@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 
-export default function SignupPage() {
+function SignupContent() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -161,5 +161,17 @@ export default function SignupPage() {
                 </p>
             </div>
         </div>
+    );
+}
+
+export default function SignupPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
+                <div className="w-10 h-10 border-4 border-[#333] border-t-white rounded-full animate-spin"></div>
+            </div>
+        }>
+            <SignupContent />
+        </Suspense>
     );
 }
