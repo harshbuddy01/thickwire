@@ -1,0 +1,153 @@
+
+> thickwire@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1359ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1465ms (826 modules)
+ GET / 200 in 16592ms
+ ✓ Compiled /[slug] in 225ms (819 modules)
+ ⚠ Cross origin request detected from 0.0.0.0 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /favicon.ico 404 in 14745ms
+ GET /robots.txt 404 in 15364ms
+ ✓ Compiled /_not-found in 200ms (822 modules)
+ GET /auth/signup 404 in 280ms
+ ✓ Compiled /signup in 362ms (842 modules)
+ GET /signup 200 in 447ms
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162364)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+ ⨯ TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162364)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7) {
+  page: '/robots.txt'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 699ms (1075 modules)
+ GET /robots.txt 500 in 15993ms
+Warning: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162364)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+ ⨯ TypeError: Cannot read properties of null (reading 'useContext')
+    at t.useContext (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:162364)
+    at usePathname (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/navigation.js:121:34)
+    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:159:50)
+    at au (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:15122
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:46505)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:58612
+    at /Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59270
+    at aN (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:59278)
+    at Timeout._onTimeout (/Users/harshanand/.gemini/antigravity/scratch/thickwire/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:6939)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7) {
+  page: '/robots.txt'
+}
+ GET /robots.txt 500 in 15079ms
+ ✓ Compiled /login in 277ms (1083 modules)
+ GET /login 200 in 365ms
+ GET /robots.txt 404 in 15065ms
+ GET /signup 200 in 77ms
+ GET /robots.txt 404 in 1562ms
+ GET /login 200 in 260ms
+ GET /robots.txt 404 in 15457ms
+ ○ Compiling /account ...
+ ✓ Compiled /account in 5.2s (1090 modules)
+ GET /account 200 in 6164ms
+ ○ Compiling /[slug] ...
+ ✓ Compiled /[slug] in 1081ms (572 modules)
+ GET /robots.txt 404 in 16710ms
+ GET /register 404 in 15138ms
+ GET /robots.txt 404 in 1692ms
+ GET /signup 200 in 186ms
+ GET /robots.txt 404 in 16203ms
+ GET / 200 in 15297ms
+ GET /robots.txt 404 in 16350ms
+ GET / 200 in 15447ms
+ GET /favicon.ico 200 in 9363ms
+ GET /robots.txt 404 in 14742ms
