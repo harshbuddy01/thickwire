@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 
+import Image from 'next/image';
+
 const slides = [
-    { id: 1, src: '/images/slider/extraction.jpg', alt: 'Extraction 2' },
-    { id: 2, src: '/images/slider/ipl.jpg', alt: 'IPL on JioHotstar' },
-    { id: 3, src: '/images/slider/familyman.jpg', alt: 'Family Man 3' },
-    { id: 4, src: '/images/slider/uefa.jpg', alt: 'UEFA Champions League' }
+    { id: 1, src: '/images/slider/slider1.png', alt: 'Slide 1', link: '/' },
+    { id: 2, src: '/images/slider/slider2.png', alt: 'Slide 2', link: '/' },
+    { id: 3, src: '/images/slider/slider3.png', alt: 'Slide 3', link: '/' },
+    { id: 4, src: '/images/slider/slider4.png', alt: 'Slide 4', link: '/' }
 ];
 
 export default function HeroSlider() {
@@ -15,19 +17,21 @@ export default function HeroSlider() {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length);
-        }, 3000);
+        }, 6000);
         return () => clearInterval(timer);
     }, []);
 
     return (
-        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
-            <div style={{ display: 'flex', transition: 'transform 0.5s ease-in-out', transform: `translateX(-${current * 100}%)`, width: `${slides.length * 100}%` }}>
+        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#e2e8f0' }}>
+            <div style={{ display: 'flex', transition: 'transform 0.5s ease-in-out', transform: `translateX(-${current * 100}%)`, width: `${slides.length * 100}%`, height: '100%' }}>
                 {slides.map((slide) => (
-                    <div key={slide.id} style={{ width: `${100 / slides.length}%`, flexShrink: 0 }}>
-                        <img
+                    <div key={slide.id} style={{ position: 'relative', width: `${100 / slides.length}%`, height: '100%', flexShrink: 0 }}>
+                        <Image
                             src={slide.src}
                             alt={slide.alt}
-                            style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+                            fill
+                            priority={slide.id === 1}
+                            style={{ objectFit: 'cover' }}
                         />
                     </div>
                 ))}
