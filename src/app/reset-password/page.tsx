@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { Lock, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 
@@ -18,19 +18,9 @@ function ResetPasswordContent() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
-        if (password !== confirm) {
-            setError('Passwords do not match');
-            return;
-        }
-
-        if (!token) {
-            setError('Missing reset token. Please use the link from your email.');
-            return;
-        }
-
+        if (password !== confirm) { setError('Passwords do not match'); return; }
+        if (!token) { setError('Missing reset token. Please use the link from your email.'); return; }
         setStatus('loading');
-
         try {
             await api.post('/auth/reset-password', { token, password });
             setStatus('success');
@@ -42,76 +32,53 @@ function ResetPasswordContent() {
 
     if (status === 'success') {
         return (
-            <div className="w-full max-w-md bg-[#111] border border-[#222] rounded-2xl p-8 shadow-2xl text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-teal-500 opacity-50"></div>
-                <div className="mb-6 flex justify-center">
-                    <CheckCircle2 className="text-emerald-500" size={48} />
+            <div style={styles.card}>
+                <div style={{ ...styles.accentBar, background: 'linear-gradient(90deg, #22c55e, #10b981)' }}></div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
+                    <CheckCircle2 size={48} style={{ color: '#22c55e' }} />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-3">Password updated!</h2>
-                <p className="text-gray-400 mb-8">
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>Password updated!</h2>
+                <p style={{ color: '#888', textAlign: 'center', marginBottom: 28, fontSize: '0.9rem', lineHeight: 1.6 }}>
                     Your password has been successfully reset. You can now use your new password to log in.
                 </p>
-                <Link href="/login" className="inline-block w-full bg-white text-black font-semibold rounded-xl py-3 hover:bg-gray-200 transition-colors">
-                    Go to Login
-                </Link>
+                <Link href="/login" style={styles.btn}>Go to Login</Link>
             </div>
         );
     }
 
     return (
-        <div className="w-full max-w-md bg-[#111] border border-[#222] rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-50"></div>
-
-            <div className="mb-8 relative z-10">
-                <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">Set new password</h1>
-                <p className="text-gray-400 text-sm">Please choose a strong password with at least 8 characters.</p>
+        <div style={styles.card}>
+            <div style={styles.accentBar}></div>
+            <div style={styles.glowOrb}></div>
+            <div style={{ marginBottom: 28, position: 'relative', zIndex: 10 }}>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', marginBottom: 8 }}>Set new password</h1>
+                <p style={{ fontSize: '0.85rem', color: '#888' }}>Please choose a strong password with at least 8 characters.</p>
             </div>
 
             {error && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
-                    <AlertCircle className="text-red-400 shrink-0 mt-0.5" size={18} />
-                    <p className="text-sm text-red-200">{error}</p>
+                <div style={styles.errorBox}>
+                    <AlertCircle size={18} style={{ color: '#f87171', flexShrink: 0, marginTop: 2 }} />
+                    <p style={{ fontSize: '0.85rem', color: '#dc2626' }}>{error}</p>
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">New Password</label>
-                    <div className="relative">
-                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-gray-600"
-                            placeholder="••••••••"
-                            minLength={8}
-                            required
-                        />
+            <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 10 }}>
+                <div style={{ marginBottom: 20 }}>
+                    <label style={styles.label}>New Password</label>
+                    <div style={{ position: 'relative' }}>
+                        <Lock size={18} style={styles.inputIcon} />
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={styles.input} placeholder="••••••••" minLength={8} required />
                     </div>
                 </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Confirm Password</label>
-                    <div className="relative">
-                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                        <input
-                            type="password"
-                            value={confirm}
-                            onChange={(e) => setConfirm(e.target.value)}
-                            className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-gray-600"
-                            placeholder="••••••••"
-                            required
-                        />
+                <div style={{ marginBottom: 20 }}>
+                    <label style={styles.label}>Confirm Password</label>
+                    <div style={{ position: 'relative' }}>
+                        <Lock size={18} style={styles.inputIcon} />
+                        <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} style={styles.input} placeholder="••••••••" required />
                     </div>
                 </div>
-
-                <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="w-full bg-white text-black font-semibold rounded-xl py-3 hover:bg-gray-200 transition-all active:scale-[0.98] mt-2 disabled:opacity-70 flex justify-center items-center h-12"
-                >
-                    {status === 'loading' ? <Loader2 className="animate-spin" size={20} /> : 'Reset Password'}
+                <button type="submit" disabled={status === 'loading'} style={styles.submitBtn}>
+                    {status === 'loading' ? <Loader2 size={20} style={{ animation: 'spin 1s linear infinite' }} /> : 'Reset Password'}
                 </button>
             </form>
         </div>
@@ -120,10 +87,23 @@ function ResetPasswordContent() {
 
 export default function ResetPasswordPage() {
     return (
-        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-            <Suspense fallback={<div className="text-white"><Loader2 className="animate-spin" /></div>}>
+        <div style={styles.pageWrapper}>
+            <Suspense fallback={<div style={{ width: 40, height: 40, border: '4px solid #eee', borderTop: '4px solid #6c5ce7', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>}>
                 <ResetPasswordContent />
             </Suspense>
         </div>
     );
 }
+
+const styles: { [k: string]: React.CSSProperties } = {
+    pageWrapper: { minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' },
+    card: { width: '100%', maxWidth: 440, background: '#fff', border: '1px solid #eee', borderRadius: 24, padding: '40px 36px', boxShadow: '0 20px 60px rgba(0,0,0,0.08)', position: 'relative', overflow: 'hidden' },
+    accentBar: { position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: 'linear-gradient(90deg, #6c5ce7, #a55eea)', opacity: 0.8 },
+    glowOrb: { position: 'absolute', top: -80, right: -80, width: 200, height: 200, background: 'rgba(108,92,231,0.08)', borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' },
+    errorBox: { marginBottom: 24, padding: '14px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 14, display: 'flex', alignItems: 'flex-start', gap: 12 },
+    label: { display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#333', marginBottom: 8, marginLeft: 4 },
+    inputIcon: { position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#999' },
+    input: { width: '100%', background: '#f8f9fc', border: '1.5px solid #e8e8e8', color: '#1a1c23', borderRadius: 14, padding: '14px 16px 14px 42px', fontSize: '0.9rem', outline: 'none', fontFamily: 'Outfit, sans-serif' },
+    submitBtn: { width: '100%', background: '#6c5ce7', color: 'white', fontWeight: 700, borderRadius: 14, padding: '14px', fontSize: '0.95rem', border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', height: 50, marginTop: 8, fontFamily: 'Outfit, sans-serif' },
+    btn: { display: 'block', width: '100%', background: '#6c5ce7', color: 'white', fontWeight: 700, borderRadius: 14, padding: '14px', fontSize: '0.95rem', textDecoration: 'none', textAlign: 'center' },
+};

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
 
+import Link from 'next/link';
+
 const slides = [
     { id: 1, src: '/images/slider/slider1.png', alt: 'Slide 1', link: '/' },
     { id: 2, src: '/images/slider/slider2.png', alt: 'Slide 2', link: '/' },
@@ -22,16 +24,14 @@ export default function HeroSlider() {
     }, []);
 
     return (
-        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#e2e8f0' }}>
+        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#000' }}>
             <div style={{ display: 'flex', transition: 'transform 0.5s ease-in-out', transform: `translateX(-${current * 100}%)`, width: `${slides.length * 100}%`, height: '100%' }}>
                 {slides.map((slide) => (
                     <div key={slide.id} style={{ position: 'relative', width: `${100 / slides.length}%`, height: '100%', flexShrink: 0 }}>
-                        <Image
+                        <img
                             src={slide.src}
                             alt={slide.alt}
-                            fill
-                            priority={slide.id === 1}
-                            style={{ objectFit: 'cover' }}
+                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
                         />
                     </div>
                 ))}

@@ -39,95 +39,104 @@ function LoginContent() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-[#111] border border-[#222] rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-                {/* Decorative gradients */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-50"></div>
-                <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
-
-                <div className="text-center mb-8 relative z-10">
-                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Welcome back</h1>
-                    <p className="text-gray-400">Log in to manage your digital assets</p>
-                </div>
-
-                {error && (
-                    <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
-                        <AlertCircle className="text-red-400 shrink-0 mt-0.5" size={18} />
-                        <p className="text-sm text-red-200">{error}</p>
-                    </div>
-                )}
-
-                <form onSubmit={handleLogin} className="space-y-5 relative z-10">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Email Address</label>
-                        <div className="relative">
-                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-gray-600"
-                                placeholder="name@example.com"
-                                required
-                            />
+        <div className="auth-luxury-wrapper">
+            <div className="auth-mesh-bg"></div>
+            
+            <div className="auth-luxury-card">
+                {/* Left Side: Brand Story */}
+                <div className="auth-luxury-brand">
+                    <div className="auth-brand-inner">
+                        <div className="auth-logo-badge">Premium</div>
+                        <h1 className="auth-luxury-title">Experience<br/>Digital<br/>Excellence.</h1>
+                        <p className="auth-luxury-subtitle">Access your elite collection of streaming and professional tools in one unified space.</p>
+                        
+                        <div className="auth-partners-grid">
+                            <div className="auth-partner-item"><img src="/images/netflix_3d.png" alt="Netflix" /></div>
+                            <div className="auth-partner-item"><img src="/images/chatgpt_3d.png" alt="ChatGPT" /></div>
+                            <div className="auth-partner-item"><img src="/images/sonyliv_3d.png" alt="SonyLIV" /></div>
+                            <div className="auth-partner-item"><img src="/images/jiohotstar_3d.png" alt="Hotstar" /></div>
                         </div>
                     </div>
+                </div>
 
-                    <div>
-                        <div className="flex items-center justify-between mb-1.5 ml-1 pr-1">
-                            <label className="block text-sm font-medium text-gray-300">Password</label>
-                            <Link href="/forgot-password" className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
-                                Forgot?
+                {/* Right Side: Authentication */}
+                <div className="auth-luxury-form-side">
+                    <div className="auth-form-container">
+                        <div style={styles.headerSection}>
+                            <h2 style={styles.title}>Welcome back</h2>
+                            <p style={styles.subtitle}>Sign in to your StreamKart account</p>
+                        </div>
+
+                        {error && (
+                            <div style={styles.errorBox}>
+                                <AlertCircle size={18} style={{ color: '#e84393', flexShrink: 0 }} />
+                                <p style={styles.errorText}>{error}</p>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleLogin}>
+                            <div style={styles.fieldGroup}>
+                                <label style={styles.label}>Email Address</label>
+                                <div style={styles.inputWrapper}>
+                                    <Mail size={18} style={styles.inputIcon} />
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        style={styles.input}
+                                        placeholder="Enter your email"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={styles.fieldGroup}>
+                                <div style={styles.labelRow}>
+                                    <label style={styles.label}>Password</label>
+                                    <Link href="/forgot-password" style={styles.forgotLink}>Forgot password?</Link>
+                                </div>
+                                <div style={styles.inputWrapper}>
+                                    <Lock size={18} style={styles.inputIcon} />
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        style={styles.input}
+                                        placeholder="Enter your password"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <button type="submit" disabled={isLoading} style={styles.submitBtn}>
+                                {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Sign In to Account'}
+                            </button>
+                        </form>
+
+                        <div style={styles.divider}>
+                            <div style={styles.dividerLine}></div>
+                            <span style={styles.dividerText}>or</span>
+                            <div style={styles.dividerLine}></div>
+                        </div>
+
+                        <button onClick={handleGoogleLogin} type="button" style={styles.googleBtn}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" style={{ marginRight: 12 }}>
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            Continue with Google
+                        </button>
+
+                        <p style={styles.bottomText}>
+                            New to StreamKart?{' '}
+                            <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} style={styles.bottomLink}>
+                                Create account
                             </Link>
-                        </div>
-                        <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-[#1a1a1a] border border-[#333] text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-gray-600"
-                                placeholder="••••••••"
-                                required
-                            />
-                        </div>
+                        </p>
                     </div>
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-white text-black font-semibold rounded-xl py-3 hover:bg-gray-200 transition-all active:scale-[0.98] disabled:opacity-70 flex justify-center items-center h-12"
-                    >
-                        {isLoading ? <Loader2 className="animate-spin" size={20} /> : 'Sign In'}
-                    </button>
-                </form>
-
-                <div className="mt-8 relative z-10 flex items-center gap-4">
-                    <div className="h-px bg-[#333] flex-1"></div>
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-widest">Or continue with</span>
-                    <div className="h-px bg-[#333] flex-1"></div>
                 </div>
-
-                <button
-                    onClick={handleGoogleLogin}
-                    type="button"
-                    className="mt-6 relative z-10 w-full bg-[#1a1a1a] border border-[#333] hover:bg-[#222] text-white font-medium rounded-xl py-3 flex items-center justify-center gap-3 transition-colors h-12"
-                >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                    </svg>
-                    Google
-                </button>
-
-                <p className="mt-8 text-center text-sm text-gray-400 relative z-10">
-                    Don't have an account?{' '}
-                    <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} className="text-white font-medium hover:underline">
-                        Sign up
-                    </Link>
-                </p>
             </div>
         </div>
     );
@@ -136,11 +145,157 @@ function LoginContent() {
 export default function LoginPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-                <div className="w-10 h-10 border-4 border-[#333] border-t-white rounded-full animate-spin"></div>
+            <div style={styles.pageWrapper}>
+                <div style={{ width: 40, height: 40, border: '4px solid #333', borderTop: '4px solid white', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
             </div>
         }>
             <LoginContent />
         </Suspense>
     );
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+    headerSection: {
+        textAlign: 'left',
+        marginBottom: 40,
+    },
+    title: {
+        fontSize: '2.4rem',
+        fontWeight: 900,
+        color: '#111',
+        marginBottom: 8,
+        letterSpacing: '-1.5px',
+    },
+    subtitle: {
+        fontSize: '1rem',
+        color: '#666',
+        fontWeight: 500,
+    },
+    errorBox: {
+        marginBottom: 24,
+        padding: '14px 16px',
+        background: '#fff0f2',
+        border: '1px solid #ffccd5',
+        borderRadius: 16,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+    },
+    errorText: {
+        fontSize: '0.85rem',
+        color: '#e84393',
+        fontWeight: 600,
+    },
+    fieldGroup: {
+        marginBottom: 28,
+    },
+    label: {
+        display: 'block',
+        fontSize: '0.85rem',
+        fontWeight: 800,
+        color: '#111',
+        marginBottom: 12,
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+    },
+    labelRow: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 12,
+    },
+    forgotLink: {
+        fontSize: '0.8rem',
+        fontWeight: 700,
+        color: '#0070f3',
+        textDecoration: 'none',
+    },
+    inputWrapper: {
+        position: 'relative',
+    },
+    inputIcon: {
+        position: 'absolute',
+        left: 20,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        color: '#aaa',
+    },
+    input: {
+        width: '100%',
+        background: '#fff',
+        border: '1.5px solid #eaeaea',
+        color: '#111',
+        borderRadius: 18,
+        padding: '18px 20px 18px 54px',
+        fontSize: '1rem',
+        outline: 'none',
+        fontFamily: 'Outfit, sans-serif',
+        transition: 'all 0.3s ease',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.02)',
+    },
+    submitBtn: {
+        width: '100%',
+        background: '#111',
+        color: 'white',
+        fontWeight: 900,
+        borderRadius: 18,
+        padding: '18px',
+        fontSize: '1.05rem',
+        border: 'none',
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 60,
+        marginTop: 12,
+        fontFamily: 'Outfit, sans-serif',
+        transition: 'all 0.3s ease',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+    },
+    divider: {
+        margin: '32px 0',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 16,
+    },
+    dividerLine: {
+        height: 1,
+        background: '#eee',
+        flex: 1,
+    },
+    dividerText: {
+        fontSize: '0.75rem',
+        fontWeight: 700,
+        color: '#bbb',
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+    },
+    googleBtn: {
+        width: '100%',
+        background: '#fff',
+        border: '1.5px solid #eaeaea',
+        color: '#111',
+        fontWeight: 700,
+        borderRadius: 18,
+        padding: '18px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        height: 60,
+        fontSize: '1rem',
+        fontFamily: 'Outfit, sans-serif',
+        transition: 'all 0.3s ease',
+    },
+    bottomText: {
+        marginTop: 40,
+        textAlign: 'center',
+        fontSize: '0.95rem',
+        color: '#666',
+    },
+    bottomLink: {
+        color: '#0070f3',
+        fontWeight: 900,
+        textDecoration: 'none',
+    },
+};

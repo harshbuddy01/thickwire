@@ -153,7 +153,7 @@ function CheckoutContent() {
                     key: res.keyId,
                     amount: res.amount * 100, // converted back to paise if needed by backend, though backend sends paise/sub-units
                     currency: res.currency,
-                    name: 'ThickWire',
+                    name: 'StreamKart',
                     description: `${service?.name} — ${plan.name}`,
                     order_id: res.razorpayOrderId,
                     handler: () => {

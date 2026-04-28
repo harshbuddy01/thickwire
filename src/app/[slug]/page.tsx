@@ -14,11 +14,11 @@ export async function generateMetadata({
     try {
         const service = await getServiceBySlug(params.slug);
         return {
-            title: `${service.name} — ThickWire`,
-            description: service.description || `Buy ${service.name} from ThickWire with instant delivery`,
+            title: `${service.name} — StreamKart`,
+            description: service.description || `Buy ${service.name} from StreamKart with instant delivery`,
         };
     } catch {
-        return { title: 'Service — ThickWire' };
+        return { title: 'Service — StreamKart' };
     }
 }
 

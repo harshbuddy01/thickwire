@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
@@ -40,31 +40,25 @@ function VerifyEmailContent() {
         verify();
     }, [token, setAuth]);
 
+    const iconColor = status === 'loading' ? '#6c5ce7' : status === 'success' ? '#22c55e' : '#ef4444';
+    const accentBg = status === 'loading' ? 'linear-gradient(90deg, #6c5ce7, #a55eea)' : status === 'success' ? 'linear-gradient(90deg, #22c55e, #10b981)' : 'linear-gradient(90deg, #ef4444, #f87171)';
+
     return (
-        <div className="w-full max-w-md bg-[#111] border border-[#222] rounded-2xl p-8 shadow-2xl text-center relative overflow-hidden">
-            {/* Decorative glows depending on status */}
-            {status === 'loading' && <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-50"></div>}
-            {status === 'success' && <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500 opacity-50"></div>}
-            {status === 'error' && <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-rose-600 opacity-50"></div>}
-
-            <div className="mb-6 flex justify-center">
-                {status === 'loading' && <Loader2 className="animate-spin text-indigo-500" size={48} />}
-                {status === 'success' && <CheckCircle2 className="text-emerald-500" size={48} />}
-                {status === 'error' && <AlertCircle className="text-rose-500" size={48} />}
+        <div style={styles.card}>
+            <div style={{ ...styles.accentBar, background: accentBg }}></div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
+                {status === 'loading' && <Loader2 size={48} style={{ color: iconColor, animation: 'spin 1s linear infinite' }} />}
+                {status === 'success' && <CheckCircle2 size={48} style={{ color: iconColor }} />}
+                {status === 'error' && <AlertCircle size={48} style={{ color: iconColor }} />}
             </div>
-
-            <h1 className="text-2xl font-bold text-white mb-3">
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>
                 {status === 'loading' && 'Verifying Email'}
                 {status === 'success' && 'Verified!'}
                 {status === 'error' && 'Verification Failed'}
             </h1>
-
-            <p className="text-gray-400 mb-8">{message}</p>
-
+            <p style={{ color: '#888', textAlign: 'center', marginBottom: 28, fontSize: '0.9rem' }}>{message}</p>
             {status === 'error' && (
-                <Link href="/login" className="inline-block w-full bg-white text-black font-semibold rounded-xl py-3 hover:bg-gray-200 transition-colors">
-                    Return to Login
-                </Link>
+                <Link href="/login" style={styles.btn}>Return to Login</Link>
             )}
         </div>
     );
@@ -72,10 +66,19 @@ function VerifyEmailContent() {
 
 export default function VerifyEmailPage() {
     return (
-        <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-            <Suspense fallback={<div className="text-white"><Loader2 className="animate-spin" /></div>}>
+        <div style={styles.pageWrapper}>
+            <Suspense fallback={
+                <div style={{ width: 40, height: 40, border: '4px solid #eee', borderTop: '4px solid #6c5ce7', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            }>
                 <VerifyEmailContent />
             </Suspense>
         </div>
     );
 }
+
+const styles: { [k: string]: React.CSSProperties } = {
+    pageWrapper: { minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 16px' },
+    card: { width: '100%', maxWidth: 440, background: '#fff', border: '1px solid #eee', borderRadius: 24, padding: '40px 36px', boxShadow: '0 20px 60px rgba(0,0,0,0.08)', textAlign: 'center', position: 'relative', overflow: 'hidden' },
+    accentBar: { position: 'absolute', top: 0, left: 0, width: '100%', height: 4, opacity: 0.8 },
+    btn: { display: 'block', width: '100%', background: '#6c5ce7', color: 'white', fontWeight: 700, borderRadius: 14, padding: '14px', fontSize: '0.95rem', textDecoration: 'none', textAlign: 'center' },
+};
