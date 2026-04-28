@@ -24,20 +24,30 @@ export default function HeroSlider() {
     }, []);
 
     return (
-        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#000' }}>
-            <div style={{ display: 'flex', transition: 'transform 0.5s ease-in-out', transform: `translateX(-${current * 100}%)`, width: `${slides.length * 100}%`, height: '100%' }}>
-                {slides.map((slide) => (
-                    <div key={slide.id} style={{ position: 'relative', width: `${100 / slides.length}%`, height: '100%', flexShrink: 0 }}>
-                        <img
-                            src={slide.src}
-                            alt={slide.alt}
-                            style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
-                        />
-                    </div>
-                ))}
-            </div>
+        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#111' }}>
+            {slides.map((slide, index) => (
+                <div 
+                    key={slide.id} 
+                    style={{ 
+                        position: 'absolute', 
+                        top: 0, 
+                        left: 0, 
+                        width: '100%', 
+                        height: '100%', 
+                        opacity: current === index ? 1 : 0, 
+                        transition: 'opacity 0.8s ease-in-out',
+                        zIndex: current === index ? 1 : 0
+                    }}
+                >
+                    <img
+                        src={slide.src}
+                        alt={slide.alt}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                </div>
+            ))}
 
-            <div className="slider-dots" style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px' }}>
+            <div className="slider-dots" style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 10 }}>
                 {slides.map((_, index) => (
                     <button
                         key={index}
