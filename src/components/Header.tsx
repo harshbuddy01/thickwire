@@ -2,12 +2,16 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/lib/AuthContext';
+import { usePathname } from 'next/navigation';
 import { Search, ShoppingCart, Heart, User, LogOut, Wallet, LayoutGrid, Package, HeadphonesIcon } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
     const { user, loading, logout } = useAuth();
+    const pathname = usePathname();
     const [menuOpen, setMenuOpen] = useState(false);
+
+    if (pathname === '/checkout') return null;
 
     return (
         <header>
