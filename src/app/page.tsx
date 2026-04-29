@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import HeroSlider from '@/components/HeroSlider';
 import { ChevronRight, ShieldCheck, Tag, Zap, Headphones } from 'lucide-react';
 
@@ -21,41 +22,41 @@ export default function HomePage() {
 
             <div className="trending-cards-grid" style={{ gap: '24px' }}>
                 <Link href="/services/netflix" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <img src="/images/netflix_3d.png" alt="Netflix" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/netflix_3d.png" alt="Netflix" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
                 </Link>
 
                 <Link href="/services/chatgpt" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <img src="/images/chatgpt_3d.png" alt="ChatGPT" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/chatgpt_3d.png" alt="ChatGPT" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
                 </Link>
 
                 <Link href="/services/jiohotstar" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <img src="/images/jiohotstar_3d.png" alt="JioHotstar" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/jiohotstar_3d.png" alt="JioHotstar" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
                 </Link>
 
                 <Link href="/services/sonyliv" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <img src="/images/sonyliv_3d.png" alt="SonyLIV" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/sonyliv_3d.png" alt="SonyLIV" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
                 </Link>
             </div>
 
             {/* ─── Content Blocks Grid ─────────────────────────────── */}
             <div className="blocks-parent-grid" style={{ marginTop: '56px' }}>
                 <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <img src="/images/blocks/streaming.png" alt="Streaming" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/blocks/streaming.png" alt="Streaming" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
                 <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <img src="/images/blocks/grossing.png" alt="Grosing" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/blocks/grossing.png" alt="Grosing" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
                 <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <img src="/images/blocks/activation.png" alt="Activation" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/blocks/activation.png" alt="Activation" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
             </div>
 
             <div className="blocks-parent-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '24px' }}>
                 <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <img src="/images/blocks/ai.png" alt="Artificial Intelligence" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/blocks/ai.png" alt="Artificial Intelligence" width={1200} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
                 <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <img src="/images/blocks/vpn.png" alt="VPN Services" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <Image src="/images/blocks/vpn.png" alt="VPN Services" width={1200} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
             </div>
 

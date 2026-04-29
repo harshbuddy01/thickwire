@@ -75,10 +75,10 @@ function LoginContent() {
 
                     {/* Partner logos */}
                     <div className="flex items-center gap-6 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-                        <img src="/images/netflix_3d.png" alt="Netflix" className="h-8 object-contain" />
-                        <img src="/images/chatgpt_3d.png" alt="ChatGPT" className="h-8 object-contain" />
-                        <img src="/images/sonyliv_3d.png" alt="SonyLIV" className="h-8 object-contain" />
-                        <img src="/images/jiohotstar_3d.png" alt="Hotstar" className="h-8 object-contain" />
+                        <img src="/images/netflix_3d.png" alt="Netflix" width={64} height={32} className="h-8 w-auto object-contain" />
+                        <img src="/images/chatgpt_3d.png" alt="ChatGPT" width={64} height={32} className="h-8 w-auto object-contain" />
+                        <img src="/images/sonyliv_3d.png" alt="SonyLIV" width={64} height={32} className="h-8 w-auto object-contain" />
+                        <img src="/images/jiohotstar_3d.png" alt="Hotstar" width={64} height={32} className="h-8 w-auto object-contain" />
                     </div>
                 </div>
             </div>
