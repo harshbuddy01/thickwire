@@ -62,7 +62,7 @@ const s: { [k: string]: React.CSSProperties } = {
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'settings'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'tickets' | 'settings'>('overview');
 
     const [orders, setOrders] = useState<any[]>([]);
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
