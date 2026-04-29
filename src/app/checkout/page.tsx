@@ -159,8 +159,27 @@ function CheckoutContent() {
                     name: 'StreamKart',
                     description: `${service?.name} — ${plan.name}`,
                     order_id: res.razorpayOrderId,
-                    handler: () => {
-                        router.push(`/order/${res.orderId}?gateway=razorpay`);
+                    handler: async (response: any) => {
+                        try {
+                            const verifyRes = await fetch('https://thickwire-api-production.up.railway.app/api/v1/orders/verify-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                })
+                            });
+                            
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.success) {
+                                router.push(`/order/${res.orderId}?gateway=razorpay`);
+                            } else {
+                                setError('Payment verification failed. Please contact support.');
+                            }
+                        } catch (e) {
+                            setError('Error verifying payment. Please contact support.');
+                        }
                     },
                     prefill: {
                         name: form.customerName,
