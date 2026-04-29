@@ -7,7 +7,7 @@ import { createOrder, getServiceBySlug, validateCoupon } from '@/lib/api';
 import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
 
-import { ShieldCheck, ArrowLeft, Lock, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CheckoutPage() {
@@ -233,7 +233,6 @@ function CheckoutContent() {
     return (
         <div className="premium-checkout-wrapper">
             <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
-            
             <header style={{ background: 'transparent', padding: '0 0 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1200, margin: '0 auto' }}>
                 <Link href={`/services/${service.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>
                     <ArrowLeft size={16} /> Back to {service.name}
@@ -360,8 +359,6 @@ function CheckoutContent() {
                         <Lock size={20} color="#818cf8" /> Order Summary
                     </h3>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-                        <div style={s.summaryRow}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
                         <div className="premium-summary-row">
                             <span style={{ color: '#9ca3af' }}>Service</span>
