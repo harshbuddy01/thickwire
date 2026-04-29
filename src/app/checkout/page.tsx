@@ -7,14 +7,14 @@ import { createOrder, getServiceBySlug, validateCoupon } from '@/lib/api';
 import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
 
-import { ShieldCheck, ArrowLeft, Lock, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, Lock, CheckCircle2, PlayCircle, Loader2, Tag, CreditCard, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CheckoutPage() {
     return (
         <Suspense fallback={
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc' }}>
-                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTop: '3px solid #4f46e5', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
             </div>
         }>
             <CheckoutContent />
@@ -140,7 +140,6 @@ function CheckoutContent() {
         setError(null);
 
         try {
-
             const payload = {
                 ...form,
                 planId: plan.id,
@@ -161,7 +160,7 @@ function CheckoutContent() {
                     order_id: res.razorpayOrderId,
                     handler: async (response: any) => {
                         try {
-                            const verifyRes = await fetch('https://thickwire-api-production.up.railway.app/api/v1/orders/verify-payment', {
+                            const verifyRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://thickwire-api-production.up.railway.app/api/v1'}/orders/verify-payment`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -186,7 +185,7 @@ function CheckoutContent() {
                         email: form.customerEmail,
                         contact: form.customerPhone,
                     },
-                    theme: { color: '#6c5ce7' },
+                    theme: { color: '#6366f1' }, // indigo-500
                 };
                 const rzp = new window.Razorpay(options);
                 rzp.open();
@@ -210,316 +209,268 @@ function CheckoutContent() {
 
     if (loading) {
         return (
-            <div className="checkout-layout">
-                <div className="skeleton skeleton-card" style={{ height: 400 }} />
-                <div className="skeleton skeleton-card" style={{ height: 300 }} />
+            <div className="min-h-screen bg-gray-50 flex flex-col pt-20 px-4">
+                <div className="max-w-6xl w-full mx-auto flex flex-col lg:flex-row gap-8">
+                    <div className="w-full lg:w-2/3 h-96 bg-white animate-pulse rounded-3xl"></div>
+                    <div className="w-full lg:w-1/3 h-96 bg-gray-200 animate-pulse rounded-3xl"></div>
+                </div>
             </div>
         );
     }
 
     if (!plan || !service) {
         return (
-            <div className="status-container">
-                <div className="status-card">
-                    <div className="status-icon failed">❌</div>
-                    <h2>Plan Not Found</h2>
-                    <p className="subtitle">The plan you&apos;re looking for doesn&apos;t exist or is unavailable.</p>
-                    <a href="/" className="btn btn-primary">Back to Home</a>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+                <div className="max-w-md w-full bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 text-center">
+                    <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 ring-8 ring-red-50/50">
+                        <span className="text-3xl">❌</span>
+                    </div>
+                    <h2 className="text-2xl font-black text-gray-900 tracking-tight mb-3">Plan Not Found</h2>
+                    <p className="text-gray-500 font-medium mb-8 leading-relaxed">
+                        The plan you're looking for doesn't exist or is currently unavailable.
+                    </p>
+                    <Link 
+                        href="/" 
+                        className="block w-full py-4 px-6 rounded-2xl bg-gray-900 text-white font-bold hover:bg-black transition-colors focus:ring-4 focus:ring-gray-900/10"
+                    >
+                        Return Home
+                    </Link>
                 </div>
             </div>
         );
     }
 
     return (
-        <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column', fontFamily: 'Inter, sans-serif' }}>
+        <div className="min-h-screen bg-gray-50 font-sans selection:bg-indigo-500/30">
             <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
             
-            {/* Premium Secure Header */}
-            <header style={{ background: '#ffffff', borderBottom: '1px solid #e2e8f0', padding: '16px 0', position: 'sticky', top: 0, zIndex: 10 }}>
-                <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Link href={`/services/${service.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0f172a'} onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
-                        <ArrowLeft size={16} /> Back to {service.name}
+            {/* Header */}
+            <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                    <Link href={`/services/${service.slug}`} className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors group">
+                        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                        <span className="hidden sm:inline">Back to {service.name}</span>
+                        <span className="sm:hidden">Back</span>
                     </Link>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#0f172a', fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.5px' }}>
-                        <div style={{ width: 28, height: 28, background: '#4f46e5', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.8rem' }}>▶</div>
-                        StreamKart
+                    
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                            <PlayCircle className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-xl font-black tracking-tight text-gray-900">StreamKart</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#10b981', fontSize: '0.85rem', fontWeight: 600 }}>
-                        <ShieldCheck size={16} /> SSL Secure
+                    
+                    <div className="flex items-center gap-2 text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-100">
+                        <ShieldCheck className="w-4 h-4" />
+                        <span className="hidden sm:inline">SSL Secure</span>
                     </div>
                 </div>
             </header>
 
-            <main className="checkout-main">
-                
-                {/* ─── Left Side: Form ───────────────────────────── */}
-                <div className="checkout-left">
-                    <div style={{ marginBottom: 32 }}>
-                        <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Complete your purchase</h1>
-                        <p style={{ color: '#64748b', fontSize: '0.95rem', margin: 0 }}>Provide your details to receive your credentials instantly.</p>
-                    </div>
-
-                    {error && (
-                        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: 16, borderRadius: 12, marginBottom: 24, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500 }}>
-                            <div style={{ background: '#ef4444', color: '#fff', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 'bold' }}>!</div>
-                            {error}
-                        </div>
-                    )}
-
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-grid" style={{ marginBottom: 32 }}>
-                            <div>
-                                <label style={s.label} htmlFor="name">Full Name</label>
-                                <input
-                                    id="name"
-                                    type="text"
-                                    placeholder="John Doe"
-                                    required
-                                    value={form.customerName}
-                                    onChange={(e) => setForm({ ...form, customerName: e.target.value })}
-                                    style={s.input}
-                                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
-                                    onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                                />
+            <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+                    
+                    {/* Left Side: Form */}
+                    <div className="w-full lg:w-3/5 order-2 lg:order-1">
+                        <div className="bg-white rounded-[2rem] p-6 sm:p-10 shadow-xl shadow-gray-200/50 border border-gray-100">
+                            <div className="mb-10">
+                                <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900 mb-3">Complete purchase</h1>
+                                <p className="text-gray-500 font-medium text-lg">Provide your details to receive your credentials instantly.</p>
                             </div>
 
-                            <div className="form-row-2">
-                                <div>
-                                    <label style={s.label} htmlFor="email">Email Address</label>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="john@example.com"
-                                        required
-                                        value={form.customerEmail}
-                                        onChange={(e) => setForm({ ...form, customerEmail: e.target.value })}
-                                        style={s.input}
-                                        onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
-                                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                                    />
+                            {error && (
+                                <div className="mb-8 p-4 bg-red-50/50 border border-red-100 rounded-2xl flex items-center gap-3">
+                                    <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                                    <p className="text-sm font-semibold text-red-600">{error}</p>
                                 </div>
-                                <div>
-                                    <label style={s.label} htmlFor="phone">Phone Number</label>
-                                    <input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="+91 98765 43210"
-                                        required
-                                        value={form.customerPhone}
-                                        onChange={(e) => setForm({ ...form, customerPhone: e.target.value })}
-                                        style={s.input}
-                                        onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
-                                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* WhatsApp Opt-in */}
-                        <label style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16, background: whatsappOptedIn ? '#f0fdf4' : '#f8fafc', border: `1px solid ${whatsappOptedIn ? '#bbf7d0' : '#e2e8f0'}`, borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s', marginBottom: 32 }}>
-                            <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${whatsappOptedIn ? '#10b981' : '#cbd5e1'}`, background: whatsappOptedIn ? '#10b981' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-                                {whatsappOptedIn && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
-                            </div>
-                            <input
-                                type="checkbox"
-                                checked={whatsappOptedIn}
-                                onChange={(e) => setWhatsappOptedIn(e.target.checked)}
-                                style={{ display: 'none' }}
-                            />
-                            <span style={{ fontSize: '0.9rem', color: '#334155', fontWeight: 500 }}>
-                                Send my credentials & updates via WhatsApp
-                            </span>
-                        </label>
-
-                        {/* Gateway Selection */}
-                        <div style={{ marginBottom: 40 }}>
-                            <label style={{ ...s.label, marginBottom: 12 }}>Payment Method</label>
-                            <div className="gateway-grid">
-                                <label style={{ ...s.gatewayOption, borderColor: gateway === 'razorpay' ? '#4f46e5' : '#e2e8f0', background: gateway === 'razorpay' ? '#eef2ff' : '#fff' }}>
-                                    <input type="radio" value="razorpay" checked={gateway === 'razorpay'} onChange={() => setGateway('razorpay')} style={{ display: 'none' }} />
-                                    <div style={{ width: 18, height: 18, borderRadius: '50%', border: `5px solid ${gateway === 'razorpay' ? '#4f46e5' : '#e2e8f0'}`, transition: 'all 0.2s' }}></div>
-                                    <span style={{ fontWeight: 600, color: gateway === 'razorpay' ? '#312e81' : '#64748b' }}>Razorpay</span>
-                                </label>
-                                <label style={{ ...s.gatewayOption, borderColor: gateway === 'cashfree' ? '#f59e0b' : '#e2e8f0', background: gateway === 'cashfree' ? '#fffbeb' : '#fff' }}>
-                                    <input type="radio" value="cashfree" checked={gateway === 'cashfree'} onChange={() => setGateway('cashfree')} style={{ display: 'none' }} />
-                                    <div style={{ width: 18, height: 18, borderRadius: '50%', border: `5px solid ${gateway === 'cashfree' ? '#f59e0b' : '#e2e8f0'}`, transition: 'all 0.2s' }}></div>
-                                    <span style={{ fontWeight: 600, color: gateway === 'cashfree' ? '#92400e' : '#64748b' }}>Cashfree</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={submitting}
-                            style={{
-                                width: '100%', padding: '16px', background: '#0f172a', color: '#fff', border: 'none', borderRadius: 14,
-                                fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                                cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.8 : 1, transition: 'all 0.2s',
-                                boxShadow: '0 10px 20px -10px rgba(15, 23, 42, 0.5)'
-                            }}
-                        >
-                            {submitting ? 'Processing safely...' : (
-                                <>
-                                    <Lock size={18} /> Pay Securely ₹{finalAmount.toLocaleString()}
-                                </>
                             )}
-                        </button>
-                        <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.8rem', marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                            <ShieldCheck size={14} /> 256-bit SSL encrypted & secured by {gateway === 'razorpay' ? 'Razorpay' : 'Cashfree'}.
-                        </p>
-                    </form>
-                </div>
 
-                {/* ─── Right Side: Order Summary ─────────────────── */}
-                <div className="checkout-right">
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 24px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Lock size={18} color="#818cf8" className="summary-icon" /> Order Summary
-                    </h3>
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
-                        <div style={s.summaryRow}>
-                            <span className="summary-text-muted" style={{ color: '#94a3b8' }}>Service</span>
-                            <span className="summary-text-bold" style={{ fontWeight: 600 }}>{service.name}</span>
-                        </div>
-                        <div style={s.summaryRow}>
-                            <span className="summary-text-muted" style={{ color: '#94a3b8' }}>Selected Plan</span>
-                            <span className="summary-text-bold" style={{ fontWeight: 600, color: '#e0e7ff' }}>{plan.name}</span>
-                        </div>
-                        <div style={s.summaryRow}>
-                            <span className="summary-text-muted" style={{ color: '#94a3b8' }}>Duration</span>
-                            <span className="summary-text-bold" style={{ fontWeight: 600 }}>{plan.durationDays} days</span>
-                        </div>
-                    </div>
-                    
-                    <div className="divider" style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '24px 0' }}></div>
+                            <form onSubmit={handleSubmit} className="space-y-8">
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-2" htmlFor="name">Full Name</label>
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            placeholder="John Doe"
+                                            required
+                                            value={form.customerName}
+                                            onChange={(e) => setForm({ ...form, customerName: e.target.value })}
+                                            className="block w-full px-5 py-4 bg-gray-50 border-transparent rounded-2xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 font-medium outline-none"
+                                        />
+                                    </div>
 
-                    {/* Coupon System */}
-                    <div style={{ marginBottom: 24 }}>
-                        {couponState === 'applied' ? (
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '12px 16px', borderRadius: 12 }}>
-                                <div style={{ fontSize: '0.85rem', color: '#34d399', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                                    <CheckCircle2 size={16} /> {couponCode.toUpperCase()} applied
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-2" htmlFor="email">Email Address</label>
+                                            <input
+                                                id="email"
+                                                type="email"
+                                                placeholder="john@example.com"
+                                                required
+                                                value={form.customerEmail}
+                                                onChange={(e) => setForm({ ...form, customerEmail: e.target.value })}
+                                                className="block w-full px-5 py-4 bg-gray-50 border-transparent rounded-2xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 font-medium outline-none"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-2" htmlFor="phone">Phone Number</label>
+                                            <input
+                                                id="phone"
+                                                type="tel"
+                                                placeholder="+91 98765 43210"
+                                                required
+                                                value={form.customerPhone}
+                                                onChange={(e) => setForm({ ...form, customerPhone: e.target.value })}
+                                                className="block w-full px-5 py-4 bg-gray-50 border-transparent rounded-2xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 font-medium outline-none"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="button" onClick={removeCoupon} style={{ background: 'none', border: 'none', color: '#f87171', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>Remove</button>
-                            </div>
-                        ) : (
-                            <div>
-                                <div className="coupon-container" style={{ display: 'flex', gap: 8, background: 'rgba(255,255,255,0.05)', padding: 4, borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
+
+                                {/* WhatsApp Opt-in */}
+                                <label className={`flex items-center gap-4 p-5 rounded-2xl cursor-pointer transition-all duration-300 border ${whatsappOptedIn ? 'bg-green-50/50 border-green-200' : 'bg-gray-50 border-transparent hover:bg-gray-100'}`}>
+                                    <div className={`w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${whatsappOptedIn ? 'bg-green-500' : 'bg-white border-2 border-gray-300'}`}>
+                                        {whatsappOptedIn && <CheckCircle2 className="w-4 h-4 text-white" strokeWidth={3} />}
+                                    </div>
                                     <input
-                                        type="text"
-                                        placeholder="Discount Code"
-                                        value={couponCode}
-                                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        style={{ flex: 1, padding: '10px 16px', background: 'transparent', border: 'none', color: '#fff', fontSize: '0.9rem', outline: 'none' }}
+                                        type="checkbox"
+                                        className="hidden"
+                                        checked={whatsappOptedIn}
+                                        onChange={(e) => setWhatsappOptedIn(e.target.checked)}
                                     />
-                                    <button type="button" onClick={handleApplyCoupon} disabled={!couponCode || couponState === 'loading'} style={{ background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 8, padding: '0 20px', fontWeight: 600, cursor: !couponCode ? 'not-allowed' : 'pointer', opacity: !couponCode ? 0.5 : 1 }}>
-                                        {couponState === 'loading' ? '...' : 'Apply'}
-                                    </button>
+                                    <span className={`text-sm font-bold ${whatsappOptedIn ? 'text-green-900' : 'text-gray-700'}`}>
+                                        Send my credentials & updates via WhatsApp
+                                    </span>
+                                </label>
+
+                                {/* Gateway Selection */}
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-4">Payment Method</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <label className={`flex items-center gap-4 p-5 rounded-2xl cursor-pointer transition-all duration-300 border-2 ${gateway === 'razorpay' ? 'bg-indigo-50 border-indigo-500' : 'bg-white border-gray-100 hover:border-gray-200'}`}>
+                                            <input type="radio" className="hidden" value="razorpay" checked={gateway === 'razorpay'} onChange={() => setGateway('razorpay')} />
+                                            <div className={`w-5 h-5 rounded-full border-4 transition-colors ${gateway === 'razorpay' ? 'border-indigo-500 bg-white' : 'border-gray-200'}`}></div>
+                                            <div className="flex flex-col">
+                                                <span className={`font-bold ${gateway === 'razorpay' ? 'text-indigo-900' : 'text-gray-700'}`}>Razorpay</span>
+                                            </div>
+                                        </label>
+                                        <label className={`flex items-center gap-4 p-5 rounded-2xl cursor-pointer transition-all duration-300 border-2 ${gateway === 'cashfree' ? 'bg-amber-50 border-amber-500' : 'bg-white border-gray-100 hover:border-gray-200'}`}>
+                                            <input type="radio" className="hidden" value="cashfree" checked={gateway === 'cashfree'} onChange={() => setGateway('cashfree')} />
+                                            <div className={`w-5 h-5 rounded-full border-4 transition-colors ${gateway === 'cashfree' ? 'border-amber-500 bg-white' : 'border-gray-200'}`}></div>
+                                            <div className="flex flex-col">
+                                                <span className={`font-bold ${gateway === 'cashfree' ? 'text-amber-900' : 'text-gray-700'}`}>Cashfree</span>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
-                                {couponState === 'error' && <div style={{ color: '#f87171', fontSize: '0.8rem', marginTop: 8, paddingLeft: 4 }}>{couponError}</div>}
-                            </div>
-                        )}
-                    </div>
 
-                    <div className="divider" style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '24px 0' }}></div>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                        <div style={s.summaryRow}>
-                            <span className="summary-text-muted" style={{ color: '#94a3b8' }}>Subtotal</span>
-                            <span className="summary-text-bold">₹{parseFloat(plan.price).toLocaleString()}</span>
-                        </div>
-
-                        {couponState === 'applied' && (
-                            <div style={{ ...s.summaryRow, color: '#34d399' }}>
-                                <span>Discount ({couponCode})</span>
-                                <span>-₹{discountAmount.toLocaleString()}</span>
-                            </div>
-                        )}
-
-                        <div style={{ ...s.summaryRow, fontSize: '1.4rem', fontWeight: 800, marginTop: 12, paddingTop: 16, borderTop: '1px dashed rgba(255,255,255,0.1)' }} className="divider">
-                            <span className="summary-text-bold">Total</span>
-                            <span className="summary-text-bold">₹{finalAmount.toLocaleString()}</span>
+                                <div className="pt-4">
+                                    <button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="w-full flex items-center justify-center gap-3 py-5 px-6 rounded-2xl bg-gray-900 text-white text-lg font-black hover:bg-black focus:outline-none focus:ring-4 focus:ring-gray-900/10 transition-all duration-300 shadow-xl shadow-gray-900/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                                    >
+                                        {submitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                                            <>
+                                                <Lock className="w-5 h-5" /> Pay Securely ₹{finalAmount.toLocaleString()}
+                                            </>
+                                        )}
+                                    </button>
+                                    <p className="text-center text-xs font-bold text-gray-400 mt-6 flex items-center justify-center gap-2">
+                                        <ShieldCheck className="w-4 h-4" /> 256-bit SSL encrypted & secured by {gateway === 'razorpay' ? 'Razorpay' : 'Cashfree'}.
+                                    </p>
+                                </div>
+                            </form>
                         </div>
                     </div>
+
+                    {/* Right Side: Order Summary */}
+                    <div className="w-full lg:w-2/5 order-1 lg:order-2">
+                        <div className="bg-gray-900 rounded-[2rem] p-6 sm:p-8 text-white shadow-2xl sticky top-28 overflow-hidden relative">
+                            {/* Decorative background blur */}
+                            <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500 rounded-full mix-blend-screen filter blur-[80px] opacity-50"></div>
+                            
+                            <h3 className="text-xl font-black flex items-center gap-3 mb-8 relative z-10">
+                                <CreditCard className="w-6 h-6 text-indigo-400" /> Order Summary
+                            </h3>
+                            
+                            <div className="space-y-4 mb-8 relative z-10">
+                                <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                    <span className="text-gray-400 font-medium">Service</span>
+                                    <span className="font-bold">{service.name}</span>
+                                </div>
+                                <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                    <span className="text-gray-400 font-medium">Selected Plan</span>
+                                    <span className="font-bold text-indigo-300">{plan.name}</span>
+                                </div>
+                                <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                    <span className="text-gray-400 font-medium">Duration</span>
+                                    <span className="font-bold">{plan.durationDays} days</span>
+                                </div>
+                            </div>
+
+                            {/* Coupon System */}
+                            <div className="mb-8 relative z-10">
+                                {couponState === 'applied' ? (
+                                    <div className="flex justify-between items-center bg-green-500/10 border border-green-500/30 p-4 rounded-xl">
+                                        <div className="flex items-center gap-2 text-green-400 font-bold text-sm">
+                                            <CheckCircle2 className="w-4 h-4" /> {couponCode.toUpperCase()} applied
+                                        </div>
+                                        <button onClick={removeCoupon} type="button" className="text-xs font-bold text-red-400 hover:text-red-300 uppercase tracking-wider transition-colors">
+                                            Remove
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-xl focus-within:border-indigo-500/50 focus-within:bg-white/10 transition-all duration-300">
+                                            <div className="pl-3 flex items-center text-gray-500 pointer-events-none">
+                                                <Tag className="w-4 h-4" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                placeholder="Discount Code"
+                                                value={couponCode}
+                                                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                                className="flex-1 bg-transparent border-none text-white text-sm font-bold placeholder-gray-500 outline-none uppercase"
+                                            />
+                                            <button 
+                                                onClick={handleApplyCoupon} 
+                                                disabled={!couponCode || couponState === 'loading'} 
+                                                type="button" 
+                                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 disabled:text-gray-500 text-white text-xs font-black rounded-lg transition-colors"
+                                            >
+                                                {couponState === 'loading' ? '...' : 'APPLY'}
+                                            </button>
+                                        </div>
+                                        {couponState === 'error' && <div className="text-red-400 text-xs font-bold mt-2 ml-2 flex items-center gap-1"><AlertCircle className="w-3 h-3"/>{couponError}</div>}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-4 relative z-10">
+                                <div className="flex justify-between items-center text-gray-400 font-medium">
+                                    <span>Subtotal</span>
+                                    <span className="font-bold text-white">₹{parseFloat(plan.price).toLocaleString()}</span>
+                                </div>
+
+                                {couponState === 'applied' && (
+                                    <div className="flex justify-between items-center text-green-400 font-bold">
+                                        <span>Discount</span>
+                                        <span>-₹{discountAmount.toLocaleString()}</span>
+                                    </div>
+                                )}
+
+                                <div className="pt-6 mt-6 border-t border-dashed border-white/20 flex justify-between items-center">
+                                    <span className="text-lg font-medium text-gray-300">Total</span>
+                                    <span className="text-3xl font-black text-white">₹{finalAmount.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </main>
-            <style>{`
-                @keyframes spin { to { transform: rotate(360deg); } }
-                input::placeholder { color: #94a3b8; }
-                
-                .checkout-main {
-                    flex: 1;
-                    max-width: 1100px;
-                    margin: 0 auto;
-                    padding: 40px 24px;
-                    width: 100%;
-                    display: flex;
-                    gap: 40px;
-                    align-items: flex-start;
-                }
-                
-                .checkout-left {
-                    flex: 1;
-                    background: #ffffff;
-                    border-radius: 24px;
-                    padding: 40px;
-                    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
-                    border: 1px solid #f1f5f9;
-                }
-                
-                .checkout-right {
-                    flex: 0 0 380px;
-                    background: linear-gradient(145deg, #0f172a, #1e293b);
-                    color: #fff;
-                    border-radius: 24px;
-                    padding: 32px;
-                    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.3);
-                    position: sticky;
-                    top: 100px;
-                }
-                
-                .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-                .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-                .gateway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-                /* Mobile View Queries - Premium Vertical Stack */
-                @media (max-width: 860px) {
-                    .checkout-main {
-                        flex-direction: column-reverse; /* Summary on top, Form below */
-                        padding: 16px;
-                        gap: 24px;
-                    }
-                    .checkout-left {
-                        flex: auto;
-                        width: 100%;
-                        padding: 24px 20px;
-                        border-radius: 20px;
-                    }
-                    .checkout-right {
-                        flex: auto;
-                        width: 100%;
-                        position: static;
-                        padding: 24px 20px;
-                        border-radius: 20px;
-                        box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.2);
-                    }
-                    .form-row-2 { grid-template-columns: 1fr; gap: 20px; }
-                    .gateway-grid { grid-template-columns: 1fr; gap: 12px; }
-                }
-                
-                @media (max-width: 480px) {
-                    .gateway-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
-            `}</style>
         </div>
     );
 }
-
-const s: Record<string, React.CSSProperties> = {
-    label: { display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#475569', marginBottom: 8 },
-    input: { width: '100%', padding: '14px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, fontSize: '0.95rem', color: '#0f172a', transition: 'border-color 0.2s', outline: 'none' },
-    gatewayOption: { display: 'flex', alignItems: 'center', gap: 12, padding: '16px', border: '1px solid', borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s' },
-    summaryRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.95rem' }
-};
