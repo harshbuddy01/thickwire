@@ -1,0 +1,10 @@
+@@ -75,6 +75,7 @@
+                             <div className="plan-badge badge-gold">
+                                 <Crown size={12} fill="currentColor" /> PREMIUM PLAN
+                             </div>
++                            <div className="plan-card-inner">
++                            <div className="best-value-ribbon">BEST<br/>VALUE</div>
+                             <div className="plan-content">
+-                                <div className="best-value-ribbon">BEST<br/>VALUE</div>
+-                                <h3 className="plan-name">6 Months <span className="sub-name">(Ads Free)</span></h3>
++                                <h3 className="plan-name">6 Months <span className="sub-name">(Ads Free)</span></h3>

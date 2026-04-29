@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import api from '@/lib/api';
-import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -66,6 +66,7 @@ export default function AccountPage() {
 
     const [orders, setOrders] = useState<any[]>([]);
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
+    const [tickets, setTickets] = useState<any[]>([]);
     const [isFetching, setIsFetching] = useState(true);
 
     // Modal State
@@ -73,6 +74,11 @@ export default function AccountPage() {
     const [loadingModal, setLoadingModal] = useState(false);
     const [selectedCredential, setSelectedCredential] = useState<any>(null);
     const [showPassword, setShowPassword] = useState(false);
+    
+    // Support Ticket State
+    const [selectedSupportTicket, setSelectedSupportTicket] = useState<any>(null);
+    const [ticketReplyText, setTicketReplyText] = useState('');
+    const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -84,16 +90,33 @@ export default function AccountPage() {
 
     const fetchData = async () => {
         try {
-            const [ordersRes, subsRes] = await Promise.all([
+            const [ordersRes, subsRes, ticketsRes] = await Promise.all([
                 api.get('/account/orders'),
-                api.get('/account/subscriptions')
+                api.get('/account/subscriptions'),
+                api.get('/support/my-tickets')
             ]);
             setOrders(ordersRes.data);
             setSubscriptions(subsRes.data);
+            setTickets(ticketsRes.data);
         } catch (err) {
             console.error('Failed to fetch account data:', err);
         } finally {
             setIsFetching(false);
+        }
+    };
+
+    const handleSendTicketReply = async () => {
+        if (!selectedSupportTicket || !ticketReplyText.trim()) return;
+        setIsSubmittingReply(true);
+        try {
+            const { data } = await api.post(`/support/${selectedSupportTicket.id}/reply`, { replyText: ticketReplyText });
+            setSelectedSupportTicket(data);
+            setTickets(tickets.map(t => t.id === data.id ? data : t));
+            setTicketReplyText('');
+        } catch (err) {
+            console.error('Failed to send reply:', err);
+        } finally {
+            setIsSubmittingReply(false);
         }
     };
 
@@ -131,6 +154,7 @@ export default function AccountPage() {
         { id: 'overview', label: 'Overview', icon: <Package size={18} /> },
         { id: 'subscriptions', label: 'Subscriptions', icon: <Clock size={18} /> },
         { id: 'orders', label: 'Order History', icon: <ShieldCheck size={18} /> },
+        { id: 'tickets', label: 'Support Tickets', icon: <HelpCircle size={18} /> },
         { id: 'settings', label: 'Settings', icon: <Settings size={18} /> }
     ];
 
@@ -305,6 +329,48 @@ export default function AccountPage() {
                             ))}
                         </div>
                     )}
+                    
+                    {/* Tickets */}
+                    {activeTab === 'tickets' && (
+                        <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                                <h2 style={{ ...s.sectionTitle, marginBottom: 0 }}>Support Tickets</h2>
+                                <Link href="/support" style={{ padding: '10px 18px', background: '#6c5ce7', color: 'white', borderRadius: 14, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
+                                    New Ticket
+                                </Link>
+                            </div>
+                            
+                            {tickets.length === 0 ? (
+                                <div style={{ ...s.listCard, ...s.emptyState }}>
+                                    <HelpCircle size={48} style={{ margin: '0 auto 16px', color: '#ccc' }} />
+                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', marginBottom: 8 }}>No support tickets</h3>
+                                    <p style={{ color: '#888', marginBottom: 24 }}>You haven't opened any support tickets yet.</p>
+                                </div>
+                            ) : (
+                                tickets.map(ticket => (
+                                    <div key={ticket.id} style={{ ...s.listCard, marginBottom: 12, borderLeft: ticket.status === 'RESOLVED' ? '4px solid #10b981' : '4px solid #f59e0b', cursor: 'pointer', transition: 'transform 0.1s' }} onClick={() => setSelectedSupportTicket(ticket)}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', margin: 0 }}>{ticket.subject}</h3>
+                                                    <span style={{ ...s.badge, background: ticket.status === 'RESOLVED' ? '#ecfdf5' : '#fffbeb', color: ticket.status === 'RESOLVED' ? '#10b981' : '#f59e0b' }}>
+                                                        {ticket.status}
+                                                    </span>
+                                                </div>
+                                                <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {ticket.message}
+                                                </p>
+                                                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                                                    Created: {new Date(ticket.createdAt).toLocaleString()} • {ticket.messages?.length || 1} messages
+                                                </div>
+                                            </div>
+                                            <ChevronRight size={20} style={{ color: '#cbd5e1', flexShrink: 0, marginTop: '4px' }} />
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    )}
 
                     {/* Settings */}
                     {activeTab === 'settings' && (
@@ -435,6 +501,99 @@ export default function AccountPage() {
                                 </div>
                             ) : null}
                         </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* View Support Ticket Modal (Live Chat) */}
+            {selectedSupportTicket && (
+                <div style={{
+                    position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)',
+                    zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+                }}>
+                    <div style={{
+                        background: 'white', width: '100%', maxWidth: '600px', height: '80vh', borderRadius: '24px',
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.1)', overflow: 'hidden', animation: 'scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        display: 'flex', flexDirection: 'column'
+                    }}>
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
+                            <div>
+                                <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', margin: '0 0 4px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <HelpCircle size={20} style={{ color: '#4f46e5' }} /> {selectedSupportTicket.subject}
+                                </h2>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#64748b' }}>
+                                    Ticket #{selectedSupportTicket.id.substring(0, 8)} • 
+                                    <span style={{ color: selectedSupportTicket.status === 'RESOLVED' ? '#10b981' : '#f59e0b', fontWeight: 700 }}>
+                                        {selectedSupportTicket.status}
+                                    </span>
+                                </div>
+                            </div>
+                            <button onClick={() => setSelectedSupportTicket(null)} style={{ background: '#fff', border: '1px solid #e2e8f0', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}>&times;</button>
+                        </div>
+
+                        <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', background: '#fff' }}>
+                            {selectedSupportTicket.messages && selectedSupportTicket.messages.map((msg: any) => (
+                                <div key={msg.id} style={{
+                                    display: 'flex',
+                                    flexDirection: msg.sender === 'CUSTOMER' ? 'row-reverse' : 'row',
+                                    gap: '12px'
+                                }}>
+                                    <div style={{
+                                        width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+                                        background: msg.sender === 'CUSTOMER' ? '#f1eeff' : '#1e293b',
+                                        color: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#fff',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.8rem'
+                                    }}>
+                                        {msg.sender === 'CUSTOMER' ? 'Me' : 'A'}
+                                    </div>
+                                    <div style={{
+                                        background: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#f1f5f9',
+                                        color: msg.sender === 'CUSTOMER' ? '#fff' : '#334155',
+                                        padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', whiteSpace: 'pre-wrap', lineHeight: 1.5,
+                                        maxWidth: '80%',
+                                        borderTopRightRadius: msg.sender === 'CUSTOMER' ? '4px' : '16px',
+                                        borderTopLeftRadius: msg.sender === 'ADMIN' ? '4px' : '16px',
+                                    }}>
+                                        {msg.text}
+                                        <div style={{ fontSize: '0.65rem', marginTop: '6px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8', textAlign: msg.sender === 'CUSTOMER' ? 'right' : 'left' }}>
+                                            {new Date(msg.createdAt).toLocaleString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            
+                            {selectedSupportTicket.status === 'RESOLVED' && (
+                                <div style={{ textAlign: 'center', padding: '12px', background: '#ecfdf5', color: '#10b981', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, marginTop: '8px' }}>
+                                    This ticket has been resolved.
+                                </div>
+                            )}
+                        </div>
+
+                        {selectedSupportTicket.status !== 'RESOLVED' && (
+                            <div style={{ padding: '20px', borderTop: '1px solid #e2e8f0', background: '#f8fafc', display: 'flex', gap: '12px' }}>
+                                <textarea
+                                    value={ticketReplyText}
+                                    onChange={(e) => setTicketReplyText(e.target.value)}
+                                    placeholder="Type your reply here..."
+                                    style={{
+                                        flex: 1, height: '80px', padding: '12px', borderRadius: '12px', border: '1px solid #cbd5e1',
+                                        resize: 'none', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem'
+                                    }}
+                                />
+                                <button
+                                    disabled={!ticketReplyText.trim() || isSubmittingReply}
+                                    onClick={handleSendTicketReply}
+                                    style={{
+                                        background: !ticketReplyText.trim() ? '#cbd5e1' : '#6c5ce7',
+                                        color: 'white', border: 'none', borderRadius: '12px', padding: '0 20px',
+                                        fontWeight: 600, cursor: !ticketReplyText.trim() ? 'not-allowed' : 'pointer',
+                                        transition: 'background 0.2s'
+                                    }}
+                                >
+                                    {isSubmittingReply ? 'Sending...' : 'Reply'}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
