@@ -138,6 +138,13 @@ function CheckoutContent() {
         setError(null);
 
         try {
+            // If amount > 0, show maintenance message instead of opening payment gateway
+            if (finalAmount > 0) {
+                setError('MAINTENANCE');
+                setSubmitting(false);
+                return;
+            }
+
             const payload = {
                 ...form,
                 planId: plan.id,
@@ -217,11 +224,44 @@ function CheckoutContent() {
                 <div className="checkout-form-card">
                     <h2>Complete Your Purchase</h2>
 
-                    {error && (
+                    {error && error === 'MAINTENANCE' ? (
+                        <div style={{
+                            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(251, 191, 36, 0.08))',
+                            border: '1px solid rgba(245, 158, 11, 0.4)',
+                            borderRadius: '12px',
+                            padding: '24px',
+                            marginBottom: '24px',
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                                <span style={{ fontSize: '1.4rem' }}>⚠️</span>
+                                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: '#f59e0b' }}>Payment Gateway Under Maintenance</h3>
+                            </div>
+                            <p style={{ margin: '0 0 14px 0', fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                                Online payment is temporarily unavailable. To complete your purchase:
+                            </p>
+                            <ol style={{ margin: '0 0 16px 0', paddingLeft: '20px', fontSize: '0.88rem', color: 'var(--text-main)', lineHeight: 1.8 }}>
+                                <li>Pay the amount to our UPI ID or QR code (contact support for details)</li>
+                                <li>Send your payment screenshot to our WhatsApp / support</li>
+                                <li>We will send you a coupon code within minutes</li>
+                                <li>Apply the coupon in the <strong>Discount Code</strong> box on this page and click <strong>Pay</strong></li>
+                            </ol>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                background: 'rgba(245, 158, 11, 0.1)',
+                                borderRadius: '8px',
+                                padding: '10px 14px',
+                            }}>
+                                <span style={{ fontSize: '1.1rem' }}>📞</span>
+                                <span style={{ fontSize: '0.88rem', color: '#f59e0b', fontWeight: 600 }}>Contact Support: WhatsApp us for instant help</span>
+                            </div>
+                        </div>
+                    ) : error ? (
                         <div className="toast error" style={{ position: 'relative', bottom: 'auto', right: 'auto', marginBottom: 20 }}>
                             {error}
                         </div>
-                    )}
+                    ) : null}
 
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
