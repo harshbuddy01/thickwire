@@ -79,6 +79,7 @@ export default function AccountPage() {
     const [selectedSupportTicket, setSelectedSupportTicket] = useState<any>(null);
     const [ticketReplyText, setTicketReplyText] = useState('');
     const [isSubmittingReply, setIsSubmittingReply] = useState(false);
+    const [ratingSubmitting, setRatingSubmitting] = useState(false);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -117,6 +118,19 @@ export default function AccountPage() {
             console.error('Failed to send reply:', err);
         } finally {
             setIsSubmittingReply(false);
+        }
+    };
+
+    const handleSubmitRating = async (ticketId: string, rating: number) => {
+        setRatingSubmitting(true);
+        try {
+            const { data } = await api.patch(`/support/${ticketId}/rating`, { rating });
+            setSelectedSupportTicket(data);
+            setTickets(tickets.map(t => t.id === data.id ? data : t));
+        } catch (err) {
+            console.error('Failed to submit rating:', err);
+        } finally {
+            setRatingSubmitting(false);
         }
     };
 
@@ -563,8 +577,37 @@ export default function AccountPage() {
                             ))}
                             
                             {selectedSupportTicket.status === 'RESOLVED' && (
-                                <div style={{ textAlign: 'center', padding: '12px', background: '#ecfdf5', color: '#10b981', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, marginTop: '8px' }}>
-                                    This ticket has been resolved.
+                                <div style={{ textAlign: 'center', padding: '16px', background: '#ecfdf5', borderRadius: '12px', marginTop: '8px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '12px' }}>
+                                        <CheckCircle2 size={20} style={{ color: '#10b981' }} />
+                                        <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.95rem' }}>Ticket Resolved</span>
+                                    </div>
+                                    {!selectedSupportTicket.rating ? (
+                                        <div>
+                                            <p style={{ color: '#065f46', fontSize: '0.85rem', marginBottom: '12px', fontWeight: 500 }}>How was your support experience?</p>
+                                            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                                                {[1, 2, 3, 4, 5].map(star => (
+                                                    <button
+                                                        key={star}
+                                                        onClick={() => handleSubmitRating(selectedSupportTicket.id, star)}
+                                                        disabled={ratingSubmitting}
+                                                        style={{
+                                                            fontSize: '28px', background: 'none', border: 'none', cursor: ratingSubmitting ? 'not-allowed' : 'pointer',
+                                                            opacity: ratingSubmitting ? 0.5 : 1, transition: 'transform 0.15s', padding: '4px',
+                                                        }}
+                                                        onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.3)')}
+                                                        onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                                                    >
+                                                        ⭐
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p style={{ color: '#065f46', fontSize: '0.9rem', fontWeight: 600, margin: 0 }}>
+                                            You rated this {selectedSupportTicket.rating}/5 {'⭐'.repeat(selectedSupportTicket.rating)}
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>
