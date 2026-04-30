@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { ChevronRight, Check, ShoppingCart, ChevronDown, Play, Zap, Monitor, ShieldCheck, Tag, Headphones } from 'lucide-react';
 import { useState } from 'react';
 import type { Service } from '@/lib/types';
+import ProgressiveImage from '@/components/ProgressiveImage';
 
+const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 export default function NetflixPageClient({ service }: { service: Service }) {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -35,7 +37,9 @@ export default function NetflixPageClient({ service }: { service: Service }) {
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
                 <div className="hero-image-container">
-                    <img src="/images/slider/netflix-banner-new.png" alt="Netflix Premium" className="hero-banner-image" />
+                    <div className="hero-banner-image-wrapper" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+                        <ProgressiveImage src={`${MINIO_URL}/slider/netflix-banner-new.png`} alt="Netflix Premium" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
                 </div>
 
                 {/* ─── Plan Selection ────────────────────────────────── */}
@@ -181,7 +185,9 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                 <div className="bottom-cta">
                     <div className="cta-content">
                         <div className="cta-icon-box">
-                            <img src="/images/netflix_3d.png" alt="N" />
+                            <div style={{ width: '32px', height: '32px' }}>
+                                <ProgressiveImage src={`${MINIO_URL}/netflix_3d.png`} alt="N" />
+                            </div>
                         </div>
                         <div className="cta-text">
                             <h3>Ready to start watching?</h3>

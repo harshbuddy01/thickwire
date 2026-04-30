@@ -6,6 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, AlertCircle, Loader2, PlayCircle } from 'lucide-react';
+import ProgressiveImage from '@/components/ProgressiveImage';
+
+const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 
 function LoginContent() {
     const [email, setEmail] = useState('');
@@ -59,9 +62,15 @@ function LoginContent() {
                     Access your elite collection of streaming and professional tools in one unified, secure space. Join thousands of creators and entertainment lovers.
                 </p>
                 <div style={{ display: 'flex', gap: '16px', marginTop: '40px', opacity: 0.6 }}>
-                    <img src="/images/netflix_3d.png" alt="Netflix" style={{ height: '40px', objectFit: 'contain' }} />
-                    <img src="/images/chatgpt_3d.png" alt="ChatGPT" style={{ height: '40px', objectFit: 'contain' }} />
-                    <img src="/images/sonyliv_3d.png" alt="SonyLIV" style={{ height: '40px', objectFit: 'contain' }} />
+                    <div style={{ height: '40px', aspectRatio: '1' }}>
+                        <ProgressiveImage src={`${MINIO_URL}/netflix_3d.png`} alt="Netflix" style={{ objectFit: 'contain' }} />
+                    </div>
+                    <div style={{ height: '40px', aspectRatio: '1' }}>
+                        <ProgressiveImage src={`${MINIO_URL}/chatgpt_3d.png`} alt="ChatGPT" style={{ objectFit: 'contain' }} />
+                    </div>
+                    <div style={{ height: '40px', aspectRatio: '1' }}>
+                        <ProgressiveImage src={`${MINIO_URL}/sonyliv_3d.png`} alt="SonyLIV" style={{ objectFit: 'contain' }} />
+                    </div>
                 </div>
             </div>
 
