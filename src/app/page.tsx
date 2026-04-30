@@ -43,9 +43,9 @@ export default function HomePage() {
 
             {/* ─── Content Blocks Grid ─────────────────────────────── */}
             <div className="blocks-parent-grid" style={{ marginTop: '56px' }}>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                <Link href="/streaming" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/streaming.png`} alt="Streaming" />
-                </div>
+                </Link>
                 <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/grossing.png`} alt="Grosing" />
                 </div>
