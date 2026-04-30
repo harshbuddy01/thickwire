@@ -24,14 +24,11 @@ export default function StreamingCategoryPage() {
     const getLogoForSlug = (slug: string) => {
         const mapping: Record<string, string> = {
             'netflix': 'netflix_3d.png',
-            'prime-video': 'prime_3d.png',
-            'prime': 'prime_3d.png',
             'chatgpt': 'chatgpt_3d.png',
             'sonyliv': 'sonyliv_3d.png',
             'jiohotstar': 'jiohotstar_3d.png',
-            'zee5': 'zee5_3d.png',
         };
-        return mapping[slug] || `${slug}_3d.png`;
+        return mapping[slug] || null; // Return null if not explicitly in MinIO
     };
 
     return (
@@ -48,70 +45,14 @@ export default function StreamingCategoryPage() {
             <div className="container">
                 {/* ─── Top Banner ────────────────────────────────────── */}
                 <div style={{
-                    background: 'linear-gradient(90deg, #110e14 0%, #2a080c 50%, #520006 100%)',
                     borderRadius: '24px',
-                    padding: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '40px',
-                    position: 'relative',
                     overflow: 'hidden',
                     marginBottom: '48px',
-                    border: '1px solid rgba(255,255,255,0.05)'
+                    aspectRatio: '1000 / 300', // Wide banner ratio
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                    position: 'relative'
                 }}>
-                    {/* Background abstract lines overlay (optional simulation) */}
-                    <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', background: 'radial-gradient(circle at right, rgba(255,0,0,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-                    {/* Red Icon Box */}
-                    <div style={{
-                        width: '120px',
-                        height: '120px',
-                        background: 'linear-gradient(135deg, #ff0f47 0%, #a2001d 100%)',
-                        borderRadius: '28px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        boxShadow: '0 20px 40px rgba(255,0,0,0.2)',
-                        position: 'relative',
-                        zIndex: 2
-                    }}>
-                        <Play size={48} fill="white" color="white" />
-                    </div>
-
-                    <div style={{ position: 'relative', zIndex: 2 }}>
-                        <h1 style={{ fontSize: '3rem', fontWeight: 800, margin: '0 0 8px 0', letterSpacing: '-1px' }}>Streaming</h1>
-                        <p style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.8)', margin: '0 0 24px 0', maxWidth: '400px', lineHeight: 1.4 }}>
-                            Watch unlimited entertainment
-                        </p>
-
-                        <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Play size={14} color="#fff" />
-                                </div>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.3 }}>Premium<br />Entertainment</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <ShieldCheck size={14} color="#fff" />
-                                </div>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.3 }}>Official<br />Subscriptions</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Tag size={14} color="#fff" />
-                                </div>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.3 }}>Best Prices<br />Guaranteed</span>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Headphones size={14} color="#fff" />
-                                </div>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.3 }}>24/7<br />Support</span>
-                            </div>
-                        </div>
-                    </div>
+                    <ProgressiveImage src={`${MINIO_URL}/slider/slider1.png`} alt="Streaming Banner" />
                 </div>
 
                 {/* ─── Grid Title ──────────────────────────────────────── */}
@@ -122,18 +63,20 @@ export default function StreamingCategoryPage() {
 
                 {/* ─── Services Grid ───────────────────────────────────── */}
                 {loading ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                            <div key={i} style={{ background: '#13131a', borderRadius: '20px', height: '140px', animation: 'shimmer 1.5s infinite', backgroundSize: '200% 100%', backgroundImage: 'linear-gradient(90deg, #13131a 25%, #1a1a24 50%, #13131a 75%)' }} />
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+                        {[1, 2, 3, 4, 5, 6].map(i => (
+                            <div key={i} style={{ background: '#13131a', borderRadius: '16px', height: '140px', animation: 'shimmer 1.5s infinite', backgroundSize: '200% 100%', backgroundImage: 'linear-gradient(90deg, #13131a 25%, #1a1a24 50%, #13131a 75%)' }} />
                         ))}
                     </div>
                 ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-                        {services.map(service => (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+                        {services.map(service => {
+                            const logoFile = getLogoForSlug(service.slug);
+                            return (
                             <div key={service.id} style={{
                                 background: '#16161e',
-                                borderRadius: '20px',
-                                padding: '24px',
+                                borderRadius: '16px',
+                                padding: '16px',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 border: '1px solid rgba(255,255,255,0.03)',
@@ -142,18 +85,22 @@ export default function StreamingCategoryPage() {
                             }}
                                 className="streaming-card-hover"
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                                    <div style={{ width: '48px', height: '48px', position: 'relative' }}>
-                                        <ProgressiveImage
-                                            src={`${MINIO_URL}/${getLogoForSlug(service.slug)}`}
-                                            alt={service.name}
-                                            style={{ objectFit: 'contain' }}
-                                        />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                                    <div style={{ width: '40px', height: '40px', position: 'relative', flexShrink: 0, borderRadius: '8px', overflow: 'hidden', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {logoFile ? (
+                                            <ProgressiveImage
+                                                src={`${MINIO_URL}/${logoFile}`}
+                                                alt={service.name}
+                                                style={{ objectFit: 'contain' }}
+                                            />
+                                        ) : (
+                                            <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>{service.name.charAt(0)}</span>
+                                        )}
                                     </div>
-                                    <div>
-                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 4px 0' }}>{service.name}</h3>
-                                        <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
-                                            {service.plans.length > 0 ? (service.plans[0].name.includes('Premium') ? 'Premium Plan' : 'All Plans') : 'Premium Subscription'}
+                                    <div style={{ minWidth: 0 }}>
+                                        <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: '0 0 2px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{service.name}</h3>
+                                        <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {service.plans.length > 0 ? (service.plans[0].name.includes('Premium') ? 'Premium Plan' : 'All Plans') : 'Premium'}
                                         </p>
                                     </div>
                                 </div>
@@ -180,7 +127,8 @@ export default function StreamingCategoryPage() {
                                     View Plans <ChevronRight size={16} />
                                 </Link>
                             </div>
-                        ))}
+                        );
+                        })}
                     </div>
                 )}
 
