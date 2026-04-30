@@ -8,18 +8,18 @@ const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-asse
 
 // Hardcoded matching the user's exact screenshot
 const SERVICES = [
-    { id: 'netflix', name: 'Netflix', slug: 'netflix', planText: 'Premium Plan', logo: 'netflix_3d.png', fallbackColor: '#E50914' },
-    { id: 'prime', name: 'Prime Video', slug: 'prime', planText: 'All Plans', logo: null, fallbackColor: '#00A8E1' },
-    { id: 'hotstar', name: 'Disney+ Hotstar', slug: 'hotstar', planText: 'Premium Plans', logo: null, fallbackColor: '#1F3C73' },
-    { id: 'zee5', name: 'ZEE5', slug: 'zee5', planText: 'Premium Plans', logo: null, fallbackColor: '#8230C6' },
-    { id: 'sonyliv', name: 'Sony LIV', slug: 'sonyliv', planText: 'Premium Plans', logo: 'sonyliv_3d.png', fallbackColor: '#F48220' },
+    { id: 'netflix', name: 'Netflix', slug: 'netflix', planText: 'Premium Plan', logo: 'logos/netflix.svg', fallbackColor: '#E50914' },
+    { id: 'prime', name: 'Prime Video', slug: 'prime', planText: 'All Plans', logo: 'logos/prime.svg', fallbackColor: '#00A8E1' },
+    { id: 'hotstar', name: 'Disney+ Hotstar', slug: 'hotstar', planText: 'Premium Plans', logo: 'logos/hotstar.svg', fallbackColor: '#1F3C73' },
+    { id: 'zee5', name: 'ZEE5', slug: 'zee5', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/28/Zee5_Official_logo.svg', fallbackColor: '#8230C6' },
+    { id: 'sonyliv', name: 'Sony LIV', slug: 'sonyliv', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Sony_LIV_logo.svg', fallbackColor: '#F48220' },
     { id: 'chaupal', name: 'Chaupal', slug: 'chaupal', planText: 'Premium Plans', logo: null, fallbackColor: '#F5B041' },
-    { id: 'youtube', name: 'YouTube Premium', slug: 'youtube', planText: 'Ad-free Experience', logo: null, fallbackColor: '#FF0000' },
-    { id: 'disney', name: 'Disney+', slug: 'disney', planText: 'Premium Plans', logo: null, fallbackColor: '#113CCF' },
-    { id: 'crunchyroll', name: 'Crunchyroll', slug: 'crunchyroll', planText: 'Premium Plans', logo: null, fallbackColor: '#F47521' },
-    { id: 'hbomax', name: 'HBO Max', slug: 'hbomax', planText: 'Premium Plans', logo: null, fallbackColor: '#5822B4' },
-    { id: 'jiosaavn', name: 'JioSaavn', slug: 'jiosaavn', planText: 'Music & Podcasts', logo: null, fallbackColor: '#2BC5B4' },
-    { id: 'spotify', name: 'Spotify', slug: 'spotify', planText: 'Premium Plans', logo: null, fallbackColor: '#1DB954' },
+    { id: 'youtube', name: 'YouTube Premium', slug: 'youtube', planText: 'Ad-free Experience', logo: 'logos/youtube.svg', fallbackColor: '#FF0000' },
+    { id: 'disney', name: 'Disney+', slug: 'disney', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg', fallbackColor: '#113CCF' },
+    { id: 'crunchyroll', name: 'Crunchyroll', slug: 'crunchyroll', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Crunchyroll_Logo.png', fallbackColor: '#F47521' },
+    { id: 'hbomax', name: 'HBO Max', slug: 'hbomax', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg', fallbackColor: '#5822B4' },
+    { id: 'jiosaavn', name: 'JioSaavn', slug: 'jiosaavn', planText: 'Music & Podcasts', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Jiosaavn-logo-300x300.png', fallbackColor: '#2BC5B4' },
+    { id: 'spotify', name: 'Spotify', slug: 'spotify', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg', fallbackColor: '#1DB954' },
 ];
 
 export default function StreamingCategoryPage() {
@@ -83,9 +83,9 @@ export default function StreamingCategoryPage() {
                                 }}>
                                     {service.logo ? (
                                         <ProgressiveImage
-                                            src={`${MINIO_URL}/${service.logo}`}
+                                            src={service.logo.startsWith('http') ? service.logo : `${MINIO_URL}/${service.logo}`}
                                             alt={service.name}
-                                            style={{ objectFit: 'contain' }}
+                                            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
                                         />
                                     ) : (
                                         <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>{service.name.charAt(0)}</span>
