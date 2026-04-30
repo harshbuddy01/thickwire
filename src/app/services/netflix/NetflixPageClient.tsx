@@ -37,9 +37,11 @@ export default function NetflixPageClient({ service }: { service: Service }) {
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
                 <div className="hero-image-container">
-                    <div className="hero-banner-image-wrapper" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
-                        <ProgressiveImage src={`${MINIO_URL}/slider/netflix-banner-new.png`} alt="Netflix Premium" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
+                    <img
+                        src={`${MINIO_URL}/slider/netflix-banner-new.png`}
+                        alt="Netflix Premium"
+                        className="hero-banner-image"
+                    />
                 </div>
 
                 {/* ─── Plan Selection ────────────────────────────────── */}

@@ -26,9 +26,11 @@ export default function PrimePageClient({ service }: { service: Service }) {
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
                 <div className="hero-image-container">
-                    <div className="hero-banner-image-wrapper" style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
-                        <ProgressiveImage src={`${MINIO_URL}/slider/prime-banner.png`} alt="Prime Video" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
+                    <img
+                        src={`${MINIO_URL}/slider/prime-banner.png`}
+                        alt="Prime Video"
+                        className="hero-banner-image"
+                    />
                 </div>
 
                 {/* ─── Plan Selection ────────────────────────────────── */}

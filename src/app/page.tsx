@@ -16,9 +16,9 @@ export default function HomePage() {
             </div>
 
             {/* ─── Trending Now ─────────────────────────────────────── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h2 className="section-title">Trending <span>Now</span></h2>
-                <Link href="/services" className="premium-btn" style={{ padding: '8px 16px', fontSize: '0.8rem', background: '#f1f5f9', color: '#0f172a' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', gap: '12px', flexWrap: 'nowrap' }}>
+                <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a1c23', margin: 0, whiteSpace: 'nowrap' }}>🔥 Trending <span style={{ color: '#6c5ce7' }}>Now</span></h2>
+                <Link href="/services" style={{ flexShrink: 0, padding: '8px 18px', background: '#f1f5f9', color: '#0f172a', borderRadius: '10px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                     View All
                 </Link>
             </div>
