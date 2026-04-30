@@ -5,11 +5,14 @@ import { useAuth } from '@/lib/AuthContext';
 import { usePathname } from 'next/navigation';
 import { Search, ShoppingCart, Heart, User, LogOut, Wallet, LayoutGrid, Package, HeadphonesIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
     const { user, loading, logout } = useAuth();
     const pathname = usePathname();
+    const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     if (pathname === '/checkout') return null;
 
@@ -34,8 +37,22 @@ export default function Header() {
                             type="text"
                             placeholder="Search for products, tools and more..."
                             className="search-main-input"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && searchQuery.trim()) {
+                                    router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                }
+                            }}
                         />
-                        <button className="search-trigger">
+                        <button
+                            className="search-trigger"
+                            onClick={() => {
+                                if (searchQuery.trim()) {
+                                    router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                }
+                            }}
+                        >
                             <Search size={18} />
                         </button>
                     </div>
@@ -43,7 +60,6 @@ export default function Header() {
                     <div className="nav-icons-group">
                         <Link href="/" className="header-icon-link">
                             <ShoppingCart size={20} />
-                            <span className="badge-num">5</span>
                         </Link>
                         <Link href="/" className="header-icon-link">
                             <Heart size={20} />

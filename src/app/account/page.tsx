@@ -196,14 +196,15 @@ export default function AccountPage() {
                 </button>
             </div>
 
-            <div style={s.layout}>
+            <div className="account-layout">
                 {/* Sidebar */}
-                <div style={s.sidebar}>
-                    <div style={s.sidebarCard}>
+                <div className="account-sidebar">
+                    <div className="sidebar-card" style={s.sidebarCard}>
                         {tabs.map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
+                                className="tab-btn"
                                 style={{
                                     ...s.tabBtn,
                                     background: activeTab === tab.id ? '#f1eeff' : '#fff',
@@ -217,7 +218,7 @@ export default function AccountPage() {
                 </div>
 
                 {/* Content */}
-                <div style={s.content}>
+                <div className="account-content">
                     {/* Overview */}
                     {activeTab === 'overview' && (
                         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>

@@ -4100,3 +4100,96 @@ textarea.form-input {
   box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
 }
 
+/* ─── Account Page Responsive ──────────────────────── */
+.account-layout {
+  display: flex;
+  gap: 28px;
+}
+
+.account-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.account-sidebar .sidebar-card {
+  position: sticky;
+  top: 100px;
+}
+
+.account-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .account-layout {
+    flex-direction: column;
+  }
+  .account-sidebar {
+    width: 100%;
+  }
+  .account-sidebar .sidebar-card {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+  }
+  .account-sidebar .tab-btn {
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid #f0f0f0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-layout {
+    padding: 16px 0 40px;
+  }
+}
+
+/* ─── Checkout Mobile Enhancements ─────────────────── */
+@media (max-width: 860px) {
+  .premium-checkout-container {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 20px;
+  }
+  .premium-summary-card {
+    position: static !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .premium-checkout-wrapper {
+    padding: 16px 12px;
+  }
+  .premium-checkout-container {
+    padding: 12px;
+  }
+}
+
+/* ─── Auth Pages Mobile ────────────────────────────── */
+@media (max-width: 768px) {
+  .premium-auth-wrapper {
+    flex-direction: column;
+  }
+  .premium-auth-left {
+    display: none;
+  }
+  .premium-auth-right {
+    width: 100%;
+    padding: 20px 16px;
+  }
+  .premium-auth-form-card {
+    padding: 32px 24px;
+  }
+}
+
+/* ─── Form Grid Responsive ─────────────────────────── */
+@media (max-width: 640px) {
+  .premium-form-grid-2col {
+    grid-template-columns: 1fr !important;
+  }
+}

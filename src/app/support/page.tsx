@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createSupportTicket } from '@/lib/api';
+import { useAuth } from '@/lib/AuthContext';
 
 export default function SupportPage() {
     const [form, setForm] = useState({
@@ -15,6 +16,18 @@ export default function SupportPage() {
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { user } = useAuth();
+
+    // Pre-fill form when user is logged in
+    useEffect(() => {
+        if (user) {
+            setForm(prev => ({
+                ...prev,
+                customerName: prev.customerName || user.name,
+                customerEmail: prev.customerEmail || user.email,
+            }));
+        }
+    }, [user]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

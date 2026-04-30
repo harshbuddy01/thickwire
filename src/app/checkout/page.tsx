@@ -49,7 +49,15 @@ function CheckoutContent() {
     const [couponError, setCouponError] = useState('');
     const [finalAmount, setFinalAmount] = useState(0);
 
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
+
+    // Auth guard — redirect to login if not authenticated
+    useEffect(() => {
+        if (!authLoading && !user) {
+            const dest = `/checkout?planId=${planId}&service=${serviceSlug}`;
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+        }
+    }, [authLoading, user, planId, serviceSlug, router]);
 
     // Pre-fill form from Auth Context
     useEffect(() => {
@@ -136,6 +144,13 @@ function CheckoutContent() {
         e.preventDefault();
         if (!plan) return;
 
+        // Phone validation
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(form.customerPhone.replace(/\D/g, ''))) {
+            setError('Please enter a valid 10-digit Indian mobile number.');
+            return;
+        }
+
         setSubmitting(true);
         setError(null);
 
@@ -161,7 +176,8 @@ function CheckoutContent() {
                     order_id: res.razorpayOrderId,
                     handler: async (response: any) => {
                         try {
-                            const verifyRes = await fetch('https://thickwire-api-production.up.railway.app/api/v1/orders/verify-payment', {
+                            const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+                        const verifyRes = await fetch(`${apiBase}/orders/verify-payment`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -207,6 +223,16 @@ function CheckoutContent() {
             setSubmitting(false);
         }
     };
+
+    // Wait for auth to resolve before rendering
+    if (authLoading) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc' }}>
+                <div style={{ width: 40, height: 40, border: '3px solid #e2e8f0', borderTop: '3px solid #4f46e5', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            </div>
+        );
+    }
+    if (!user) return null; // redirect in progress
 
     if (loading) {
         return (

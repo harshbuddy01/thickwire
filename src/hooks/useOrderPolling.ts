@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { getOrderStatus } from '@/lib/api';
 import type { OrderStatus } from '@/lib/types';
 
@@ -8,6 +8,13 @@ export function useOrderPolling(orderId: string | null) {
     const [order, setOrder] = useState<OrderStatus | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Use a ref to track current order state to avoid stale closures
+    const orderRef = useRef<OrderStatus | null>(null);
+
+    useEffect(() => {
+        orderRef.current = order;
+    }, [order]);
 
     const fetchStatus = useCallback(async () => {
         if (!orderId) return;
@@ -27,16 +34,15 @@ export function useOrderPolling(orderId: string | null) {
 
         fetchStatus();
 
-        // Stop polling if order is fulfilled or failed
-        const shouldPoll = () => {
-            if (!order) return true;
-            const terminal = ['FULFILLED', 'MANUAL_FULFILLED'];
-            const failed = order.paymentStatus === 'FAILED';
-            return !terminal.includes(order.fulfillmentStatus) && !failed;
-        };
-
         const interval = setInterval(() => {
-            if (shouldPoll()) {
+            const current = orderRef.current;
+            if (!current) {
+                fetchStatus();
+                return;
+            }
+            const terminal = ['FULFILLED', 'MANUAL_FULFILLED'];
+            const failed = current.paymentStatus === 'FAILED';
+            if (!terminal.includes(current.fulfillmentStatus) && !failed) {
                 fetchStatus();
             }
         }, 5000);
@@ -48,7 +54,7 @@ export function useOrderPolling(orderId: string | null) {
             clearInterval(interval);
             clearTimeout(timeout);
         };
-    }, [orderId, fetchStatus, order]);
+    }, [orderId, fetchStatus]); // removed "order" from deps to prevent re-creating interval
 
     return { order, loading, error, refetch: fetchStatus };
 }
