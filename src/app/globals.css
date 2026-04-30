@@ -610,6 +610,12 @@ a {
   color: var(--text-secondary);
 }
 
+/* ─── Shimmer skeleton for ProgressiveImage ─── */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* ─── Animated Floating Feature ─── */
 @keyframes float {
   0% {

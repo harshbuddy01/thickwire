@@ -1,105 +1,74 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-interface ProgressiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ProgressiveImageProps {
     src: string;
     alt: string;
     className?: string;
     style?: React.CSSProperties;
 }
 
-export default function ProgressiveImage({ src, alt, className, style, ...props }: ProgressiveImageProps) {
-    const [progress, setProgress] = useState(0);
-    const [blobUrl, setBlobUrl] = useState<string | null>(null);
+export default function ProgressiveImage({ src, alt, className, style }: ProgressiveImageProps) {
+    const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
+    const imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
-        let isMounted = true;
-        const xhr = new XMLHttpRequest();
+        // Reset when src changes
+        setLoaded(false);
+        setError(false);
 
-        xhr.open('GET', src, true);
-        xhr.responseType = 'blob';
+        const img = new window.Image();
+        img.src = src;
+        img.onload = () => setLoaded(true);
+        img.onerror = () => setError(true);
 
-        xhr.onprogress = (event) => {
-            if (event.lengthComputable && isMounted) {
-                const percentComplete = Math.round((event.loaded / event.total) * 100);
-                setProgress(percentComplete);
-            }
-        };
-
-        xhr.onload = () => {
-            if (xhr.status === 200 && isMounted) {
-                const url = URL.createObjectURL(xhr.response);
-                setBlobUrl(url);
-                setProgress(100);
-            } else if (isMounted) {
-                setError(true);
-            }
-        };
-
-        xhr.onerror = () => {
-            if (isMounted) setError(true);
-        };
-
-        xhr.send();
-
-        return () => {
-            isMounted = false;
-            xhr.abort();
-            if (blobUrl) {
-                URL.revokeObjectURL(blobUrl);
-            }
-        };
+        // If already cached by browser, it fires synchronously
+        if (img.complete) setLoaded(true);
     }, [src]);
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', ...style }} className={className}>
-            {/* The Image */}
-            {blobUrl && (
-                <img
-                    src={blobUrl}
-                    alt={alt}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        opacity: blobUrl ? 1 : 0,
-                        ...style
-                    }}
-                    {...props}
-                />
+        <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#f0f0f5' }} className={className}>
+            {/* Shimmer skeleton — shown while loading */}
+            {!loaded && !error && (
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(90deg, #f0f0f5 25%, #e4e4ef 50%, #f0f0f5 75%)',
+                    backgroundSize: '200% 100%',
+                    animation: 'shimmer 1.5s infinite',
+                    zIndex: 1,
+                }} />
             )}
 
-            {/* Circular Progress Loader */}
-            {!blobUrl && !error && (
-                <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="60" height="60" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
-                        {/* Background Circle */}
-                        <circle cx="50" cy="50" r="40" stroke="#e5e7eb" strokeWidth="8" fill="none" />
-                        {/* Progress Circle */}
-                        <circle
-                            cx="50"
-                            cy="50"
-                            r="40"
-                            stroke="#6c5ce7"
-                            strokeWidth="8"
-                            fill="none"
-                            strokeDasharray="251.2" /* 2 * pi * 40 */
-                            strokeDashoffset={251.2 - (251.2 * progress) / 100}
-                            style={{ transition: 'stroke-dashoffset 0.1s ease-out' }}
-                            strokeLinecap="round"
-                        />
-                    </svg>
-                    <div style={{ position: 'absolute', fontSize: '0.8rem', fontWeight: 800, color: '#6c5ce7', fontFamily: 'Outfit, sans-serif' }}>
-                        {progress}%
-                    </div>
-                </div>
-            )}
+            {/* Actual image */}
+            <img
+                ref={imgRef}
+                src={src}
+                alt={alt}
+                onLoad={() => setLoaded(true)}
+                onError={() => setError(true)}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    opacity: loaded ? 1 : 0,
+                    transition: 'opacity 0.4s ease',
+                    ...(style || {}),
+                }}
+            />
 
-            {/* Error Fallback */}
+            {/* Error state */}
             {error && (
-                <div style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 600 }}>Failed to load</div>
+                <div style={{
+                    position: 'absolute', inset: 0, display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                    color: '#aaa', fontSize: '0.75rem', background: '#f5f5f5'
+                }}>
+                    Failed to load
+                </div>
             )}
         </div>
     );
