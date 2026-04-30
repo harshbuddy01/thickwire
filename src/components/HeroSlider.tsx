@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
+import ProgressiveImage from '@/components/ProgressiveImage';
 
 import Link from 'next/link';
 
+const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+
 const slides = [
-    { id: 1, src: '/images/slider/slider1.png', alt: 'Slide 1', link: '/' },
-    { id: 2, src: '/images/slider/slider2.png', alt: 'Slide 2', link: '/' },
-    { id: 3, src: '/images/slider/slider3.png', alt: 'Slide 3', link: '/' },
-    { id: 4, src: '/images/slider/slider4.png', alt: 'Slide 4', link: '/' }
+    { id: 1, src: `${MINIO_URL}/slider/slider1.png`, alt: 'Slide 1', link: '/' },
+    { id: 2, src: `${MINIO_URL}/slider/slider2.png`, alt: 'Slide 2', link: '/' },
+    { id: 3, src: `${MINIO_URL}/slider/slider3.png`, alt: 'Slide 3', link: '/' },
+    { id: 4, src: `${MINIO_URL}/slider/slider4.png`, alt: 'Slide 4', link: '/' }
 ];
 
 export default function HeroSlider() {
@@ -39,11 +42,9 @@ export default function HeroSlider() {
                         zIndex: current === index ? 1 : 0
                     }}
                 >
-                    <img
-                        src={slide.src}
-                        alt={slide.alt}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
+                    {current === index && (
+                        <ProgressiveImage src={slide.src} alt={slide.alt} />
+                    )}
                 </div>
             ))}
 

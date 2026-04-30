@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import HeroSlider from '@/components/HeroSlider';
+import ProgressiveImage from '@/components/ProgressiveImage';
 import { ChevronRight, ShieldCheck, Tag, Zap, Headphones } from 'lucide-react';
+
+const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 
 export default function HomePage() {
     return (
-        <div className="container" style={{ paddingBottom: '80px' }}>
+        <div className="container" style={{ paddingBottom: '80px', paddingTop: '100px' }}>
 
             {/* ─── Hero Slider ────────────────────────────────────────── */}
             <div className="main-hero-area">
@@ -13,50 +16,50 @@ export default function HomePage() {
             </div>
 
             {/* ─── Trending Now ─────────────────────────────────────── */}
-            <div className="content-section-head" style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '1.6rem' }}>🔥 Trending Now</h2>
-                <Link href="/services" className="section-link-more">
-                    View All <ChevronRight size={18} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <h2 className="section-title">Trending <span>Now</span></h2>
+                <Link href="/services" className="premium-btn" style={{ padding: '8px 16px', fontSize: '0.8rem', background: '#f1f5f9', color: '#0f172a' }}>
+                    View All
                 </Link>
             </div>
 
             <div className="trending-cards-grid" style={{ gap: '24px' }}>
-                <Link href="/services/netflix" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <Image src="/images/netflix_3d.png" alt="Netflix" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
+                <Link href="/services/netflix" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/netflix_3d.png`} alt="Netflix" />
                 </Link>
 
-                <Link href="/services/chatgpt" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <Image src="/images/chatgpt_3d.png" alt="ChatGPT" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
+                <Link href="/services/chatgpt" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/chatgpt_3d.png`} alt="ChatGPT" />
                 </Link>
 
-                <Link href="/services/jiohotstar" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <Image src="/images/jiohotstar_3d.png" alt="JioHotstar" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
+                <Link href="/services/jiohotstar" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/jiohotstar_3d.png`} alt="JioHotstar" />
                 </Link>
 
-                <Link href="/services/sonyliv" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none' }}>
-                    <Image src="/images/sonyliv_3d.png" alt="SonyLIV" width={600} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} priority />
+                <Link href="/services/sonyliv" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/sonyliv_3d.png`} alt="SonyLIV" />
                 </Link>
             </div>
 
             {/* ─── Content Blocks Grid ─────────────────────────────── */}
             <div className="blocks-parent-grid" style={{ marginTop: '56px' }}>
-                <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image src="/images/blocks/streaming.png" alt="Streaming" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/streaming.png`} alt="Streaming" />
                 </div>
-                <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image src="/images/blocks/grossing.png" alt="Grosing" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/grossing.png`} alt="Grosing" />
                 </div>
-                <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image src="/images/blocks/activation.png" alt="Activation" width={800} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/activation.png`} alt="Activation" />
                 </div>
             </div>
 
             <div className="blocks-parent-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '24px' }}>
-                <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image src="/images/blocks/ai.png" alt="Artificial Intelligence" width={1200} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '2/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/ai.png`} alt="Artificial Intelligence" />
                 </div>
-                <div style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image src="/images/blocks/vpn.png" alt="VPN Services" width={1200} height={600} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '2/1' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/vpn.png`} alt="VPN Services" />
                 </div>
             </div>
 
