@@ -34,7 +34,9 @@ function SignupContent() {
     };
 
     const handleGoogleSignup = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/auth/google`;
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+        const state = encodeURIComponent(redirectUrl);
+        window.location.href = `${apiBase}/auth/google?state=${state}`;
     };
 
     if (isSuccess) {
@@ -49,7 +51,7 @@ function SignupContent() {
                         We&apos;ve sent a verification link to <span style={{ color: 'white', fontWeight: 600 }}>{email}</span>.
                         Please click the link to activate your account.
                     </p>
-                    <Link href="/login" className="premium-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+                    <Link href={`/login?redirect=${encodeURIComponent(redirectUrl)}`} className="premium-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
                         Return to Login
                     </Link>
                 </div>

@@ -88,7 +88,7 @@ export async function validateCoupon(payload: {
     amount: number;
     customerId?: string;
 }) {
-    const { data } = await api.post('/orders/validate-coupon', payload);
+    const { data } = await api.post('/coupons/validate', payload);
     return data;
 }
 

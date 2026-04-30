@@ -177,9 +177,14 @@ function CheckoutContent() {
                     handler: async (response: any) => {
                         try {
                             const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
-                        const verifyRes = await fetch(`${apiBase}/orders/verify-payment`, {
+                            const token = localStorage.getItem('accessToken');
+                            const verifyRes = await fetch(`${apiBase}/orders/verify-payment`, {
                                 method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+                                },
+                                credentials: 'include',
                                 body: JSON.stringify({
                                     razorpay_order_id: response.razorpay_order_id,
                                     razorpay_payment_id: response.razorpay_payment_id,
@@ -301,7 +306,7 @@ function CheckoutContent() {
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                            <div className="checkout-fields-row">
                                 <div>
                                     <label className="premium-form-label" htmlFor="email">Email Address</label>
                                     <input
@@ -309,10 +314,15 @@ function CheckoutContent() {
                                         type="email"
                                         placeholder="john@example.com"
                                         required
+                                        readOnly
+                                        disabled
                                         value={form.customerEmail}
-                                        onChange={(e) => setForm({ ...form, customerEmail: e.target.value })}
                                         className="premium-form-input"
+                                        style={{ background: '#f1f5f9', opacity: 0.8, cursor: 'not-allowed' }}
                                     />
+                                    <p style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: 4 }}>
+                                        Credentials will be sent to this email. <Link href="/account">Change in settings</Link>
+                                    </p>
                                 </div>
                                 <div>
                                     <label className="premium-form-label" htmlFor="phone">Phone Number</label>

@@ -35,7 +35,9 @@ function LoginContent() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/auth/google`;
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+        const state = encodeURIComponent(redirectUrl);
+        window.location.href = `${apiBase}/auth/google?state=${state}`;
     };
 
     return (

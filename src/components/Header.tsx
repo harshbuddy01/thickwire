@@ -58,10 +58,10 @@ export default function Header() {
                     </div>
 
                     <div className="nav-icons-group">
-                        <Link href="/" className="header-icon-link">
+                        <Link href="/account" className="header-icon-link">
                             <ShoppingCart size={20} />
                         </Link>
-                        <Link href="/" className="header-icon-link">
+                        <Link href="/account" className="header-icon-link">
                             <Heart size={20} />
                         </Link>
 
@@ -127,11 +127,11 @@ export default function Header() {
                 <div className="sub-nav-wrapper">
                     <div className="container">
                         <div className="sub-nav-bar">
-                            <Link href="/" className="sub-nav-item">
+                            <Link href="/account" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-wallet"><Wallet size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>My Wallet</strong>
-                                    <span>₹ 1.93</span>
+                                    <span>—</span>
                                 </div>
                             </Link>
                             <Link href="/account" className="sub-nav-item">
@@ -141,14 +141,14 @@ export default function Header() {
                                     <span>My Account</span>
                                 </div>
                             </Link>
-                            <Link href="/" className="sub-nav-item">
+                            <Link href="/account" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-orders"><Package size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Orders</strong>
                                     <span>Track & View</span>
                                 </div>
                             </Link>
-                            <Link href="/" className="sub-nav-item">
+                            <Link href="/account" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-wishlist"><Heart size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Wishlist</strong>
