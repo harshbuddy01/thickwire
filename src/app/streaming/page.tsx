@@ -36,83 +36,16 @@ export default function StreamingCategoryPage() {
             </div>
 
             <div className="container">
-                {/* ─── Exact CSS Replica of the Red Banner ───────────── */}
-                {/* I am building this with CSS because I cannot download images from the chat interface. */}
+                {/* ─── Top Banner ────────────────────────────────────── */}
                 <div style={{
-                    background: '#0d0d12',
-                    borderRadius: '16px',
-                    padding: '48px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '40px',
-                    position: 'relative',
+                    borderRadius: '24px',
                     overflow: 'hidden',
                     marginBottom: '48px',
-                    border: '1px solid rgba(255,255,255,0.03)',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                    aspectRatio: '1440 / 320', // Wide banner ratio exactly matching the uploaded image
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                    position: 'relative'
                 }}>
-                    {/* Dark red glow matching the screenshot's background */}
-                    <div style={{
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: '60%',
-                        background: 'linear-gradient(90deg, transparent 0%, #4a0005 50%, #8a000b 100%)',
-                        opacity: 0.5,
-                        pointerEvents: 'none'
-                    }} />
-
-                    {/* Left Icon (The bright red rounded box with white play icon) */}
-                    <div style={{
-                        width: '120px',
-                        height: '120px',
-                        background: 'linear-gradient(135deg, #ff1744 0%, #a2001d 100%)',
-                        borderRadius: '30px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        boxShadow: '0 20px 40px rgba(255,23,68,0.3)',
-                        position: 'relative',
-                        zIndex: 2
-                    }}>
-                        <Play size={48} fill="white" color="white" style={{ marginLeft: '6px' }} />
-                    </div>
-
-                    {/* Text Content */}
-                    <div style={{ position: 'relative', zIndex: 2 }}>
-                        <h1 style={{ fontSize: '2.8rem', fontWeight: 700, margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Streaming</h1>
-                        <p style={{ fontSize: '1.2rem', color: '#e2e8f0', margin: '0 0 28px 0', fontWeight: 400 }}>
-                            Watch unlimited entertainment
-                        </p>
-
-                        {/* Features Strip with Vertical Dividers */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <Play size={20} color="#fff" />
-                                <span style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.3 }}>Premium<br />Entertainment</span>
-                            </div>
-                            <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.15)' }} />
-                            
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <ShieldCheck size={20} color="#fff" />
-                                <span style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.3 }}>Official<br />Subscriptions</span>
-                            </div>
-                            <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.15)' }} />
-                            
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <Tag size={20} color="#fff" />
-                                <span style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.3 }}>Best Prices<br />Guaranteed</span>
-                            </div>
-                            <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.15)' }} />
-                            
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <Headphones size={20} color="#fff" />
-                                <span style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.3 }}>24/7<br />Support</span>
-                            </div>
-                        </div>
-                    </div>
+                    <ProgressiveImage src={`${MINIO_URL}/slider/streaming-banner.png`} alt="Streaming Banner" />
                 </div>
 
                 {/* ─── Grid Title ──────────────────────────────────────── */}
