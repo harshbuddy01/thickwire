@@ -43,7 +43,7 @@ export default function HeroSlider() {
                     }}
                 >
                     {current === index && (
-                        <ProgressiveImage src={slide.src} alt={slide.alt} />
+                        <ProgressiveImage src={slide.src} alt={slide.alt} priority={index === 0} />
                     )}
                 </div>
             ))}

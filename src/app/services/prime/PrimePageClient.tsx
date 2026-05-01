@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, ShoppingCart, ChevronDown, Play, Zap, Monitor, ShieldCheck, Tag, Headphones, Crown } from 'lucide-react';
 import type { Service } from '@/lib/types';
 import ProgressiveImage from '@/components/ProgressiveImage';
@@ -25,11 +26,15 @@ export default function PrimePageClient({ service }: { service: Service }) {
         <div className="prime-page-exact">
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
-                <div className="hero-image-container">
-                    <img
+                <div className="hero-image-container" style={{ position: 'relative' }}>
+                    <Image
                         src={`${MINIO_URL}/slider/prime-banner.png`}
                         alt="Prime Video"
+                        fill
+                        priority
                         className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 

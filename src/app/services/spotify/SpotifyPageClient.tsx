@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Zap, Headphones, HelpCircle, Star, Globe, Navigation } from 'lucide-react';
 import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
@@ -37,11 +38,15 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className="hero-image-container">
-                    <img
+                <div className="hero-image-container" style={{ position: 'relative' }}>
+                    <Image
                         src={`${MINIO_URL}/slider/file_000000004fd07208a284a13ce78f69ff.png`}
                         alt="Spotify Premium Hero"
+                        fill
+                        priority
                         className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 

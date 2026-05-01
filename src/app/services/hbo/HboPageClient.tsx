@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Headphones, HelpCircle, Navigation, CalendarDays } from 'lucide-react';
 import { useState } from 'react';
 import type { Service } from '@/lib/types';
@@ -26,11 +27,15 @@ export default function HboPageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className="hero-image-container">
-                    <img
+                <div className="hero-image-container" style={{ position: 'relative' }}>
+                    <Image
                         src={`${MINIO_URL}/slider/file_00000000b5047208a3d5ea069a7996df.png`}
                         alt="HBO Max Hero"
+                        fill
+                        priority
                         className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 

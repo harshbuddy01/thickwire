@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   ShieldCheck, 
@@ -151,10 +152,10 @@ export default function Footer() {
                         }}>
                             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginBottom: '10px' }}>We Accept</div>
                             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" style={{ height: '12px' }} />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" style={{ height: '18px' }} />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/American_Express_logo_%282018%29.svg" alt="Amex" style={{ height: '14px' }} />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" style={{ height: '12px' }} />
+                                <Image src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" width={38} height={12} style={{ height: 'auto' }} />
+                                <Image src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" width={28} height={18} style={{ height: 'auto' }} />
+                                <Image src="https://upload.wikimedia.org/wikipedia/commons/b/b5/American_Express_logo_%282018%29.svg" alt="Amex" width={14} height={14} style={{ height: 'auto' }} />
+                                <Image src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" width={38} height={12} style={{ height: 'auto' }} />
                             </div>
                         </div>
                     </div>
@@ -220,19 +221,19 @@ export default function Footer() {
                         </h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                             <Link href="/services/netflix" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                <img src={`${MINIO}/logos/netflix.svg`} alt="Netflix" style={{ width: '20px', height: '20px', objectFit: 'contain' }} /> Netflix
+                                <Image src={`${MINIO}/logos/netflix.svg`} alt="Netflix" width={20} height={20} style={{ objectFit: 'contain' }} /> Netflix
                             </Link>
                             <Link href="/services/spotify" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                <img src={`${MINIO}/logos/spotify.png`} alt="Spotify" style={{ width: '20px', height: '20px', objectFit: 'contain' }} /> Spotify
+                                <Image src={`${MINIO}/logos/spotify.png`} alt="Spotify" width={20} height={20} style={{ objectFit: 'contain' }} /> Spotify
                             </Link>
                             <Link href="/services/disney" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                <img src={`${MINIO}/logos/disney.jpg`} alt="Disney+" style={{ width: '20px', height: '20px', objectFit: 'contain' }} /> Disney+
+                                <Image src={`${MINIO}/logos/disney.jpg`} alt="Disney+" width={20} height={20} style={{ objectFit: 'contain' }} /> Disney+
                             </Link>
                             <Link href="/services/youtube" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                <img src={`${MINIO}/logos/youtube.png`} alt="YouTube Premium" style={{ width: '20px', height: '20px', objectFit: 'contain' }} /> YouTube Premium
+                                <Image src={`${MINIO}/logos/youtube.png`} alt="YouTube Premium" width={20} height={20} style={{ objectFit: 'contain' }} /> YouTube Premium
                             </Link>
                             <Link href="/services/prime" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
-                                <img src={`${MINIO}/logos/prime.svg`} alt="Amazon Prime" style={{ width: '20px', height: '20px', objectFit: 'contain' }} /> Amazon Prime
+                                <Image src={`${MINIO}/logos/prime.svg`} alt="Amazon Prime" width={20} height={20} style={{ objectFit: 'contain' }} /> Amazon Prime
                             </Link>
                         </div>
                     </div>

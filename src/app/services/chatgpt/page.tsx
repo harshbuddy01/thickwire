@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, ChevronDown, ShieldCheck, Zap, Brain, Monitor, CheckCircle2, Truck, Headphones, Lock, ShoppingCart, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -33,24 +34,22 @@ export default function ChatGPTProductPage() {
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                 
                 {/* Hero Banner Image */}
-                <div style={{
+                <div className="hero-image-container" style={{
                     width: '100%',
                     borderRadius: '32px',
                     overflow: 'hidden',
                     boxShadow: '0 24px 48px rgba(0,0,0,0.1)',
                     background: '#131314',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                    position: 'relative',
+                    aspectRatio: '16/6'
                 }}>
-                    <img 
+                    <Image 
                         src={HERO_BANNER} 
                         alt="ChatGPT Plus - Smarter Answers, Write Better" 
-                        style={{ width: '100%', height: 'auto', display: 'block' }}
-                        onError={(e) => {
-                            // Fallback if image fails to load
-                            e.currentTarget.style.display = 'none';
-                        }}
+                        fill
+                        priority
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 

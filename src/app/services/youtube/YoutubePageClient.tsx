@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Zap, Headphones, HelpCircle, Star, Globe, Navigation, Info } from 'lucide-react';
 import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
@@ -30,11 +31,15 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className="hero-image-container">
-                    <img
+                <div className="hero-image-container" style={{ position: 'relative' }}>
+                    <Image
                         src={`${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
                         alt="YouTube Premium Hero"
+                        fill
+                        priority
                         className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 

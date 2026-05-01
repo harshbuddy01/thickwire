@@ -1,35 +1,33 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface ProgressiveImageProps {
     src: string;
     alt: string;
     className?: string;
     style?: React.CSSProperties;
+    priority?: boolean;
+    fill?: boolean;
 }
 
-export default function ProgressiveImage({ src, alt, className, style }: ProgressiveImageProps) {
+export default function ProgressiveImage({ src, alt, className, style, priority, fill = true }: ProgressiveImageProps) {
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
-    const imgRef = useRef<HTMLImageElement>(null);
-
-    useEffect(() => {
-        // Reset when src changes
-        setLoaded(false);
-        setError(false);
-
-        const img = new window.Image();
-        img.src = src;
-        img.onload = () => setLoaded(true);
-        img.onerror = () => setError(true);
-
-        // If already cached by browser, it fires synchronously
-        if (img.complete) setLoaded(true);
-    }, [src]);
 
     return (
-        <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden', background: '#f0f0f5' }} className={className}>
+        <div 
+            style={{ 
+                position: 'relative', 
+                width: '100%', 
+                height: '100%', 
+                overflow: 'hidden', 
+                background: '#f0f0f5',
+                ...(style || {})
+            }} 
+            className={className}
+        >
             {/* Shimmer skeleton — shown while loading */}
             {!loaded && !error && (
                 <div style={{
@@ -42,22 +40,21 @@ export default function ProgressiveImage({ src, alt, className, style }: Progres
                 }} />
             )}
 
-            {/* Actual image */}
-            <img
-                ref={imgRef}
+            <Image
                 src={src}
                 alt={alt}
-                onLoad={() => setLoaded(true)}
-                onError={() => setError(true)}
+                fill={fill}
+                priority={priority}
+                className={className}
                 style={{
-                    width: '100%',
-                    height: '100%',
                     objectFit: 'cover',
-                    display: 'block',
                     opacity: loaded ? 1 : 0,
                     transition: 'opacity 0.4s ease',
                     ...(style || {}),
                 }}
+                onLoad={() => setLoaded(true)}
+                onError={() => setError(true)}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
 
             {/* Error state */}

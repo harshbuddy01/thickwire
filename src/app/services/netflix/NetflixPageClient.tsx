@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, ShoppingCart, ChevronDown, Play, Zap, Monitor, ShieldCheck, Tag, Headphones } from 'lucide-react';
 import { useState } from 'react';
 import type { Service } from '@/lib/types';
@@ -36,11 +37,15 @@ export default function NetflixPageClient({ service }: { service: Service }) {
 
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
-                <div className="hero-image-container">
-                    <img
+                <div className="hero-image-container" style={{ position: 'relative' }}>
+                    <Image
                         src={`${MINIO_URL}/slider/netflix-banner-new.png`}
                         alt="Netflix Premium"
+                        fill
+                        priority
                         className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
                     />
                 </div>
 
