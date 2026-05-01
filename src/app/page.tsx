@@ -8,7 +8,7 @@ const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-asse
 
 export default function HomePage() {
     return (
-        <div className="container" style={{ paddingBottom: '80px', paddingTop: '100px' }}>
+        <div className="container" style={{ paddingBottom: '80px', paddingTop: '80px' }}>
 
             {/* ─── Hero Slider ────────────────────────────────────────── */}
             <div className="main-hero-area">
@@ -43,57 +43,26 @@ export default function HomePage() {
 
             {/* ─── Content Blocks Grid ─────────────────────────────── */}
             <div className="blocks-parent-grid" style={{ marginTop: '56px' }}>
-                <Link href="/streaming" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3', textDecoration: 'none' }}>
+                <Link href="/streaming" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/streaming.png`} alt="Streaming" />
                 </Link>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/grossing.png`} alt="Grosing" />
                 </div>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '4/3' }}>
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/activation.png`} alt="Activation" />
                 </div>
             </div>
 
             <div className="blocks-parent-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '24px' }}>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '2/1' }}>
+                <Link href="/ai" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/ai.png`} alt="Artificial Intelligence" />
-                </div>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '2/1' }}>
+                </Link>
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/vpn.png`} alt="VPN Services" />
                 </div>
             </div>
 
-            {/* ─── Bottom Features Row ───────────────────────────────── */}
-            <div className="bottom-features-row" style={{ marginTop: '64px' }}>
-                <div className="usp-card float-anim">
-                    <div className="usp-rounded-icon"><ShieldCheck size={24} /></div>
-                    <div className="usp-content">
-                        <h4>100% Safe &amp; Secure</h4>
-                        <p>Your data and payments are fully protected</p>
-                    </div>
-                </div>
-                <div className="usp-card float-anim" style={{ animationDelay: '0.5s' }}>
-                    <div className="usp-rounded-icon"><Tag size={24} /></div>
-                    <div className="usp-content">
-                        <h4>Best Price Guarantee</h4>
-                        <p>Get top services at the best possible prices</p>
-                    </div>
-                </div>
-                <div className="usp-card float-anim" style={{ animationDelay: '1s' }}>
-                    <div className="usp-rounded-icon"><Zap size={24} /></div>
-                    <div className="usp-content">
-                        <h4>Instant Delivery</h4>
-                        <p>Quick activation &amp; instant access</p>
-                    </div>
-                </div>
-                <div className="usp-card float-anim" style={{ animationDelay: '1.5s' }}>
-                    <div className="usp-rounded-icon"><Headphones size={24} /></div>
-                    <div className="usp-content">
-                        <h4>24/7 Customer Support</h4>
-                        <p>We&apos;re here anytime you need us</p>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }

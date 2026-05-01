@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   background-color: #fafafa;
   color: var(--text-primary);
   line-height: 1.5;
@@ -128,7 +128,7 @@ a {
   border-right: 1px solid rgba(0, 0, 0, 0.06);
   outline: none;
   cursor: pointer;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .search-main-input {
@@ -138,7 +138,7 @@ a {
   padding: 10px 16px;
   font-size: 0.9rem;
   outline: none;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   color: #111;
 }
 
@@ -755,11 +755,45 @@ a {
   }
 
   .trending-cards-grid {
-    grid-template-columns: 1fr;
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 16px !important;
+    padding: 4px 4px 20px 4px !important;
+    margin: 0 -20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: none !important;
+  }
+  .trending-cards-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .trending-cards-grid > a, .trending-cards-grid > div {
+    flex: 0 0 160px !important;
+    max-width: 160px !important;
   }
 
   .blocks-parent-grid {
-    grid-template-columns: 1fr !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 16px !important;
+    padding: 4px 4px 20px 4px !important;
+    margin: 0 -20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: none !important;
+  }
+  .blocks-parent-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .blocks-parent-grid > a, .blocks-parent-grid > div {
+    flex: 0 0 280px !important;
+    max-width: 280px !important;
   }
 
   .bottom-features-row {
@@ -839,7 +873,7 @@ a {
   padding: 14px 16px;
   font-size: 0.9rem;
   outline: none;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   transition: border-color 0.2s;
   resize: vertical;
 }
@@ -858,7 +892,7 @@ textarea.form-input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
   border: none;
@@ -3048,6 +3082,11 @@ textarea.form-input {
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
+@media (max-width: 900px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .plan-card {
   background: #fff;
@@ -3361,7 +3400,7 @@ textarea.form-input {
 .prime-page-exact {
   background: #f4f6f8;
   padding: 40px 0 80px 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .prime-page-exact .container {
@@ -3415,6 +3454,11 @@ textarea.form-input {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+@media (max-width: 900px) {
+  .prime-page-exact .plans-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .prime-page-exact .plan-card {
@@ -3779,7 +3823,7 @@ textarea.form-input {
   background-color: #050505; /* Deep black */
   position: relative;
   overflow: hidden;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .premium-auth-left {
@@ -4011,7 +4055,7 @@ textarea.form-input {
   min-height: 100vh;
   background-color: #fafafa;
   padding: 40px 20px;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .premium-checkout-container {
@@ -4231,5 +4275,1694 @@ textarea.form-input {
   .premium-btn {
     height: 56px;
     font-size: 1rem;
+  }
+}
+
+/* ─── SPOTIFY PAGE EXACT ─────────────── */
+.spotify-page-exact {
+  background-color: #fafafa;
+  padding-bottom: 80px;
+  color: #333;
+}
+
+.spotify-page-exact .container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero */
+.spotify-page-exact .hero-image-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.spotify-page-exact .hero-banner-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: auto;
+}
+
+/* Region Toggle */
+.spotify-region-toggle {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+.spotify-region-btn {
+  flex: 1;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+.spotify-region-btn.active {
+  background: #f7fcf8;
+  border-color: #1ed760;
+  color: #1a5e31;
+}
+
+/* Plans Section */
+.spotify-page-exact .plans-section {
+  margin-bottom: 40px;
+}
+.spotify-page-exact .plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Plan Card */
+.spotify-plan-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  padding: 32px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.spotify-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+.spotify-plan-tag {
+  position: absolute;
+  top: -12px;
+  left: 32px;
+  background: #cdf5d8;
+  color: #1ed760;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.spotify-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.spotify-plan-title p {
+  color: #111;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.spotify-plan-title h3 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  margin: 4px 0 8px 0;
+}
+.spotify-plan-badge {
+  display: inline-block;
+  background: #e6f0ff;
+  color: #2563eb;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.spotify-plan-price {
+  text-align: right;
+}
+.spotify-plan-price h4 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+  line-height: 1;
+}
+.spotify-plan-price p {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.spotify-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  flex: 1;
+}
+.spotify-plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 16px;
+}
+.spotify-plan-features li .check-icon {
+  color: #1ed760;
+}
+
+.spotify-buy-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+.spotify-buy-btn:hover {
+  background: #333;
+}
+.spotify-secure-text {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Trust Strip */
+.spotify-page-exact .trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 40px;
+}
+
+/* FAQ */
+.spotify-page-exact .faq-section {
+  margin-bottom: 40px;
+}
+.spotify-page-exact .faq-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spotify-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Bottom CTA */
+.spotify-bottom-cta {
+  background: #111;
+  border-radius: 20px;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.spotify-bottom-cta .cta-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.spotify-bottom-cta .cta-left h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.spotify-bottom-cta .cta-left p {
+  color: #999;
+  font-size: 14px;
+}
+.spotify-bottom-cta .cta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.spotify-bottom-cta-btn {
+  background: #1ed760;
+  color: #111;
+  padding: 14px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  transition: transform 0.3s;
+}
+.spotify-bottom-cta-btn:hover {
+  transform: scale(1.05);
+}
+.spotify-cta-trust {
+  font-size: 12px;
+  color: #777;
+}
+
+@media (max-width: 900px) {
+  .spotify-page-exact .plans-grid, .spotify-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .spotify-page-exact .trust-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .spotify-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  .spotify-bottom-cta .cta-left {
+    flex-direction: column;
+  }
+  .spotify-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .spotify-page-exact .trust-strip {
+    grid-template-columns: 1fr;
+  }
+  .spotify-region-toggle {
+    flex-direction: column;
+  }
+}
+
+/* ─── YOUTUBE PAGE EXACT ─────────────── */
+.youtube-page-exact {
+  background-color: #fafafa;
+  padding-bottom: 80px;
+  color: #333;
+}
+
+.youtube-page-exact .container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero */
+.youtube-page-exact .hero-image-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.youtube-page-exact .hero-banner-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: auto;
+}
+
+/* Region Header */
+.youtube-region-btn {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.youtube-region-btn.active {
+  background: #fff5f5;
+  border-color: #ff0000;
+  color: #cc0000;
+}
+
+/* Plans Section */
+.youtube-page-exact .plans-section {
+  margin-bottom: 40px;
+}
+
+.youtube-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.youtube-indian-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Plan Card */
+.youtube-plan-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  padding: 32px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.youtube-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+.youtube-plan-tag {
+  position: absolute;
+  top: -12px;
+  left: 32px;
+  background: #ffe5e5;
+  color: #ff0000;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.youtube-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.youtube-plan-title p {
+  color: #111;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.youtube-plan-title h3 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  margin: 4px 0 8px 0;
+}
+.youtube-plan-badge {
+  display: inline-block;
+  background: #ffe5e5;
+  color: #ff0000;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.youtube-plan-badge-blue {
+  background: #eef2ff;
+  color: #3b82f6;
+}
+
+.youtube-plan-price {
+  text-align: right;
+}
+.youtube-plan-price h4 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+  line-height: 1;
+}
+.youtube-plan-price p {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.youtube-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  flex: 1;
+}
+.youtube-plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 16px;
+}
+.youtube-plan-features li .check-icon {
+  color: #ff0000;
+}
+
+.youtube-info-box {
+  background: #f0f7ff;
+  border: 1px solid #dbeafe;
+  color: #2563eb;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.youtube-buy-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+.youtube-buy-btn:hover {
+  background: #333;
+}
+.youtube-secure-text {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Trust Strip */
+.youtube-page-exact .trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 40px;
+}
+
+/* FAQ */
+.youtube-page-exact .faq-section {
+  margin-bottom: 40px;
+}
+.youtube-page-exact .faq-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.youtube-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Bottom CTA */
+.youtube-bottom-cta {
+  background: #111;
+  border-radius: 20px;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.youtube-bottom-cta .cta-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.youtube-bottom-cta .cta-left h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.youtube-bottom-cta .cta-left p {
+  color: #999;
+  font-size: 14px;
+}
+.youtube-bottom-cta .cta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.youtube-bottom-cta-btn {
+  background: #ff0000;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  transition: transform 0.3s;
+}
+.youtube-bottom-cta-btn:hover {
+  transform: scale(1.05);
+}
+.youtube-cta-trust {
+  font-size: 12px;
+  color: #777;
+}
+
+@media (max-width: 900px) {
+  .youtube-plans-grid, .youtube-indian-plans-grid, .youtube-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .youtube-page-exact .trust-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .youtube-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  .youtube-bottom-cta .cta-left {
+    flex-direction: column;
+  }
+  .youtube-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .youtube-page-exact .trust-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── HBO PAGE EXACT ─────────────── */
+.hbo-page-exact {
+  background-color: #fafafa;
+  padding-bottom: 80px;
+  color: #333;
+}
+
+.hbo-page-exact .container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero */
+.hbo-page-exact .hero-image-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.hbo-page-exact .hero-banner-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: auto;
+}
+
+/* Plans Grid */
+.hbo-page-exact .plans-section {
+  margin-bottom: 40px;
+}
+
+.hbo-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Plan Card */
+.hbo-plan-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  padding: 32px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.hbo-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+.hbo-plan-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.hbo-plan-icon-wrapper {
+  background: #f3ebff;
+  color: #6d28d9;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.hbo-plan-title-wrapper h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 12px 0;
+}
+
+.hbo-plan-price h4 {
+  font-size: 48px;
+  font-weight: 800;
+  color: #6d28d9;
+  margin: 0;
+  line-height: 1;
+}
+.hbo-plan-price p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin-top: 8px;
+}
+
+.hbo-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  flex: 1;
+}
+.hbo-plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 16px;
+}
+.hbo-plan-features li .check-icon {
+  color: #6d28d9;
+  background: #f3ebff;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.hbo-buy-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+.hbo-buy-btn:hover {
+  background: #333;
+}
+.hbo-secure-text {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Trust Strip */
+.hbo-page-exact .trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 40px;
+}
+
+/* FAQ */
+.hbo-page-exact .faq-section {
+  margin-bottom: 40px;
+}
+.hbo-page-exact .faq-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hbo-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Bottom CTA */
+.hbo-bottom-cta {
+  background: linear-gradient(135deg, #09090e, #1a0b2e);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hbo-bottom-cta .cta-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.hbo-bottom-cta .cta-left h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.hbo-bottom-cta .cta-left p {
+  color: #d8b4fe;
+  font-size: 14px;
+}
+.hbo-bottom-cta .cta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.hbo-bottom-cta-btn {
+  background: #6d28d9;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  transition: transform 0.3s, background 0.3s;
+}
+.hbo-bottom-cta-btn:hover {
+  transform: scale(1.05);
+  background: #5b21b6;
+}
+.hbo-cta-trust {
+  font-size: 12px;
+  color: #d8b4fe;
+}
+
+@media (max-width: 900px) {
+  .hbo-plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .hbo-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .hbo-page-exact .trust-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hbo-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  .hbo-bottom-cta .cta-left {
+    flex-direction: column;
+  }
+  .hbo-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .hbo-page-exact .trust-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   COMPREHENSIVE MOBILE RESPONSIVE OVERRIDES
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── HEADER MOBILE (≤768px) ─── */
+@media (max-width: 768px) {
+  .header-top {
+    padding: 10px 0;
+  }
+  .header-top .container {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .nav-logo-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .nav-logo-text h1 {
+    font-size: 1.1rem;
+  }
+  .nav-logo-text span {
+    display: none;
+  }
+  .search-container {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+  }
+  .search-cat-dropdown {
+    display: none;
+  }
+  .nav-icons-group {
+    gap: 8px;
+  }
+  .header-icon-link {
+    width: 36px;
+    height: 36px;
+  }
+  /* Sub Nav */
+  .sub-nav-wrapper {
+    padding: 12px 0;
+  }
+  .sub-nav-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+    padding: 8px;
+  }
+  .sub-nav-item {
+    min-width: 120px;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .sub-nav-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .sub-nav-meta strong {
+    font-size: 0.8rem;
+  }
+  .sub-nav-meta span {
+    display: none;
+  }
+}
+
+/* ─── HEADER MOBILE (≤480px) ─── */
+@media (max-width: 480px) {
+  .header-top .container {
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .nav-logo-group {
+    gap: 8px;
+  }
+  .nav-logo-text h1 {
+    font-size: 1rem;
+  }
+  .header-icon-link {
+    width: 32px;
+    height: 32px;
+  }
+  .search-main-input {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+}
+
+/* ─── HOMEPAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .main-hero-area {
+    margin-bottom: 24px;
+  }
+  .hero-slider {
+    border-radius: 16px;
+  }
+  .content-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .content-section-head h2 {
+    font-size: 1.2rem;
+  }
+  .trend-card {
+    padding: 24px 16px 20px;
+    border-radius: 20px;
+  }
+  .blocks-parent-grid {
+    gap: 16px !important;
+  }
+  .bottom-features-row {
+    gap: 16px;
+  }
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* ─── FOOTER MOBILE ─── */
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 40px;
+    padding: 40px 0 0;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .footer-brand p {
+    max-width: 100%;
+  }
+}
+
+/* ─── STREAMING PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .streaming-card-hover {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+  }
+}
+
+/* ─── ALL SERVICE PAGES SHARED MOBILE ─── */
+@media (max-width: 768px) {
+  /* Containers */
+  .netflix-page-exact .container,
+  .prime-page-exact .container,
+  .spotify-page-exact .container,
+  .youtube-page-exact .container,
+  .hbo-page-exact .container {
+    padding: 0 16px;
+  }
+  /* Hero banners */
+  .netflix-page-exact .hero-image-container,
+  .prime-page-exact .hero-image-container,
+  .spotify-page-exact .hero-image-container,
+  .youtube-page-exact .hero-image-container,
+  .hbo-page-exact .hero-image-container {
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  /* Trust strips → 2 cols at tablet, 1 col at phone */
+  .trust-strip,
+  .netflix-page-exact .trust-strip,
+  .prime-page-exact .trust-strip,
+  .spotify-page-exact .trust-strip,
+  .youtube-page-exact .trust-strip,
+  .hbo-page-exact .trust-strip {
+    grid-template-columns: 1fr 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+  .trust-item {
+    gap: 10px;
+  }
+  .trust-text strong {
+    font-size: 13px;
+  }
+  .trust-text span {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-strip,
+  .netflix-page-exact .trust-strip,
+  .prime-page-exact .trust-strip,
+  .spotify-page-exact .trust-strip,
+  .youtube-page-exact .trust-strip,
+  .hbo-page-exact .trust-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── NETFLIX PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .netflix-page-exact {
+    padding-bottom: 40px;
+  }
+  .section-title {
+    font-size: 18px;
+  }
+  .plan-card {
+    border-radius: 14px;
+  }
+  .plan-card-inner {
+    padding: 20px;
+  }
+  .plan-name {
+    font-size: 1.2rem;
+  }
+  .plan-price {
+    font-size: 2rem;
+  }
+  .info-grid-row,
+  .info-split,
+  .info-split-exact,
+  .luxury-info-split,
+  .info-grid-bold {
+    grid-template-columns: 1fr;
+  }
+  .bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+  .cta-content {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ─── PRIME PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .prime-page-exact {
+    padding-bottom: 40px;
+  }
+  .prime-page-exact .plans-header h2 {
+    font-size: 18px;
+  }
+  .prime-page-exact .plan-card {
+    border-radius: 14px;
+  }
+  .prime-page-exact .faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .prime-page-exact .info-split {
+    grid-template-columns: 1fr;
+  }
+  .prime-page-exact .bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+  .prime-page-exact .bottom-cta .cta-left {
+    flex-direction: column;
+    align-items: center;
+  }
+  .prime-page-exact .bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+
+/* ─── SPOTIFY PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .spotify-page-exact {
+    padding-bottom: 40px;
+  }
+  .spotify-page-exact .plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .spotify-region-btn {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  .spotify-plan-card {
+    padding: 24px;
+  }
+  .spotify-plan-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .spotify-plan-price {
+    text-align: left;
+  }
+  .spotify-plan-price h4 {
+    font-size: 28px;
+  }
+  .spotify-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .spotify-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+  .spotify-bottom-cta .cta-left {
+    flex-direction: column;
+    align-items: center;
+  }
+  .spotify-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+
+/* ─── YOUTUBE PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .youtube-page-exact {
+    padding-bottom: 40px;
+  }
+  .youtube-plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .youtube-indian-plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .youtube-region-btn {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  .youtube-plan-card {
+    padding: 24px;
+  }
+  .youtube-plan-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .youtube-plan-price {
+    text-align: left;
+  }
+  .youtube-plan-price h4 {
+    font-size: 28px;
+  }
+  .youtube-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .youtube-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+  .youtube-bottom-cta .cta-left {
+    flex-direction: column;
+    align-items: center;
+  }
+  .youtube-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+
+/* ─── HBO PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .hbo-page-exact {
+    padding-bottom: 40px;
+  }
+  .hbo-plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .hbo-plan-card {
+    padding: 24px;
+  }
+  .hbo-plan-price h4 {
+    font-size: 36px;
+  }
+  .hbo-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .hbo-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+  .hbo-bottom-cta .cta-left {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hbo-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+
+/* ─── CHATGPT / GEMINI SERVICE PAGES MOBILE ─── */
+@media (max-width: 768px) {
+  /* These pages use inline styles heavily, so we need !important */
+  [style*="padding: 48px"] {
+    padding: 20px !important;
+  }
+}
+
+/* ─── AUTH PAGES (Login/Signup) MOBILE ─── */
+@media (max-width: 768px) {
+  .premium-auth-wrapper {
+    flex-direction: column;
+  }
+  .premium-auth-left {
+    display: none;
+  }
+  .premium-auth-right {
+    border-radius: 0;
+    min-height: 100vh;
+    padding: 32px 20px;
+  }
+}
+
+/* ─── CHECKOUT PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .premium-checkout-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+/* ─── ACCOUNT PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .account-page-wrapper {
+    padding: 20px 16px;
+  }
+}
+
+/* ─── BOTTOM PAYMENT STRIPS (All Service Pages) ─── */
+@media (max-width: 768px) {
+  .spotify-page-exact > .container > div:last-child,
+  .youtube-page-exact > .container > div:last-child,
+  .hbo-page-exact > .container > div:last-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+/* ─── BREADCRUMB MOBILE ─── */
+@media (max-width: 480px) {
+  .breadcrumb-nav, nav[class*="breadcrumb"] {
+    font-size: 11px !important;
+  }
+}
+
+/* ─── CHATGPT PAGE CLASSES ─── */
+.chatgpt-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.chatgpt-info-faq-layout {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+}
+.chatgpt-trust-badges {
+  background: #ffffff;
+  border-radius: 32px;
+  border: 1px solid #e5e7eb;
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.02);
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.chatgpt-bottom-cta {
+  background: #131314;
+  border-radius: 24px;
+  padding: 40px 50px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .chatgpt-plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .chatgpt-info-faq-layout {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .chatgpt-trust-badges {
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+  }
+  .chatgpt-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 20px;
+    gap: 20px;
+  }
+  .chatgpt-bottom-cta > div {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ─── SONYLIV / ZEE5 / GEMINI INLINE GRID OVERRIDES ─── */
+@media (max-width: 768px) {
+  /* Force inline grid pages to single column */
+  [style*="gridTemplateColumns: '1fr 1fr'"],
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="gridTemplateColumns: 'repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Force flex rows to stack */
+  [style*="display: 'flex'"][style*="gap: '40px'"] {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  /* Force inline padding reduction */
+  [style*="padding: '48px'"],
+  [style*="padding: '40px'"] {
+    padding: 20px !important;
+  }
+  [style*="padding: '40px 50px'"],
+  [style*="padding: '40px 48px'"] {
+    padding: 20px !important;
+  }
+}
+
+/* ─── STREAMING PAGE WHITE WRAPPER MOBILE ─── */
+@media (max-width: 768px) {
+  .streaming-white-wrapper {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* ─── CHECKOUT PAGE FORM GRID MOBILE ─── */
+@media (max-width: 768px) {
+  .premium-checkout-container {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── AI PAGE TRUST STRIP MOBILE ─── */
+@media (max-width: 768px) {
+  .ai-trust-strip {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .ai-trust-strip {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── GLOBAL MOBILE OVERRIDES ─── */
+@media (max-width: 768px) {
+  /* Homepage Container Tightening */
+  .container {
+    padding: 0 16px !important;
+  }
+  
+  /* Header Fixes */
+  .header-top {
+    padding: 12px 0 !important;
+  }
+  .header-top .container {
+    padding-top: 0 !important;
+    padding-bottom: 8px !important;
+  }
+  .logo {
+    gap: 8px !important; /* Space between play icon and text */
+    font-size: 20px !important;
+  }
+  .search-container {
+    margin-top: 12px !important;
+  }
+
+  /* Hero Slider Mobile Height */
+  .hero-slider {
+    aspect-ratio: 16/10 !important; /* Taller on mobile */
+    border-radius: 16px !important;
+  }
+
+  /* Section Spacing */
+  .main-hero-area {
+    margin-bottom: 24px !important;
+  }
+  h2 {
+    font-size: 1.4rem !important;
+  }
+
+  /* Horizontal Scroll Widths */
+  .trending-cards-grid > a, .trending-cards-grid > div {
+    flex: 0 0 140px !important; /* Smaller cards to show more "peek" */
+    max-width: 140px !important;
+  }
+
+  .blocks-parent-grid > a, .blocks-parent-grid > div {
+    flex: 0 0 310px !important; /* Larger width so they look like main banners */
+    max-width: 310px !important;
+  }
+
+  .plans-grid > div,
+  .chatgpt-plans-grid > div,
+  .prime-page-exact .plans-grid > div,
+  .spotify-page-exact .plans-grid > div,
+  .youtube-page-exact .plans-grid > div,
+  .hbo-page-exact .plans-grid > div {
+    flex: 0 0 270px !important; /* Balanced width for plan cards */
+    max-width: 270px !important;
+  }
+
+  /* Service Page Hero */
+  .hero-image-container {
+    aspect-ratio: 16/8 !important;
+    border-radius: 16px !important;
+  }
+  .hero-banner-image {
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
+
+/* ─── GLOBAL HORIZONTAL SCROLL FOR PLAN GRIDS ON MOBILE ─── */
+@media (max-width: 768px) {
+  .plans-grid, 
+  .chatgpt-plans-grid, 
+  .prime-page-exact .plans-grid,
+  .spotify-page-exact .plans-grid,
+  .youtube-page-exact .plans-grid,
+  .hbo-page-exact .plans-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 16px !important;
+    padding: 8px 4px 24px 4px !important;
+    margin: 0 -20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: none !important;
+  }
+
+  .plans-grid::-webkit-scrollbar,
+  .chatgpt-plans-grid::-webkit-scrollbar,
+  .prime-page-exact .plans-grid::-webkit-scrollbar,
+  .spotify-page-exact .plans-grid::-webkit-scrollbar,
+  .youtube-page-exact .plans-grid::-webkit-scrollbar,
+  .hbo-page-exact .plans-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .plans-grid > div,
+  .chatgpt-plans-grid > div,
+  .prime-page-exact .plans-grid > div,
+  .spotify-page-exact .plans-grid > div,
+  .youtube-page-exact .plans-grid > div,
+  .hbo-page-exact .plans-grid > div {
+    flex: 0 0 280px !important;
+    max-width: 280px !important;
+  }
+
+  /* Reduce padding for mobile cards inside horizontal scroll */
+  .plan-card-inner, .plan-content, .chatgpt-plans-grid > div {
+    padding: 24px 20px !important;
+  }
+}
+
+/* ─── ZEE5 PAGE MOBILE ─── */
+.zee5-main-content, .sonyliv-main-content {
+  display: flex;
+}
+
+.zee5-trust-badges, .sonyliv-trust-badges {
+  display: flex;
+  justify-content: space-between;
+}
+
+.zee5-bottom-cta, .sonyliv-bottom-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zee5-footer-badges, .sonyliv-footer-badges {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sonyliv-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+
+.sonyliv-hero-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@media (max-width: 992px) {
+  .zee5-main-content, .sonyliv-main-content {
+    flex-direction: column;
+  }
+  .zee5-main-content > div, .sonyliv-main-content > div {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb;
+    flex: none !important;
+  }
+  .zee5-main-content > div:last-child, .sonyliv-main-content > div:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .sonyliv-hero {
+    padding: 30px 20px;
+  }
+  .sonyliv-hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+  }
+  .sonyliv-hero-content > div {
+    max-width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sonyliv-hero-content h1 {
+    font-size: 2rem !important;
+  }
+  .sonyliv-hero-content p {
+    font-size: 0.95rem !important;
+  }
+
+  .zee5-trust-badges, .sonyliv-trust-badges,
+  .zee5-footer-badges, .sonyliv-footer-badges {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 24px !important;
+    padding: 24px 4px !important;
+    margin: 0 -20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  .zee5-trust-badges::-webkit-scrollbar,
+  .sonyliv-trust-badges::-webkit-scrollbar,
+  .zee5-footer-badges::-webkit-scrollbar,
+  .sonyliv-footer-badges::-webkit-scrollbar {
+    display: none;
+  }
+  .zee5-trust-badges > div, .sonyliv-trust-badges > div,
+  .zee5-footer-badges > div, .sonyliv-footer-badges > div {
+    flex: 0 0 200px !important;
+    max-width: 200px !important;
+  }
+
+  .zee5-bottom-cta, .sonyliv-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px !important;
+    gap: 24px;
+  }
+  .zee5-bottom-cta > div, .sonyliv-bottom-cta > div {
+    flex-direction: column;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+
+  /* Specific Hero & Header Stacking */
+  .sonyliv-hero-header, .zee5-main-header {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+    gap: 16px !important;
+  }
+  .sonyliv-hero-header img, .zee5-main-header img {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 16px !important;
+  }
+  .sonyliv-hero-features {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+    width: 100%;
+  }
+  .zee5-main-content > div, .sonyliv-main-content > div {
+    padding: 24px !important;
   }
 }

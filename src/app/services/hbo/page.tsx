@@ -1,65 +1,66 @@
 import { getServiceBySlug } from '@/lib/api';
 import type { Service } from '@/lib/types';
 import type { Metadata } from 'next';
-import PrimePageClient from './PrimePageClient';
+import HboPageClient from './HboPageClient';
 
 export const revalidate = 30;
 
 export async function generateMetadata(): Promise<Metadata> {
     try {
-        const service = await getServiceBySlug('prime');
+        const service = await getServiceBySlug('hbo');
         return {
             title: `${service.name} — StreamKart`,
             description: service.description || `Buy ${service.name} from StreamKart with instant delivery`,
         };
     } catch {
-        return { title: 'Prime Video — StreamKart' };
+        return { title: 'HBO Max — StreamKart' };
     }
 }
 
-export default async function PrimePage() {
+export default async function HboPage() {
     let service: Service;
     try {
-        service = await getServiceBySlug('prime');
+        service = await getServiceBySlug('hbo');
     } catch {
+        // Fallback mock data if API fails or service doesn't exist
         service = {
-            id: 'mock-prime',
-            name: 'Prime Video',
-            slug: 'prime',
+            id: 'mock-hbo',
+            name: 'HBO Max',
+            slug: 'hbo',
             logoUrl: null,
-            description: 'Enjoy exclusive Amazon Originals as well as popular movies and TV shows.',
+            description: 'Iconic stories. Unforgettable entertainment.',
             displayOrder: 1,
             plans: [
                 {
-                    id: 'plan-pr-1',
-                    name: 'Mobile Edition',
-                    slug: 'mobile',
+                    id: 'plan-hbo-1',
+                    name: '3 Months Plan',
+                    slug: '3-months',
                     description: null,
-                    price: '299',
+                    price: '5',
                     originalPrice: null,
-                    durationDays: 30,
+                    durationDays: 90,
                     displayOrder: 1,
                     inStock: true,
                     stockCount: 100
                 },
                 {
-                    id: 'plan-pr-2',
-                    name: 'Prime Lite',
-                    slug: 'lite',
+                    id: 'plan-hbo-2',
+                    name: '6 Months Plan',
+                    slug: '6-months',
                     description: null,
-                    price: '799',
+                    price: '10',
                     originalPrice: null,
-                    durationDays: 365,
+                    durationDays: 180,
                     displayOrder: 2,
                     inStock: true,
                     stockCount: 100
                 },
                 {
-                    id: 'plan-pr-3',
-                    name: 'Prime Annual',
-                    slug: 'annual',
+                    id: 'plan-hbo-3',
+                    name: '12 Months Plan',
+                    slug: '12-months',
                     description: null,
-                    price: '1499',
+                    price: '18',
                     originalPrice: null,
                     durationDays: 365,
                     displayOrder: 3,
@@ -70,5 +71,5 @@ export default async function PrimePage() {
         };
     }
 
-    return <PrimePageClient service={service} />;
+    return <HboPageClient service={service} />;
 }

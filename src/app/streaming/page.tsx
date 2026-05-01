@@ -1,156 +1,234 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Play, ShieldCheck, Tag, Headphones, CheckCircle2 } from 'lucide-react';
-import ProgressiveImage from '@/components/ProgressiveImage';
+import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
 
-const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 
-// Hardcoded matching the user's exact screenshot
 const SERVICES = [
-    { id: 'netflix', name: 'Netflix', slug: 'netflix', planText: 'Premium Plan', logo: 'logos/netflix.svg', fallbackColor: '#E50914' },
-    { id: 'prime', name: 'Prime Video', slug: 'prime', planText: 'All Plans', logo: 'logos/prime.svg', fallbackColor: '#00A8E1' },
-    { id: 'hotstar', name: 'Disney+ Hotstar', slug: 'hotstar', planText: 'Premium Plans', logo: 'logos/hotstar.svg', fallbackColor: '#1F3C73' },
-    { id: 'zee5', name: 'ZEE5', slug: 'zee5', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/28/Zee5_Official_logo.svg', fallbackColor: '#8230C6' },
-    { id: 'sonyliv', name: 'Sony LIV', slug: 'sonyliv', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Sony_LIV_logo.svg', fallbackColor: '#F48220' },
-    { id: 'chaupal', name: 'Chaupal', slug: 'chaupal', planText: 'Premium Plans', logo: null, fallbackColor: '#F5B041' },
-    { id: 'youtube', name: 'YouTube Premium', slug: 'youtube', planText: 'Ad-free Experience', logo: 'logos/youtube.svg', fallbackColor: '#FF0000' },
-    { id: 'disney', name: 'Disney+', slug: 'disney', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg', fallbackColor: '#113CCF' },
-    { id: 'crunchyroll', name: 'Crunchyroll', slug: 'crunchyroll', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Crunchyroll_Logo.png', fallbackColor: '#F47521' },
-    { id: 'hbomax', name: 'HBO Max', slug: 'hbomax', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg', fallbackColor: '#5822B4' },
-    { id: 'jiosaavn', name: 'JioSaavn', slug: 'jiosaavn', planText: 'Music & Podcasts', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Jiosaavn-logo-300x300.png', fallbackColor: '#2BC5B4' },
-    { id: 'spotify', name: 'Spotify', slug: 'spotify', planText: 'Premium Plans', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg', fallbackColor: '#1DB954' },
+    { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflix.svg',     bg: '#141414' },
+    { id: 'prime',       name: 'Prime Video',        slug: 'prime',       plan: 'All Plans',          logo: 'logos/prime.svg',       bg: '#0F2535' },
+    { id: 'hotstar',     name: 'Disney+ Hotstar',    slug: 'hotstar',     plan: 'Premium Plans',      logo: 'logos/hotstar.svg',     bg: '#0E1A3C' },
+    { id: 'zee5',        name: 'ZEE5',               slug: 'zee5',        plan: 'Premium Plans',      logo: 'logos/zee5.jpg',        bg: '#1A0A2E' },
+    { id: 'sonyliv',     name: 'Sony LIV',           slug: 'sonyliv',     plan: 'Premium Plans',      logo: 'logos/sonyliv.jpg',     bg: '#1A1A1A' },
+    { id: 'chaupal',     name: 'Chaupal',            slug: 'chaupal',     plan: 'Premium Plans',      logo: 'logos/chaupal.svg',     bg: '#120E00' },
+    { id: 'youtube',     name: 'YouTube Premium',    slug: 'youtube',     plan: 'Ad-free Experience', logo: 'logos/youtube.png',     bg: '#1A0000' },
+    { id: 'disney',      name: 'Disney+',            slug: 'disney',      plan: 'Premium Plans',      logo: 'logos/disney.jpg',      bg: '#040D2E' },
+    { id: 'crunchyroll', name: 'Crunchyroll',        slug: 'crunchyroll', plan: 'Premium Plans',      logo: 'logos/crunchyroll.png', bg: '#1A0D00' },
+    { id: 'hbomax',      name: 'HBO Max',            slug: 'hbomax',      plan: 'Premium Plans',      logo: 'logos/hbomax.jpg',      bg: '#0F0520' },
+    { id: 'jiosaavn',    name: 'JioSaavn',           slug: 'jiosaavn',    plan: 'Music & Podcasts',   logo: 'logos/jiosaavn.png',    bg: '#001A19' },
+    { id: 'spotify',     name: 'Spotify',            slug: 'spotify',     plan: 'Premium Plans',      logo: 'logos/spotify.png',     bg: '#001A0A' },
 ];
 
 export default function StreamingCategoryPage() {
     return (
-        <div style={{ background: '#0a0a0f', minHeight: '100vh', paddingBottom: '80px', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
-            
-            {/* ─── Breadcrumbs ────────────────────────────────────── */}
-            <div className="container" style={{ paddingTop: '24px' }}>
-                <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)', marginBottom: '32px' }}>
-                    <Link href="/" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>Home</Link>
+        <div style={{ background: '#0a0a0f', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
+
+            {/* Breadcrumb */}
+            <div className="container" style={{ paddingTop: '20px', color: '#fff' }}>
+                <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
+                    <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Home</Link>
                     <ChevronRight size={14} />
-                    <span style={{ color: '#fff' }}>Streaming</span>
+                    <span style={{ color: '#fff', fontWeight: 500 }}>Streaming</span>
                 </nav>
             </div>
 
             <div className="container">
-                {/* ─── Top Banner ────────────────────────────────────── */}
-                <div style={{
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    marginBottom: '48px',
-                    aspectRatio: '1440 / 320', // Wide banner ratio exactly matching the uploaded image
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-                    position: 'relative'
+
+                {/* Banner */}
+                <div style={{ 
+                    borderRadius: '24px', 
+                    overflow: 'hidden', 
+                    marginBottom: '32px', 
+                    width: '100%', 
+                    aspectRatio: '1440 / 360', 
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+                    border: '1px solid rgba(255,255,255,0.05)'
                 }}>
-                    <ProgressiveImage src={`${MINIO_URL}/slider/streaming-banner.png`} alt="Streaming Banner" />
+                    <img
+                        src={`${MINIO}/slider/file_00000000b220720cb2fb31789491ad9f.png`}
+                        alt="Streaming"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
                 </div>
 
-                {/* ─── Grid Title ──────────────────────────────────────── */}
-                <div style={{ marginBottom: '24px' }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 6px 0' }}>Choose Your Streaming Service</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.5)', margin: 0, fontSize: '0.9rem' }}>Official subscriptions at best prices.</p>
-                </div>
+                {/* Light Wrapper */}
+                <div className="streaming-white-wrapper" style={{ 
+                    background: '#ffffff', 
+                    borderRadius: '32px', 
+                    padding: '48px', 
+                    border: '1px solid #e9ecef',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.02)'
+                }}>
 
-                {/* ─── Hardcoded 12 Cards Grid exactly like screenshot ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
-                    {SERVICES.map(service => (
-                        <div key={service.id} style={{
-                            background: '#16161e',
-                            borderRadius: '12px',
-                            padding: '16px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            transition: 'transform 0.2s',
-                        }} className="streaming-card-hover">
-                            
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                                {/* Logo Box */}
-                                <div style={{ 
-                                    width: '42px', 
-                                    height: '42px', 
-                                    flexShrink: 0, 
-                                    borderRadius: '8px', 
-                                    overflow: 'hidden', 
-                                    display: 'flex', 
-                                    alignItems: 'center', 
-                                    justifyContent: 'center',
-                                    background: service.logo ? 'transparent' : 'rgba(255,255,255,0.05)',
-                                    color: service.fallbackColor
-                                }}>
-                                    {service.logo ? (
-                                        <ProgressiveImage
-                                            src={service.logo.startsWith('http') ? service.logo : `${MINIO_URL}/${service.logo}`}
-                                            alt={service.name}
-                                            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                    {/* Section heading */}
+                    <div style={{ marginBottom: '40px' }}>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1a1c23', margin: '0 0 8px 0', letterSpacing: '-0.03em' }}>
+                            Choose Your Streaming Service
+                        </h2>
+                        <p style={{ fontSize: '0.95rem', color: '#6c757d', margin: 0, fontWeight: 500 }}>
+                            Official subscriptions at the best prices.
+                        </p>
+                    </div>
+
+                    {/* 6-column Grid */}
+                    <div className="streaming-services-grid" style={{ 
+                        gap: '20px', 
+                        marginBottom: '40px' 
+                    }}>
+                        {SERVICES.map(s => (
+                            <div key={s.id} style={{
+                                background: s.bg,
+                                borderRadius: '24px',
+                                padding: '24px 20px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                cursor: 'pointer',
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+                            }} className="streaming-card-hover">
+
+                                {/* Logo Area */}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                                    <div style={{
+                                        width: '80px',
+                                        height: '80px',
+                                        flexShrink: 0,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <img
+                                            src={`${MINIO}/${s.logo}`}
+                                            alt={s.name}
+                                            style={{ 
+                                                width: '100%', 
+                                                height: '100%', 
+                                                objectFit: 'contain', 
+                                                display: 'block',
+                                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
+                                            }}
+                                            onError={(e) => {
+                                                // Fallback if image fails
+                                                e.currentTarget.style.display = 'none';
+                                                e.currentTarget.parentElement!.innerHTML = `<span style="font-size: 28px; font-weight: 800; color: #fff">${s.name.charAt(0)}</span>`;
+                                            }}
                                         />
-                                    ) : (
-                                        <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>{service.name.charAt(0)}</span>
-                                    )}
-                                </div>
-                                
-                                {/* Text */}
-                                <div style={{ minWidth: 0 }}>
-                                    <h3 style={{ fontSize: '0.95rem', fontWeight: 600, margin: '0 0 2px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#fff' }}>
-                                        {service.name}
-                                    </h3>
-                                    <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
-                                        {service.planText}
-                                    </p>
-                                </div>
-                            </div>
+                                    </div>
 
-                            {/* Button */}
-                            <Link
-                                href={`/services/${service.slug}`}
-                                style={{
+                                    <div style={{ minWidth: 0, flex: 1 }}>
+                                        <div style={{
+                                            fontSize: '1rem',
+                                            fontWeight: 800,
+                                            color: '#ffffff',
+                                            lineHeight: 1.2,
+                                            marginBottom: '2px'
+                                        }}>
+                                            {s.name}
+                                        </div>
+                                        <div style={{ 
+                                            fontSize: '0.75rem', 
+                                            color: 'rgba(255,255,255,0.5)', 
+                                            fontWeight: 500 
+                                        }}>
+                                            {s.plan}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Button */}
+                                <Link href={`/services/${s.slug}`} style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    background: 'rgba(255,255,255,0.05)',
-                                    padding: '10px 14px',
-                                    borderRadius: '8px',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    background: 'rgba(255,255,255,0.1)',
+                                    padding: '12px',
+                                    borderRadius: '14px',
                                     color: '#fff',
                                     textDecoration: 'none',
                                     fontSize: '0.85rem',
-                                    fontWeight: 500,
+                                    fontWeight: 700,
                                     marginTop: 'auto',
-                                    transition: 'background 0.2s'
-                                }}
-                                className="streaming-btn-hover"
-                            >
-                                <span>View Plans</span>
-                                <ChevronRight size={14} color="rgba(255,255,255,0.5)" />
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-
-                {/* ─── Bottom Trust Strip ──────────────────────────────── */}
-                <div style={{
-                    marginTop: '60px',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-between',
-                    gap: '24px',
-                    background: '#f4f5f7',
-                    padding: '32px 40px',
-                    borderRadius: '16px',
-                    color: '#1a1c23'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 200px' }}>
-                        <CheckCircle2 size={24} color="#333" />
-                        <div>
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '2px' }}>100% Secure Payments</div>
-                            <div style={{ fontSize: '0.75rem', color: '#666' }}>Your payments are safe and encrypted.</div>
-                        </div>
+                                    transition: 'all 0.2s ease',
+                                    border: '1px solid rgba(255,255,255,0.05)'
+                                }} className="streaming-btn-hover">
+                                    <span>View Plans</span>
+                                    <ChevronRight size={16} strokeWidth={3} />
+                                </Link>
+                            </div>
+                        ))}
                     </div>
-                    {/* (Other features matching exactly like the screenshot...) */}
+
+                    {/* Features Strip */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        background: '#f8f9fa',
+                        borderRadius: '24px',
+                        padding: '32px 48px',
+                        border: '1px solid #e9ecef',
+                        gap: '24px',
+                        flexWrap: 'wrap'
+                    }}>
+                        {[
+                            { Icon: ShieldCheck, title: 'Secure', sub: 'Encrypted.' },
+                            { Icon: Truck, title: 'Instant', sub: 'Delivery.' },
+                            { Icon: BadgePercent, title: 'Official', sub: 'Genuine.' },
+                            { Icon: BadgePercent, title: 'Best Price', sub: 'Guaranteed.' },
+                            { Icon: Headphones, title: 'Support', sub: '24/7 Care.' },
+                        ].map(({ Icon, title, sub }, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 0', minWidth: '150px' }}>
+                                <div style={{ color: '#1a1c23' }}>
+                                    <Icon size={28} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <div style={{ fontWeight: 800, color: '#1a1c23', fontSize: '0.95rem' }}>{title}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#6c757d', fontWeight: 500 }}>{sub}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </div>
+
+            <style jsx global>{`
+                .streaming-card-hover:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                    border-color: rgba(255,255,255,0.2);
+                }
+                .streaming-btn-hover:hover {
+                    background: rgba(255,255,255,0.2);
+                }
+                .streaming-services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                }
+                @media (max-width: 1400px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                }
+                @media (max-width: 1024px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 480px) {
+                    .streaming-services-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

@@ -26,4 +26,4 @@ async function upload(file, key) {
   }
 }
 
-upload('/Users/harshanand/.gemini/antigravity/brain/7be811f1-805f-4622-81fe-8ee3e80d051b/media__1777565679926.png', 'slider/streaming-banner.png');
+upload('/Users/harshanand/.gemini/antigravity/brain/7be811f1-805f-4622-81fe-8ee3e80d051b/media__1777587484231.png', 'slider/streaming-banner.png');

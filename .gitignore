@@ -5,3 +5,10 @@ dist/
 .env
 .env.local
 .env.*.local
+
+# Test and temp files
+*.png
+*.webp
+*.txt
+*.tsbuildinfo
+next_dev_log.txt

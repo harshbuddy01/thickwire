@@ -48,16 +48,16 @@ export default function HeroSlider() {
                 </div>
             ))}
 
-            <div className="slider-dots" style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 10 }}>
+            <div className="slider-dots" style={{ position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 10 }}>
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrent(index)}
                         style={{
-                            width: current === index ? '24px' : '8px',
-                            height: '8px',
-                            borderRadius: '4px',
-                            background: current === index ? '#6c5ce7' : 'rgba(255,255,255,0.5)',
+                            width: current === index ? '20px' : '6px',
+                            height: '6px',
+                            borderRadius: '3px',
+                            background: current === index ? '#6c5ce7' : 'rgba(255,255,255,0.4)',
                             border: 'none',
                             cursor: 'pointer',
                             transition: 'all 0.3s'
