@@ -14,7 +14,7 @@ export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 
-    if (pathname === '/checkout') return null;
+    if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup') return null;
 
     return (
         <header>

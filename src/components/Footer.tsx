@@ -34,7 +34,7 @@ import {
 export default function Footer() {
     const pathname = usePathname();
     
-    if (pathname === '/checkout') return null;
+    if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup') return null;
 
     const accentColor = '#b87a1d'; // The gold/bronze color from the image
     const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
