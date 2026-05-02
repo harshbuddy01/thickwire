@@ -208,7 +208,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                         <Headphones size={24} className="trust-icon text-gold" />
                         <div className="trust-text text-white">
                             <strong>24/7 Customer Support</strong>
-                            <span>We're here anytime you need us.</span>
+                            <span>We&apos;re here anytime you need us.</span>
                         </div>
                     </div>
                 </div>

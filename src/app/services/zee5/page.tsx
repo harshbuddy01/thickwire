@@ -94,7 +94,7 @@ export default function Zee5ProductPage() {
                     <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb' }}>
                         <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Enter Your Mobile Number</h3>
                         <p style={{ margin: '0 0 24px 0', fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.5 }}>
-                            We'll send your ZEE5 premium access details on this number.
+                            We&apos;ll send your ZEE5 premium access details on this number.
                         </p>
 
                         <div style={{ display: 'flex', marginBottom: '24px' }}>
@@ -216,7 +216,7 @@ export default function Zee5ProductPage() {
                         </div>
                         <div>
                             <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.95rem', marginBottom: '2px' }}>24/7 Customer Support</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>We're here to help you<br/>anytime you need.</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>We&apos;re here to help you<br/>anytime you need.</div>
                         </div>
                     </div>
                 </div>

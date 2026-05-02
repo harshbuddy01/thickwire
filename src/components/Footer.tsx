@@ -95,7 +95,7 @@ export default function Footer() {
                             </div>
                             <div>
                                 <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>24/7 Support</div>
-                                <div style={{ fontSize: '0.8rem', color: '#777' }}>We're here to help you anytime</div>
+                                <div style={{ fontSize: '0.8rem', color: '#777' }}>We&apos;re here to help you anytime</div>
                             </div>
                         </div>
                     </div>
@@ -305,7 +305,7 @@ export default function Footer() {
                         <Headphones size={20} color="#666" />
                         <div>
                             <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>24/7 Customer Care</div>
-                            <div style={{ fontSize: '0.75rem', color: '#999' }}>We're always here to help</div>
+                            <div style={{ fontSize: '0.75rem', color: '#999' }}>We&apos;re always here to help</div>
                         </div>
                     </div>
                 </div>

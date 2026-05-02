@@ -108,7 +108,7 @@ export default function SonyLivProductPage() {
                             <h2 style={{ color: '#fff', fontSize: '1.8rem', fontWeight: 900, textAlign: 'center', margin: '0 0 8px 0', letterSpacing: '1px' }}>UEFA CHAMPIONS LEAGUE</h2>
                             <div style={{ color: '#a78bfa', fontSize: '1.4rem', fontWeight: 800, textAlign: 'center', marginBottom: '16px' }}>LIVE & EXCLUSIVE</div>
                             <p style={{ color: '#e5e7eb', fontSize: '1rem', textAlign: 'center', marginBottom: '24px', lineHeight: 1.5 }}>
-                                Watch Europe's top football clubs<br/>battle it out for glory!
+                                Watch Europe&apos;s top football clubs<br/>battle it out for glory!
                             </p>
                             <button style={{
                                 background: 'linear-gradient(90deg, #4c1d95 0%, #3b0764 100%)',
@@ -169,7 +169,7 @@ export default function SonyLivProductPage() {
                     <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb' }}>
                         <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Enter Your Mobile Number</h3>
                         <p style={{ margin: '0 0 24px 0', fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.5 }}>
-                            We'll send your SonyLIV premium access details on this number.
+                            We&apos;ll send your SonyLIV premium access details on this number.
                         </p>
 
                         <div style={{ display: 'flex', marginBottom: '24px' }}>
@@ -291,7 +291,7 @@ export default function SonyLivProductPage() {
                         </div>
                         <div>
                             <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.95rem', marginBottom: '2px' }}>24/7 Customer Support</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>We're here to help you<br/>anytime you need.</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>We&apos;re here to help you<br/>anytime you need.</div>
                         </div>
                     </div>
                 </div>

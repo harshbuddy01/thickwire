@@ -183,7 +183,7 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                         <Headphones size={24} className="trust-icon" />
                         <div className="trust-text">
                             <strong>24/7 Customer Support</strong>
-                            <span>We're here anytime you need us.</span>
+                            <span>We&apos;re here anytime you need us.</span>
                         </div>
                     </div>
                 </div>

@@ -25,7 +25,7 @@ const CATEGORIES = [
 
 const AI_SERVICES = [
     { id: 'chatgpt', name: 'ChatGPT Plus', desc: 'Smarter conversations, infinite possibilities.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/chatgpt.svg` },
-    { id: 'gemini', name: 'Gemini Advanced', desc: "Google's most powerful AI model.", price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/gemini.svg` },
+    { id: 'gemini', name: 'Gemini Advanced', desc: "Google&apos;s most powerful AI model.", price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/gemini.svg` },
     { id: 'copilot', name: 'Microsoft Copilot', desc: 'Your everyday AI companion.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/copilot.svg` },
     { id: 'midjourney', name: 'Midjourney', desc: 'Create stunning AI artwork.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/midjourney.svg` },
     { id: 'notion', name: 'Notion AI', desc: 'Write, plan, organize. All in one place.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/notion.svg` },
@@ -150,7 +150,7 @@ export default function AICategoryPage() {
                         <div style={{ color: '#60a5fa' }}><Headphones size={28} /></div>
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>24/7 Customer Support</div>
-                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>We're here to help you anytime</div>
+                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>We&apos;re here to help you anytime</div>
                         </div>
                     </div>
                 </div>

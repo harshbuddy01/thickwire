@@ -422,7 +422,7 @@ export default function ChatGPTProductPage() {
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>24/7 Customer Support</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.9rem', lineHeight: 1.4 }}>We're here anytime<br/>you need us.</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.9rem', lineHeight: 1.4 }}>We&apos;re here anytime<br/>you need us.</div>
                         </div>
                     </div>
                 </div>

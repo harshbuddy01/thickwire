@@ -359,7 +359,7 @@ export default function AccountPage() {
                                 <div style={{ ...s.listCard, ...s.emptyState }}>
                                     <HelpCircle size={48} style={{ margin: '0 auto 16px', color: '#ccc' }} />
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', marginBottom: 8 }}>No support tickets</h3>
-                                    <p style={{ color: '#888', marginBottom: 24 }}>You haven't opened any support tickets yet.</p>
+                                    <p style={{ color: '#888', marginBottom: 24 }}>You haven&apos;t opened any support tickets yet.</p>
                                 </div>
                             ) : (
                                 tickets.map(ticket => (

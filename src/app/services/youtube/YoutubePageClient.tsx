@@ -199,7 +199,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                         <Headphones size={28} className="trust-icon" />
                         <div className="trust-text">
                             <strong>24/7 Customer Support</strong>
-                            <span>We're here to help you anytime you need.</span>
+                            <span>We&apos;re here to help you anytime you need.</span>
                         </div>
                     </div>
                 </div>

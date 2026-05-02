@@ -317,7 +317,7 @@ export default function GeminiProductPage() {
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>24/7 Customer Support</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.9rem', lineHeight: 1.4 }}>We're here to help you<br/>anytime you need.</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.9rem', lineHeight: 1.4 }}>We&apos;re here to help you<br/>anytime you need.</div>
                         </div>
                     </div>
                 </div>
@@ -333,7 +333,7 @@ export default function GeminiProductPage() {
                         {/* Col 1 */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             {[
-                                { q: "What is Gemini Pro?", a: "Gemini Pro is Google's highly capable AI model. This subscription gives you priority access to Gemini Advanced capabilities, directly integrated into Google Workspace apps." },
+                                { q: "What is Gemini Pro?", a: "Gemini Pro is Google&apos;s highly capable AI model. This subscription gives you priority access to Gemini Advanced capabilities, directly integrated into Google Workspace apps." },
                                 { q: "What's included in the 5 TB storage?", a: "You get 5 TB of unified cloud storage that is shared across Google Drive, Gmail, and Google Photos for all your files and memories." },
                                 { q: "Can I use Gemini Pro on multiple devices?", a: "Yes, your subscription is linked to your Google Account, allowing you to access Gemini Pro across all your web browsers, mobile phones, and tablets seamlessly." }
                             ].map((item, i) => (
@@ -427,7 +427,7 @@ export default function GeminiProductPage() {
                             <img src={GEMINI_LOGO} alt="Gemini" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
                         </div>
                         <div>
-                            <h2 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: 800, margin: '0 0 10px 0', letterSpacing: '-0.5px' }}>Unlock the power of Google's most advanced AI</h2>
+                            <h2 style={{ color: '#ffffff', fontSize: '1.8rem', fontWeight: 800, margin: '0 0 10px 0', letterSpacing: '-0.5px' }}>Unlock the power of Google&apos;s most advanced AI</h2>
                             <p style={{ color: '#9ca3af', fontSize: '1.05rem', margin: 0, fontWeight: 500 }}>Get Gemini Pro + 5 TB Storage and experience<br/>next-generation productivity.</p>
                         </div>
                     </div>

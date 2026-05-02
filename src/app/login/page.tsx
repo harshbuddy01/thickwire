@@ -133,7 +133,7 @@ function LoginContent() {
                     </button>
 
                     <p style={{ textAlign: 'center', marginTop: '32px', color: '#6b7280', fontSize: '0.95rem' }}>
-                        Don't have an account? <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} style={{ color: '#4f46e5', fontWeight: 700, textDecoration: 'none' }}>Create one now</Link>
+                        Don&apos;t have an account? <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} style={{ color: '#4f46e5', fontWeight: 700, textDecoration: 'none' }}>Create one now</Link>
                     </p>
                 </div>
             </div>
