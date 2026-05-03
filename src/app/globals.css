@@ -4298,6 +4298,8 @@ textarea.form-input {
   overflow: hidden;
   margin-bottom: 30px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  position: relative;
+  aspect-ratio: 21 / 9;
 }
 
 .spotify-page-exact .hero-banner-image {
@@ -5246,6 +5248,15 @@ textarea.form-input {
     font-size: 0.8rem;
     padding: 8px 12px;
   }
+}
+
+/* ─── GLOBAL HERO IMAGE CONTAINER ─── */
+.hero-image-container {
+  width: 100%;
+  position: relative;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
 /* ─── HOMEPAGE MOBILE ─── */
