@@ -33,6 +33,7 @@ export interface CreateOrderRequest {
     couponCode?: string;
     gateway?: 'razorpay' | 'cashfree';
     whatsappOptedIn?: boolean;
+    serviceCredentials?: Record<string, any>;
 }
 
 export interface CreateOrderResponse {

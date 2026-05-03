@@ -6,7 +6,7 @@ import Script from 'next/script';
 import { createOrder, getServiceBySlug, validateCoupon } from '@/lib/api';
 import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
-import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play, Eye, EyeOff, Globe, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CheckoutPage() {
@@ -47,6 +47,15 @@ function CheckoutContent() {
     const [discountAmount, setDiscountAmount] = useState(0);
     const [couponError, setCouponError] = useState('');
     const [finalAmount, setFinalAmount] = useState(0);
+
+    // ─── Service Credentials State ─────────────────────
+    const [spotifyEmail, setSpotifyEmail] = useState('');
+    const [spotifyPassword, setSpotifyPassword] = useState('');
+    const [spotifyConfirmPassword, setSpotifyConfirmPassword] = useState('');
+    const [spotifyCountry, setSpotifyCountry] = useState('');
+    const [showSpotifyPassword, setShowSpotifyPassword] = useState(false);
+    const [youtubeEmail, setYoutubeEmail] = useState('');
+    const [mobileNumber, setMobileNumber] = useState('');
 
     const { user, loading: authLoading } = useAuth();
 
@@ -136,6 +145,23 @@ function CheckoutContent() {
         });
     };
 
+    // ─── Service Type Detection ────────────────────────
+    const slug = service?.slug || '';
+    const price = plan ? parseFloat(plan.price) : 0;
+    const isSpotifyGlobal = slug === 'spotify' && price <= 100;
+    const isYouTubeIndia = slug === 'youtube' && price > 100;
+    const isYouTubeGlobal = slug === 'youtube' && price <= 100;
+    const needsPhone = slug === 'sonyliv' || slug === 'zee5';
+    const isManualService = isSpotifyGlobal || isYouTubeIndia || isYouTubeGlobal || needsPhone;
+
+    // Check if credential fields are valid
+    const credentialsValid = (() => {
+        if (isSpotifyGlobal) return spotifyEmail && spotifyPassword && spotifyConfirmPassword && spotifyCountry && spotifyPassword === spotifyConfirmPassword;
+        if (isYouTubeIndia) return youtubeEmail.includes('@');
+        if (needsPhone) return /^[6-9]\d{9}$/.test(mobileNumber.replace(/\D/g, ''));
+        return true; // auto-delivery or YouTube Global — no extra fields
+    })();
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!plan) return;
@@ -151,16 +177,45 @@ function CheckoutContent() {
             return;
         }
 
+        // Validate credentials for manual services
+        if (isSpotifyGlobal && spotifyPassword !== spotifyConfirmPassword) {
+            setError('Spotify passwords do not match.');
+            return;
+        }
+        if (isSpotifyGlobal && (!spotifyEmail || !spotifyPassword || !spotifyCountry)) {
+            setError('Please fill in all Spotify account details.');
+            return;
+        }
+        if (isYouTubeIndia && !youtubeEmail) {
+            setError('Please enter your YouTube account email.');
+            return;
+        }
+        if (needsPhone && !phoneRegex.test(mobileNumber.replace(/\D/g, ''))) {
+            setError('Please enter a valid 10-digit mobile number for your account.');
+            return;
+        }
+
         setSubmitting(true);
         setError(null);
 
         try {
+            // Build serviceCredentials based on service type
+            let serviceCredentials: Record<string, any> | undefined;
+            if (isSpotifyGlobal) {
+                serviceCredentials = { spotifyEmail, spotifyPassword, spotifyCountry };
+            } else if (isYouTubeIndia) {
+                serviceCredentials = { youtubeEmail };
+            } else if (needsPhone) {
+                serviceCredentials = { mobileNumber };
+            }
+
             const payload = {
                 ...form,
                 planId: plan.id,
                 gateway,
                 whatsappOptedIn,
-                ...(couponState === 'applied' ? { couponCode } : {})
+                ...(couponState === 'applied' ? { couponCode } : {}),
+                ...(serviceCredentials ? { serviceCredentials } : {})
             };
 
             const res = await createOrder(payload);
@@ -397,6 +452,146 @@ function CheckoutContent() {
                             </div>
                         </div>
 
+                        {/* ─── Conditional Service Credential Fields ─── */}
+
+                        {isSpotifyGlobal && (
+                            <div style={{ marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                                    <div style={{ width: 40, height: 40, background: '#f0fdf4', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1DB954' }}>
+                                        <Globe size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>Spotify Account Details</div>
+                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>Required for upgrading your Spotify Premium</div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Enter your Spotify email or username</label>
+                                        <input type="text" placeholder="you@spotify.com" required value={spotifyEmail} onChange={(e) => setSpotifyEmail(e.target.value)}
+                                            style={{ width: '100%', padding: '14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', transition: 'all 0.2s', boxSizing: 'border-box' }}
+                                            onFocus={(e) => e.target.style.borderColor = '#1DB954'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                                        />
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                        <div style={{ flex: 1 }}>
+                                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Spotify Password</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <input type={showSpotifyPassword ? 'text' : 'password'} placeholder="••••••••" required value={spotifyPassword} onChange={(e) => setSpotifyPassword(e.target.value)}
+                                                    style={{ width: '100%', padding: '14px 44px 14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
+                                                    onFocus={(e) => e.target.style.borderColor = '#1DB954'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                                                />
+                                                <button type="button" onClick={() => setShowSpotifyPassword(!showSpotifyPassword)}
+                                                    style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: 4 }}>
+                                                    {showSpotifyPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Confirm Password</label>
+                                            <input type="password" placeholder="••••••••" required value={spotifyConfirmPassword} onChange={(e) => setSpotifyConfirmPassword(e.target.value)}
+                                                style={{ width: '100%', padding: '14px 16px', border: `1px solid ${spotifyConfirmPassword && spotifyPassword !== spotifyConfirmPassword ? '#ef4444' : '#e5e7eb'}`, borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
+                                            />
+                                            {spotifyConfirmPassword && spotifyPassword !== spotifyConfirmPassword && (
+                                                <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4, fontWeight: 600 }}>Passwords do not match</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Country / Region of your Spotify account</label>
+                                        <select value={spotifyCountry} onChange={(e) => setSpotifyCountry(e.target.value)} required
+                                            style={{ width: '100%', padding: '14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', background: '#fff', color: spotifyCountry ? '#111827' : '#9ca3af', cursor: 'pointer', boxSizing: 'border-box' }}>
+                                            <option value="">Select your country</option>
+                                            <option value="US">United States</option>
+                                            <option value="UK">United Kingdom</option>
+                                            <option value="CA">Canada</option>
+                                            <option value="AU">Australia</option>
+                                            <option value="DE">Germany</option>
+                                            <option value="FR">France</option>
+                                            <option value="NL">Netherlands</option>
+                                            <option value="SE">Sweden</option>
+                                            <option value="BR">Brazil</option>
+                                            <option value="MX">Mexico</option>
+                                            <option value="JP">Japan</option>
+                                            <option value="KR">South Korea</option>
+                                            <option value="SG">Singapore</option>
+                                            <option value="PH">Philippines</option>
+                                            <option value="OTHER">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, padding: '14px 16px', background: '#fefce8', border: '1px solid #fef08a', borderRadius: 12 }}>
+                                    <ShieldCheck size={18} style={{ color: '#ca8a04', flexShrink: 0, marginTop: 2 }} />
+                                    <div style={{ fontSize: '0.8rem', color: '#854d0e', lineHeight: 1.5 }}>
+                                        <strong>Your Privacy is Our Priority</strong> — We use your account details only to upgrade your Spotify Premium. We do not share or store your password. All data is encrypted and secure.
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {isYouTubeIndia && (
+                            <div style={{ marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                                    <div style={{ width: 40, height: 40, background: '#fef2f2', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
+                                        <Play size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>YouTube Account Details</div>
+                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>For India customers only</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Enter your YouTube email</label>
+                                    <input type="email" placeholder="you@gmail.com" required value={youtubeEmail} onChange={(e) => setYoutubeEmail(e.target.value)}
+                                        style={{ width: '100%', padding: '14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
+                                        onFocus={(e) => e.target.style.borderColor = '#dc2626'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                                    />
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, padding: '14px 16px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 12 }}>
+                                    <ShieldCheck size={18} style={{ color: '#0284c7', flexShrink: 0, marginTop: 2 }} />
+                                    <div style={{ fontSize: '0.8rem', color: '#0369a1', lineHeight: 1.5 }}>
+                                        You will need an active YouTube account to continue. <strong>We do not ask for your password.</strong> We will never access your account.
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {needsPhone && (
+                            <div style={{ marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                                    <div style={{ width: 40, height: 40, background: '#faf5ff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
+                                        <Smartphone size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>{service?.name} Account Details</div>
+                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>Required for activating your subscription</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Enter your mobile number</label>
+                                    <div style={{ position: 'relative' }}>
+                                        <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700, fontSize: '0.95rem' }}>+91</div>
+                                        <input type="tel" placeholder="98765 43210" required value={mobileNumber}
+                                            onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                                            style={{ width: '100%', padding: '14px 16px 14px 56px', border: `1px solid ${mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) ? '#ef4444' : '#e5e7eb'}`, borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
+                                            onFocus={(e) => e.target.style.borderColor = '#7c3aed'} onBlur={(e) => e.target.style.borderColor = mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) ? '#ef4444' : '#e5e7eb'}
+                                        />
+                                    </div>
+                                    {mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) && (
+                                        <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4, fontWeight: 600 }}>Please enter a valid 10-digit Indian mobile number</div>
+                                    )}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, padding: '14px 16px', background: '#fefce8', border: '1px solid #fef08a', borderRadius: 12 }}>
+                                    <AlertCircle size={18} style={{ color: '#ca8a04', flexShrink: 0, marginTop: 2 }} />
+                                    <div style={{ fontSize: '0.8rem', color: '#854d0e', lineHeight: 1.5 }}>
+                                        Please double-check your mobile number. Access details will be sent on this number.
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* WhatsApp Checkbox */}
                         <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: whatsappOptedIn ? '#f0fdf4' : '#f9fafb', border: `1px solid ${whatsappOptedIn ? '#10b981' : '#e5e7eb'}`, borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s', marginBottom: 32 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -491,8 +686,8 @@ function CheckoutContent() {
                         {/* Pay Button */}
                         <button
                             type="submit"
-                            disabled={submitting}
-                            style={{ width: '100%', height: 64, background: 'linear-gradient(90deg, #111827 0%, #1f2937 100%)', color: '#fff', border: 'none', borderRadius: 12, fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, cursor: submitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 24px rgba(17, 24, 39, 0.2)' }}
+                            disabled={submitting || !credentialsValid}
+                            style={{ width: '100%', height: 64, background: (submitting || !credentialsValid) ? '#9ca3af' : 'linear-gradient(90deg, #111827 0%, #1f2937 100%)', color: '#fff', border: 'none', borderRadius: 12, fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, cursor: (submitting || !credentialsValid) ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: (submitting || !credentialsValid) ? 'none' : '0 8px 24px rgba(17, 24, 39, 0.2)' }}
                         >
                             {submitting ? 'Processing securely...' : (
                                 <>
