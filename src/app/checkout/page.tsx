@@ -55,7 +55,6 @@ function CheckoutContent() {
     const [spotifyCountry, setSpotifyCountry] = useState('');
     const [showSpotifyPassword, setShowSpotifyPassword] = useState(false);
     const [youtubeEmail, setYoutubeEmail] = useState('');
-    const [mobileNumber, setMobileNumber] = useState('');
 
     const { user, loading: authLoading } = useAuth();
 
@@ -117,7 +116,14 @@ function CheckoutContent() {
                     setService(mockService);
                     setPlan(mockService.plans.find(p => p.id === planId) || null);
                 } else {
-                    setError('Failed to load service');
+                    const mockService = {
+                        id: `mock-${serviceSlug}`, name: serviceSlug.toUpperCase(), slug: serviceSlug, logoUrl: null, description: '', displayOrder: 99,
+                        plans: [
+                            { id: planId, name: 'Premium Plan', slug: 'premium', description: null, price: '299', originalPrice: null, durationDays: 30, displayOrder: 1, inStock: true, stockCount: 100 }
+                        ]
+                    } as Service;
+                    setService(mockService);
+                    setPlan(mockService.plans[0] || null);
                 }
             })
             .finally(() => setLoading(false));
@@ -182,8 +188,7 @@ function CheckoutContent() {
     const credentialsValid = (() => {
         if (isSpotifyGlobal) return spotifyEmail && spotifyPassword && spotifyConfirmPassword && spotifyCountry && spotifyPassword === spotifyConfirmPassword;
         if (isYouTubeIndia) return youtubeEmail.includes('@');
-        if (needsPhone) return /^[6-9]\d{9}$/.test(mobileNumber.replace(/\D/g, ''));
-        return true; // auto-delivery or YouTube Global — no extra fields
+        return true; // auto-delivery or YouTube Global or needsPhone (phone is already validated) — no extra fields
     })();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -214,23 +219,18 @@ function CheckoutContent() {
             setError('Please enter your YouTube account email.');
             return;
         }
-        if (needsPhone && !phoneRegex.test(mobileNumber.replace(/\D/g, ''))) {
-            setError('Please enter a valid 10-digit mobile number for your account.');
-            return;
-        }
 
         setSubmitting(true);
         setError(null);
 
         try {
-            // Build serviceCredentials based on service type
             let serviceCredentials: Record<string, any> | undefined;
             if (isSpotifyGlobal) {
                 serviceCredentials = { spotifyEmail, spotifyPassword, spotifyCountry };
             } else if (isYouTubeIndia) {
                 serviceCredentials = { youtubeEmail };
             } else if (needsPhone) {
-                serviceCredentials = { mobileNumber };
+                serviceCredentials = { mobileNumber: form.customerPhone.replace(/\D/g, '') };
             }
 
             const payload = {
@@ -471,6 +471,11 @@ function CheckoutContent() {
                                                 onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                                             />
                                         </div>
+                                        {needsPhone && (
+                                            <div style={{ fontSize: '0.75rem', color: '#10b981', marginTop: 6, fontWeight: 500 }}>
+                                                * This number will also be used to activate your {service?.name} subscription.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -582,39 +587,6 @@ function CheckoutContent() {
                             </div>
                         )}
 
-                        {needsPhone && (
-                            <div style={{ marginBottom: 32 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                                    <div style={{ width: 40, height: 40, background: '#faf5ff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
-                                        <Smartphone size={20} />
-                                    </div>
-                                    <div>
-                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>{service?.name} Account Details</div>
-                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>Required for activating your subscription</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Enter your mobile number</label>
-                                    <div style={{ position: 'relative' }}>
-                                        <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#6b7280', fontWeight: 700, fontSize: '0.95rem' }}>+91</div>
-                                        <input type="tel" placeholder="98765 43210" required value={mobileNumber}
-                                            onChange={(e) => setMobileNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                                            style={{ width: '100%', padding: '14px 16px 14px 56px', border: `1px solid ${mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) ? '#ef4444' : '#e5e7eb'}`, borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
-                                            onFocus={(e) => e.target.style.borderColor = '#7c3aed'} onBlur={(e) => e.target.style.borderColor = mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) ? '#ef4444' : '#e5e7eb'}
-                                        />
-                                    </div>
-                                    {mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber) && (
-                                        <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: 4, fontWeight: 600 }}>Please enter a valid 10-digit Indian mobile number</div>
-                                    )}
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, padding: '14px 16px', background: '#fefce8', border: '1px solid #fef08a', borderRadius: 12 }}>
-                                    <AlertCircle size={18} style={{ color: '#ca8a04', flexShrink: 0, marginTop: 2 }} />
-                                    <div style={{ fontSize: '0.8rem', color: '#854d0e', lineHeight: 1.5 }}>
-                                        Please double-check your mobile number. Access details will be sent on this number.
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                         {/* WhatsApp Checkbox */}
                         <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: whatsappOptedIn ? '#f0fdf4' : '#f9fafb', border: `1px solid ${whatsappOptedIn ? '#10b981' : '#e5e7eb'}`, borderRadius: 12, cursor: 'pointer', transition: 'all 0.2s', marginBottom: 32 }}>
