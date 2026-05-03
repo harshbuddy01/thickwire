@@ -95,7 +95,31 @@ function CheckoutContent() {
                 const p = s.plans.find((pl) => pl.id === planId);
                 setPlan(p || null);
             })
-            .catch(() => setError('Failed to load service'))
+            .catch(() => {
+                // Fallback for services not yet added to the production DB
+                if (serviceSlug === 'spotify') {
+                    const mockService = {
+                        id: 'mock-spotify', name: 'Spotify Premium', slug: 'spotify', logoUrl: null, description: '', displayOrder: 1,
+                        plans: [
+                            { id: 'plan-1', name: '3 Months Plan', slug: '3-months', description: null, price: '149', originalPrice: null, durationDays: 90, displayOrder: 1, inStock: true, stockCount: 100 },
+                            { id: 'plan-2', name: '12 Months Plan', slug: '12-months', description: null, price: '26', originalPrice: null, durationDays: 365, displayOrder: 2, inStock: true, stockCount: 100 }
+                        ]
+                    } as Service;
+                    setService(mockService);
+                    setPlan(mockService.plans.find(p => p.id === planId) || null);
+                } else if (serviceSlug === 'sonyliv') {
+                    const mockService = {
+                        id: 'mock-sonyliv', name: 'SonyLIV', slug: 'sonyliv', logoUrl: null, description: '', displayOrder: 2,
+                        plans: [
+                            { id: 'plan-sl-1', name: '1 Year Plan', slug: '1-year', description: null, price: '399', originalPrice: null, durationDays: 365, displayOrder: 1, inStock: true, stockCount: 100 }
+                        ]
+                    } as Service;
+                    setService(mockService);
+                    setPlan(mockService.plans.find(p => p.id === planId) || null);
+                } else {
+                    setError('Failed to load service');
+                }
+            })
             .finally(() => setLoading(false));
     }, [serviceSlug, planId]);
 

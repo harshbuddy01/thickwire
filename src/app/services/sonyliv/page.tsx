@@ -165,48 +165,21 @@ export default function SonyLivProductPage() {
                         </div>
                     </div>
 
-                    {/* Mid Col - Input */}
-                    <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb' }}>
-                        <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Enter Your Mobile Number</h3>
-                        <p style={{ margin: '0 0 24px 0', fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.5 }}>
-                            We&apos;ll send your SonyLIV premium access details on this number.
+                    {/* Mid Col - Details */}
+                    <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <h3 style={{ margin: '0 0 12px 0', fontSize: '1.4rem', fontWeight: 800, color: '#111827' }}>Seamless Entertainment</h3>
+                        <p style={{ margin: '0 0 24px 0', fontSize: '1rem', color: '#6b7280', lineHeight: 1.6 }}>
+                            Get your SonyLIV Premium access details delivered instantly to your mobile number upon successful payment. Enjoy blockbuster hits and live sports without interruptions.
                         </p>
 
-                        <div style={{ display: 'flex', marginBottom: '24px' }}>
-                            <div style={{
-                                background: '#f9fafb',
-                                border: '1px solid #d1d5db',
-                                borderRight: 'none',
-                                borderRadius: '12px 0 0 12px',
-                                padding: '16px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                color: '#374151',
-                                fontWeight: 500
-                            }}>
-                                +91 <ChevronDown size={14} color="#6b7280" />
+                        <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', border: '1px solid #e2e8f0' }}>
+                            <div style={{ background: '#e0e7ff', padding: '10px', borderRadius: '12px', color: '#4f46e5' }}>
+                                <MonitorPlay size={24} />
                             </div>
-                            <input 
-                                type="tel" 
-                                placeholder="Enter your mobile number" 
-                                style={{
-                                    flex: 1,
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '0 12px 12px 0',
-                                    padding: '16px',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    color: '#111827'
-                                }} 
-                            />
-                        </div>
-
-                        <div style={{ background: '#f3f4f6', borderRadius: '12px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                            <Lock size={20} color="#6b7280" style={{ flexShrink: 0, marginTop: '2px' }} />
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563', lineHeight: 1.5 }}>
-                                Please double-check your mobile number. Access details will be sent on this number.
-                            </p>
+                            <div>
+                                <div style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.05rem', marginBottom: '4px' }}>Watch Anywhere</div>
+                                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>Stream on your Phone, TV, or Web Browser.</div>
+                            </div>
                         </div>
                     </div>
 
@@ -221,25 +194,27 @@ export default function SonyLivProductPage() {
                             <CheckCircle2 size={14} /> One-time payment
                         </div>
 
-                        <button style={{
-                            width: '100%',
-                            background: '#0f172a',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '12px',
-                            padding: '18px',
-                            fontSize: '1.1rem',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            marginBottom: '20px',
-                            boxShadow: '0 10px 20px rgba(15,23,42,0.2)'
-                        }}>
-                            <Lock size={20} /> Buy Now Securely
-                        </button>
+                        <Link href="/checkout?planId=plan-sl-1&service=sonyliv" style={{ width: '100%', textDecoration: 'none' }}>
+                            <button style={{
+                                width: '100%',
+                                background: '#0f172a',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '12px',
+                                padding: '18px',
+                                fontSize: '1.1rem',
+                                fontWeight: 700,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '12px',
+                                cursor: 'pointer',
+                                marginBottom: '20px',
+                                boxShadow: '0 10px 20px rgba(15,23,42,0.2)'
+                            }}>
+                                <Lock size={20} /> Buy Now Securely
+                            </button>
+                        </Link>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <ShieldCheck size={24} color="#9ca3af" />
@@ -401,22 +376,24 @@ export default function SonyLivProductPage() {
                         </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <button style={{
-                            background: '#fcd34d',
-                            color: '#111827',
-                            border: 'none',
-                            padding: '16px 40px',
-                            borderRadius: '12px',
-                            fontSize: '1.1rem',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            boxShadow: '0 10px 20px rgba(252,211,77,0.2)'
-                        }}>
-                            Get SonyLIV 1 Year Now <ChevronRight size={20} />
-                        </button>
+                        <Link href="/checkout?planId=plan-sl-1&service=sonyliv" style={{ textDecoration: 'none' }}>
+                            <button style={{
+                                background: '#fcd34d',
+                                color: '#111827',
+                                border: 'none',
+                                padding: '16px 40px',
+                                borderRadius: '12px',
+                                fontSize: '1.1rem',
+                                fontWeight: 700,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                cursor: 'pointer',
+                                boxShadow: '0 10px 20px rgba(252,211,77,0.2)'
+                            }}>
+                                Get SonyLIV 1 Year Now <ChevronRight size={20} />
+                            </button>
+                        </Link>
                         <div style={{ color: '#d1d5db', fontSize: '0.85rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span>1 Year Premium Access</span>
                             <div style={{ width: '4px', height: '4px', background: '#d1d5db', borderRadius: '50%' }}></div>
