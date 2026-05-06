@@ -8,10 +8,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const s: { [k: string]: React.CSSProperties } = {
-    page: { minHeight: '80vh', padding: '40px 0 60px' },
+    page: { minHeight: '80vh', padding: '40px 20px 60px' },
     profileCard: {
         background: '#fff', border: '1px solid #eee', borderRadius: 24,
-        padding: '28px 32px', display: 'flex', alignItems: 'center',
+        padding: '28px 32px', display: 'flex', alignItems: 'center', flexWrap: 'wrap',
         gap: 24, marginBottom: 32, position: 'relative', overflow: 'hidden',
         boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
     },
@@ -191,7 +191,7 @@ export default function AccountPage() {
                         <div style={s.unverified}><AlertCircle size={14} /> Email not verified</div>
                     )}
                 </div>
-                <button onClick={logout} style={s.logoutBtn}>
+                <button onClick={logout} style={{ ...s.logoutBtn, flexShrink: 0, marginTop: 'auto' }}>
                     <LogOut size={16} /> Log Out
                 </button>
             </div>

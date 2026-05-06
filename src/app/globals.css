@@ -2966,7 +2966,7 @@ textarea.form-input {
   .account-layout {
     flex-direction: column !important;
     gap: 14px !important;
-    padding: 14px 0 80px !important;
+    padding: 14px 16px 80px !important;
   }
   .account-sidebar {
     width: 100% !important;
@@ -3203,5 +3203,44 @@ textarea.form-input {
     flex-direction: column !important;
     gap: 24px !important;
     align-items: flex-start !important;
+  }
+}
+
+/* Checkout Page Mobile Layout Overrides */
+@media (max-width: 900px) {
+  .checkout-main-layout {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .checkout-summary-column {
+    width: 100% !important;
+    order: -1 !important;
+  }
+  .checkout-info-cards {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .checkout-header-inner {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .checkout-info-cards {
+    grid-template-columns: 1fr !important;
+  }
+  .checkout-split-row {
+    grid-template-columns: 1fr !important; /* For the payment grid */
+    flex-direction: column !important;     /* For the flex rows */
+    gap: 16px !important;
+  }
+  .checkout-stepper {
+    gap: 12px !important;
+  }
+  .checkout-stepper-line {
+    width: 16px !important;
+  }
+  .checkout-stepper span {
+    display: none !important;
   }
 }

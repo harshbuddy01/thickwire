@@ -334,7 +334,7 @@ function CheckoutContent() {
             
             {/* Header */}
             <header style={{ background: '#fff', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="checkout-header-inner" style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     {/* Logo */}
                     <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
                         <div style={{ width: 40, height: 40, background: '#111827', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
@@ -347,17 +347,17 @@ function CheckoutContent() {
                     </Link>
 
                     {/* Stepper */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                    <div className="checkout-stepper" style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{ width: 28, height: 28, background: '#111827', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 700 }}>1</div>
                             <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.95rem' }}>Checkout</span>
                         </div>
-                        <div style={{ width: 40, height: 1, background: '#e2e8f0' }}></div>
+                        <div className="checkout-stepper-line" style={{ width: 40, height: 1, background: '#e2e8f0' }}></div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{ width: 28, height: 28, border: '1px solid #e2e8f0', color: '#9ca3af', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 600 }}>2</div>
                             <span style={{ fontWeight: 500, color: '#9ca3af', fontSize: '0.95rem' }}>Payment</span>
                         </div>
-                        <div style={{ width: 40, height: 1, background: '#e2e8f0' }}></div>
+                        <div className="checkout-stepper-line" style={{ width: 40, height: 1, background: '#e2e8f0' }}></div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <div style={{ width: 28, height: 28, border: '1px solid #e2e8f0', color: '#9ca3af', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 600 }}>3</div>
                             <span style={{ fontWeight: 500, color: '#9ca3af', fontSize: '0.95rem' }}>Confirmation</span>
@@ -375,7 +375,7 @@ function CheckoutContent() {
                 </div>
             </header>
 
-            <main style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', display: 'flex', gap: 32, alignItems: 'flex-start' }}>
+            <main className="checkout-main-layout" style={{ maxWidth: 1200, margin: '40px auto 0', padding: '0 24px', display: 'flex', gap: 32, alignItems: 'flex-start' }}>
                 
                 {/* Left Column */}
                 <div style={{ flex: 1, background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 10px 40px rgba(0,0,0,0.03)' }}>
@@ -434,7 +434,7 @@ function CheckoutContent() {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: 20 }}>
+                                <div className="checkout-split-row" style={{ display: 'flex', gap: 20 }}>
                                     <div style={{ flex: 1 }}>
                                         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Email Address</label>
                                         <div style={{ position: 'relative' }}>
@@ -504,7 +504,7 @@ function CheckoutContent() {
                                             onFocus={(e) => e.target.style.borderColor = '#1DB954'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                                         />
                                     </div>
-                                    <div style={{ display: 'flex', gap: 16 }}>
+                                    <div className="checkout-split-row" style={{ display: 'flex', gap: 16 }}>
                                         <div style={{ flex: 1 }}>
                                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Spotify Password</label>
                                             <div style={{ position: 'relative' }}>
@@ -623,7 +623,7 @@ function CheckoutContent() {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                            <div className="checkout-split-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                                 {/* Razorpay (Active) */}
                                 <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#f0fdf4', border: '1px solid #10b981', borderRadius: 16, cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
                                     <div style={{ position: 'absolute', top: 0, right: 0, background: '#10b981', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>RECOMMENDED</div>
@@ -700,7 +700,7 @@ function CheckoutContent() {
                 </div>
 
                 {/* Right Column - Order Summary */}
-                <div style={{ width: '380px', flexShrink: 0, background: '#111827', borderRadius: 24, color: '#fff', overflow: 'hidden', position: 'relative', boxShadow: '0 20px 40px rgba(17,24,39,0.2)' }}>
+                <div className="checkout-summary-column" style={{ width: '380px', flexShrink: 0, background: '#111827', borderRadius: 24, color: '#fff', overflow: 'hidden', position: 'relative', boxShadow: '0 20px 40px rgba(17,24,39,0.2)' }}>
                     
                     {/* Decorative waves top right */}
                     <svg width="200" height="150" style={{ position: 'absolute', top: 0, right: 0, opacity: 0.1, pointerEvents: 'none' }} viewBox="0 0 200 150">
@@ -838,7 +838,7 @@ function CheckoutContent() {
             </main>
 
             {/* Bottom Info Cards */}
-            <div style={{ maxWidth: 1200, margin: '32px auto 0', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="checkout-info-cards" style={{ maxWidth: 1200, margin: '32px auto 0', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
                 <div style={{ background: '#fff', borderRadius: 16, padding: 20, display: 'flex', gap: 12, alignItems: 'flex-start', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
                     <div style={{ color: '#10b981', background: '#f0fdf4', padding: 8, borderRadius: 12 }}>
                         <ShieldCheck size={24} />
