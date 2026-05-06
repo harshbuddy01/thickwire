@@ -30,15 +30,28 @@ export default function Header() {
             {/* ─── Top Bar ─────────────────────────────────────────── */}
             <div className="header-top">
                 <div className="container">
-                    <Link href="/" className="nav-logo-group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                        <div style={{ position: 'relative', height: '44px', width: '240px', mixBlendMode: 'darken' }}>
-                            <Image 
-                                src="/streamkart-logo.png" 
-                                alt="StreamKart Logo" 
-                                fill 
-                                style={{ objectFit: 'cover', objectPosition: 'center' }} 
-                                priority
-                            />
+                    <Link href="/" className="nav-logo-group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '40px', height: '40px', position: 'relative', flexShrink: 0 }}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#b87a1d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
+                                <circle cx="9" cy="21" r="1.5" stroke="none" fill="#b87a1d" />
+                                <circle cx="20" cy="21" r="1.5" stroke="none" fill="#b87a1d" />
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                <polygon points="10 9 15 12 10 15 10 9" fill="#b87a1d" stroke="none" />
+                            </svg>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <span style={{
+                                fontFamily: "'Outfit', sans-serif",
+                                fontSize: '1.75rem',
+                                fontWeight: 800,
+                                margin: 0,
+                                lineHeight: 1,
+                                letterSpacing: '-0.8px',
+                                color: '#1a1c23',
+                                display: 'block'
+                            }}>
+                                Stream<span style={{ color: '#b87a1d' }}>Kart</span>
+                            </span>
                         </div>
                     </Link>
 

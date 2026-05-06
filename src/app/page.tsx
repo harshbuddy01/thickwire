@@ -50,9 +50,9 @@ export default function HomePage() {
                 <Link href="/streaming" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/streaming.png`} alt="Streaming" />
                 </Link>
-                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
-                    <ProgressiveImage src={`${MINIO_URL}/blocks/grossing.png`} alt="Grosing" />
-                </div>
+                <Link href="/grossing" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
+                    <ProgressiveImage src={`${MINIO_URL}/blocks/grossing.png`} alt="Grossing" />
+                </Link>
                 <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/activation.png`} alt="Activation" />
                 </div>
