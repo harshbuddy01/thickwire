@@ -23,7 +23,13 @@ const services = [
   { name: 'windows', domain: 'microsoft.com' },
   { name: 'office', domain: 'office.com' },
   { name: 'gcp', domain: 'cloud.google.com' },
-  { name: 'chatgpt', domain: 'openai.com' }
+  { name: 'chatgpt', domain: 'openai.com' },
+  { name: 'gemini', domain: 'google.com' },
+  { name: 'claude', domain: 'anthropic.com' },
+  { name: 'midjourney', domain: 'midjourney.com' },
+  { name: 'copilot', domain: 'microsoft.com' },
+  { name: 'notion', domain: 'notion.so' },
+  { name: 'elevenlabs', domain: 'elevenlabs.io' }
 ];
 
 async function downloadAndUpload() {

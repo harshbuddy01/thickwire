@@ -18,19 +18,14 @@ import ProgressiveImage from '@/components/ProgressiveImage';
 const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 const BANNER_IMG = `${MINIO}/slider/ChatGPT%20Image%20May%201,%202026,%2005_42_45%20AM.png`;
 
-const CATEGORIES = [
-    "All AI Tools", "Chatbots", "Image Generation", "Writing Assistant", 
-    "Video Tools", "Productivity", "Code Assistant", "Voice & Audio", "Research"
-];
-
 const AI_SERVICES = [
-    { id: 'chatgpt', name: 'ChatGPT Plus', desc: 'Smarter conversations, infinite possibilities.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/chatgpt.svg` },
-    { id: 'gemini', name: 'Gemini Advanced', desc: "Google&apos;s most powerful AI model.", price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/gemini.svg` },
-    { id: 'copilot', name: 'Microsoft Copilot', desc: 'Your everyday AI companion.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/copilot.svg` },
-    { id: 'midjourney', name: 'Midjourney', desc: 'Create stunning AI artwork.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/midjourney.svg` },
-    { id: 'notion', name: 'Notion AI', desc: 'Write, plan, organize. All in one place.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/notion.svg` },
-    { id: 'claude', name: 'Claude Pro', desc: 'AI assistant by Anthropic.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/claude.svg` },
-    { id: 'perplexity', name: 'Perplexity Pro', desc: 'Search smarter, not harder.', price: '₹199', tag: 'Popular', logo: `${MINIO}/logos/perplexity.svg` },
+    { id: 'chatgpt', name: 'ChatGPT Plus', desc: 'Smarter conversations, infinite possibilities.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/chatgpt.png` },
+    { id: 'gemini', name: 'Gemini Advanced', desc: "Google's most powerful AI model.", price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/gemini.png` },
+    { id: 'claude', name: 'Claude Pro', desc: 'Advanced AI assistant by Anthropic.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/claude.png` },
+    { id: 'perplexity', name: 'Perplexity Pro', desc: 'Search smarter, not harder.', price: '₹199', tag: 'Popular', logo: `${MINIO}/logos/perplexity.png` },
+    { id: 'midjourney', name: 'Midjourney', desc: 'Create stunning AI artwork.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/midjourney.png` },
+    { id: 'copilot', name: 'Microsoft Copilot', desc: 'Your everyday AI companion.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/copilot.png` },
+    { id: 'notion', name: 'Notion AI', desc: 'Write, plan, organize. All in one place.', price: '₹249', tag: 'Popular', logo: `${MINIO}/logos/notion.png` },
     { id: 'elevenlabs', name: 'ElevenLabs', desc: 'AI voice generation that sounds real.', price: '₹199', tag: 'Popular', logo: `${MINIO}/logos/elevenlabs.png` },
 ];
 
@@ -47,7 +42,7 @@ export default function AICategoryPage() {
                 <span style={{ color: '#1a1c23', fontWeight: 600 }}>Artificial Intelligence</span>
             </div>
 
-            {/* ─── Hero Banner ────────────────────────────────────────── */}
+            {/* Hero Banner */}
             <div className="container">
                 <div style={{
                     position: 'relative',
@@ -60,17 +55,12 @@ export default function AICategoryPage() {
                     <img 
                         src={BANNER_IMG} 
                         alt="AI Banner" 
-                        style={{ 
-                            width: '100%', 
-                            height: 'auto', 
-                            display: 'block' 
-                        }} 
+                        style={{ width: '100%', height: 'auto', display: 'block' }} 
                     />
                 </div>
             </div>
 
-
-            {/* ─── Service Grid ───────────────────────────────────────── */}
+            {/* Service Grid - ORIGINAL GRID */}
             <div className="container">
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px', marginBottom: '60px' }}>
                     {AI_SERVICES.map((service) => (
@@ -114,7 +104,7 @@ export default function AICategoryPage() {
                 </div>
             </div>
 
-            {/* ─── Bottom Dark USP Bar ───────────────────────────────── */}
+            {/* Bottom USP Bar */}
             <div className="container">
                 <div style={{
                     background: '#1a1c23',
@@ -129,28 +119,24 @@ export default function AICategoryPage() {
                         <div style={{ color: '#3b82f6' }}><ShieldCheck size={28} /></div>
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>100% Safe & Secure</div>
-                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>Your data and payments are protected</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ color: '#10b981' }}><Zap size={28} /></div>
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>Instant Delivery</div>
-                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>Get access in seconds after payment</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ color: '#f59e0b' }}><Tag size={28} /></div>
                         <div>
                             <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>Best Price Guarantee</div>
-                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>Unbeatable prices on all AI tools</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ color: '#60a5fa' }}><Headphones size={28} /></div>
                         <div>
-                            <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>24/7 Customer Support</div>
-                            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>We&apos;re here to help you anytime</div>
+                            <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>24/7 Support</div>
                         </div>
                     </div>
                 </div>
