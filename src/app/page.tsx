@@ -8,7 +8,7 @@ const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-asse
 
 export default function HomePage() {
     return (
-        <div className="container" style={{ paddingBottom: '80px', paddingTop: '80px' }}>
+        <div className="container home-container" style={{ paddingBottom: '80px', paddingTop: '80px' }}>
 
             {/* ─── Hero Slider ────────────────────────────────────────── */}
             <div className="main-hero-area">

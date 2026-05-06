@@ -316,3 +316,18 @@
   }
 }
 
+@media (max-width: 768px) {
+  .youtube-plans-grid {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .youtube-indian-plans-grid {
+    grid-template-columns: 1fr !important; /* was 1fr 1fr */
+  }
+  .plan-column { width: 100% !important; }
+  .youtube-plan-header { flex-direction: column !important; gap: 10px !important; }
+  .youtube-plan-price { text-align: left !important; }
+  .youtube-buy-btn { height: 52px !important; }
+}
+

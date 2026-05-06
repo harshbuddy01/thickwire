@@ -16,7 +16,17 @@
 }
 
 @media (max-width: 900px) {
-  .premium-checkout-container { grid-template-columns: 1fr; }
+  .premium-checkout-container { 
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .premium-summary-card {
+    order: -1 !important; /* Forces summary to TOP */
+    position: static !important;
+  }
+  .premium-checkout-card { 
+    order: 0; 
+  }
 }
 
 .premium-checkout-card {

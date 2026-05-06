@@ -111,7 +111,7 @@ export default function AICategoryPage() {
 
             {/* Bottom USP Bar */}
             <div className="container">
-                <div style={{
+                <div className="ai-usp-bar" style={{
                     background: '#1a1c23',
                     borderRadius: '24px',
                     padding: '40px 60px',

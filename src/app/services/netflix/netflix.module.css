@@ -361,24 +361,16 @@
 @media (max-width: 768px) {
   .plans-grid {
     display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
+    flex-direction: column !important;
+    overflow: visible !important;
     gap: 16px !important;
-    padding-bottom: 24px !important;
-    margin: 0 -16px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .plans-grid::-webkit-scrollbar {
-    display: none;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   .plans-grid > * {
-    flex: 0 0 240px !important;
-    max-width: 240px !important;
-    width: 240px !important;
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
   .plan-content {
     padding: 24px 16px 20px 16px !important;

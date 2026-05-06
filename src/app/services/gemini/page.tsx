@@ -31,7 +31,7 @@ export default function GeminiProductPage() {
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 
                 {/* Top Section - Hero */}
-                <div style={{
+                <div className="gemini-top-section" style={{
                     background: '#ffffff',
                     borderRadius: '32px',
                     border: '1px solid #f3f4f6',
@@ -47,7 +47,7 @@ export default function GeminiProductPage() {
                         {/* Top: Image + Content */}
                         <div style={{ display: 'flex', gap: '50px', alignItems: 'flex-start' }}>
                             {/* Gemini Image Block */}
-                            <div style={{ position: 'relative', flexShrink: 0 }}>
+                            <div className="gemini-image-block" style={{ position: 'relative', flexShrink: 0 }}>
                                 <div style={{ 
                                     width: '280px', 
                                     height: '280px', 
@@ -98,7 +98,7 @@ export default function GeminiProductPage() {
                         </div>
 
                         {/* 5 Icons Row */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '60px', paddingRight: '20px' }}>
+                        <div className="gemini-icons-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '60px', paddingRight: '20px' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                                 <Sparkles size={32} color="#3b82f6" strokeWidth={1.5} />
                                 <span style={{ color: '#4b5563', fontSize: '0.85rem', textAlign: 'center', fontWeight: 600, lineHeight: 1.3 }}>Advanced<br/>AI Models</span>
@@ -128,7 +128,7 @@ export default function GeminiProductPage() {
                     </div>
 
                     {/* Right Side - Why Choose Card */}
-                    <div style={{ flex: 1, background: '#fafafb', border: '1px solid #f3f4f6', borderRadius: '32px', padding: '40px' }}>
+                    <div className="gemini-right-col" style={{ flex: 1, background: '#fafafb', border: '1px solid #f3f4f6', borderRadius: '32px', padding: '40px' }}>
                         <h3 style={{ margin: '0 0 32px 0', fontSize: '1.3rem', fontWeight: 800, color: '#111827' }}>Why Choose Gemini Pro?</h3>
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -173,7 +173,7 @@ export default function GeminiProductPage() {
                 </div>
 
                 {/* Main Content / Checkout Section */}
-                <div style={{
+                <div className="gemini-main-card" style={{
                     background: '#ffffff',
                     borderRadius: '32px',
                     border: '1px solid #fde047',
@@ -182,7 +182,7 @@ export default function GeminiProductPage() {
                 }}>
                     
                     {/* Left Col - Features */}
-                    <div style={{ padding: '50px', flex: 1.3, borderRight: '1px solid #fef08a' }}>
+                    <div className="gemini-left-col" style={{ padding: '50px', flex: 1.3, borderRight: '1px solid #fef08a' }}>
                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '40px' }}>
                             <div style={{ 
                                 width: '120px', 
@@ -412,7 +412,7 @@ export default function GeminiProductPage() {
                 </div>
 
                 {/* Bottom Banner CTA */}
-                <div style={{
+                <div className="gemini-bottom-cta" style={{
                     background: 'linear-gradient(145deg, #131314 0%, #1e1e20 100%)',
                     borderRadius: '32px',
                     padding: '40px 50px',
@@ -463,7 +463,7 @@ export default function GeminiProductPage() {
                 </div>
 
                 {/* Footer Badges */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '50px 20px', marginTop: '20px', borderTop: '1px solid #e5e7eb' }}>
+                <div className="gemini-footer-badges" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '50px 20px', marginTop: '20px', borderTop: '1px solid #e5e7eb' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
                         <span style={{ fontSize: '0.9rem', color: '#6b7280', fontWeight: 600 }}>We Accept:</span>
                         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>

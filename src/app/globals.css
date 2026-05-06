@@ -2625,7 +2625,7 @@ textarea.form-input {
     font-size: 0.85rem !important;
     margin-bottom: 14px !important;
   }
-  /* Plan grids → horizontal scrolling */
+  /* Plan grids → Stacked full width on mobile */
   .plans-grid,
   .luxury-plans-grid,
   .plan-grid-exact,
@@ -2635,28 +2635,15 @@ textarea.form-input {
   .spotify-page-exact .plans-grid,
   .youtube-page-exact .plans-grid,
   .youtube-plans-grid,
-  .youtube-indian-plans-grid {
+  .youtube-indian-plans-grid,
+  .plan-grid {
     display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
+    flex-direction: column !important;
+    overflow: visible !important;
     gap: 16px !important;
-    padding-bottom: 20px !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    margin: 0 -16px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-  .plans-grid::-webkit-scrollbar,
-  .luxury-plans-grid::-webkit-scrollbar,
-  .plan-grid-exact::-webkit-scrollbar,
-  .plans-grid-bold::-webkit-scrollbar,
-  .chatgpt-plans-grid::-webkit-scrollbar,
-  .hbo-plans-grid::-webkit-scrollbar,
-  .youtube-plans-grid::-webkit-scrollbar,
-  .youtube-indian-plans-grid::-webkit-scrollbar {
-    display: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    grid-template-columns: unset !important;
   }
   .plans-grid > *,
   .luxury-plans-grid > *,
@@ -2666,9 +2653,12 @@ textarea.form-input {
   .hbo-plans-grid > *,
   .spotify-page-exact .plans-grid > *,
   .youtube-plans-grid > *,
-  .youtube-indian-plans-grid > * {
-    flex: 0 0 240px !important;
-    max-width: 240px !important;
+  .youtube-indian-plans-grid > *,
+  .plan-card {
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
   /* Plan card internals */
   .plan-card,
@@ -3107,5 +3097,111 @@ textarea.form-input {
   /* USP row → single col */
   .bottom-features-row {
     grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Phase 3: AI Page USP Bar */
+@media (max-width: 768px) {
+  .ai-usp-bar {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    padding: 24px !important;
+  }
+}
+@media (max-width: 480px) {
+  .ai-usp-bar {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Phase 3: Home Container Padding */
+@media (max-width: 768px) {
+  .home-container {
+    padding-top: 24px !important;
+    padding-bottom: 40px !important;
+  }
+}
+
+/* Phase 4: Gemini Page Mobile Fixes */
+@media (max-width: 900px) {
+  .gemini-top-section {
+    flex-direction: column !important;
+    padding: 24px !important;
+    gap: 30px !important;
+  }
+  .gemini-image-block > div {
+    width: 200px !important;
+    height: 200px !important;
+  }
+  .gemini-image-block img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  .gemini-right-col {
+    padding: 24px !important;
+  }
+  .gemini-icons-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 20px !important;
+  }
+  .gemini-icons-row > div {
+    margin-bottom: 10px;
+  }
+  .gemini-main-card {
+    flex-direction: column !important;
+  }
+  .gemini-left-col {
+    padding: 24px !important;
+    border-right: none !important;
+    border-bottom: 1px solid #fef08a !important;
+  }
+  .gemini-left-col > div:first-child {
+    flex-direction: column !important;
+  }
+  .gemini-bottom-cta {
+    flex-direction: column !important;
+    padding: 24px !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+  .gemini-bottom-cta > div {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .gemini-footer-badges {
+    flex-direction: column !important;
+    gap: 30px !important;
+    align-items: flex-start !important;
+  }
+  .gemini-footer-badges > div {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+
+/* Phase 5: SonyLIV Mobile Fixes */
+@media (max-width: 900px) {
+  .sonyliv-trust-badges {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 24px !important;
+  }
+  .sonyliv-hero-features {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+  .sonyliv-footer-badges {
+    flex-direction: column !important;
+    gap: 24px !important;
+    align-items: flex-start !important;
   }
 }

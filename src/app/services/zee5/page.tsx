@@ -55,7 +55,7 @@ export default function Zee5ProductPage() {
                 </div>
 
                 {/* Main Content Sections */}
-                <div className="zee5-main-content" style={{
+                <div className="zee5-main-content main-content" style={{
                     background: '#fff',
                     borderRadius: '24px',
                     border: '1px solid #e5e7eb',
