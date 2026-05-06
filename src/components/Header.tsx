@@ -1,10 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/lib/AuthContext';
 import { usePathname } from 'next/navigation';
-import { Search, ShoppingCart, Heart, User, LogOut, Wallet, LayoutGrid, Package, HeadphonesIcon } from 'lucide-react';
-import { useState } from 'react';
+import {
+    Search, ShoppingCart, Heart, User, LogOut,
+    Wallet, LayoutGrid, Package, HeadphonesIcon,
+    Home, Grid, X
+} from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
@@ -13,22 +18,31 @@ export default function Header() {
     const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchOpen, setSearchOpen] = useState(false);
+    const searchRef = useRef<HTMLDivElement>(null);
 
-    if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup') return null;
+    if (pathname === '/checkout') return null;
+
+    const isActive = (path: string) => pathname === path || pathname.startsWith(path + '/');
 
     return (
-        <header>
-            {/* ─── Top Bar ────────────────────────────────────────── */}
+        <>
+            {/* ─── Top Bar ─────────────────────────────────────────── */}
             <div className="header-top">
                 <div className="container">
-                    <Link href="/" className="nav-logo-group">
-                        <div className="nav-logo-icon">▶</div>
-                        <div className="nav-logo-text">
-                            <h1>StreamKart</h1>
-                            <span>Your Digital World, One Place.</span>
+                    <Link href="/" className="nav-logo-group" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                        <div style={{ position: 'relative', height: '44px', width: '240px', mixBlendMode: 'darken' }}>
+                            <Image 
+                                src="/streamkart-logo.png" 
+                                alt="StreamKart Logo" 
+                                fill 
+                                style={{ objectFit: 'cover', objectPosition: 'center' }} 
+                                priority
+                            />
                         </div>
                     </Link>
 
+                    {/* Desktop search */}
                     <div className="search-container">
                         <select className="search-cat-dropdown">
                             <option>All Categories</option>
@@ -58,10 +72,22 @@ export default function Header() {
                     </div>
 
                     <div className="nav-icons-group">
-                        <Link href="/account" className="header-icon-link">
+                        {/* Mobile: search toggle */}
+                        <button
+                            className="header-icon-link mobile-search-toggle"
+                            onClick={() => setSearchOpen(!searchOpen)}
+                            style={{ border: 'none', cursor: 'pointer', background: 'none' }}
+                            aria-label="Search"
+                        >
+                            {searchOpen ? <X size={18} /> : <Search size={18} />}
+                        </button>
+
+                        <Link href="/account" className="header-icon-link" aria-label="Cart">
                             <ShoppingCart size={20} />
                         </Link>
-                        <Link href="/account" className="header-icon-link">
+
+                        {/* Heart: hidden on mobile via CSS */}
+                        <Link href="/account" className="header-icon-link mobile-hide" aria-label="Wishlist">
                             <Heart size={20} />
                         </Link>
 
@@ -70,6 +96,7 @@ export default function Header() {
                                 onClick={() => setMenuOpen(!menuOpen)}
                                 className="header-icon-link user-btn"
                                 style={{ border: 'none', cursor: 'pointer' }}
+                                aria-label="Account"
                             >
                                 <User size={20} />
                             </button>
@@ -79,7 +106,7 @@ export default function Header() {
                                     <div
                                         style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 40 }}
                                         onClick={() => setMenuOpen(false)}
-                                    ></div>
+                                    />
                                     <div style={dropdownStyles.menu}>
                                         {!loading && !user ? (
                                             <>
@@ -87,13 +114,9 @@ export default function Header() {
                                                     <p style={dropdownStyles.menuTitle}>Welcome to StreamKart</p>
                                                     <p style={dropdownStyles.menuSubtitle}>Login for the best experience</p>
                                                 </div>
-                                                <div style={dropdownStyles.menuDivider}></div>
-                                                <Link href="/login" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
-                                                    Login
-                                                </Link>
-                                                <Link href="/signup" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
-                                                    Sign Up
-                                                </Link>
+                                                <div style={dropdownStyles.menuDivider} />
+                                                <Link href="/login" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>Login</Link>
+                                                <Link href="/signup" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>Sign Up</Link>
                                             </>
                                         ) : (
                                             <>
@@ -101,11 +124,9 @@ export default function Header() {
                                                     <p style={dropdownStyles.menuTitle}>{user?.name}</p>
                                                     <p style={dropdownStyles.menuSubtitle}>{user?.email}</p>
                                                 </div>
-                                                <div style={dropdownStyles.menuDivider}></div>
-                                                <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
-                                                    My Account
-                                                </Link>
-                                                <div style={dropdownStyles.menuDivider}></div>
+                                                <div style={dropdownStyles.menuDivider} />
+                                                <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>My Account</Link>
+                                                <div style={dropdownStyles.menuDivider} />
                                                 <button
                                                     onClick={() => { setMenuOpen(false); logout(); }}
                                                     style={{ ...dropdownStyles.menuItem, color: '#ef4444', border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Outfit, sans-serif' }}
@@ -120,9 +141,32 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile inline search — slides down when open */}
+                <div className={`mobile-search-bar ${searchOpen ? 'mobile-search-bar--open' : ''}`}>
+                    <div className="container">
+                        <div className="mobile-search-inner">
+                            <Search size={16} className="mobile-search-icon" />
+                            <input
+                                type="text"
+                                placeholder="Search Netflix, Spotify, ChatGPT..."
+                                className="mobile-search-input"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && searchQuery.trim()) {
+                                        router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                        setSearchOpen(false);
+                                    }
+                                }}
+                                autoFocus={searchOpen}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* ─── Secondary Sub-nav ──────────────────────────────── */}
+            {/* ─── Desktop Sub-nav (logged-in only) ───────────────── */}
             {user && (
                 <div className="sub-nav-wrapper">
                     <div className="container">
@@ -167,77 +211,49 @@ export default function Header() {
                 </div>
             )}
 
-            <MobileBottomNav />
-        </header>
-    );
-}
+            {/* ─── Mobile Bottom Tab Nav ───────────────────────────── */}
+            <nav className="mobile-bottom-nav" aria-label="Main navigation">
+                <Link href="/" className={`mobile-nav-item ${isActive('/') && pathname === '/' ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    <span>Home</span>
+                </Link>
 
-function MobileBottomNav() {
-    const pathname = usePathname();
-    const { user } = useAuth();
-    
-    return (
-        <nav className="mobile-bottom-nav">
-            <Link href="/" className={pathname === '/' ? 'active' : ''}>
-                <LayoutGrid size={22} />
-                <span>Home</span>
-            </Link>
-            <Link href="/services" className={pathname === '/services' ? 'active' : ''}>
-                <Search size={22} />
-                <span>Search</span>
-            </Link>
-            <Link href="/account" className={pathname === '/account' ? 'active' : ''}>
-                <ShoppingCart size={22} />
-                <span>Cart</span>
-            </Link>
-            <Link href="/support" className={pathname === '/support' ? 'active' : ''}>
-                <HeadphonesIcon size={22} />
-                <span>Support</span>
-            </Link>
-            <Link href="/account" className={pathname.startsWith('/account') && pathname !== '/account' ? 'active' : ''}>
-                <User size={22} />
-                <span>Profile</span>
-            </Link>
+                <Link href="/streaming" className={`mobile-nav-item ${isActive('/streaming') ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <rect x="2" y="7" width="20" height="15" rx="2" />
+                        <polyline points="17 2 12 7 7 2" />
+                    </svg>
+                    <span>Browse</span>
+                </Link>
 
-            <style jsx>{`
-                .mobile-bottom-nav {
-                    display: none;
-                    position: fixed;
-                    bottom: 0; left: 0; right: 0;
-                    background: rgba(255, 255, 255, 0.9);
-                    backdrop-filter: blur(20px);
-                    -webkit-backdrop-filter: blur(20px);
-                    border-top: 1px solid rgba(0,0,0,0.05);
-                    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-                    z-index: 2000;
-                    justify-content: space-around;
-                    box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
-                }
-                .mobile-bottom-nav :global(a) {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 4px;
-                    color: #8e8e93;
-                    text-decoration: none;
-                    font-size: 10px;
-                    font-weight: 500;
-                    transition: all 0.2s;
-                    min-width: 60px;
-                }
-                .mobile-bottom-nav :global(a.active) {
-                    color: #6c5ce7;
-                }
-                .mobile-bottom-nav :global(span) {
-                    font-family: var(--font-poppins), sans-serif;
-                }
-                @media (max-width: 768px) {
-                    .mobile-bottom-nav {
-                        display: flex;
-                    }
-                }
-            `}</style>
-        </nav>
+                <Link href="/account" className={`mobile-nav-item ${isActive('/account') ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    <span>Orders</span>
+                </Link>
+
+                <Link href="/support" className={`mobile-nav-item ${isActive('/support') ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6 6l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <span>Support</span>
+                </Link>
+
+                <Link href={user ? '/account' : '/login'} className={`mobile-nav-item ${isActive('/login') || isActive('/signup') ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>{user ? 'Account' : 'Login'}</span>
+                </Link>
+            </nav>
+        </>
     );
 }
 
@@ -255,24 +271,10 @@ const dropdownStyles: { [key: string]: React.CSSProperties } = {
         zIndex: 50,
         overflow: 'hidden',
     },
-    menuHeader: {
-        padding: '14px 18px',
-    },
-    menuTitle: {
-        fontSize: '0.85rem',
-        fontWeight: 700,
-        color: '#1a1c23',
-        marginBottom: 2,
-    },
-    menuSubtitle: {
-        fontSize: '0.75rem',
-        color: '#999',
-    },
-    menuDivider: {
-        height: 1,
-        background: '#f3f4f6',
-        margin: '2px 0',
-    },
+    menuHeader: { padding: '14px 18px' },
+    menuTitle: { fontSize: '0.85rem', fontWeight: 700, color: '#1a1c23', marginBottom: 2 },
+    menuSubtitle: { fontSize: '0.75rem', color: '#999' },
+    menuDivider: { height: 1, background: '#f3f4f6', margin: '2px 0' },
     menuItem: {
         display: 'block',
         padding: '11px 18px',

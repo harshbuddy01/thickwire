@@ -783,24 +783,23 @@ a {
   }
 
   .blocks-parent-grid {
-    display: flex !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 16px !important;
-    padding: 4px 4px 20px 4px !important;
-    margin: 0 -20px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    grid-template-columns: none !important;
-  }
-  .blocks-parent-grid::-webkit-scrollbar {
-    display: none;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    overflow: visible !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   .blocks-parent-grid > a, .blocks-parent-grid > div {
-    flex: 0 0 280px !important;
-    max-width: 280px !important;
+    flex: unset !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    aspect-ratio: 3/2 !important;
+    border-radius: 14px !important;
+  }
+  .blocks-parent-grid > *:last-child:nth-child(odd) {
+    grid-column: unset;
+    aspect-ratio: 3/2 !important;
   }
 
   .bottom-features-row {
@@ -2143,7 +2142,7 @@ textarea.form-input {
 
   /* Hero Slider Mobile Height */
   .hero-slider {
-    aspect-ratio: 16/10 !important; /* Taller on mobile */
+    aspect-ratio: 2/1 !important;
     border-radius: 16px !important;
   }
 
@@ -2155,15 +2154,22 @@ textarea.form-input {
     font-size: 1.4rem !important;
   }
 
-  /* Horizontal Scroll Widths */
+  /* Trending card sizes */
   .trending-cards-grid > a, .trending-cards-grid > div {
-    flex: 0 0 140px !important; /* Smaller cards to show more "peek" */
-    max-width: 140px !important;
+    flex: unset !important;
+    max-width: 100% !important;
   }
 
   .blocks-parent-grid > a, .blocks-parent-grid > div {
-    flex: 0 0 310px !important; /* Larger width so they look like main banners */
-    max-width: 310px !important;
+    flex: unset !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    aspect-ratio: 3/2 !important;
+    border-radius: 16px !important;
+  }
+  .blocks-parent-grid > *:last-child:nth-child(odd) {
+    grid-column: unset;
+    aspect-ratio: 3/2 !important;
   }
 
   .plans-grid > div,
@@ -2365,5 +2371,734 @@ textarea.form-input {
   }
   .zee5-main-content > div, .sonyliv-main-content > div {
     padding: 24px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   STREAMKART — MOBILE OVERRIDE CSS
+   PASTE THIS ENTIRE BLOCK AT THE VERY BOTTOM of globals.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── 0. Global Mobile Resets ─── */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+  .container {
+    padding: 0 14px !important;
+  }
+}
+
+/* ─── 1. HEADER — Top Bar ─── */
+.mobile-search-toggle {
+  display: none;
+}
+.mobile-hide {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .mobile-search-toggle {
+    display: flex !important;
+  }
+  .mobile-hide {
+    display: none !important;
+  }
+  .header-top {
+    padding: 10px 0 !important;
+  }
+  .header-top .container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    justify-content: space-between !important;
+    padding: 0 12px !important;
+  }
+  .nav-logo-text span {
+    display: none !important;
+  }
+  .nav-logo-text h1 {
+    font-size: 1.05rem !important;
+  }
+  .nav-logo-icon {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.9rem !important;
+  }
+  /* Hide desktop search bar on mobile */
+  .search-container {
+    display: none !important;
+  }
+  .nav-icons-group {
+    gap: 4px !important;
+  }
+  .header-icon-link {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
+
+/* ─── Mobile Inline Search Bar ─── */
+.mobile-search-bar {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255,255,255,0.97);
+}
+.mobile-search-bar--open {
+  max-height: 72px;
+}
+.mobile-search-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f4f5f7;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 8px 0;
+}
+.mobile-search-icon {
+  color: #999;
+  flex-shrink: 0;
+}
+.mobile-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px !important;
+  flex: 1;
+  color: #111;
+  font-family: inherit;
+}
+.mobile-search-input::placeholder {
+  color: #999;
+}
+
+/* ─── Hide the desktop sub-nav on mobile ─── */
+@media (max-width: 768px) {
+  .sub-nav-wrapper {
+    display: none !important;
+  }
+}
+
+/* ─── 2. MOBILE BOTTOM TAB NAV ─── */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    z-index: 999;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    text-decoration: none;
+    color: #aaa;
+    font-size: 10px;
+    font-weight: 600;
+    transition: color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+  }
+  .mobile-nav-item--active {
+    color: #6c5ce7;
+  }
+  .mobile-nav-item svg {
+    transition: transform 0.2s;
+  }
+  .mobile-nav-item--active svg {
+    transform: scale(1.1);
+  }
+}
+
+/* ─── 3. HOMEPAGE ─── */
+@media (max-width: 768px) {
+  /* Hero */
+  .main-hero-area {
+    margin-bottom: 20px !important;
+  }
+  .hero-slider {
+    border-radius: 16px !important;
+  }
+  /* Section heads */
+  .content-section-head {
+    flex-direction: row !important;
+    align-items: center !important;
+    margin-bottom: 14px !important;
+  }
+  .content-section-head h2 {
+    font-size: 1.15rem !important;
+  }
+  /* Trending cards → 2×2 grid */
+  .trending-cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .trending-cards-grid > a,
+  .trending-cards-grid > div {
+    flex: unset !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 16px !important;
+    aspect-ratio: 1/1;
+  }
+  /* Block banners → 2-col grid with orphan spanning */
+  .blocks-parent-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    overflow: visible !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .blocks-parent-grid > a,
+  .blocks-parent-grid > div {
+    flex: unset !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    aspect-ratio: 3/2 !important;
+    border-radius: 14px !important;
+  }
+  .blocks-parent-grid > *:last-child:nth-child(odd) {
+    grid-column: unset;
+    aspect-ratio: 3/2 !important;
+  }
+  /* Page spacing */
+  .container[style*="paddingTop"] {
+    padding-top: 24px !important;
+  }
+}
+
+/* ─── 4. ALL SERVICE PAGES — Plans ─── */
+@media (max-width: 768px) {
+  /* Section titles */
+  .area-title,
+  .plans-label,
+  .plans-heading,
+  .section-title,
+  .area-h2,
+  .plan-selection-area .area-title {
+    font-size: 1.2rem !important;
+    margin-bottom: 4px !important;
+  }
+  .area-subtitle,
+  .plans-sub,
+  .plans-subheading,
+  .section-subtitle,
+  .area-p {
+    font-size: 0.85rem !important;
+    margin-bottom: 14px !important;
+  }
+  /* Plan grids → horizontal scrolling */
+  .plans-grid,
+  .luxury-plans-grid,
+  .plan-grid-exact,
+  .plans-grid-bold,
+  .chatgpt-plans-grid,
+  .hbo-plans-grid,
+  .spotify-page-exact .plans-grid,
+  .youtube-page-exact .plans-grid,
+  .youtube-plans-grid,
+  .youtube-indian-plans-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 16px !important;
+    padding-bottom: 20px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin: 0 -16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .plans-grid::-webkit-scrollbar,
+  .luxury-plans-grid::-webkit-scrollbar,
+  .plan-grid-exact::-webkit-scrollbar,
+  .plans-grid-bold::-webkit-scrollbar,
+  .chatgpt-plans-grid::-webkit-scrollbar,
+  .hbo-plans-grid::-webkit-scrollbar,
+  .youtube-plans-grid::-webkit-scrollbar,
+  .youtube-indian-plans-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .plans-grid > *,
+  .luxury-plans-grid > *,
+  .plan-grid-exact > *,
+  .plans-grid-bold > *,
+  .chatgpt-plans-grid > *,
+  .hbo-plans-grid > *,
+  .spotify-page-exact .plans-grid > *,
+  .youtube-plans-grid > *,
+  .youtube-indian-plans-grid > * {
+    flex: 0 0 240px !important;
+    max-width: 240px !important;
+  }
+  /* Plan card internals */
+  .plan-card,
+  .luxury-plan-card,
+  .plan-card-exact,
+  .p-card-bold,
+  .spotify-plan-card,
+  .youtube-plan-card,
+  .hbo-plan-card,
+  .chatgpt-plans-grid > div {
+    border-radius: 16px !important;
+    padding: 20px 16px !important;
+  }
+  /* Price display */
+  .plan-price .amount,
+  .price-row .val,
+  .p-val,
+  .chatgpt-plans-grid > div > div:nth-child(3) {
+    font-size: 2rem !important;
+    letter-spacing: -1px !important;
+  }
+  .chatgpt-plan-card {
+    padding: 24px 16px 20px 16px !important;
+    border-radius: 16px !important;
+  }
+  .chatgpt-plan-price {
+    font-size: 2.2rem !important;
+    margin-bottom: 24px !important;
+  }
+  
+  /* Buy buttons — generous touch target */
+  .plan-buy-btn,
+  .plan-action-btn,
+  .buy-btn,
+  .c-btn,
+  .spotify-buy-btn,
+  .youtube-buy-btn,
+  .hbo-buy-btn {
+    min-height: 52px !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    border-radius: 14px !important;
+  }
+  /* Sticky buy bar on service pages */
+  .mobile-sticky-cta {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid #eee;
+    z-index: 990;
+  }
+  .mobile-sticky-cta-btn {
+    width: 100%;
+    height: 50px;
+    background: #6c5ce7;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+  }
+  /* Trust strips → 2 cols */
+  .trust-row-mini,
+  .luxury-trust-strip,
+  .trust-strip-exact,
+  .trust-strip-bold,
+  .trust-strip,
+  .dark-strip {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    margin-bottom: 20px !important;
+  }
+  /* Info split → single col */
+  .info-grid-row,
+  .luxury-info-split,
+  .info-split-exact,
+  .info-grid-bold,
+  .info-split,
+  .prime-page-exact .info-split,
+  .chatgpt-info-faq-layout {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    margin-bottom: 24px !important;
+  }
+  /* FAQ grids → single col */
+  .spotify-faq-grid,
+  .youtube-faq-grid,
+  .hbo-faq-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* Bottom CTA banners */
+  .bottom-cta-banner,
+  .luxury-bottom-cta,
+  .bottom-cta-exact,
+  .bottom-bar-bold,
+  .bottom-cta,
+  .spotify-bottom-cta,
+  .youtube-bottom-cta,
+  .hbo-bottom-cta,
+  .chatgpt-bottom-cta,
+  .prime-page-exact .prime-cta {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 16px !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+  .cta-left,
+  .cta-left-side,
+  .bb-left,
+  .spotify-bottom-cta .cta-left,
+  .youtube-bottom-cta .cta-left,
+  .hbo-bottom-cta .cta-left {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .cta-action-btn,
+  .cta-final-btn,
+  .bb-btn,
+  .spotify-bottom-cta-btn,
+  .youtube-bottom-cta-btn,
+  .hbo-bottom-cta-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  /* Netflix large hero */
+  .netflix-hero-card,
+  .netflix-premium-hero,
+  .netflix-hero-banner-main {
+    height: auto !important;
+    min-height: 200px !important;
+    border-radius: 16px !important;
+    margin-bottom: 20px !important;
+  }
+  .hero-content-overlay,
+  .hero-inner-content {
+    padding: 20px 16px !important;
+  }
+  .hero-brand-name,
+  .netflix-big-title,
+  .hero-title {
+    font-size: 2.2rem !important;
+    letter-spacing: -2px !important;
+  }
+  /* Hide visual elements that overflow on mobile */
+  .hero-stats-row,
+  .hero-features-grid,
+  .hero-features-strip,
+  .hero-posters-visual {
+    display: none !important;
+  }
+  .netflix-hero-visual {
+    width: 45% !important;
+  }
+  /* Prime dark strip */
+  .prime-page-exact .dark-strip {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 16px !important;
+  }
+  .prime-page-exact .plans-section {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+  /* Spotify plan header */
+  .spotify-plan-header {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .spotify-plan-price {
+    text-align: left !important;
+  }
+  /* YouTube plan header */
+  .youtube-plan-header {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .youtube-plan-price {
+    text-align: left !important;
+  }
+  .section-h3 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Service Page Hero Banners */
+  .hero-image-container {
+    aspect-ratio: 16/9 !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* ─── 5. CHECKOUT PAGE ─── */
+@media (max-width: 900px) {
+  .premium-checkout-wrapper {
+    padding: 12px 0 80px !important;
+  }
+  /* Flip order: summary on TOP, form below */
+  .premium-checkout-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    padding: 0 14px !important;
+    max-width: 100% !important;
+  }
+  /* Summary card moves to top */
+  .premium-summary-card {
+    position: static !important;
+    border-radius: 18px !important;
+    padding: 20px !important;
+    order: -1;
+  }
+  .premium-checkout-card {
+    border-radius: 18px !important;
+    padding: 20px !important;
+  }
+  .premium-checkout-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 4px !important;
+  }
+  .premium-payment-method {
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+  .premium-btn {
+    height: 54px !important;
+    border-radius: 14px !important;
+    font-size: 1rem !important;
+  }
+  /* Sticky pay button */
+  .checkout-sticky-pay {
+    position: sticky;
+    bottom: 60px;
+    background: rgba(255,255,255,0.97);
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 90;
+  }
+}
+
+/* ─── 6. AUTH PAGES ─── */
+@media (max-width: 768px) {
+  .premium-auth-wrapper {
+    flex-direction: column !important;
+  }
+  .premium-auth-left {
+    display: none !important;
+  }
+  .premium-auth-right {
+    flex: 1 !important;
+    width: 100% !important;
+    padding: 28px 16px !important;
+    border-radius: 0 !important;
+    min-height: 100vh;
+    align-items: flex-start !important;
+  }
+  .premium-auth-form-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .premium-form-title {
+    font-size: 1.8rem !important;
+  }
+  .premium-form-input {
+    font-size: 16px !important;
+    padding: 14px 14px 14px 44px !important;
+    border-radius: 12px !important;
+  }
+  /* Luxury auth card */
+  .auth-luxury-card {
+    flex-direction: column !important;
+    border-radius: 0 !important;
+    min-height: 100vh !important;
+  }
+  .auth-luxury-brand {
+    display: none !important;
+  }
+  .auth-luxury-form-side {
+    padding: 28px 16px !important;
+    align-items: flex-start !important;
+  }
+  .auth-form-container {
+    max-width: 100% !important;
+  }
+}
+
+/* ─── 7. ACCOUNT PAGE ─── */
+@media (max-width: 768px) {
+  .account-layout {
+    flex-direction: column !important;
+    gap: 14px !important;
+    padding: 14px 0 80px !important;
+  }
+  .account-sidebar {
+    width: 100% !important;
+  }
+  .account-sidebar .sidebar-card {
+    position: static !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 0 !important;
+    border-radius: 14px !important;
+    scrollbar-width: none !important;
+  }
+  .account-sidebar .sidebar-card::-webkit-scrollbar {
+    display: none !important;
+  }
+  .account-sidebar .tab-btn {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    border-radius: 0 !important;
+    padding: 12px 16px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* ─── 8. FOOTER ─── */
+@media (max-width: 768px) {
+  footer {
+    margin-top: 32px !important;
+    padding-top: 28px !important;
+    padding-bottom: 80px !important;
+  }
+  /* USP bar → 2 cols */
+  footer > .container > div:first-child {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 16px !important;
+    gap: 14px !important;
+    border-radius: 16px !important;
+    margin-bottom: 20px !important;
+  }
+  /* Main footer content → single col */
+  footer .container > div[style*="gridTemplateColumns: '1.5fr"] {
+    grid-template-columns: 1fr !important;
+    padding: 24px !important;
+    border-radius: 20px !important;
+    gap: 24px !important;
+  }
+  /* Bottom features bar → 2 cols */
+  footer .container > div[style*="gridTemplateColumns: 'repeat(4"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+  /* Copyright bar */
+  footer .container > div:last-child {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center !important;
+    padding: 16px !important;
+  }
+}
+
+/* ─── 9. SONYLIV / ZEE5 ─── */
+@media (max-width: 768px) {
+  .zee5-main-content,
+  .sonyliv-main-content {
+    flex-direction: column !important;
+  }
+  .sonyliv-hero {
+    padding: 24px 14px !important;
+  }
+  .sonyliv-hero-content {
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+  .zee5-bottom-cta,
+  .sonyliv-bottom-cta {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 24px 16px !important;
+    gap: 20px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ─── 10. CHATGPT / GEMINI ─── */
+@media (max-width: 768px) {
+  .chatgpt-trust-badges {
+    flex-direction: column !important;
+    padding: 16px !important;
+    gap: 16px !important;
+    border-radius: 14px !important;
+  }
+  .chatgpt-bottom-cta {
+    flex-direction: column !important;
+    padding: 20px !important;
+    border-radius: 16px !important;
+    gap: 16px !important;
+    text-align: center !important;
+  }
+}
+
+/* ─── 11. BREADCRUMBS ─── */
+@media (max-width: 480px) {
+  .breadcrumb-nav {
+    font-size: 0.72rem !important;
+  }
+  .page-header {
+    padding: 14px 0 10px !important;
+    text-align: left !important;
+  }
+  .page-header h1 {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ─── 12. SMALL PHONE EXTRAS (≤480px) ─── */
+@media (max-width: 480px) {
+  /* Trust strips → single col */
+  .trust-row-mini,
+  .luxury-trust-strip,
+  .trust-strip-exact,
+  .trust-strip-bold,
+  .trust-strip,
+  .dark-strip {
+    grid-template-columns: 1fr !important;
+  }
+  /* USP row → single col */
+  .bottom-features-row {
+    grid-template-columns: 1fr !important;
   }
 }

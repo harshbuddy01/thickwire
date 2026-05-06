@@ -61,7 +61,7 @@ export default function ChatGPTProductPage() {
                     <div className="chatgpt-plans-grid">
                         
                         {/* Plan 1 */}
-                        <div style={{ 
+                        <div className="chatgpt-plan-card" style={{ 
                             background: '#131314', 
                             borderRadius: '24px', 
                             padding: '40px 32px', 
@@ -80,7 +80,7 @@ export default function ChatGPTProductPage() {
                                 <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(Private)</span>
                             </div>
                             
-                            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹499</div>
+                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹499</div>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -135,7 +135,7 @@ export default function ChatGPTProductPage() {
                         </div>
 
                         {/* Plan 2 */}
-                        <div style={{ 
+                        <div className="chatgpt-plan-card" style={{ 
                             background: '#131314', 
                             borderRadius: '24px', 
                             padding: '40px 32px', 
@@ -161,7 +161,7 @@ export default function ChatGPTProductPage() {
                                 <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(1 Device)</span>
                             </div>
                             
-                            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹799</div>
+                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹799</div>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -217,7 +217,7 @@ export default function ChatGPTProductPage() {
                         </div>
 
                         {/* Plan 3 */}
-                        <div style={{ 
+                        <div className="chatgpt-plan-card" style={{ 
                             background: '#131314', 
                             borderRadius: '24px', 
                             padding: '40px 32px', 
@@ -241,7 +241,7 @@ export default function ChatGPTProductPage() {
                                 <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(1 Device)</span>
                             </div>
                             
-                            <div style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹1499</div>
+                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹1499</div>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

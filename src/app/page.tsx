@@ -25,24 +25,28 @@ export default function HomePage() {
 
             <div className="trending-cards-grid" style={{ gap: '24px' }}>
                 <Link href="/services/netflix" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
-                    <ProgressiveImage src={`${MINIO_URL}/netflix_3d.png`} alt="Netflix" objectFit="contain" />
+                    <ProgressiveImage src={`${MINIO_URL}/netflix_3d.png`} alt="Netflix" />
                 </Link>
 
                 <Link href="/services/chatgpt" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
-                    <ProgressiveImage src={`${MINIO_URL}/chatgpt_3d.png`} alt="ChatGPT" objectFit="contain" />
+                    <ProgressiveImage src={`${MINIO_URL}/chatgpt_3d.png`} alt="ChatGPT" />
                 </Link>
 
                 <Link href="/services/jiohotstar" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
-                    <ProgressiveImage src={`${MINIO_URL}/jiohotstar_3d.png`} alt="JioHotstar" objectFit="contain" />
+                    <ProgressiveImage src={`${MINIO_URL}/jiohotstar_3d.png`} alt="JioHotstar" />
                 </Link>
 
                 <Link href="/services/sonyliv" style={{ display: 'block', borderRadius: '28px', overflow: 'hidden', textDecoration: 'none', aspectRatio: '1/1' }}>
-                    <ProgressiveImage src={`${MINIO_URL}/sonyliv_3d.png`} alt="SonyLIV" objectFit="contain" />
+                    <ProgressiveImage src={`${MINIO_URL}/sonyliv_3d.png`} alt="SonyLIV" />
                 </Link>
             </div>
 
-            {/* ─── Content Blocks Grid ─────────────────────────────── */}
-            <div className="blocks-parent-grid" style={{ marginTop: '56px' }}>
+            {/* ─── Browse Categories ─────────────────────────────── */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '40px', marginBottom: '20px', gap: '12px', flexWrap: 'nowrap' }} className="content-section-head">
+                <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a1c23', margin: 0, whiteSpace: 'nowrap' }}>🗂️ Browse <span style={{ color: '#6c5ce7' }}>Categories</span></h2>
+            </div>
+
+            <div className="blocks-parent-grid category-blocks-grid">
                 <Link href="/streaming" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/streaming.png`} alt="Streaming" />
                 </Link>
@@ -52,9 +56,6 @@ export default function HomePage() {
                 <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/activation.png`} alt="Activation" />
                 </div>
-            </div>
-
-            <div className="blocks-parent-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '24px' }}>
                 <Link href="/ai" style={{ display: 'block', borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2', textDecoration: 'none' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/ai.png`} alt="Artificial Intelligence" />
                 </Link>

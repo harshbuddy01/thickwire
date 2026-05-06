@@ -7,6 +7,9 @@
 }
 
 .hero-image-container {
+  width: 100%;
+  position: relative;
+  aspect-ratio: 21 / 9;
   margin-bottom: 40px;
   border-radius: 24px;
   overflow: hidden;
@@ -357,14 +360,38 @@
 
 @media (max-width: 768px) {
   .plans-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    overflow: visible !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 16px !important;
+    padding-bottom: 24px !important;
+    margin: 0 -16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .plans-grid::-webkit-scrollbar {
+    display: none;
   }
   .plans-grid > * {
-    flex: none !important;
-    max-width: 100% !important;
-    width: 100% !important;
+    flex: 0 0 240px !important;
+    max-width: 240px !important;
+    width: 240px !important;
+  }
+  .plan-content {
+    padding: 24px 16px 20px 16px !important;
+  }
+  .plan-name {
+    font-size: 18px !important;
+  }
+  .plan-price .amount {
+    font-size: 32px !important;
+  }
+  .plan-features li {
+    font-size: 12px !important;
+    margin-bottom: 10px !important;
   }
 }
 
