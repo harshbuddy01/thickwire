@@ -1,0 +1,270 @@
+/* ─── Trending Now 3D Cards ───────────────────────── */
+
+.trending-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  perspective: 1000px;
+}
+
+.trend-card {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 36px 20px 28px;
+  text-align: center;
+  transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  overflow: visible;
+}
+
+.trend-card:hover {
+  transform: translateY(-14px) rotateX(6deg) rotateY(6deg);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Content Section Head ─── */
+.content-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-section-head h2 {
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.section-link-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #6c5ce7;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.section-link-more:hover {
+  gap: 10px;
+  text-decoration: underline;
+}
+
+/* ─── Section Blocks ─── */
+
+.blocks-parent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.block-item {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid #f1f3f7;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.block-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border-color: #6c5ce7;
+}
+
+.block-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.block-title-row h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.block-icon-circle {
+  font-size: 1.3rem;
+}
+
+.block-arrow-btn {
+  width: 30px;
+  height: 30px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  transition: all 0.2s;
+}
+
+.block-item:hover .block-arrow-btn {
+  background: #6c5ce7;
+  color: white;
+}
+
+.block-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 12px;
+}
+
+.brand-pill-icon {
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #eee;
+  transition: all 0.2s;
+}
+
+.brand-pill-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.brand-pill-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ─── Bottom Features Row ─── */
+.bottom-features-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.usp-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.usp-rounded-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: linear-gradient(135deg, #f1eeff 0%, #e8e0ff 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c5ce7;
+}
+
+.usp-content h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.usp-content p {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Animated Floating Feature ─── */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float-anim {
+  animation: float 4s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ─── HOMEPAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .main-hero-area {
+    margin-bottom: 24px;
+  }
+  .hero-slider {
+    border-radius: 16px;
+  }
+  .content-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .content-section-head h2 {
+    font-size: 1.2rem;
+  }
+  .trend-card {
+    padding: 24px 16px 20px;
+    border-radius: 20px;
+  }
+  .blocks-parent-grid {
+    gap: 16px !important;
+  }
+  .bottom-features-row {
+    gap: 16px;
+  }
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .trending-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    overflow: visible !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .trending-cards-grid > * {
+    flex: none !important;
+    max-width: 100% !important;
+  }
+
+  .blocks-parent-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    overflow: visible !important;
+    gap: 16px !important;
+  }
+  .blocks-parent-grid > * {
+    flex: none !important;
+    max-width: 100% !important;
+  }
+}

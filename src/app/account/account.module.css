@@ -1,0 +1,55 @@
+/* ─── Account Page Responsive ──────────────────────── */
+.account-layout {
+  display: flex;
+  gap: 28px;
+}
+
+.account-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.account-sidebar .sidebar-card {
+  position: sticky;
+  top: 100px;
+}
+
+.account-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .account-layout {
+    flex-direction: column;
+  }
+  .account-sidebar {
+    width: 100%;
+  }
+  .account-sidebar .sidebar-card {
+    position: static;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0;
+  }
+  .account-sidebar .tab-btn {
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid #f0f0f0;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-layout {
+    padding: 16px 0 40px;
+  }
+}
+
+/* ─── ACCOUNT PAGE MOBILE ─── */
+@media (max-width: 768px) {
+  .account-page-wrapper {
+    padding: 20px 16px;
+  }
+}

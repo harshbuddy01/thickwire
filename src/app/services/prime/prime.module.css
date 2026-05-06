@@ -1,0 +1,420 @@
+/* ─── PRIME VIDEO PAGE EXACT ─────────────── */
+.prime-page-exact {
+  background: #f4f6f8;
+  padding: 40px 0 80px 0;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.prime-page-exact .container {
+  max-width: 96%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero */
+.prime-page-exact .hero-image-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.prime-page-exact .hero-banner-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: auto;
+}
+
+/* Plans Header */
+.prime-page-exact .plans-section {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 30px;
+}
+
+.prime-page-exact .plans-header {
+  margin-bottom: 30px;
+}
+
+.prime-page-exact .plans-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.prime-page-exact .plans-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Plans Grid */
+.prime-page-exact .plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .prime-page-exact .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prime-page-exact .plan-card {
+  border-radius: 16px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.prime-page-exact .plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.prime-page-exact .card-dark {
+  background: #111820;
+  border: 1px solid #d8a241;
+}
+
+.prime-page-exact .card-blue {
+  background: #0e2a4a;
+  border: 1px solid #0f79af;
+}
+
+.prime-page-exact .plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+
+.prime-page-exact .badge-gold {
+  background: #111820;
+  color: #d8a241;
+  border: 1px solid #d8a241;
+}
+
+.prime-page-exact .badge-blue {
+  background: #0f79af;
+  color: #fff;
+  border: 1px solid #0f79af;
+}
+
+.prime-page-exact .plan-card-inner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  height: 100%;
+}
+
+.prime-page-exact .best-value-ribbon {
+  position: absolute;
+  top: 18px;
+  right: -32px;
+  background: linear-gradient(135deg, #d8a241, #f5c873);
+  color: #111;
+  padding: 8px 40px;
+  font-size: 10px;
+  font-weight: 800;
+  transform: rotate(45deg);
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.prime-page-exact .plan-card.best-value {
+  /* No overflow hidden so the top badge is visible */
+}
+
+.prime-page-exact .plan-content {
+  padding: 40px 24px 24px 24px;
+}
+
+.prime-page-exact .plan-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.prime-page-exact .sub-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #aaa;
+}
+
+.prime-page-exact .plan-price {
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.prime-page-exact .plan-price.text-blue-light {
+  color: #33a8ff;
+}
+
+.prime-page-exact .plan-price .currency {
+  font-size: 24px;
+  font-weight: 600;
+  vertical-align: top;
+  margin-right: 4px;
+  color: #fff !important;
+}
+
+.prime-page-exact .plan-price .amount {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #fff !important;
+}
+
+.prime-page-exact .plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.prime-page-exact .plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ddd;
+}
+
+.prime-page-exact .text-gold { color: #d8a241; }
+.prime-page-exact .text-blue-light { color: #33a8ff; }
+
+.prime-page-exact .plan-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.prime-page-exact .btn-outline-gold {
+  background: transparent;
+  border: 1px solid #d8a241;
+  color: #d8a241;
+}
+
+.prime-page-exact .btn-outline-gold:hover {
+  background: #d8a241;
+  color: #111;
+}
+
+.prime-page-exact .btn-gradient-blue {
+  background: linear-gradient(to bottom, #1f85d6, #0c569c);
+  border: none;
+  color: #fff;
+}
+
+.prime-page-exact .btn-gradient-blue:hover {
+  background: linear-gradient(to bottom, #2b9aff, #0f6bbd);
+}
+
+/* Why & FAQ Split */
+.prime-page-exact .info-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.prime-page-exact .dark-panel {
+  background: #111820;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.prime-page-exact .section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.prime-page-exact .text-white { color: #fff; }
+
+.prime-page-exact .why-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prime-page-exact .why-item {
+  display: flex;
+  gap: 16px;
+}
+
+.prime-page-exact .why-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.prime-page-exact .icon-gold {
+  border: 1px solid #d8a241;
+  color: #d8a241;
+}
+
+.prime-page-exact .why-text strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.prime-page-exact .why-text p {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.prime-page-exact .faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prime-page-exact .faq-item {
+  background: #1a242f;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.prime-page-exact .faq-question {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 13px;
+  color: #ddd;
+}
+
+.prime-page-exact .faq-arrow {
+  color: #aaa;
+  transition: transform 0.3s;
+}
+
+.prime-page-exact .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+.prime-page-exact .faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.prime-page-exact .faq-item.open .faq-answer { max-height: 150px; }
+
+.prime-page-exact .faq-answer-inner {
+  padding: 0 16px 16px 16px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+/* Trust Strip */
+.prime-page-exact .dark-strip {
+  background: #111820;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.prime-page-exact .trust-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prime-page-exact .trust-text strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  color: #fff;
+}
+
+.prime-page-exact .trust-text span {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* Bottom CTA */
+.prime-page-exact .prime-cta {
+  background: #111820;
+  padding: 24px 40px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prime-page-exact .cta-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.prime-page-exact .cta-icon-box {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.prime-page-exact .cta-text h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.prime-page-exact .cta-text p {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.prime-page-exact .btn-gold {
+  background: linear-gradient(135deg, #d8a241, #f5c873);
+  color: #111;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+

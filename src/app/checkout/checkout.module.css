@@ -1,0 +1,110 @@
+/* ─── Premium Checkout UI ─────────────────────────── */
+.premium-checkout-wrapper {
+  min-height: 100vh;
+  background-color: #fafafa;
+  padding: 40px 20px;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.premium-checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .premium-checkout-container { grid-template-columns: 1fr; }
+}
+
+.premium-checkout-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.premium-checkout-header {
+  margin-bottom: 32px;
+}
+
+.premium-checkout-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #111827;
+}
+
+.premium-checkout-subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.premium-summary-card {
+  background: #050505;
+  border-radius: 24px;
+  padding: 32px;
+  color: white;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.premium-summary-card::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 150px; height: 150px;
+  background: #6366f1;
+  filter: blur(80px);
+  opacity: 0.5;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.premium-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 1.1rem;
+}
+
+.premium-summary-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.premium-summary-total {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+}
+
+.premium-payment-method {
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.premium-payment-method:hover {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.premium-payment-method.active {
+  border-color: #6366f1;
+  background: #eef2ff;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
+}
+

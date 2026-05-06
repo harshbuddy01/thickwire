@@ -1,0 +1,57 @@
+/* ─── Hero Slider ─── */
+.main-hero-area {
+  margin-bottom: 48px;
+}
+
+.hero-slider {
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  /* Hero Slider Mobile Height */
+  .hero-slider {
+    aspect-ratio: 16/10 !important; /* Taller on mobile */
+    border-radius: 16px !important;
+  }
+
+  /* Section Spacing */
+  .main-hero-area {
+    margin-bottom: 24px !important;
+  }
+  .main-hero-area h2 {
+    font-size: 1.4rem !important;
+  }
+
+  /* Horizontal Scroll Widths */
+  .trending-cards-grid > a, .trending-cards-grid > div {
+    flex: 0 0 140px !important; /* Smaller cards to show more "peek" */
+    max-width: 140px !important;
+  }
+
+  .blocks-parent-grid > a, .blocks-parent-grid > div {
+    flex: 0 0 310px !important; /* Larger width so they look like main banners */
+    max-width: 310px !important;
+  }
+
+  .plans-grid > div,
+  .chatgpt-plans-grid > div,
+  .prime-page-exact .plans-grid > div,
+  .spotify-page-exact .plans-grid > div,
+  .youtube-page-exact .plans-grid > div,
+  .hbo-page-exact .plans-grid > div {
+    flex: 0 0 270px !important; /* Balanced width for plan cards */
+    max-width: 270px !important;
+  }
+
+  /* Service Page Hero */
+  .hero-image-container {
+    aspect-ratio: 16/8 !important;
+    border-radius: 16px !important;
+  }
+  .hero-banner-image {
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}

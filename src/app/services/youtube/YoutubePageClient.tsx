@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Zap, Headphones, HelpCircle, Star, Globe, Navigation, Info } from 'lucide-react';
 import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
+import styles from './youtube.module.css';
 
 const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 
@@ -20,7 +21,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
     const globalPlans = service.plans.filter(p => parseFloat(p.price) <= 100);
 
     return (
-        <div className="youtube-page-exact">
+        <div className={styles['youtube-page-exact']}>
             <div className="container">
                 <nav className="breadcrumb-nav" style={{ padding: '24px 0', fontSize: '13px', color: '#666', display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <Link href="/" style={{ color: '#111', textDecoration: 'none' }}>Home</Link>
@@ -31,21 +32,21 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className="hero-image-container" style={{ position: 'relative' }}>
+                <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
                         src={`${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
                         alt="YouTube Premium Hero"
                         fill
                         priority
-                        className="hero-banner-image"
+                        className={styles['hero-banner-image']}
                         style={{ objectFit: 'cover' }}
                         sizes="100vw"
                     />
                 </div>
 
                 {/* Plans */}
-                <div className="plans-section">
-                    <div className="youtube-plans-grid" style={{ gap: '24px' }}>
+                <div className={styles['plans-section']}>
+                    <div className={styles['youtube-plans-grid']} style={{ gap: '24px' }}>
                         {/* Indian Column */}
                         <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <div className="youtube-region-btn active" style={{ cursor: 'default' }}>
@@ -53,32 +54,32 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                             </div>
                             
                             {/* We will map through Indian plans, but render 2 per row if needed? No, vertical list is fine. The screenshot shows side-by-side inside the Indian column. */}
-                            <div className="youtube-indian-plans-grid" style={{ gap: '16px' }}>
+                            <div className={styles['youtube-indian-plans-grid']} style={{ gap: '16px' }}>
                                 {indianPlans.length > 0 ? indianPlans.map((plan, idx) => (
-                                    <div key={plan.id} className="youtube-plan-card">
+                                    <div key={plan.id} className={styles['youtube-plan-card']}>
                                         {idx === 0 && (
-                                            <div className="youtube-plan-tag">
+                                            <div className={styles['youtube-plan-tag']}>
                                                 <Star size={12} fill="#ff0000" /> MOST POPULAR
                                             </div>
                                         )}
-                                        <div className="youtube-plan-header" style={{ flexDirection: 'column', gap: '16px' }}>
-                                            <div className="youtube-plan-title">
+                                        <div className={styles['youtube-plan-header']} style={{ flexDirection: 'column', gap: '16px' }}>
+                                            <div className={styles['youtube-plan-title']}>
                                                 <p>YouTube Premium</p>
                                                 <h3>{plan.name}</h3>
-                                                <div className="youtube-plan-badge">Individual</div>
+                                                <div className={styles['youtube-plan-badge']}>Individual</div>
                                             </div>
-                                            <div className="youtube-plan-price" style={{ textAlign: 'left' }}>
+                                            <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
                                                 <h4>₹{parseFloat(plan.price).toLocaleString()}</h4>
                                                 <p>for {Math.round(plan.durationDays / 30)} Months</p>
                                             </div>
                                         </div>
 
-                                        <ul className="youtube-plan-features">
-                                            <li><Check size={18} className="check-icon" /> Ad-free videos</li>
-                                            <li><Check size={18} className="check-icon" /> Background play</li>
-                                            <li><Check size={18} className="check-icon" /> Downloads to watch offline</li>
-                                            <li><Check size={18} className="check-icon" /> YouTube Originals</li>
-                                            <li><Check size={18} className="check-icon" /> Works on mobile, tablet & web</li>
+                                        <ul className={styles['youtube-plan-features']}>
+                                            <li><Check size={18} className={styles['check-icon']} /> Ad-free videos</li>
+                                            <li><Check size={18} className={styles['check-icon']} /> Background play</li>
+                                            <li><Check size={18} className={styles['check-icon']} /> Downloads to watch offline</li>
+                                            <li><Check size={18} className={styles['check-icon']} /> YouTube Originals</li>
+                                            <li><Check size={18} className={styles['check-icon']} /> Works on mobile, tablet & web</li>
                                         </ul>
 
                                         <div style={{ marginTop: 'auto' }}>
@@ -87,16 +88,16 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                     style={{ textDecoration: 'none' }}
                                                 >
-                                                    <button className="youtube-buy-btn">
+                                                    <button className={styles['youtube-buy-btn']}>
                                                         <Lock size={18} /> Buy Now Securely
                                                     </button>
                                                 </Link>
                                             ) : (
-                                                <button className="youtube-buy-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                                <button className={styles['youtube-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                                                     Out of Stock
                                                 </button>
                                             )}
-                                            <div className="youtube-secure-text">
+                                            <div className={styles['youtube-secure-text']}>
                                                 <ShieldCheck size={14} /> Secure & Safe Payment
                                             </div>
                                         </div>
@@ -111,34 +112,34 @@ export default function YoutubePageClient({ service }: { service: Service }) {
 
                         {/* Global Column */}
                         <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            <div className="youtube-region-btn" style={{ cursor: 'default' }}>
+                            <div className={styles['youtube-region-btn']} style={{ cursor: 'default' }}>
                                 <Globe size={18} /> For Outside India Customers
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
                                 {globalPlans.length > 0 ? globalPlans.map((plan, idx) => (
-                                    <div key={plan.id} className="youtube-plan-card">
-                                        <div className="youtube-plan-header" style={{ flexDirection: 'column', gap: '16px' }}>
-                                            <div className="youtube-plan-title">
+                                    <div key={plan.id} className={styles['youtube-plan-card']}>
+                                        <div className={styles['youtube-plan-header']} style={{ flexDirection: 'column', gap: '16px' }}>
+                                            <div className={styles['youtube-plan-title']}>
                                                 <p>YouTube Premium</p>
                                                 <h3>{plan.name}</h3>
                                                 <div className="youtube-plan-badge youtube-plan-badge-blue">Individual</div>
                                             </div>
-                                            <div className="youtube-plan-price" style={{ textAlign: 'left' }}>
+                                            <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
                                                 <h4>${parseFloat(plan.price).toLocaleString()}</h4>
                                                 <p>for 1 Year</p>
                                             </div>
                                         </div>
 
-                                        <ul className="youtube-plan-features">
-                                            <li><Check size={18} className="check-icon" style={{ color: '#3b82f6' }} /> Ad-free videos</li>
-                                            <li><Check size={18} className="check-icon" style={{ color: '#3b82f6' }} /> Background play</li>
-                                            <li><Check size={18} className="check-icon" style={{ color: '#3b82f6' }} /> Downloads to watch offline</li>
-                                            <li><Check size={18} className="check-icon" style={{ color: '#3b82f6' }} /> YouTube Originals</li>
-                                            <li><Check size={18} className="check-icon" style={{ color: '#3b82f6' }} /> Works on mobile, tablet & web</li>
+                                        <ul className={styles['youtube-plan-features']}>
+                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Ad-free videos</li>
+                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Background play</li>
+                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Downloads to watch offline</li>
+                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> YouTube Originals</li>
+                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Works on mobile, tablet & web</li>
                                         </ul>
 
-                                        <div className="youtube-info-box">
+                                        <div className={styles['youtube-info-box']}>
                                             <Info size={16} /> This plan is for outside India customers only.
                                         </div>
 
@@ -148,16 +149,16 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                     style={{ textDecoration: 'none' }}
                                                 >
-                                                    <button className="youtube-buy-btn">
+                                                    <button className={styles['youtube-buy-btn']}>
                                                         <Lock size={18} /> Buy Now Securely
                                                     </button>
                                                 </Link>
                                             ) : (
-                                                <button className="youtube-buy-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                                <button className={styles['youtube-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                                                     Out of Stock
                                                 </button>
                                             )}
-                                            <div className="youtube-secure-text">
+                                            <div className={styles['youtube-secure-text']}>
                                                 <ShieldCheck size={14} /> Secure & Safe Payment
                                             </div>
                                         </div>
@@ -173,7 +174,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* Trust Strip */}
-                <div className="trust-strip">
+                <div className={styles['trust-strip']}>
                     <div className="trust-item">
                         <ShieldCheck size={28} className="trust-icon" />
                         <div className="trust-text">
@@ -205,9 +206,9 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* FAQ */}
-                <div className="faq-section">
+                <div className={styles['faq-section']}>
                     <h3><HelpCircle size={24} /> Frequently Asked Questions</h3>
-                    <div className="youtube-faq-grid">
+                    <div className={styles['youtube-faq-grid']}>
                         <div className="faq-column">
                             {[
                                 { q: "What is YouTube Premium?", a: "YouTube Premium provides ad-free videos, background play, and offline downloads." },
@@ -248,8 +249,8 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="youtube-bottom-cta">
-                    <div className="cta-left">
+                <div className={styles['youtube-bottom-cta']}>
+                    <div className={styles['cta-left']}>
                         <div style={{ width: '64px', height: '64px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="36" height="36" viewBox="0 0 24 24" fill="#ff0000" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -260,11 +261,11 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                             <p>Go ad-free and enjoy unlimited entertainment with YouTube Premium.</p>
                         </div>
                     </div>
-                    <div className="cta-right">
-                        <button className="youtube-bottom-cta-btn" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <div className={styles['cta-right']}>
+                        <button className={styles['youtube-bottom-cta-btn']} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                             Get YouTube Premium Now <ChevronRight size={18} />
                         </button>
-                        <div className="youtube-cta-trust">
+                        <div className={styles['youtube-cta-trust']}>
                             Instant Delivery • Secure Payment
                         </div>
                     </div>

@@ -1,0 +1,50 @@
+/* ─── Support / Form Layout ─── */
+.support-layout {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.checkout-form-card,
+.status-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  background: #f8f9fc;
+  border: 1.5px solid #e8e8e8;
+  color: #1a1c23;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  outline: none;
+  font-family: var(--font-poppins), sans-serif;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+.form-input:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.08);
+}
+
+textarea.form-input {
+  min-height: 120px;
+}

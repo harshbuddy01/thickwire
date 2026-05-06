@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, AlertCircle, Loader2, Play } from 'lucide-react';
 import '../auth-styles.css';
+import styles from '../auth/auth.module.css';
 
 function LoginContent() {
     const [email, setEmail] = useState('');

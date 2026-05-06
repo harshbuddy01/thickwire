@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ChevronRight, Check, ShoppingCart, ChevronDown, Play, Zap, Monitor, ShieldCheck, Tag, Headphones, Crown } from 'lucide-react';
 import type { Service } from '@/lib/types';
 import ProgressiveImage from '@/components/ProgressiveImage';
+import styles from './prime.module.css';
 
 const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 export default function PrimePageClient({ service }: { service: Service }) {
@@ -23,29 +24,29 @@ export default function PrimePageClient({ service }: { service: Service }) {
     ];
 
     return (
-        <div className="prime-page-exact">
+        <div className={styles['prime-page-exact']}>
             <div className="container">
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
-                <div className="hero-image-container" style={{ position: 'relative' }}>
+                <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
                         src={`${MINIO_URL}/slider/prime-banner.png`}
                         alt="Prime Video"
                         fill
                         priority
-                        className="hero-banner-image"
+                        className={styles['hero-banner-image']}
                         style={{ objectFit: 'cover' }}
                         sizes="100vw"
                     />
                 </div>
 
                 {/* ─── Plan Selection ────────────────────────────────── */}
-                <div className="plans-section">
-                    <div className="plans-header">
+                <div className={styles['plans-section']}>
+                    <div className={styles['plans-header']}>
                         <h2>Choose Your Plan</h2>
                         <p>All plans include Prime benefits.</p>
                     </div>
 
-                    <div className="plans-grid">
+                    <div className={styles['plans-grid']}>
                         {service.plans.map((plan, index) => {
                             const colors = colorSchemes[index % colorSchemes.length];
                             const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
@@ -56,13 +57,13 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                         <Crown size={12} fill="currentColor" /> PREMIUM PLAN
                                     </div>
                                     {isBestValue ? (
-                                        <div className="plan-card-inner">
-                                            <div className="best-value-ribbon">BEST<br/>VALUE</div>
-                                            <div className="plan-content">
-                                                <h3 className="plan-name">{plan.name}</h3>
+                                        <div className={styles['plan-card-inner']}>
+                                            <div className={styles['best-value-ribbon']}>BEST<br/>VALUE</div>
+                                            <div className={styles['plan-content']}>
+                                                <h3 className={styles['plan-name']}>{plan.name}</h3>
                                                 <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
-                                                    <span className="currency">₹</span>
-                                                    <span className="amount">{parseFloat(plan.price).toLocaleString()}</span>
+                                                    <span className={styles['currency']}>₹</span>
+                                                    <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                                 </div>
                                                 <ul className={`plan-features ${colors.features}`}>
                                                     <li><Check size={16} className={colors.text} /> Full HD / 4K Ultra HD Quality</li>
@@ -87,11 +88,11 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="plan-content">
-                                            <h3 className="plan-name">{plan.name}</h3>
+                                        <div className={styles['plan-content']}>
+                                            <h3 className={styles['plan-name']}>{plan.name}</h3>
                                             <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
-                                                <span className="currency">₹</span>
-                                                <span className="amount">{parseFloat(plan.price).toLocaleString()}</span>
+                                                <span className={styles['currency']}>₹</span>
+                                                <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                             </div>
                                             <ul className={`plan-features ${colors.features}`}>
                                                 <li><Check size={16} className={colors.text} /> {colors.card.includes('blue') ? 'Full HD Quality' : 'HD Quality'}</li>
@@ -122,32 +123,32 @@ export default function PrimePageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* ─── Why Choose & FAQ ─────────────────────────────── */}
-                <div className="info-split">
+                <div className={styles['info-split']}>
                     <div className="why-section dark-panel">
                         <h3 className="section-title text-white">Why Choose {service.name}?</h3>
-                        <div className="why-list">
-                            <div className="why-item">
+                        <div className={styles['why-list']}>
+                            <div className={styles['why-item']}>
                                 <div className="why-icon icon-gold"><Play fill="transparent" size={16} /></div>
                                 <div className="why-text text-white">
                                     <strong>Exclusive Originals</strong>
                                     <p>Watch award-winning Amazon Originals.</p>
                                 </div>
                             </div>
-                            <div className="why-item">
+                            <div className={styles['why-item']}>
                                 <div className="why-icon icon-gold"><Zap fill="transparent" size={16} /></div>
                                 <div className="why-text text-white">
                                     <strong>Latest Movies & TV Shows</strong>
                                     <p>New releases and trending shows, all in one place.</p>
                                 </div>
                             </div>
-                            <div className="why-item">
+                            <div className={styles['why-item']}>
                                 <div className="why-icon icon-gold"><Check size={18} /></div>
                                 <div className="why-text text-white">
                                     <strong>Live Sports</strong>
                                     <p>Watch live cricket, football and more.</p>
                                 </div>
                             </div>
-                            <div className="why-item">
+                            <div className={styles['why-item']}>
                                 <div className="why-icon icon-gold"><Monitor size={18} /></div>
                                 <div className="why-text text-white">
                                     <strong>Download & Watch</strong>
@@ -168,12 +169,12 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                 { q: "What if I face any issue?", a: "Our dedicated support team is available 24/7. You can reach out via the Support tab or live chat for immediate assistance." }
                             ].map((item, idx) => (
                                 <div key={idx} className={`faq-item ${openFaq === idx ? 'open' : ''}`} onClick={() => toggleFaq(idx)}>
-                                    <div className="faq-question">
+                                    <div className={styles['faq-question']}>
                                         <span>{item.q}</span>
-                                        <ChevronDown size={16} className="faq-arrow" />
+                                        <ChevronDown size={16} className={styles['faq-arrow']} />
                                     </div>
-                                    <div className="faq-answer">
-                                        <div className="faq-answer-inner">{item.a}</div>
+                                    <div className={styles['faq-answer']}>
+                                        <div className={styles['faq-answer-inner']}>{item.a}</div>
                                     </div>
                                 </div>
                             ))}
@@ -183,28 +184,28 @@ export default function PrimePageClient({ service }: { service: Service }) {
 
                 {/* ─── Trust Elements ─────────────────────────────────── */}
                 <div className="trust-strip dark-strip">
-                    <div className="trust-item">
+                    <div className={styles['trust-item']}>
                         <ShieldCheck size={24} className="trust-icon text-gold" />
                         <div className="trust-text text-white">
                             <strong>100% Safe & Secure</strong>
                             <span>Your data and payments are fully protected.</span>
                         </div>
                     </div>
-                    <div className="trust-item">
+                    <div className={styles['trust-item']}>
                         <Tag size={24} className="trust-icon text-gold" />
                         <div className="trust-text text-white">
                             <strong>Best Price Guarantee</strong>
                             <span>Get the best services at the lowest prices.</span>
                         </div>
                     </div>
-                    <div className="trust-item">
+                    <div className={styles['trust-item']}>
                         <Zap size={24} className="trust-icon text-gold" />
                         <div className="trust-text text-white">
                             <strong>Instant Delivery</strong>
                             <span>Quick activation & instant access.</span>
                         </div>
                     </div>
-                    <div className="trust-item">
+                    <div className={styles['trust-item']}>
                         <Headphones size={24} className="trust-icon text-gold" />
                         <div className="trust-text text-white">
                             <strong>24/7 Customer Support</strong>
@@ -215,11 +216,11 @@ export default function PrimePageClient({ service }: { service: Service }) {
 
                 {/* ─── Bottom CTA ───────────────────────────────────── */}
                 <div className="bottom-cta prime-cta">
-                    <div className="cta-content">
-                        <div className="cta-icon-box" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div className={styles['cta-content']}>
+                        <div className={styles['cta-icon-box']} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/Amazon_Prime_Video_logo.svg" alt="Prime Video" style={{ height: '32px' }} />
                         </div>
-                        <div className="cta-text">
+                        <div className={styles['cta-text']}>
                             <h3>Ready to start streaming?</h3>
                             <p>Choose a plan and enjoy unlimited entertainment.</p>
                         </div>

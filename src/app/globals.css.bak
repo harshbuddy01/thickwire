@@ -17,11 +17,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-input, select, textarea {
-  font-size: 16px !important;
 }
 
 html {
@@ -36,8 +31,6 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   overflow-x: hidden;
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-top: env(safe-area-inset-top);
 }
 
 .container {
@@ -1437,6 +1430,363 @@ textarea.form-input {
   .hero-title { font-size: 3.5rem; }
 }
 
+/* ─── NETFLIX PAGE (EXACT IMAGE 4 MATCH) ─────────────── */
+
+.netflix-page-exact {
+  background-color: #f4f5f7;
+  padding-bottom: 80px;
+  color: #333;
+}
+
+.hero-image-container {
+  margin-bottom: 40px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.hero-banner-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.plans-section {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-card {
+  background: #fff;
+  border-radius: 16px;
+  position: relative;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+.card-red { border-color: rgba(229,9,20,0.2); }
+.card-purple { border-color: rgba(124,58,237,0.2); }
+.card-blue { border-color: rgba(37,99,235,0.2); }
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.badge-red { background: #fee2e2; color: #e50914; }
+.badge-purple { background: #f3e8ff; color: #7c3aed; }
+.badge-blue { background: #dbeafe; color: #2563eb; }
+
+.best-value-ribbon {
+  position: absolute;
+  top: 18px;
+  right: -24px;
+  background: #2563eb;
+  color: #fff;
+  padding: 4px 30px;
+  font-size: 10px;
+  font-weight: 800;
+  transform: rotate(45deg);
+  letter-spacing: 1px;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.plan-card.best-value {
+  border: 2px solid #2563eb;
+  overflow: hidden;
+}
+
+/* Because overflow:hidden hides the top badge, we adjust for .best-value */
+.plan-card.best-value {
+  overflow: visible;
+}
+.plan-card.best-value .best-value-ribbon {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Keeps it tidy without overflow hidden on parent */
+}
+/* Better fix: Wrap content in overflow hidden, keep badge outside */
+
+.plan-content {
+  padding: 30px 24px 24px 24px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.plan-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 8px;
+}
+
+.plan-price {
+  margin-bottom: 24px;
+}
+
+.plan-price .currency {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  vertical-align: top;
+  margin-right: 2px;
+}
+
+.plan-price .amount {
+  font-size: 42px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -1.5px;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+}
+
+.text-red { color: #e50914; }
+.text-purple { color: #7c3aed; }
+.text-blue { color: #2563eb; }
+
+.plan-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Why & FAQ Split */
+.info-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.why-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.why-item {
+  display: flex;
+  gap: 16px;
+}
+
+.why-icon {
+  width: 36px;
+  height: 36px;
+  background: #e50914;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.why-text strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.why-text p {
+  font-size: 12px;
+  color: #666;
+}
+
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.faq-question {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 14px;
+  color: #111;
+}
+
+.faq-arrow {
+  color: #999;
+  transition: transform 0.3s;
+}
+
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.faq-item.open .faq-answer { max-height: 150px; }
+
+.faq-answer-inner {
+  padding: 0 20px 16px 20px;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Trust Strip */
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  margin-bottom: 40px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.trust-icon { color: #111; }
+
+.trust-text strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.trust-text span {
+  font-size: 11px;
+  color: #888;
+}
+
+/* Bottom CTA */
+.bottom-cta {
+  background: #111;
+  padding: 20px 40px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cta-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cta-icon-box {
+  width: 48px;
+  height: 48px;
+  background: #000;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.cta-icon-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cta-text h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.cta-text p {
+  color: #999;
+  font-size: 13px;
+}
+
+.cta-button {
+  background: #fff;
+  color: #111;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* ─── Account Page Responsive ──────────────────────── */
 .account-layout {
   display: flex;
@@ -1486,74 +1836,9 @@ textarea.form-input {
   }
 }
 
-/* ─── Checkout Mobile Enhancements ─────────────────── */
-@media (max-width: 860px) {
-  .premium-checkout-container {
-    grid-template-columns: 1fr;
-    padding: 16px;
-    gap: 20px;
-  }
-  .premium-summary-card {
-    position: static !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .premium-checkout-wrapper {
-    padding: 16px 12px;
-  }
-  .premium-checkout-container {
-    padding: 12px;
-  }
-}
-
-/* ─── Auth Pages Mobile ────────────────────────────── */
-@media (max-width: 768px) {
-  .premium-auth-wrapper {
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 0;
-  }
-  .premium-auth-left {
-    display: none;
-  }
-  .premium-auth-right {
-    flex: 1;
-    width: 100%;
-    padding: 20px 16px;
-    border-radius: 0;
-  }
-  .premium-auth-form-card {
-    padding: 28px 20px;
-  }
-  .premium-form-input {
-    font-size: 16px; /* prevent iOS zoom on focus */
-  }
-}
-
-/* ─── Checkout Fields Row ──────────────────────────── */
-.checkout-fields-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-@media (max-width: 640px) {
-  .checkout-fields-row {
-    grid-template-columns: 1fr;
-  }
-  .premium-form-grid-2col {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* ─── Checkout Mobile Button ───────────────────────── */
-@media (max-width: 480px) {
-  .premium-btn {
-    height: 56px;
-    font-size: 1rem;
-  }
-}
+/* ═══════════════════════════════════════════════════════
+   COMPREHENSIVE MOBILE RESPONSIVE OVERRIDES
+   ═══════════════════════════════════════════════════════ */
 
 /* ─── HEADER MOBILE (≤768px) ─── */
 @media (max-width: 768px) {
@@ -1753,198 +2038,6 @@ textarea.form-input {
   .youtube-page-exact .trust-strip,
   .hbo-page-exact .trust-strip {
     grid-template-columns: 1fr;
-  }
-}
-
-/* ─── NETFLIX PAGE MOBILE ─── */
-@media (max-width: 768px) {
-  .netflix-page-exact {
-    padding-bottom: 40px;
-  }
-  .section-title {
-    font-size: 18px;
-  }
-  .plan-card {
-    border-radius: 14px;
-  }
-  .plan-card-inner {
-    padding: 20px;
-  }
-  .plan-name {
-    font-size: 1.2rem;
-  }
-  .plan-price {
-    font-size: 2rem;
-  }
-  .info-grid-row,
-  .info-split,
-  .info-split-exact,
-  .luxury-info-split,
-  .info-grid-bold {
-    grid-template-columns: 1fr;
-  }
-  .bottom-cta {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .cta-content {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-/* ─── PRIME PAGE MOBILE ─── */
-@media (max-width: 768px) {
-  .prime-page-exact {
-    padding-bottom: 40px;
-  }
-  .prime-page-exact .plans-header h2 {
-    font-size: 18px;
-  }
-  .prime-page-exact .plan-card {
-    border-radius: 14px;
-  }
-  .prime-page-exact .faq-grid {
-    grid-template-columns: 1fr;
-  }
-  .prime-page-exact .info-split {
-    grid-template-columns: 1fr;
-  }
-  .prime-page-exact .bottom-cta {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .prime-page-exact .bottom-cta .cta-left {
-    flex-direction: column;
-    align-items: center;
-  }
-  .prime-page-exact .bottom-cta .cta-right {
-    align-items: center;
-  }
-}
-
-/* ─── SPOTIFY PAGE MOBILE ─── */
-@media (max-width: 768px) {
-  .spotify-page-exact {
-    padding-bottom: 40px;
-  }
-  .spotify-page-exact .plans-grid {
-    grid-template-columns: 1fr;
-  }
-  .spotify-region-btn {
-    font-size: 14px;
-    padding: 12px 16px;
-  }
-  .spotify-plan-card {
-    padding: 24px;
-  }
-  .spotify-plan-header {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .spotify-plan-price {
-    text-align: left;
-  }
-  .spotify-plan-price h4 {
-    font-size: 28px;
-  }
-  .spotify-faq-grid {
-    grid-template-columns: 1fr;
-  }
-  .spotify-bottom-cta {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .spotify-bottom-cta .cta-left {
-    flex-direction: column;
-    align-items: center;
-  }
-  .spotify-bottom-cta .cta-right {
-    align-items: center;
-  }
-}
-
-/* ─── YOUTUBE PAGE MOBILE ─── */
-@media (max-width: 768px) {
-  .youtube-page-exact {
-    padding-bottom: 40px;
-  }
-  .youtube-plans-grid {
-    grid-template-columns: 1fr;
-  }
-  .youtube-indian-plans-grid {
-    grid-template-columns: 1fr;
-  }
-  .youtube-region-btn {
-    font-size: 14px;
-    padding: 12px 16px;
-  }
-  .youtube-plan-card {
-    padding: 24px;
-  }
-  .youtube-plan-header {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .youtube-plan-price {
-    text-align: left;
-  }
-  .youtube-plan-price h4 {
-    font-size: 28px;
-  }
-  .youtube-faq-grid {
-    grid-template-columns: 1fr;
-  }
-  .youtube-bottom-cta {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .youtube-bottom-cta .cta-left {
-    flex-direction: column;
-    align-items: center;
-  }
-  .youtube-bottom-cta .cta-right {
-    align-items: center;
-  }
-}
-
-/* ─── HBO PAGE MOBILE ─── */
-@media (max-width: 768px) {
-  .hbo-page-exact {
-    padding-bottom: 40px;
-  }
-  .hbo-plans-grid {
-    grid-template-columns: 1fr;
-  }
-  .hbo-plan-card {
-    padding: 24px;
-  }
-  .hbo-plan-price h4 {
-    font-size: 36px;
-  }
-  .hbo-faq-grid {
-    grid-template-columns: 1fr;
-  }
-  .hbo-bottom-cta {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .hbo-bottom-cta .cta-left {
-    flex-direction: column;
-    align-items: center;
-  }
-  .hbo-bottom-cta .cta-right {
-    align-items: center;
   }
 }
 

@@ -1,0 +1,316 @@
+/* ─── YOUTUBE PAGE EXACT ─────────────── */
+.youtube-page-exact {
+  background-color: #fafafa;
+  padding-bottom: 80px;
+  color: #333;
+}
+
+.youtube-page-exact .container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero */
+.youtube-page-exact .hero-image-container {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.youtube-page-exact .hero-banner-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: auto;
+}
+
+/* Region Header */
+.youtube-region-btn {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.youtube-region-btn.active {
+  background: #fff5f5;
+  border-color: #ff0000;
+  color: #cc0000;
+}
+
+/* Plans Section */
+.youtube-page-exact .plans-section {
+  margin-bottom: 40px;
+}
+
+.youtube-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.youtube-indian-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Plan Card */
+.youtube-plan-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  padding: 32px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.youtube-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.06);
+}
+
+.youtube-plan-tag {
+  position: absolute;
+  top: -12px;
+  left: 32px;
+  background: #ffe5e5;
+  color: #ff0000;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.youtube-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.youtube-plan-title p {
+  color: #111;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.youtube-plan-title h3 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  margin: 4px 0 8px 0;
+}
+.youtube-plan-badge {
+  display: inline-block;
+  background: #ffe5e5;
+  color: #ff0000;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.youtube-plan-badge-blue {
+  background: #eef2ff;
+  color: #3b82f6;
+}
+
+.youtube-plan-price {
+  text-align: right;
+}
+.youtube-plan-price h4 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+  line-height: 1;
+}
+.youtube-plan-price p {
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.youtube-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  flex: 1;
+}
+.youtube-plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 16px;
+}
+.youtube-plan-features li .check-icon {
+  color: #ff0000;
+}
+
+.youtube-info-box {
+  background: #f0f7ff;
+  border: 1px solid #dbeafe;
+  color: #2563eb;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.youtube-buy-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+.youtube-buy-btn:hover {
+  background: #333;
+}
+.youtube-secure-text {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Trust Strip */
+.youtube-page-exact .trust-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 40px;
+}
+
+/* FAQ */
+.youtube-page-exact .faq-section {
+  margin-bottom: 40px;
+}
+.youtube-page-exact .faq-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.youtube-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Bottom CTA */
+.youtube-bottom-cta {
+  background: #111;
+  border-radius: 20px;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.youtube-bottom-cta .cta-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.youtube-bottom-cta .cta-left h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.youtube-bottom-cta .cta-left p {
+  color: #999;
+  font-size: 14px;
+}
+.youtube-bottom-cta .cta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.youtube-bottom-cta-btn {
+  background: #ff0000;
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  transition: transform 0.3s;
+}
+.youtube-bottom-cta-btn:hover {
+  transform: scale(1.05);
+}
+.youtube-cta-trust {
+  font-size: 12px;
+  color: #777;
+}
+
+@media (max-width: 900px) {
+  .youtube-plans-grid, .youtube-indian-plans-grid, .youtube-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .youtube-page-exact .trust-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .youtube-bottom-cta {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  .youtube-bottom-cta .cta-left {
+    flex-direction: column;
+  }
+  .youtube-bottom-cta .cta-right {
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .youtube-page-exact .trust-strip {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Zap, Headphones, HelpCircle, Star, Globe, Navigation } from 'lucide-react';
 import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
+import styles from './spotify.module.css';
 
 const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 
@@ -27,7 +28,7 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
     const displayPlans = region === 'india' ? indianPlans : globalPlans;
 
     return (
-        <div className="spotify-page-exact">
+        <div className={styles['spotify-page-exact']}>
             <div className="container">
                 <nav className="breadcrumb-nav" style={{ padding: '24px 0', fontSize: '13px', color: '#666', display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <Link href="/" style={{ color: '#111', textDecoration: 'none' }}>Home</Link>
@@ -38,21 +39,21 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className="hero-image-container" style={{ position: 'relative' }}>
+                <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
                         src={`${MINIO_URL}/slider/file_000000004fd07208a284a13ce78f69ff.png`}
                         alt="Spotify Premium Hero"
                         fill
                         priority
-                        className="hero-banner-image"
+                        className={styles['hero-banner-image']}
                         style={{ objectFit: 'cover' }}
                         sizes="100vw"
                     />
                 </div>
 
                 {/* Plans */}
-                <div className="plans-section">
-                    <div className="plans-grid" style={{ gap: '24px' }}>
+                <div className={styles['plans-section']}>
+                    <div className={styles['plans-grid']} style={{ gap: '24px' }}>
                         {/* Indian Column */}
                         <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <div className="spotify-region-btn active" style={{ cursor: 'default' }}>
@@ -60,30 +61,30 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                             </div>
                             
                             {indianPlans.length > 0 ? indianPlans.map((plan, idx) => (
-                                <div key={plan.id} className="spotify-plan-card">
+                                <div key={plan.id} className={styles['spotify-plan-card']}>
                                     {idx === 0 && (
-                                        <div className="spotify-plan-tag">
+                                        <div className={styles['spotify-plan-tag']}>
                                             <Star size={12} fill="#1ed760" /> MOST POPULAR
                                         </div>
                                     )}
-                                    <div className="spotify-plan-header">
-                                        <div className="spotify-plan-title">
+                                    <div className={styles['spotify-plan-header']}>
+                                        <div className={styles['spotify-plan-title']}>
                                             <p>Spotify Premium</p>
                                             <h3>{plan.name}</h3>
-                                            <div className="spotify-plan-badge">Individual</div>
+                                            <div className={styles['spotify-plan-badge']}>Individual</div>
                                         </div>
-                                        <div className="spotify-plan-price">
+                                        <div className={styles['spotify-plan-price']}>
                                             <h4>₹{parseFloat(plan.price).toLocaleString()}</h4>
                                             <p>for {plan.durationDays} Days</p>
                                         </div>
                                     </div>
 
-                                    <ul className="spotify-plan-features">
-                                        <li><Check size={18} className="check-icon" /> Ad-free music listening</li>
-                                        <li><Check size={18} className="check-icon" /> Play anywhere – even offline</li>
-                                        <li><Check size={18} className="check-icon" /> On-demand playback</li>
-                                        <li><Check size={18} className="check-icon" /> High quality audio</li>
-                                        <li><Check size={18} className="check-icon" /> Cancel anytime</li>
+                                    <ul className={styles['spotify-plan-features']}>
+                                        <li><Check size={18} className={styles['check-icon']} /> Ad-free music listening</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> Play anywhere – even offline</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> On-demand playback</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> High quality audio</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> Cancel anytime</li>
                                     </ul>
 
                                     <div style={{ marginTop: 'auto' }}>
@@ -92,16 +93,16 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                                                 href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                <button className="spotify-buy-btn">
+                                                <button className={styles['spotify-buy-btn']}>
                                                     <Lock size={18} /> Buy Now Securely
                                                 </button>
                                             </Link>
                                         ) : (
-                                            <button className="spotify-buy-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                            <button className={styles['spotify-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                                                 Out of Stock
                                             </button>
                                         )}
-                                        <div className="spotify-secure-text">
+                                        <div className={styles['spotify-secure-text']}>
                                             <ShieldCheck size={14} /> Secure & Safe Payment
                                         </div>
                                     </div>
@@ -115,30 +116,30 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
 
                         {/* Global Column */}
                         <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            <div className="spotify-region-btn" style={{ cursor: 'default' }}>
+                            <div className={styles['spotify-region-btn']} style={{ cursor: 'default' }}>
                                 <Globe size={18} /> For Outside India Customers
                             </div>
 
                             {globalPlans.length > 0 ? globalPlans.map((plan, idx) => (
-                                <div key={plan.id} className="spotify-plan-card">
-                                    <div className="spotify-plan-header">
-                                        <div className="spotify-plan-title">
+                                <div key={plan.id} className={styles['spotify-plan-card']}>
+                                    <div className={styles['spotify-plan-header']}>
+                                        <div className={styles['spotify-plan-title']}>
                                             <p>Spotify Premium</p>
                                             <h3>{plan.name}</h3>
-                                            <div className="spotify-plan-badge">Individual</div>
+                                            <div className={styles['spotify-plan-badge']}>Individual</div>
                                         </div>
-                                        <div className="spotify-plan-price">
+                                        <div className={styles['spotify-plan-price']}>
                                             <h4>${parseFloat(plan.price).toLocaleString()}</h4>
                                             <p>for {plan.durationDays} Days</p>
                                         </div>
                                     </div>
 
-                                    <ul className="spotify-plan-features">
-                                        <li><Check size={18} className="check-icon" /> Ad-free music listening</li>
-                                        <li><Check size={18} className="check-icon" /> Play anywhere – even offline</li>
-                                        <li><Check size={18} className="check-icon" /> On-demand playback</li>
-                                        <li><Check size={18} className="check-icon" /> High quality audio</li>
-                                        <li><Check size={18} className="check-icon" /> Cancel anytime</li>
+                                    <ul className={styles['spotify-plan-features']}>
+                                        <li><Check size={18} className={styles['check-icon']} /> Ad-free music listening</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> Play anywhere – even offline</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> On-demand playback</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> High quality audio</li>
+                                        <li><Check size={18} className={styles['check-icon']} /> Cancel anytime</li>
                                     </ul>
 
                                     <div style={{ marginTop: 'auto' }}>
@@ -147,16 +148,16 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                                                 href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                 style={{ textDecoration: 'none' }}
                                             >
-                                                <button className="spotify-buy-btn">
+                                                <button className={styles['spotify-buy-btn']}>
                                                     <Lock size={18} /> Buy Now Securely
                                                 </button>
                                             </Link>
                                         ) : (
-                                            <button className="spotify-buy-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                            <button className={styles['spotify-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
                                                 Out of Stock
                                             </button>
                                         )}
-                                        <div className="spotify-secure-text">
+                                        <div className={styles['spotify-secure-text']}>
                                             <ShieldCheck size={14} /> Secure & Safe Payment
                                         </div>
                                     </div>
@@ -171,7 +172,7 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* Trust Strip */}
-                <div className="trust-strip">
+                <div className={styles['trust-strip']}>
                     <div className="trust-item">
                         <ShieldCheck size={28} className="trust-icon" />
                         <div className="trust-text">
@@ -203,9 +204,9 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* FAQ */}
-                <div className="faq-section">
+                <div className={styles['faq-section']}>
                     <h3><HelpCircle size={24} /> Frequently Asked Questions</h3>
-                    <div className="spotify-faq-grid">
+                    <div className={styles['spotify-faq-grid']}>
                         <div className="faq-column">
                             {[
                                 { q: "What is Spotify Premium?", a: "Spotify Premium gives you ad-free music listening, offline playback, and high-quality audio." },
@@ -246,8 +247,8 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="spotify-bottom-cta">
-                    <div className="cta-left">
+                <div className={styles['spotify-bottom-cta']}>
+                    <div className={styles['cta-left']}>
                         <div style={{ width: '64px', height: '64px', background: '#1ed760', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <svg width="36" height="36" viewBox="0 0 24 24" fill="#000" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.6.3 1.021zm1.44-3.3c-.301.42-.84.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.18-1.2-.18-1.38-.781-.18-.6.18-1.2.78-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.239.54-.959.72-1.62.36z"/>
@@ -258,11 +259,11 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                             <p>Enjoy ad-free music, offline listening & unlimited skips with Spotify Premium.</p>
                         </div>
                     </div>
-                    <div className="cta-right">
-                        <button className="spotify-bottom-cta-btn" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                    <div className={styles['cta-right']}>
+                        <button className={styles['spotify-bottom-cta-btn']} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                             Get Spotify Premium Now <ChevronRight size={18} />
                         </button>
-                        <div className="spotify-cta-trust">
+                        <div className={styles['spotify-cta-trust']}>
                             Instant Delivery • Secure Payment
                         </div>
                     </div>

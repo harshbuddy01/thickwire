@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { Mail, Lock, User, AlertCircle, Loader2, Play } from 'lucide-react';
 import '../auth-styles.css';
+import styles from '../auth/auth.module.css';
 
 function SignupContent() {
     const [name, setName] = useState('');

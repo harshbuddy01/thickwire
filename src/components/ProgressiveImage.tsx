@@ -10,9 +10,10 @@ interface ProgressiveImageProps {
     style?: React.CSSProperties;
     priority?: boolean;
     fill?: boolean;
+    objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
-export default function ProgressiveImage({ src, alt, className, style, priority, fill = true }: ProgressiveImageProps) {
+export default function ProgressiveImage({ src, alt, className, style, priority, fill = true, objectFit = 'cover' }: ProgressiveImageProps) {
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
 
@@ -47,7 +48,7 @@ export default function ProgressiveImage({ src, alt, className, style, priority,
                 priority={priority}
                 className={className}
                 style={{
-                    objectFit: 'cover',
+                    objectFit: objectFit,
                     opacity: loaded ? 1 : 0,
                     transition: 'opacity 0.4s ease',
                     ...(style || {}),

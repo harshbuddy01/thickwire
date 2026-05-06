@@ -1,0 +1,19 @@
+--- src/app/globals.css
++++ src/app/globals.css
+@@ -2,6 +2,14 @@
+   box-sizing: border-box;
+   padding: 0;
+   margin: 0;
++  -webkit-tap-highlight-color: transparent;
++}
++
++input, select, textarea {
++  font-size: 16px !important;
++}
++
++body {
++  padding-bottom: env(safe-area-inset-bottom);
++  padding-top: env(safe-area-inset-top);
+ }
+ 
+ html,

@@ -166,7 +166,78 @@ export default function Header() {
                     </div>
                 </div>
             )}
+
+            <MobileBottomNav />
         </header>
+    );
+}
+
+function MobileBottomNav() {
+    const pathname = usePathname();
+    const { user } = useAuth();
+    
+    return (
+        <nav className="mobile-bottom-nav">
+            <Link href="/" className={pathname === '/' ? 'active' : ''}>
+                <LayoutGrid size={22} />
+                <span>Home</span>
+            </Link>
+            <Link href="/services" className={pathname === '/services' ? 'active' : ''}>
+                <Search size={22} />
+                <span>Search</span>
+            </Link>
+            <Link href="/account" className={pathname === '/account' ? 'active' : ''}>
+                <ShoppingCart size={22} />
+                <span>Cart</span>
+            </Link>
+            <Link href="/support" className={pathname === '/support' ? 'active' : ''}>
+                <HeadphonesIcon size={22} />
+                <span>Support</span>
+            </Link>
+            <Link href="/account" className={pathname.startsWith('/account') && pathname !== '/account' ? 'active' : ''}>
+                <User size={22} />
+                <span>Profile</span>
+            </Link>
+
+            <style jsx>{`
+                .mobile-bottom-nav {
+                    display: none;
+                    position: fixed;
+                    bottom: 0; left: 0; right: 0;
+                    background: rgba(255, 255, 255, 0.9);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
+                    border-top: 1px solid rgba(0,0,0,0.05);
+                    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+                    z-index: 2000;
+                    justify-content: space-around;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+                }
+                .mobile-bottom-nav :global(a) {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 4px;
+                    color: #8e8e93;
+                    text-decoration: none;
+                    font-size: 10px;
+                    font-weight: 500;
+                    transition: all 0.2s;
+                    min-width: 60px;
+                }
+                .mobile-bottom-nav :global(a.active) {
+                    color: #6c5ce7;
+                }
+                .mobile-bottom-nav :global(span) {
+                    font-family: var(--font-poppins), sans-serif;
+                }
+                @media (max-width: 768px) {
+                    .mobile-bottom-nav {
+                        display: flex;
+                    }
+                }
+            `}</style>
+        </nav>
     );
 }
 
