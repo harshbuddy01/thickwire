@@ -5,6 +5,7 @@ import { AuthProvider } from '@/lib/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PageLoader from '@/components/PageLoader';
+import Script from 'next/script';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -36,6 +37,7 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://bucket-production-6fef.up.railway.app" />
             </head>
             <body className={poppins.className}>
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
                 <AuthProvider>
                     <Header />
                     <main>{children}</main>

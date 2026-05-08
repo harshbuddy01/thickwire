@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import api from '@/lib/api';
-import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle } from 'lucide-react';
+import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -62,11 +62,15 @@ const s: { [k: string]: React.CSSProperties } = {
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'tickets' | 'settings'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'wallet' | 'tickets' | 'settings'>('overview');
 
     const [orders, setOrders] = useState<any[]>([]);
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
     const [tickets, setTickets] = useState<any[]>([]);
+    const [walletData, setWalletData] = useState<any>(null);
+    const [walletTransactions, setWalletTransactions] = useState<any[]>([]);
+    const [topUpAmount, setTopUpAmount] = useState('');
+    const [isToppingUp, setIsToppingUp] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
 
     // Modal State
@@ -91,14 +95,18 @@ export default function AccountPage() {
 
     const fetchData = async () => {
         try {
-            const [ordersRes, subsRes, ticketsRes] = await Promise.all([
+            const [ordersRes, subsRes, ticketsRes, walletRes, walletTxRes] = await Promise.all([
                 api.get('/account/orders'),
                 api.get('/account/subscriptions'),
-                api.get('/support/my-tickets')
+                api.get('/support/my-tickets'),
+                api.get('/wallet/balance/local').catch(() => ({ data: null })),
+                api.get('/wallet/transactions').catch(() => ({ data: { items: [] } }))
             ]);
             setOrders(ordersRes.data);
             setSubscriptions(subsRes.data);
             setTickets(ticketsRes.data);
+            if (walletRes.data) setWalletData(walletRes.data);
+            if (walletTxRes.data?.items) setWalletTransactions(walletTxRes.data.items);
         } catch (err) {
             console.error('Failed to fetch account data:', err);
         } finally {
@@ -150,6 +158,48 @@ export default function AccountPage() {
         }
     };
 
+    const handleTopUp = async () => {
+        if (!topUpAmount || Number(topUpAmount) <= 0) return alert('Enter a valid amount');
+        setIsToppingUp(true);
+        try {
+            const { data } = await api.post('/wallet/topup', { amount: Number(topUpAmount), currency: walletData?.currency || 'INR' });
+            
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_YourKeyHere',
+                amount: Math.round(Number(topUpAmount) * 100),
+                currency: walletData?.currency || 'INR',
+                name: 'StreamKart Wallet',
+                description: 'Wallet Top-Up',
+                order_id: data.razorpayOrderId,
+                handler: async function (response: any) {
+                    try {
+                        await api.post('/wallet/topup/confirm', {
+                            amountINR: data.amountINR || data.amountBase, // Fallback for either
+                            fromCurrency: data.currency,
+                            amountLocal: data.amount
+                        });
+                        alert('Wallet topped up successfully!');
+                        setTopUpAmount('');
+                        fetchData();
+                    } catch (err) {
+                        alert('Failed to confirm top-up. Please contact support.');
+                    }
+                },
+                prefill: { name: user.name, email: user.email, contact: user.phone },
+                theme: { color: '#6c5ce7' }
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', function () { alert('Payment failed'); });
+            rzp.open();
+        } catch (err) {
+            console.error('Failed to init top-up:', err);
+            alert('Top-up failed to initiate');
+        } finally {
+            setIsToppingUp(false);
+        }
+    };
+
     const daysUntil = (date: string) => {
         if (!date) return 0;
         const diff = new Date(date).getTime() - Date.now();
@@ -166,6 +216,7 @@ export default function AccountPage() {
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: <Package size={18} /> },
+        { id: 'wallet', label: 'My Wallet', icon: <Wallet size={18} /> },
         { id: 'subscriptions', label: 'Subscriptions', icon: <Clock size={18} /> },
         { id: 'orders', label: 'Order History', icon: <ShieldCheck size={18} /> },
         { id: 'tickets', label: 'Support Tickets', icon: <HelpCircle size={18} /> },
@@ -255,6 +306,70 @@ export default function AccountPage() {
                                     ))
                                 )}
                             </div>
+                        </div>
+                    )}
+
+                    {/* Wallet */}
+                    {activeTab === 'wallet' && (
+                        <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <h2 style={s.sectionTitle}>My Wallet</h2>
+                            
+                            <div style={{ ...s.listCard, marginBottom: 24, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', color: 'white', border: 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+                                    <div>
+                                        <div style={{ fontSize: '0.9rem', opacity: 0.9, marginBottom: 8, fontWeight: 600 }}>Available Balance</div>
+                                        <div style={{ fontSize: '2.5rem', fontWeight: 800 }}>
+                                            {walletData ? `${walletData.symbol}${Number(walletData.balanceLocal).toFixed(2)}` : '₹0.00'}
+                                        </div>
+                                        {walletData && walletData.baseCurrency !== 'INR' && walletData.balanceBase !== walletData.balanceLocal && (
+                                            <div style={{ fontSize: '0.8rem', opacity: 0.8, marginTop: 4 }}>
+                                                Base Balance: {walletData.balanceBase.toFixed(2)} {walletData.baseCurrency}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div style={{ background: 'rgba(255,255,255,0.1)', padding: 20, borderRadius: 16, width: '100%', maxWidth: 300 }}>
+                                        <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 12 }}>Top Up Wallet</h3>
+                                        <div style={{ display: 'flex', gap: 8 }}>
+                                            <div style={{ position: 'relative', flex: 1 }}>
+                                                <span style={{ position: 'absolute', left: 12, top: 10, fontWeight: 700, opacity: 0.8 }}>{walletData?.symbol || '₹'}</span>
+                                                <input 
+                                                    type="number" 
+                                                    value={topUpAmount}
+                                                    onChange={e => setTopUpAmount(e.target.value)}
+                                                    placeholder="Amount"
+                                                    style={{ width: '100%', padding: '10px 10px 10px 28px', borderRadius: 10, border: 'none', outline: 'none', fontSize: '0.95rem', fontWeight: 600, color: '#333' }}
+                                                />
+                                            </div>
+                                            <button 
+                                                onClick={handleTopUp}
+                                                disabled={isToppingUp}
+                                                style={{ padding: '0 20px', background: '#fff', color: '#6c5ce7', border: 'none', borderRadius: 10, fontWeight: 800, cursor: isToppingUp ? 'not-allowed' : 'pointer' }}
+                                            >
+                                                {isToppingUp ? '...' : 'Add'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a1c23', marginBottom: 16 }}>Transaction History</h3>
+                            {walletTransactions.length === 0 ? (
+                                <div style={s.emptyState}>No transactions yet.</div>
+                            ) : (
+                                <div style={s.listCard}>
+                                    {walletTransactions.map(tx => (
+                                        <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #eee' }}>
+                                            <div>
+                                                <div style={{ fontWeight: 700, color: '#1a1c23', marginBottom: 4 }}>{tx.description}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#888' }}>{new Date(tx.createdAt).toLocaleString()} • {tx.type}</div>
+                                            </div>
+                                            <div style={{ fontWeight: 800, fontSize: '1.1rem', color: Number(tx.amount) > 0 ? '#10b981' : '#1a1c23' }}>
+                                                {Number(tx.amount) > 0 ? '+' : ''}{Number(tx.amount).toFixed(2)} {walletData?.baseCurrency || 'INR'}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
 

@@ -41,7 +41,9 @@ function CheckoutContent() {
     });
 
     const [whatsappOptedIn, setWhatsappOptedIn] = useState(true);
-    const [gateway, setGateway] = useState<'razorpay' | 'cashfree'>('razorpay');
+    const [gateway, setGateway] = useState<'razorpay' | 'cashfree' | 'wallet'>('razorpay');
+    const [walletBalance, setWalletBalance] = useState<number | null>(null);
+    const [walletCurrency, setWalletCurrency] = useState<string>('INR');
 
     const [couponCode, setCouponCode] = useState('');
     const [couponState, setCouponState] = useState<'idle' | 'loading' | 'applied' | 'error'>('idle');
@@ -75,6 +77,11 @@ function CheckoutContent() {
                 customerPhone: prev.customerPhone || user.phone || '',
             }));
             setWhatsappOptedIn(user.whatsappOptedIn);
+            // Fetch wallet balance
+            api.get('/wallet/balance/local').then(({ data }) => {
+                setWalletBalance(data.balanceLocal);
+                setWalletCurrency(data.symbol);
+            }).catch(console.error);
         }
     }, [user]);
 
@@ -202,8 +209,13 @@ function CheckoutContent() {
             return;
         }
 
-        if (gateway !== 'razorpay') {
-            setError('Please select Razorpay as it is the only supported payment gateway currently.');
+        if (gateway !== 'razorpay' && gateway !== 'wallet') {
+            setError('Please select Razorpay or Wallet.');
+            return;
+        }
+
+        if (gateway === 'wallet' && (walletBalance === null || walletBalance < finalAmount)) {
+            setError('Insufficient wallet balance. Please top up your wallet or use another payment method.');
             return;
         }
 
@@ -242,6 +254,14 @@ function CheckoutContent() {
                 ...(couponState === 'applied' ? { couponCode } : {}),
                 ...(serviceCredentials ? { serviceCredentials } : {})
             };
+
+            if (gateway === 'wallet') {
+                const res = await api.post('/wallet/pay', { planId: plan.id });
+                if (res.data && res.data.status === 'SUCCESS') {
+                    router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                    return;
+                }
+            }
 
             const res = await createOrder(payload);
 
@@ -655,6 +675,32 @@ function CheckoutContent() {
                                     </div>
                                     <div style={{ width: 22, height: 22, borderRadius: '50%', border: '2px solid #d1d5db' }}></div>
                                 </label>
+                            </div>
+                            
+                            {/* Wallet Option */}
+                            <div style={{ marginTop: 16 }}>
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'wallet' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'wallet' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                        <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>StreamKart Wallet</div>
+                                            <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
+                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && walletBalance >= finalAmount) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{ width: 22, height: 22, borderRadius: '50%', background: gateway === 'wallet' ? '#10b981' : 'transparent', border: gateway === 'wallet' ? 'none' : '2px solid #d1d5db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {gateway === 'wallet' && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
+                                    </div>
+                                    <input type="radio" value="wallet" checked={gateway === 'wallet'} onChange={() => setGateway('wallet')} style={{ display: 'none' }} />
+                                </label>
+                                {gateway === 'wallet' && walletBalance !== null && walletBalance < finalAmount && (
+                                    <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                        <AlertCircle size={14} /> Insufficient balance. Please <Link href="/account?tab=wallet" style={{ color: '#6c5ce7', fontWeight: 600 }}>Top Up</Link> first.
+                                    </div>
+                                )}
                             </div>
                         </div>
 
