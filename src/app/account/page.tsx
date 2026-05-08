@@ -174,9 +174,9 @@ export default function AccountPage() {
                 handler: async function (response: any) {
                     try {
                         await api.post('/wallet/topup/confirm', {
-                            amountINR: data.amountINR || data.amountBase, // Fallback for either
-                            fromCurrency: data.currency,
-                            amountLocal: data.amount
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
                         });
                         alert('Wallet topped up successfully!');
                         setTopUpAmount('');
