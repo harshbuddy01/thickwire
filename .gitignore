@@ -6,9 +6,28 @@ dist/
 .env.local
 .env.*.local
 
-# Test and temp files
+# Build artifacts
+*.tsbuildinfo
+
+# Logs and temp output
+*.log
+*.txt
+!README.txt
+
+# One-off utility scripts (keep root clean)
+upload-*.js
+upload_*.js
+download-*.js
+fix-*.js
+fix_*.js
+check-*.js
+list-*.js
+test-*.js
+perfect-*.js
+delete_*.js
+find_*.js
+*.patch
+
+# Images dumped in root
 *.png
 *.webp
-*.txt
-*.tsbuildinfo
-next_dev_log.txt
