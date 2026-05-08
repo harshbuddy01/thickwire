@@ -185,7 +185,7 @@ export default function AccountPage() {
                         alert('Failed to confirm top-up. Please contact support.');
                     }
                 },
-                prefill: { name: user.name, email: user.email, contact: user.phone },
+                prefill: { name: user?.name || '', email: user?.email || '', contact: user?.phone || '' },
                 theme: { color: '#6c5ce7' }
             };
 

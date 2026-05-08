@@ -17,7 +17,7 @@ export interface Plan {
     description: string | null;
     price: string;
     originalPrice: string | null;
-    currency: string;
+    currency?: string;
     durationDays: number;
     displayOrder: number;
     stockCount: number;
@@ -32,7 +32,7 @@ export interface CreateOrderRequest {
     customerPhone: string;
     planId: string;
     couponCode?: string;
-    gateway?: 'razorpay' | 'cashfree';
+    gateway?: 'razorpay' | 'cashfree' | 'wallet';
     whatsappOptedIn?: boolean;
     serviceCredentials?: Record<string, any>;
 }

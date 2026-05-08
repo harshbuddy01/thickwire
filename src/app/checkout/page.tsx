@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Script from 'next/script';
-import { createOrder, getServiceBySlug, validateCoupon } from '@/lib/api';
+import { createOrder, getServiceBySlug, validateCoupon, api } from '@/lib/api';
 import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
 import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play, Eye, EyeOff, Globe, Smartphone } from 'lucide-react';
