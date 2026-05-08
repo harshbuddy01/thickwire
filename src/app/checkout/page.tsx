@@ -688,7 +688,7 @@ function CheckoutContent() {
                         >
                             {submitting ? 'Processing securely...' : (
                                 <>
-                                    <Lock size={20} /> Pay Securely ₹{finalAmount.toLocaleString()}
+                                    <Lock size={20} /> Pay Securely {plan.currency === 'USD' ? '$' : '₹'}{finalAmount.toLocaleString()}
                                 </>
                             )}
                         </button>
@@ -764,19 +764,19 @@ function CheckoutContent() {
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                             <span style={{ color: '#9ca3af', fontSize: '0.95rem' }}>Subtotal</span>
-                            <span style={{ fontWeight: 700, fontSize: '1rem' }}>₹{parseFloat(plan.price).toLocaleString()}</span>
+                            <span style={{ fontWeight: 700, fontSize: '1rem' }}>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</span>
                         </div>
 
                         {couponState === 'applied' && (
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, color: '#34d399' }}>
                                 <span style={{ fontSize: '0.95rem' }}>Discount ({couponCode})</span>
-                                <span style={{ fontWeight: 700, fontSize: '1rem' }}>-₹{discountAmount.toLocaleString()}</span>
+                                <span style={{ fontWeight: 700, fontSize: '1rem' }}>-{plan.currency === 'USD' ? '$' : '₹'}{discountAmount.toLocaleString()}</span>
                             </div>
                         )}
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '16px 20px', borderRadius: 12, marginTop: 16 }}>
                             <span style={{ fontSize: '1.2rem', fontWeight: 700 }}>Total</span>
-                            <span style={{ fontSize: '1.8rem', fontWeight: 800 }}>₹{finalAmount.toLocaleString()}</span>
+                            <span style={{ fontSize: '1.8rem', fontWeight: 800 }}>{plan.currency === 'USD' ? '$' : '₹'}{finalAmount.toLocaleString()}</span>
                         </div>
 
                         {/* Features */}

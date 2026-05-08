@@ -47,9 +47,9 @@ export default function PlanCard({ plan, serviceSlug, serviceName }: PlanCardPro
                 {plan.description || `${serviceName} — ${plan.durationDays} day access`}
             </div>
             <div className="plan-card-price">
-                <span className="current">₹{parseFloat(plan.price).toLocaleString()}</span>
+                <span className="current">{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</span>
                 {plan.originalPrice && (
-                    <span className="original">₹{parseFloat(plan.originalPrice).toLocaleString()}</span>
+                    <span className="original">{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.originalPrice).toLocaleString()}</span>
                 )}
             </div>
             <div className="plan-card-duration">{plan.durationDays} days validity</div>

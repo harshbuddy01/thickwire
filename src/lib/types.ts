@@ -17,6 +17,7 @@ export interface Plan {
     description: string | null;
     price: string;
     originalPrice: string | null;
+    currency: string;
     durationDays: number;
     displayOrder: number;
     stockCount: number;
