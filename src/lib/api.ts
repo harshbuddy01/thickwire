@@ -101,4 +101,45 @@ export async function createSupportTicket(
     return data;
 }
 
+// ─── Reviews ────────────────────────────────────────
+
+export async function getServiceReviews(serviceId: string) {
+    const { data } = await api.get(`/reviews/service/${serviceId}`);
+    return data;
+}
+
+export async function submitReview(payload: { serviceId: string; orderId?: string; rating: number; comment?: string }) {
+    const { data } = await api.post('/reviews', payload);
+    return data;
+}
+
+// ─── Wallet & Referral ──────────────────────────────
+
+export async function getWalletBalance() {
+    const { data } = await api.get('/wallet/balance');
+    return data;
+}
+
+export async function getWalletTransactions(page = 1) {
+    const { data } = await api.get(`/wallet/transactions?page=${page}`);
+    return data;
+}
+
+export async function getReferralStats() {
+    const { data } = await api.get('/wallet/referral');
+    return data;
+}
+
+export async function applyReferralCode(code: string) {
+    const { data } = await api.post('/wallet/referral/apply', { code });
+    return data;
+}
+
+// ─── Flash Sales ────────────────────────────────────
+
+export async function getActiveFlashSales() {
+    const { data } = await api.get('/flash-sales');
+    return data;
+}
+
 export default api;
