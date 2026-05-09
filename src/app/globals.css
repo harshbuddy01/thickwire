@@ -1457,6 +1457,11 @@ textarea.form-input {
 .account-sidebar .sidebar-card {
   position: sticky;
   top: 100px;
+  overflow: hidden;
+}
+
+.account-sidebar .tab-btn {
+  width: 100%;
 }
 
 .account-content {
@@ -3009,18 +3014,23 @@ textarea.form-input {
     display: flex !important;
     flex-direction: row !important;
     overflow-x: auto !important;
+    overflow-y: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     gap: 0 !important;
     border-radius: 14px !important;
     scrollbar-width: none !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .account-sidebar .sidebar-card::-webkit-scrollbar {
     display: none !important;
   }
 
+  /* CRITICAL: override inline width:100% to auto so tabs sit side-by-side */
   .account-sidebar .tab-btn {
+    width: auto !important;
     flex-shrink: 0 !important;
     white-space: nowrap !important;
     border-bottom: 2px solid transparent !important;
@@ -3035,7 +3045,8 @@ textarea.form-input {
   /* Active tab → purple bottom border */
   .account-sidebar .tab-btn[style*="f1eeff"] {
     border-bottom: 3px solid #6c5ce7 !important;
-    background: #fff !important;
+    background: transparent !important;
+    color: #6c5ce7 !important;
   }
 
   /* Content area → full width */
@@ -3056,18 +3067,13 @@ textarea.form-input {
     gap: 16px !important;
   }
 
-  /* Balance text smaller */
-  .account-wallet-inner div[style*="2.5rem"] {
-    font-size: 2rem !important;
-  }
-
   /* Top-up box → full width */
   .account-topup-box {
     max-width: 100% !important;
     width: 100% !important;
   }
 
-  /* Stats grid → keep 2 cols but smaller gaps */
+  /* Stats grid → 2 cols with tighter gaps */
   .account-stats-grid {
     gap: 10px !important;
   }

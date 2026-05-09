@@ -32,9 +32,9 @@ const s: { [k: string]: React.CSSProperties } = {
     },
     layout: { display: 'flex', gap: 28 },
     sidebar: { width: 240, flexShrink: 0 },
-    sidebarCard: { background: '#fff', border: '1px solid #eee', borderRadius: 20, overflow: 'hidden', position: 'sticky', top: 100, boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
+    sidebarCard: { background: '#fff', border: '1px solid #eee', borderRadius: 20, position: 'sticky', top: 100, boxShadow: '0 4px 20px rgba(0,0,0,0.03)' },
     tabBtn: {
-        width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+        display: 'flex', alignItems: 'center', gap: 12,
         padding: '14px 20px', fontSize: '0.85rem', fontWeight: 600,
         border: 'none', cursor: 'pointer', borderBottom: '1px solid #f0f0f0',
         fontFamily: 'Outfit, sans-serif', transition: 'all 0.15s',
