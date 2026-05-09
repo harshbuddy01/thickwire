@@ -6,6 +6,7 @@ import api from '@/lib/api';
 import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const s: { [k: string]: React.CSSProperties } = {
     page: { minHeight: '80vh', padding: '40px 20px 60px' },
@@ -230,7 +231,7 @@ export default function AccountPage() {
                 <div style={s.profileAccent}></div>
                 <div className="account-avatar" style={s.avatar}>
                     {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <Image src={user.avatarUrl} alt={user.name} width={72} height={72} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                         user.name.charAt(0).toUpperCase()
                     )}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
 
 const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
@@ -45,10 +46,13 @@ export default function StreamingCategoryPage() {
                     boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
                     border: '1px solid rgba(255,255,255,0.05)'
                 }}>
-                    <img
+                    <Image
                         src={`${MINIO}/slider/file_00000000b220720cb2fb31789491ad9f.png`}
                         alt="Streaming"
+                        width={1440}
+                        height={360}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        priority
                     />
                 </div>
 
@@ -99,9 +103,11 @@ export default function StreamingCategoryPage() {
                                         alignItems: 'center',
                                         justifyContent: 'center'
                                     }}>
-                                        <img
+                                        <Image
                                             src={`${MINIO}/${s.logo}`}
                                             alt={s.name}
+                                            width={80}
+                                            height={80}
                                             style={{ 
                                                 width: '100%', 
                                                 height: '100%', 

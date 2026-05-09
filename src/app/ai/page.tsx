@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
     ChevronRight, 
     ShieldCheck, 
@@ -48,10 +49,13 @@ export default function AICategoryPage() {
                     boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                     background: '#0a0a0f'
                 }}>
-                    <img 
+                    <Image 
                         src={`${MINIO}/slider/ChatGPT%20Image%20May%201,%202026,%2005_42_45%20AM.png`} 
                         alt="AI Banner" 
+                        width={1200}
+                        height={400}
                         style={{ width: '100%', height: 'auto', display: 'block' }} 
+                        priority
                     />
                 </div>
             </div>
@@ -82,7 +86,7 @@ export default function AICategoryPage() {
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                                     <div style={{ width: '100px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <img src={service.logo} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                        <Image src={service.logo} alt={service.name} width={100} height={100} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                     </div>
                                     <div style={{ background: '#1a1c23', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', padding: '6px 14px', borderRadius: '100px', textTransform: 'uppercase' }}>
                                         {service.tag}

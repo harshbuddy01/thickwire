@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
     ChevronRight, 
     ShieldCheck, 
@@ -158,10 +159,13 @@ export default function GrossingCategoryPage() {
                     boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                     background: '#fff'
                 }}>
-                    <img 
+                    <Image 
                         src={BANNER_IMG} 
                         alt="Banner" 
+                        width={1200}
+                        height={350}
                         style={{ width: '100%', height: 'auto', display: 'block' }} 
+                        priority
                     />
                 </div>
             </div>
@@ -198,9 +202,11 @@ export default function GrossingCategoryPage() {
                                 >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '20px' }}>
                                         <div className="service-logo-container">
-                                            <img 
+                                            <Image 
                                                 src={service.logo} 
                                                 alt={service.name} 
+                                                width={100}
+                                                height={100}
                                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
                                                 onError={(e) => {
                                                     e.currentTarget.style.display = 'none';
