@@ -2968,20 +2968,27 @@ textarea.form-input {
 
 /* ─── 7. ACCOUNT PAGE MOBILE ─── */
 @media (max-width: 768px) {
+  /* Page padding for mobile */
+  .container[style] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 100px !important;
+  }
+
   /* Profile card → vertical stack */
   .account-profile-card {
     flex-direction: column !important;
     align-items: flex-start !important;
     padding: 20px !important;
-    gap: 14px !important;
-    border-radius: 18px !important;
-    margin-bottom: 14px !important;
+    gap: 12px !important;
+    border-radius: 16px !important;
+    margin-bottom: 16px !important;
   }
 
   .account-avatar {
-    width: 56px !important;
-    height: 56px !important;
-    font-size: 1.2rem !important;
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.1rem !important;
   }
 
   .account-profile-info div:first-child {
@@ -2993,8 +3000,9 @@ textarea.form-input {
     margin-left: 0 !important;
     width: 100% !important;
     justify-content: center !important;
-    padding: 12px !important;
+    padding: 11px !important;
     border-radius: 12px !important;
+    font-size: 0.82rem !important;
   }
 
   /* Layout → vertical stack */
@@ -3003,7 +3011,7 @@ textarea.form-input {
     gap: 0 !important;
   }
 
-  /* Sidebar → horizontal scrollable tab bar */
+  /* ──── TAB BAR → 3-column grid of tiles ──── */
   .account-sidebar {
     width: 100% !important;
     margin-bottom: 20px !important;
@@ -3011,42 +3019,51 @@ textarea.form-input {
 
   .account-sidebar .sidebar-card {
     position: static !important;
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    overflow: visible !important;
     gap: 0 !important;
-    border-radius: 14px !important;
-    scrollbar-width: none !important;
+    border-radius: 16px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    border: 1px solid #eee !important;
   }
 
-  .account-sidebar .sidebar-card::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  /* CRITICAL: override inline width:100% to auto so tabs sit side-by-side */
   .account-sidebar .tab-btn {
     width: auto !important;
-    flex-shrink: 0 !important;
-    white-space: nowrap !important;
-    border-bottom: 2px solid transparent !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 14px 8px !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    border-bottom: none !important;
     border-right: none !important;
     border-radius: 0 !important;
-    padding: 13px 16px !important;
-    font-size: 0.8rem !important;
-    gap: 6px !important;
-    min-width: fit-content !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    min-height: 64px !important;
+    position: relative !important;
   }
 
-  /* Active tab → purple bottom border */
+  /* Grid cell borders */
+  .account-sidebar .tab-btn:nth-child(1),
+  .account-sidebar .tab-btn:nth-child(2),
+  .account-sidebar .tab-btn:nth-child(3) {
+    border-bottom: 1px solid #f0f0f0 !important;
+  }
+  .account-sidebar .tab-btn:nth-child(1),
+  .account-sidebar .tab-btn:nth-child(2),
+  .account-sidebar .tab-btn:nth-child(4),
+  .account-sidebar .tab-btn:nth-child(5) {
+    border-right: 1px solid #f0f0f0 !important;
+  }
+
+  /* Active tab → subtle highlight */
   .account-sidebar .tab-btn[style*="f1eeff"] {
-    border-bottom: 3px solid #6c5ce7 !important;
-    background: transparent !important;
+    background: #f8f5ff !important;
     color: #6c5ce7 !important;
+    font-weight: 700 !important;
   }
 
   /* Content area → full width */
