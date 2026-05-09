@@ -226,23 +226,23 @@ export default function AccountPage() {
     return (
         <div className="container" style={s.page}>
             {/* Profile Header */}
-            <div style={s.profileCard}>
+            <div className="account-profile-card" style={s.profileCard}>
                 <div style={s.profileAccent}></div>
-                <div style={s.avatar}>
+                <div className="account-avatar" style={s.avatar}>
                     {user.avatarUrl ? (
                         <img src={user.avatarUrl} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                         user.name.charAt(0).toUpperCase()
                     )}
                 </div>
-                <div>
+                <div className="account-profile-info">
                     <div style={s.profileName}>{user.name}</div>
                     <div style={s.profileEmail}>{user.email}</div>
                     {!user.isVerified && (
                         <div style={s.unverified}><AlertCircle size={14} /> Email not verified</div>
                     )}
                 </div>
-                <button onClick={logout} style={{ ...s.logoutBtn, flexShrink: 0, marginTop: 'auto' }}>
+                <button className="account-logout-btn" onClick={logout} style={{ ...s.logoutBtn, flexShrink: 0, marginTop: 'auto' }}>
                     <LogOut size={16} /> Log Out
                 </button>
             </div>
@@ -274,7 +274,7 @@ export default function AccountPage() {
                     {activeTab === 'overview' && (
                         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                             <h2 style={s.sectionTitle}>Overview</h2>
-                            <div style={s.statsGrid}>
+                            <div className="account-stats-grid" style={s.statsGrid}>
                                 <div style={s.statCard}>
                                     <div style={s.statLabel}>Active Subscriptions</div>
                                     <div style={s.statValue}>{subscriptions.filter(sub => sub.status === 'ACTIVE').length}</div>
@@ -314,8 +314,8 @@ export default function AccountPage() {
                         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                             <h2 style={s.sectionTitle}>My Wallet</h2>
                             
-                            <div style={{ ...s.listCard, marginBottom: 24, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', color: 'white', border: 'none' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+                            <div className="account-wallet-card" style={{ ...s.listCard, marginBottom: 24, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', color: 'white', border: 'none' }}>
+                                <div className="account-wallet-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
                                     <div>
                                         <div style={{ fontSize: '0.9rem', opacity: 0.9, marginBottom: 8, fontWeight: 600 }}>Available Balance</div>
                                         <div style={{ fontSize: '2.5rem', fontWeight: 800 }}>
@@ -327,7 +327,7 @@ export default function AccountPage() {
                                             </div>
                                         )}
                                     </div>
-                                    <div style={{ background: 'rgba(255,255,255,0.1)', padding: 20, borderRadius: 16, width: '100%', maxWidth: 300 }}>
+                                    <div className="account-topup-box" style={{ background: 'rgba(255,255,255,0.1)', padding: 20, borderRadius: 16, width: '100%', maxWidth: 300 }}>
                                         <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 12 }}>Top Up Wallet</h3>
                                         <div style={{ display: 'flex', gap: 8 }}>
                                             <div style={{ position: 'relative', flex: 1 }}>
