@@ -165,6 +165,10 @@
 .text-purple { color: #7c3aed; }
 .text-blue { color: #2563eb; }
 
+.bg-red { background: linear-gradient(135deg, #e50914, #b80710); }
+.bg-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.bg-blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+
 .plan-btn {
   width: 100%;
   padding: 14px;
