@@ -165,9 +165,9 @@ export default function AccountPage() {
             const { data } = await api.post('/wallet/topup', { amount: Number(topUpAmount), currency: walletData?.currency || 'INR' });
             
             const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_YourKeyHere',
-                amount: Math.round(Number(topUpAmount) * 100),
-                currency: walletData?.currency || 'INR',
+                key: data.keyId,
+                amount: Math.round(data.amount * 100),
+                currency: data.currency,
                 name: 'StreamKart Wallet',
                 description: 'Wallet Top-Up',
                 order_id: data.razorpayOrderId,
