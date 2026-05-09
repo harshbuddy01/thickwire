@@ -65,11 +65,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (token) {
                 try {
                     await refreshProfile();
-                } catch {
-                    localStorage.removeItem('accessToken');
+                } catch (err: any) {
+                    // Only clear token on explicit 401 (invalid/expired token).
+                    // Network errors on mobile should NOT log user out.
+                    if (err?.response?.status === 401) {
+                        localStorage.removeItem('accessToken');
+                        // Try refresh token implicitly via cookie
+                        try {
+                            const { data } = await api.post('/auth/refresh');
+                            localStorage.setItem('accessToken', data.accessToken);
+                            await refreshProfile();
+                        } catch {
+                            // No valid session — user genuinely needs to log in
+                        }
+                    }
+                    // For network errors, keep the token and let user retry
                 }
             } else {
-                // Try refresh token implicitly via cookie
+                // No access token — try refresh token implicitly via cookie
                 try {
                     const { data } = await api.post('/auth/refresh');
                     localStorage.setItem('accessToken', data.accessToken);

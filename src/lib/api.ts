@@ -45,7 +45,13 @@ api.interceptors.response.use(
             } catch (err) {
                 if (typeof window !== 'undefined') {
                     localStorage.removeItem('accessToken');
-                    window.location.href = '/login';
+                    // Don't force redirect — let AuthContext handle it gracefully.
+                    // Only redirect if user is on a protected page (e.g. /account).
+                    const protectedPaths = ['/account', '/checkout'];
+                    const currentPath = window.location.pathname;
+                    if (protectedPaths.some(p => currentPath.startsWith(p))) {
+                        window.location.href = '/login';
+                    }
                 }
                 return Promise.reject(error);
             }
