@@ -74,7 +74,7 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                                             <div className={styles['spotify-plan-badge']}>Individual</div>
                                         </div>
                                         <div className={styles['spotify-plan-price']}>
-                                            <h4>₹{parseFloat(plan.price).toLocaleString()}</h4>
+                                            <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
                                             <p>for {plan.durationDays} Days</p>
                                         </div>
                                     </div>

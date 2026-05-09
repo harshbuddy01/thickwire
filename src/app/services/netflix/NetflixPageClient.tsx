@@ -75,7 +75,7 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                                     <div className={styles['plan-content']}>
                                         <h3 className={styles['plan-name']}>{plan.name}</h3>
                                         <div className={styles['plan-price']}>
-                                            <span className={styles.currency}>₹</span>
+                                            <span className={styles.currency}>{plan.currency === 'USD' ? '$' : '₹'}</span>
                                             <span className={styles.amount}>{parseFloat(plan.price).toLocaleString()}</span>
                                             <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700, marginTop: '4px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                                                 {formatDuration(plan.durationDays)}

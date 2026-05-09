@@ -62,7 +62,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                             <div className={styles['plan-content']}>
                                                 <h3 className={styles['plan-name']}>{plan.name}</h3>
                                                 <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
-                                                    <span className={styles['currency']}>₹</span>
+                                                    <span className={styles['currency']}>{plan.currency === 'USD' ? '$' : '₹'}</span>
                                                     <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                                 </div>
                                                 <ul className={`plan-features ${colors.features}`}>
@@ -91,7 +91,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                         <div className={styles['plan-content']}>
                                             <h3 className={styles['plan-name']}>{plan.name}</h3>
                                             <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
-                                                <span className={styles['currency']}>₹</span>
+                                                <span className={styles['currency']}>{plan.currency === 'USD' ? '$' : '₹'}</span>
                                                 <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                             </div>
                                             <ul className={`plan-features ${colors.features}`}>

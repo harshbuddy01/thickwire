@@ -69,7 +69,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                 <div className={styles['youtube-plan-badge']}>Individual</div>
                                             </div>
                                             <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
-                                                <h4>₹{parseFloat(plan.price).toLocaleString()}</h4>
+                                                <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
                                                 <p>for {Math.round(plan.durationDays / 30)} Months</p>
                                             </div>
                                         </div>
