@@ -2,15 +2,35 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRight, ChevronDown, ShieldCheck, Zap, Brain, Monitor, CheckCircle2, Truck, Headphones, Lock, ShoppingCart, HelpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronRight, ChevronDown, ShieldCheck, Zap, Brain, Monitor, CheckCircle2, Headphones, ShoppingCart } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
+import { getServiceBySlug } from '@/lib/api';
+import type { Service, Plan } from '@/lib/types';
 
 const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 const HERO_BANNER = `${MINIO}/slider/file_00000000a6587208abda7443e39b8c5d.png`;
-const CHATGPT_LOGO = `${MINIO}/logos/chatgpt.png`; // Fallback, or I can use an SVG
 
 export default function ChatGPTProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
+    const [service, setService] = useState<Service | null>(null);
+    const { user } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        getServiceBySlug('chatgpt').then(setService).catch(console.error);
+    }, []);
+
+    const handleBuy = (plan: Plan) => {
+        if (!plan.inStock) return;
+        const dest = `/checkout?planId=${plan.id}&service=chatgpt`;
+        if (!user) {
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+        } else {
+            router.push(dest);
+        }
+    };
 
     const toggleFaq = (index: number) => {
         if (faqOpen === index) setFaqOpen(null);
@@ -60,240 +80,113 @@ export default function ChatGPTProductPage() {
 
                     <div className="chatgpt-plans-grid">
                         
-                        {/* Plan 1 */}
-                        <div className="chatgpt-plan-card" style={{ 
-                            background: '#131314', 
-                            borderRadius: '24px', 
-                            padding: '40px 32px', 
-                            display: 'flex', 
-                            flexDirection: 'column',
-                            border: '1px solid #374151',
-                            boxShadow: '0 12px 24px rgba(0,0,0,0.05)',
-                            position: 'relative'
-                        }}>
-                            <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', border: '1px solid #4b5563', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700, color: '#e5e7eb', letterSpacing: '0.5px', marginBottom: '24px' }}>
-                                PLUS PLAN
-                            </div>
-                            
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>1 Month</span>
-                                <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(Private)</span>
-                            </div>
-                            
-                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹499</div>
-                            
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Private Account</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Full Access to GPT-4o & Latest Models</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Priority Response</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Works on All Devices</span>
-                                </div>
-                            </div>
-                            
-                            <Link href="/checkout" style={{ textDecoration: 'none', marginTop: 'auto' }}>
-                                <button style={{
-                                    width: '100%',
-                                    background: 'transparent',
-                                    border: '1px solid #D4AF37',
-                                    color: '#D4AF37',
-                                    padding: '16px',
-                                    borderRadius: '12px',
-                                    fontSize: '1.05rem',
-                                    fontWeight: 700,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '10px',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(253, 224, 71, 0.1)' }}
-                                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
-                                >
-                                    <ShoppingCart size={18} /> Buy Now
-                                </button>
-                            </Link>
-                        </div>
+                        {!service ? (
+                            <div style={{ padding: '40px', color: '#6b7280', gridColumn: '1 / -1', textAlign: 'center' }}>Loading plans...</div>
+                        ) : service.plans.length === 0 ? (
+                            <div style={{ padding: '40px', color: '#6b7280', gridColumn: '1 / -1', textAlign: 'center' }}>No plans available right now. Check back soon!</div>
+                        ) : service.plans.map((plan, index) => {
+                            const isPopular = index === 1;
+                            const isBestValue = index === 2;
 
-                        {/* Plan 2 */}
-                        <div className="chatgpt-plan-card" style={{ 
-                            background: '#131314', 
-                            borderRadius: '24px', 
-                            padding: '40px 32px', 
-                            display: 'flex', 
-                            flexDirection: 'column',
-                            border: '2px solid #D4AF37',
-                            boxShadow: '0 20px 40px rgba(253, 224, 71, 0.15)',
-                            position: 'relative',
-                            transform: 'scale(1.02)'
-                        }}>
-                            <div style={{ position: 'absolute', top: '-14px', left: '0', right: '0', display: 'flex', justifyContent: 'center' }}>
-                                <div style={{ background: '#D4AF37', color: '#111827', padding: '6px 16px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                                    Most Popular
-                                </div>
-                            </div>
+                            return (
+                                <div key={plan.id} className="chatgpt-plan-card" style={{ 
+                                    background: '#131314', 
+                                    borderRadius: '24px', 
+                                    padding: '40px 32px', 
+                                    display: 'flex', 
+                                    flexDirection: 'column',
+                                    border: isPopular ? '2px solid #D4AF37' : '1px solid #374151',
+                                    boxShadow: isPopular ? '0 20px 40px rgba(253, 224, 71, 0.15)' : '0 12px 24px rgba(0,0,0,0.05)',
+                                    position: 'relative',
+                                    transform: isPopular ? 'scale(1.02)' : 'none',
+                                    overflow: 'hidden'
+                                }}>
+                                    {isPopular && (
+                                        <div style={{ position: 'absolute', top: '-14px', left: '0', right: '0', display: 'flex', justifyContent: 'center' }}>
+                                            <div style={{ background: '#D4AF37', color: '#111827', padding: '6px 16px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                Most Popular
+                                            </div>
+                                        </div>
+                                    )}
 
-                            <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', background: '#D4AF37', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 800, color: '#111827', letterSpacing: '0.5px', marginBottom: '24px' }}>
-                                PLUS PLAN
-                            </div>
-                            
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>3 Months</span>
-                                <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(1 Device)</span>
-                            </div>
-                            
-                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹799</div>
-                            
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>1 Device Access</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Full Access to GPT-4o & Latest Models</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Priority Response</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
-                                    </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Regular Updates</span>
-                                </div>
-                            </div>
-                            
-                            <Link href="/checkout" style={{ textDecoration: 'none', marginTop: 'auto' }}>
-                                <button style={{
-                                    width: '100%',
-                                    background: 'linear-gradient(to right, #F3E5AB, #D4AF37)',
-                                    border: 'none',
-                                    color: '#111827',
-                                    padding: '16px',
-                                    borderRadius: '12px',
-                                    fontSize: '1.05rem',
-                                    fontWeight: 800,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '10px',
-                                    transition: 'all 0.2s',
-                                    boxShadow: '0 8px 24px rgba(253, 224, 71, 0.3)'
-                                }}
-                                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)' }}
-                                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)' }}
-                                >
-                                    <ShoppingCart size={18} /> Buy Now
-                                </button>
-                            </Link>
-                        </div>
+                                    {isBestValue && (
+                                        <div style={{ position: 'absolute', top: '16px', right: '-30px', background: '#D4AF37', color: '#111827', padding: '6px 40px', transform: 'rotate(45deg)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.5px' }}>
+                                            BEST VALUE
+                                        </div>
+                                    )}
 
-                        {/* Plan 3 */}
-                        <div className="chatgpt-plan-card" style={{ 
-                            background: '#131314', 
-                            borderRadius: '24px', 
-                            padding: '40px 32px', 
-                            display: 'flex', 
-                            flexDirection: 'column',
-                            border: '1px solid #374151',
-                            boxShadow: '0 12px 24px rgba(0,0,0,0.05)',
-                            position: 'relative',
-                            overflow: 'hidden'
-                        }}>
-                            <div style={{ position: 'absolute', top: '16px', right: '-30px', background: '#D4AF37', color: '#111827', padding: '6px 40px', transform: 'rotate(45deg)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.5px' }}>
-                                BEST VALUE
-                            </div>
-
-                            <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', border: '1px solid #4b5563', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700, color: '#e5e7eb', letterSpacing: '0.5px', marginBottom: '24px' }}>
-                                PLUS PLAN
-                            </div>
-                            
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>6 Months</span>
-                                <span style={{ fontSize: '1rem', color: '#9ca3af' }}>(1 Device)</span>
-                            </div>
-                            
-                            <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>₹1499</div>
-                            
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
+                                    <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', background: isPopular ? '#D4AF37' : 'transparent', border: isPopular ? 'none' : '1px solid #4b5563', borderRadius: '100px', fontSize: '0.7rem', fontWeight: isPopular ? 800 : 700, color: isPopular ? '#111827' : '#e5e7eb', letterSpacing: '0.5px', marginBottom: '24px' }}>
+                                        PLUS PLAN
                                     </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>1 Device Access</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
+                                    
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
+                                        <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>{plan.name}</span>
+                                        <span style={{ fontSize: '1rem', color: '#9ca3af' }}>({plan.durationDays} Days)</span>
                                     </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Full Access to GPT-4o & Latest Models</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
+                                    
+                                    <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>
+                                        {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}
                                     </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Priority Response</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <CheckCircle2 size={12} color="#111" />
+                                    
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, marginBottom: '40px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <CheckCircle2 size={12} color="#111" />
+                                            </div>
+                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>{plan.description || 'Full Access to GPT-4o & Latest Models'}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <CheckCircle2 size={12} color="#111" />
+                                            </div>
+                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Priority Response</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <CheckCircle2 size={12} color="#111" />
+                                            </div>
+                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Works on All Devices</span>
+                                        </div>
                                     </div>
-                                    <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Regular Updates</span>
+                                    
+                                    <button 
+                                        onClick={() => handleBuy(plan)}
+                                        disabled={!plan.inStock}
+                                        style={{
+                                            width: '100%',
+                                            background: isPopular ? 'linear-gradient(to right, #F3E5AB, #D4AF37)' : 'transparent',
+                                            border: isPopular ? 'none' : '1px solid #D4AF37',
+                                            color: isPopular ? '#111827' : '#D4AF37',
+                                            padding: '16px',
+                                            borderRadius: '12px',
+                                            fontSize: '1.05rem',
+                                            fontWeight: 800,
+                                            cursor: plan.inStock ? 'pointer' : 'not-allowed',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '10px',
+                                            transition: 'all 0.2s',
+                                            boxShadow: isPopular ? '0 8px 24px rgba(253, 224, 71, 0.3)' : 'none',
+                                            opacity: plan.inStock ? 1 : 0.5,
+                                            marginTop: 'auto'
+                                        }}
+                                        onMouseEnter={(e) => { 
+                                            if (!plan.inStock) return;
+                                            if (isPopular) e.currentTarget.style.transform = 'translateY(-2px)';
+                                            else e.currentTarget.style.background = 'rgba(253, 224, 71, 0.1)';
+                                        }}
+                                        onMouseLeave={(e) => { 
+                                            if (!plan.inStock) return;
+                                            if (isPopular) e.currentTarget.style.transform = 'translateY(0)';
+                                            else e.currentTarget.style.background = 'transparent';
+                                        }}
+                                    >
+                                        <ShoppingCart size={18} /> {plan.inStock ? 'Buy Now' : 'Out of Stock'}
+                                    </button>
                                 </div>
-                            </div>
-                            
-                            <Link href="/checkout" style={{ textDecoration: 'none', marginTop: 'auto' }}>
-                                <button style={{
-                                    width: '100%',
-                                    background: 'transparent',
-                                    border: '1px solid #D4AF37',
-                                    color: '#D4AF37',
-                                    padding: '16px',
-                                    borderRadius: '12px',
-                                    fontSize: '1.05rem',
-                                    fontWeight: 700,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '10px',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(253, 224, 71, 0.1)' }}
-                                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
-                                >
-                                    <ShoppingCart size={18} /> Buy Now
-                                </button>
-                            </Link>
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
 
