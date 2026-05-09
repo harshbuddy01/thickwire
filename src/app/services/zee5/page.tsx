@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { ChevronRight, ChevronDown, ShieldCheck, Download, Tv, MonitorPlay, CheckCircle2, Truck, Headphones, Lock, PlayCircle, HelpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
+import { getServiceBySlug } from '@/lib/api';
+import type { Service, Plan } from '@/lib/types';
 
 const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 const LOGO_URL = `${MINIO}/logos/zee5.jpg`;
@@ -10,11 +14,30 @@ const HERO_BG = `${MINIO}/slider/ChatGPT%20Image%20May%201%2C%202026%2C%2003_22_
 
 export default function Zee5ProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
+    const [service, setService] = useState<Service | null>(null);
+    const { user } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        getServiceBySlug('zee5').then(setService).catch(console.error);
+    }, []);
+
+    const handleBuy = (plan: Plan | undefined) => {
+        if (!plan || !plan.inStock) return;
+        const dest = `/checkout?planId=${plan.id}&service=zee5`;
+        if (!user) {
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+        } else {
+            router.push(dest);
+        }
+    };
 
     const toggleFaq = (index: number) => {
         if (faqOpen === index) setFaqOpen(null);
         else setFaqOpen(index);
     };
+
+    const currentPlan = service?.plans?.[0];
 
     return (
         <div style={{ background: '#f8f9fb', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
@@ -138,32 +161,41 @@ export default function Zee5ProductPage() {
                     {/* Right Col - Price & CTA */}
                     <div style={{ padding: '40px', flex: 0.8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '3.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>₹399</span>
+                            <span style={{ fontSize: '3.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>
+                                {!currentPlan ? '...' : `${currentPlan.currency === 'USD' ? '$' : '₹'}${parseFloat(currentPlan.price).toLocaleString()}`}
+                            </span>
                         </div>
-                        <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500, marginBottom: '24px' }}>for 1 Year</div>
+                        <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500, marginBottom: '24px' }}>
+                            for {!currentPlan ? '...' : `${currentPlan.durationDays} Days`}
+                        </div>
 
                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f3f4f6', color: '#4b5563', padding: '6px 12px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, marginBottom: '32px' }}>
                             <CheckCircle2 size={14} /> One-time payment
                         </div>
 
-                        <button style={{
-                            width: '100%',
-                            background: '#0a0a0f',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '12px',
-                            padding: '18px',
-                            fontSize: '1.1rem',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            marginBottom: '20px',
-                            boxShadow: '0 10px 20px rgba(10,10,15,0.2)'
-                        }}>
-                            <Lock size={20} /> Buy Now Securely
+                        <button 
+                            onClick={() => handleBuy(currentPlan)}
+                            disabled={!currentPlan?.inStock}
+                            style={{
+                                width: '100%',
+                                background: '#0a0a0f',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '12px',
+                                padding: '18px',
+                                fontSize: '1.1rem',
+                                fontWeight: 700,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '12px',
+                                cursor: currentPlan?.inStock ? 'pointer' : 'not-allowed',
+                                marginBottom: '20px',
+                                boxShadow: '0 10px 20px rgba(10,10,15,0.2)',
+                                opacity: currentPlan?.inStock ? 1 : 0.5
+                            }}
+                        >
+                            <Lock size={20} /> {currentPlan?.inStock ? 'Buy Now Securely' : 'Out of Stock'}
                         </button>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -328,21 +360,26 @@ export default function Zee5ProductPage() {
                         </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '16px' }}>
-                        <button style={{
-                            background: '#facc15',
-                            color: '#111827',
-                            border: 'none',
-                            padding: '16px 32px',
-                            borderRadius: '8px',
-                            fontSize: '1rem',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            boxShadow: '0 10px 20px rgba(250,204,21,0.2)'
-                        }}>
-                            Get ZEE5 1 Year Now <ChevronRight size={18} />
+                        <button 
+                            onClick={() => handleBuy(currentPlan)}
+                            disabled={!currentPlan?.inStock}
+                            style={{
+                                background: '#facc15',
+                                color: '#111827',
+                                border: 'none',
+                                padding: '16px 32px',
+                                borderRadius: '8px',
+                                fontSize: '1rem',
+                                fontWeight: 700,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                cursor: currentPlan?.inStock ? 'pointer' : 'not-allowed',
+                                boxShadow: '0 10px 20px rgba(250,204,21,0.2)',
+                                opacity: currentPlan?.inStock ? 1 : 0.5
+                            }}
+                        >
+                            {currentPlan?.inStock ? 'Get ZEE5 Now' : 'Out of Stock'} <ChevronRight size={18} />
                         </button>
                         <div style={{ color: '#d1d5db', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span>1 Year Access</span>
