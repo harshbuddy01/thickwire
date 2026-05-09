@@ -256,9 +256,20 @@ function CheckoutContent() {
             };
 
             if (gateway === 'wallet') {
-                const res = await api.post('/wallet/pay', { planId: plan.id });
-                if (res.data && res.data.status === 'SUCCESS') {
-                    router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                try {
+                    const res = await api.post('/wallet/pay', { planId: plan.id });
+                    if (res.data && res.data.success) {
+                        router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                        return;
+                    } else {
+                        setError('Wallet payment failed. Please try again.');
+                        setSubmitting(false);
+                        return;
+                    }
+                } catch (walletErr: any) {
+                    console.error('Wallet payment error:', walletErr);
+                    setError(walletErr?.response?.data?.message || 'Wallet payment failed. Please try again.');
+                    setSubmitting(false);
                     return;
                 }
             }
