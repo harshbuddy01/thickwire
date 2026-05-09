@@ -23,6 +23,14 @@ export default function NetflixPageClient({ service }: { service: Service }) {
         { card: styles['card-blue'], badge: styles['badge-blue'], text: styles['text-blue'], btn: styles['bg-blue'] },
     ];
 
+    const formatDuration = (days: number) => {
+        if (days >= 30) {
+            const months = Math.floor(days / 30);
+            return `${days} Days (${months} Month${months > 1 ? 's' : ''})`;
+        }
+        return `${days} Days`;
+    };
+
     return (
         <div className={styles['netflix-page-exact']}>
             {/* ─── Breadcrumbs ────────────────────────────────────── */}
@@ -69,6 +77,9 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                                         <div className={styles['plan-price']}>
                                             <span className={styles.currency}>₹</span>
                                             <span className={styles.amount}>{parseFloat(plan.price).toLocaleString()}</span>
+                                            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700, marginTop: '4px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                {formatDuration(plan.durationDays)}
+                                            </div>
                                         </div>
                                         <ul className={styles['plan-features']}>
                                             <li><Check size={16} className={colors.text} /> Full HD / 4K Ultra HD Quality</li>
