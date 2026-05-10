@@ -135,6 +135,8 @@ function CheckoutContent() {
                         ]
                     } as Service,
                 };
+                // Also support 'hbo' slug (HBO page uses slug 'hbo')
+                fallbacks['hbo'] = fallbacks['hbomax'];
                 const fb = fallbacks[serviceSlug || ''];
                 if (fb) {
                     setService(fb);
@@ -220,6 +222,11 @@ function CheckoutContent() {
 
         if (gateway !== 'razorpay' && gateway !== 'wallet') {
             setError('Please select Razorpay or Wallet.');
+            return;
+        }
+
+        if (gateway === 'wallet' && plan?.currency === 'USD') {
+            setError('Wallet payment is not available for USD plans. Please use Razorpay.');
             return;
         }
 
@@ -707,7 +714,8 @@ function CheckoutContent() {
                                         <div>
                                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>StreamKart Wallet</div>
                                             <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
-                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && walletBalance >= finalAmount) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
+                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && (plan?.currency || 'INR') === 'INR' && walletBalance >= finalAmount) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
+                                                {plan?.currency === 'USD' && <span style={{ display: 'block', fontSize: '0.7rem', color: '#ef4444', marginTop: 2 }}>Wallet cannot be used for USD plans</span>}
                                             </div>
                                         </div>
                                     </div>
