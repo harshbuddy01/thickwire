@@ -4,7 +4,8 @@ import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
-import { Mail, Lock, User, AlertCircle, Loader2, Play } from 'lucide-react';
+import { useAuth } from '@/lib/AuthContext';
+import { Mail, Lock, User, AlertCircle, Loader2, Play, CheckCircle2 } from 'lucide-react';
 import '../auth-styles.css';
 import styles from '../auth/auth.module.css';
 
@@ -18,6 +19,7 @@ function SignupContent() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { setAuth } = useAuth();
     const redirectUrl = searchParams.get('redirect') || '/account';
 
     const handleSignup = async (e: React.FormEvent) => {
@@ -26,8 +28,14 @@ function SignupContent() {
         setIsLoading(true);
 
         try {
-            await api.post('/auth/signup', { name, email, password });
+            const { data } = await api.post('/auth/signup', { name, email, password });
+            // Auto-login: store the access token immediately
+            setAuth(data.accessToken);
             setIsSuccess(true);
+            // Brief success flash, then redirect to account
+            setTimeout(() => {
+                router.push(redirectUrl);
+            }, 1500);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to create account. Please try again.');
         } finally {
@@ -52,16 +60,18 @@ function SignupContent() {
                 </div>
                 <div className="glass-card" style={{ textAlign: 'center' }}>
                     <div style={{ width: 80, height: 80, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px', color: '#fff', boxShadow: '0 15px 30px rgba(16, 185, 129, 0.3)' }}>
-                        <Mail size={40} />
+                        <CheckCircle2 size={40} />
                     </div>
-                    <h2 className="auth-title">Check your email</h2>
-                    <p className="auth-subtitle" style={{ marginBottom: 32, lineHeight: 1.6 }}>
-                        We&apos;ve sent a verification link to <span style={{ color: '#0f172a', fontWeight: 800 }}>{email}</span>.
-                        Please click the link to activate your account.
+                    <h2 className="auth-title">Welcome to StreamKart!</h2>
+                    <p className="auth-subtitle" style={{ marginBottom: 16, lineHeight: 1.6 }}>
+                        Your account has been created successfully. Redirecting you now...
                     </p>
-                    <Link href={`/login?redirect=${encodeURIComponent(redirectUrl)}`} className="auth-btn-primary" style={{ textDecoration: 'none' }}>
-                        Return to Login
-                    </Link>
+                    <p className="auth-subtitle" style={{ marginBottom: 32, lineHeight: 1.6, fontSize: '0.85rem', opacity: 0.7 }}>
+                        We&apos;ve sent a verification link to <span style={{ color: '#0f172a', fontWeight: 800 }}>{email}</span>. Please verify when you get a chance.
+                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Loader2 size={28} style={{ animation: 'spin 1s linear infinite', color: '#10b981' }} />
+                    </div>
                 </div>
             </div>
         );
@@ -175,3 +185,4 @@ export default function SignupPage() {
         </Suspense>
     );
 }
+
