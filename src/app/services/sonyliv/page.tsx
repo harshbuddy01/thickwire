@@ -12,6 +12,12 @@ const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 const LOGO_URL = `${MINIO}/logos/sonyliv.jpg`;
 const HERO_BG = `${MINIO}/slider/sonyliv-hero-bg.png`;
 
+const FALLBACK_PLAN: Plan = {
+    id: 'plan-sl-1', name: '1 Year Plan', slug: '1-year', description: null,
+    price: '399', originalPrice: null, currency: 'INR', durationDays: 365,
+    displayOrder: 1, inStock: true, stockCount: 100
+};
+
 export default function SonyLivProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
     const [service, setService] = useState<Service | null>(null);
@@ -19,7 +25,13 @@ export default function SonyLivProductPage() {
     const router = useRouter();
 
     useEffect(() => {
-        getServiceBySlug('sonyliv').then(setService).catch(console.error);
+        getServiceBySlug('sonyliv').then(setService).catch(() => {
+            // Use fallback if API unavailable
+            setService({
+                id: 'mock-sonyliv', name: 'SonyLIV', slug: 'sonyliv', logoUrl: null,
+                description: '', displayOrder: 1, plans: [FALLBACK_PLAN]
+            });
+        });
     }, []);
 
     const handleBuy = (plan: Plan | undefined) => {
@@ -37,7 +49,7 @@ export default function SonyLivProductPage() {
         else setFaqOpen(index);
     };
 
-    const currentPlan = service?.plans?.[0];
+    const currentPlan = service?.plans?.[0] || FALLBACK_PLAN;
 
     return (
         <div style={{ background: '#f8f9fb', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>

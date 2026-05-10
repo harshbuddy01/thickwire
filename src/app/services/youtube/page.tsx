@@ -33,12 +33,13 @@ export default async function YoutubePage() {
             plans: [
                 {
                     id: 'plan-yt-1',
-                    name: '6 Months Plan',
-                    slug: '6-months',
+                    name: '4 Months Plan',
+                    slug: '4-months',
                     description: null,
                     price: '499',
                     originalPrice: null,
-                    durationDays: 180,
+                    currency: 'INR',
+                    durationDays: 120,
                     displayOrder: 1,
                     inStock: true,
                     stockCount: 100
@@ -50,6 +51,7 @@ export default async function YoutubePage() {
                     description: null,
                     price: '899',
                     originalPrice: null,
+                    currency: 'INR',
                     durationDays: 365,
                     displayOrder: 2,
                     inStock: true,
@@ -62,6 +64,7 @@ export default async function YoutubePage() {
                     description: null,
                     price: '17',
                     originalPrice: null,
+                    currency: 'USD',
                     durationDays: 365,
                     displayOrder: 3,
                     inStock: true,
