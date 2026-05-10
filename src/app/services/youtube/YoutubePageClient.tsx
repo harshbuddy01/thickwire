@@ -16,9 +16,8 @@ export default function YoutubePageClient({ service }: { service: Service }) {
         setOpenFaq(openFaq === index ? null : index);
     };
 
-    // Heuristic to split plans: if price > 100, we treat it as INR (India), otherwise USD (Global)
-    const indianPlans = service.plans.filter(p => parseFloat(p.price) > 100);
-    const globalPlans = service.plans.filter(p => parseFloat(p.price) <= 100);
+    const indianPlans = service.plans.filter(p => p.currency === 'INR' || !p.currency);
+    const globalPlans = service.plans.filter(p => p.currency === 'USD');
 
     return (
         <div className={styles['youtube-page-exact']}>
@@ -70,7 +69,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                             </div>
                                             <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
                                                 <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
-                                                <p>for {Math.round(plan.durationDays / 30)} Months</p>
+                                                <p>for {plan.durationDays} Days</p>
                                             </div>
                                         </div>
 
@@ -126,8 +125,8 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                 <div className="youtube-plan-badge youtube-plan-badge-blue">Individual</div>
                                             </div>
                                             <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
-                                                <h4>${parseFloat(plan.price).toLocaleString()}</h4>
-                                                <p>for 1 Year</p>
+                                                <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
+                                                <p>for {plan.durationDays} Days</p>
                                             </div>
                                         </div>
 

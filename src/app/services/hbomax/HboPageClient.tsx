@@ -52,8 +52,8 @@ export default function HboPageClient({ service }: { service: Service }) {
                                     <div className={`hbo-plan-title-wrapper ${styles['hbo-plan-title-wrapper'] || ''}`.trim()}>
                                         <h3>{plan.name}</h3>
                                         <div className={`hbo-plan-price ${styles['hbo-plan-price'] || ''}`.trim()}>
-                                            <h4>${parseFloat(plan.price).toLocaleString()}</h4>
-                                            <p>for {Math.round(plan.durationDays / 30)} Months</p>
+                                            <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
+                                            <p>for {plan.durationDays} Days</p>
                                         </div>
                                     </div>
                                 </div>
@@ -223,7 +223,7 @@ export default function HboPageClient({ service }: { service: Service }) {
             <div className={styles['mobile-sticky-cta']}>
                 <button className={styles['plan-btn']}>
                     <ShoppingCart size={18} />
-                    <span>Get HBO Max from ₹{service.plans[0]?.price || '149'}</span>
+                    <span>Get HBO Max from {service.plans[0]?.currency === 'USD' ? '$' : '₹'}{service.plans[0]?.price || '149'}</span>
                 </button>
             </div>
         </div>
