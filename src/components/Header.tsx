@@ -9,8 +9,11 @@ import {
     Wallet, LayoutGrid, Package, HeadphonesIcon,
     Home, Grid, X
 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Fuse from 'fuse.js';
+import { getServices } from '@/lib/api';
+import type { Service } from '@/lib/types';
 
 export default function Header() {
     const { user, loading, logout } = useAuth();
@@ -20,6 +23,38 @@ export default function Header() {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchOpen, setSearchOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
+    const [services, setServices] = useState<Service[]>([]);
+    const [suggestions, setSuggestions] = useState<Service[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    useEffect(() => {
+        getServices().then(setServices).catch(console.error);
+        
+        const handleClickOutside = (e: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+                setShowSuggestions(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const fuse = useMemo(() => new Fuse(services, {
+        keys: ['name', 'description'],
+        threshold: 0.4,
+    }), [services]);
+
+    const handleSearchInput = (query: string) => {
+        setSearchQuery(query);
+        if (query.trim().length > 1) {
+            const results = fuse.search(query);
+            setSuggestions(results.slice(0, 5).map(r => r.item));
+            setShowSuggestions(true);
+        } else {
+            setSuggestions([]);
+            setShowSuggestions(false);
+        }
+    };
 
     if (pathname === '/checkout') return null;
 
@@ -56,7 +91,7 @@ export default function Header() {
                     </Link>
 
                     {/* Desktop search */}
-                    <div className="search-container">
+                    <div className="search-container relative" ref={searchRef}>
                         <select className="search-cat-dropdown">
                             <option>All Categories</option>
                         </select>
@@ -65,9 +100,11 @@ export default function Header() {
                             placeholder="Search for products, tools and more..."
                             className="search-main-input"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) => handleSearchInput(e.target.value)}
+                            onFocus={() => { if (searchQuery.length > 1) setShowSuggestions(true); }}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && searchQuery.trim()) {
+                                    setShowSuggestions(false);
                                     router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                 }
                             }}
@@ -76,12 +113,41 @@ export default function Header() {
                             className="search-trigger"
                             onClick={() => {
                                 if (searchQuery.trim()) {
+                                    setShowSuggestions(false);
                                     router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                 }
                             }}
                         >
                             <Search size={18} />
                         </button>
+
+                        {/* Desktop Suggestions Dropdown */}
+                        {showSuggestions && suggestions.length > 0 && (
+                            <div className="search-suggestions-dropdown">
+                                {suggestions.map(item => (
+                                    <div 
+                                        key={item.id} 
+                                        className="search-suggestion-item"
+                                        onClick={() => {
+                                            setSearchQuery('');
+                                            setShowSuggestions(false);
+                                            router.push(`/services/${item.slug}`);
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            {item.logoUrl ? (
+                                                <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, borderRadius: 4, objectFit: 'contain' }} />
+                                            ) : (
+                                                <Search size={16} color="#999" />
+                                            )}
+                                            <div>
+                                                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#111' }}>{item.name}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="nav-icons-group">
@@ -158,22 +224,52 @@ export default function Header() {
                 {/* Mobile inline search — slides down when open */}
                 <div className={`mobile-search-bar ${searchOpen ? 'mobile-search-bar--open' : ''}`}>
                     <div className="container">
-                        <div className="mobile-search-inner">
+                        <div className="mobile-search-inner relative">
                             <Search size={16} className="mobile-search-icon" />
                             <input
                                 type="text"
                                 placeholder="Search Netflix, Spotify, ChatGPT..."
                                 className="mobile-search-input"
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onChange={(e) => handleSearchInput(e.target.value)}
+                                onFocus={() => { if (searchQuery.length > 1) setShowSuggestions(true); }}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && searchQuery.trim()) {
-                                        router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                         setSearchOpen(false);
+                                        setShowSuggestions(false);
+                                        router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                     }
                                 }}
                                 autoFocus={searchOpen}
                             />
+                            {/* Mobile Suggestions Dropdown */}
+                            {showSuggestions && suggestions.length > 0 && searchOpen && (
+                                <div className="search-suggestions-dropdown mobile-suggestions">
+                                    {suggestions.map(item => (
+                                        <div 
+                                            key={item.id} 
+                                            className="search-suggestion-item"
+                                            onClick={() => {
+                                                setSearchQuery('');
+                                                setShowSuggestions(false);
+                                                setSearchOpen(false);
+                                                router.push(`/services/${item.slug}`);
+                                            }}
+                                        >
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                {item.logoUrl ? (
+                                                    <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, borderRadius: 4, objectFit: 'contain' }} />
+                                                ) : (
+                                                    <Search size={16} color="#999" />
+                                                )}
+                                                <div>
+                                                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#111' }}>{item.name}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
