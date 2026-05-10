@@ -78,8 +78,31 @@ export default function ChatGPTProductPage() {
                     <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Choose Your Plan</h2>
                     <p style={{ color: '#6b7280', fontSize: '1.1rem', margin: '0 0 32px 0', fontWeight: 500 }}>Simple plans. Powerful AI.</p>
 
-                    <div className="chatgpt-plans-grid">
-                        
+                    <div className="chatgpt-plans-container-new" style={{
+                        display: 'grid',
+                        gap: '24px',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    }}>
+                        <style>{`
+                            @media (max-width: 768px) {
+                                .chatgpt-plans-container-new {
+                                    display: flex !important;
+                                    overflow-x: auto !important;
+                                    padding-bottom: 24px !important;
+                                    margin: 0 -20px !important;
+                                    padding-left: 20px !important;
+                                    padding-right: 20px !important;
+                                    scrollbar-width: none;
+                                }
+                                .chatgpt-plans-container-new::-webkit-scrollbar {
+                                    display: none;
+                                }
+                                .chatgpt-plans-container-new > div {
+                                    flex: 0 0 280px !important;
+                                    max-width: 280px !important;
+                                }
+                            }
+                        `}</style>
                         {!service ? (
                             <div style={{ padding: '40px', color: '#6b7280', gridColumn: '1 / -1', textAlign: 'center' }}>Loading plans...</div>
                         ) : service.plans.length === 0 ? (
@@ -89,7 +112,7 @@ export default function ChatGPTProductPage() {
                             const isBestValue = index === 2;
 
                             return (
-                                <div key={plan.id} className="chatgpt-plan-card" style={{ 
+                                <div key={plan.id} className="chatgpt-plan-card-isolated" style={{ 
                                     background: '#131314', 
                                     borderRadius: '24px', 
                                     padding: '40px 32px', 
@@ -124,7 +147,7 @@ export default function ChatGPTProductPage() {
                                         <span style={{ fontSize: '1rem', color: '#9ca3af' }}>({plan.durationDays} Days)</span>
                                     </div>
                                     
-                                    <div className="chatgpt-plan-price" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>
+                                    <div className="chatgpt-plan-price-isolated" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>
                                         {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}
                                     </div>
                                     
