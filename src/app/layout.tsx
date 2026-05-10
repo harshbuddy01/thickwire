@@ -34,7 +34,7 @@ export default function RootLayout({
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
-                <link rel="preconnect" href="https://bucket-production-6fef.up.railway.app" />
+                <link rel="preconnect" href="https://assets.streamkart.store" />
             </head>
             <body className={poppins.className}>
                 <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />

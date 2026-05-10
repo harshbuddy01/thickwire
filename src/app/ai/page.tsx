@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import ProgressiveImage from '@/components/ProgressiveImage';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 
 const AI_SERVICES = [
     { id: 'chatgpt', name: 'ChatGPT Plus', desc: 'Smarter conversations, infinite possibilities.', price: '₹299', tag: 'Popular', logo: `${MINIO}/logos/chatgpt.png` },

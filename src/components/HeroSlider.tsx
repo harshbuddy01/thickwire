@@ -7,7 +7,7 @@ import ProgressiveImage from '@/components/ProgressiveImage';
 
 import Link from 'next/link';
 
-const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
 const slides = [
     { id: 1, src: `${MINIO_URL}/slider/slider1.png`, alt: 'Slide 1', link: '/' },

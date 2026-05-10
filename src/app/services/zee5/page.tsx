@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { getServiceBySlug } from '@/lib/api';
 import type { Service, Plan } from '@/lib/types';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 const LOGO_URL = `${MINIO}/logos/zee5.jpg`;
 const HERO_BG = `${MINIO}/slider/ChatGPT%20Image%20May%201%2C%202026%2C%2003_22_47%20AM.png`;
 

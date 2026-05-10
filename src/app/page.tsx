@@ -4,7 +4,7 @@ import HeroSlider from '@/components/HeroSlider';
 import ProgressiveImage from '@/components/ProgressiveImage';
 import { ChevronRight, ShieldCheck, Tag, Zap, Headphones } from 'lucide-react';
 
-const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
 export default function HomePage() {
     return (

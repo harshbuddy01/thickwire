@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 
 const SERVICES = [
     { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflix.svg',     bg: '#141414' },

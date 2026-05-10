@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 
 const CRITICAL_IMAGES = [
-    'https://bucket-production-6fef.up.railway.app/streamkart-assets/netflix_3d.png',
-    'https://bucket-production-6fef.up.railway.app/streamkart-assets/chatgpt_3d.png',
-    'https://bucket-production-6fef.up.railway.app/streamkart-assets/jiohotstar_3d.png',
-    'https://bucket-production-6fef.up.railway.app/streamkart-assets/sonyliv_3d.png',
-    'https://bucket-production-6fef.up.railway.app/streamkart-assets/slider/slider1.png',
+    'https://assets.streamkart.store/streamkart-assets/netflix_3d.png',
+    'https://assets.streamkart.store/streamkart-assets/chatgpt_3d.png',
+    'https://assets.streamkart.store/streamkart-assets/jiohotstar_3d.png',
+    'https://assets.streamkart.store/streamkart-assets/sonyliv_3d.png',
+    'https://assets.streamkart.store/streamkart-assets/slider/slider1.png',
 ];
 
 export default function PageLoader() {

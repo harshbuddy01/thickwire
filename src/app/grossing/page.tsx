@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 const BANNER_IMG = `${MINIO}/slider/WhatsApp%20Image%202026-05-06%20at%2008.50.27.jpeg`;
 
 const GROSSING_SERVICES = [

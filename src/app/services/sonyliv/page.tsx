@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { getServiceBySlug } from '@/lib/api';
 import type { Service, Plan } from '@/lib/types';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 const LOGO_URL = `${MINIO}/logos/sonyliv.jpg`;
 const HERO_BG = `${MINIO}/slider/sonyliv-hero-bg.png`;
 

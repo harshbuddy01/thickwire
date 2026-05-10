@@ -18,7 +18,7 @@ export default function Footer() {
   if (pathname === '/checkout') return null;
 
   const accentColor = '#b87a1d';
-  const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+  const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 
   const toggleCol = (col: string) => {
     setOpenCol(prev => prev === col ? null : col);

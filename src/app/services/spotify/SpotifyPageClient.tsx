@@ -7,7 +7,7 @@ import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
 import styles from './spotify.module.css';
 
-const MINIO_URL = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
 export default function SpotifyPageClient({ service }: { service: Service }) {
     const [region, setRegion] = useState<'india' | 'global'>('india');

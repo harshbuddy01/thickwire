@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { getServiceBySlug } from '@/lib/api';
 import type { Service, Plan } from '@/lib/types';
 
-const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
+const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 const HERO_BANNER = `${MINIO}/slider/file_00000000a6587208abda7443e39b8c5d.png`;
 
 export default function ChatGPTProductPage() {
