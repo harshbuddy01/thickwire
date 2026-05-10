@@ -102,37 +102,9 @@ function CheckoutContent() {
                 const p = s.plans.find((pl) => pl.id === planId);
                 setPlan(p || null);
             })
-            .catch(() => {
-                // Fallback for services not yet added to the production DB
-                if (serviceSlug === 'spotify') {
-                    const mockService = {
-                        id: 'mock-spotify', name: 'Spotify Premium', slug: 'spotify', logoUrl: null, description: '', displayOrder: 1,
-                        plans: [
-                            { id: 'plan-1', name: '3 Months Plan', slug: '3-months', description: null, price: '149', originalPrice: null, durationDays: 90, displayOrder: 1, inStock: true, stockCount: 100 },
-                            { id: 'plan-2', name: '12 Months Plan', slug: '12-months', description: null, price: '26', originalPrice: null, durationDays: 365, displayOrder: 2, inStock: true, stockCount: 100 }
-                        ]
-                    } as Service;
-                    setService(mockService);
-                    setPlan(mockService.plans.find(p => p.id === planId) || null);
-                } else if (serviceSlug === 'sonyliv') {
-                    const mockService = {
-                        id: 'mock-sonyliv', name: 'SonyLIV', slug: 'sonyliv', logoUrl: null, description: '', displayOrder: 2,
-                        plans: [
-                            { id: 'plan-sl-1', name: '1 Year Plan', slug: '1-year', description: null, price: '399', originalPrice: null, durationDays: 365, displayOrder: 1, inStock: true, stockCount: 100 }
-                        ]
-                    } as Service;
-                    setService(mockService);
-                    setPlan(mockService.plans.find(p => p.id === planId) || null);
-                } else {
-                    const mockService = {
-                        id: `mock-${serviceSlug}`, name: serviceSlug.toUpperCase(), slug: serviceSlug, logoUrl: null, description: '', displayOrder: 99,
-                        plans: [
-                            { id: planId, name: 'Premium Plan', slug: 'premium', description: null, price: '299', originalPrice: null, durationDays: 30, displayOrder: 1, inStock: true, stockCount: 100 }
-                        ]
-                    } as Service;
-                    setService(mockService);
-                    setPlan(mockService.plans[0] || null);
-                }
+            .catch((err) => {
+                console.error('Failed to load service:', err);
+                setError('Unable to load plan details. Please go back and try again.');
             })
             .finally(() => setLoading(false));
     }, [serviceSlug, planId]);
@@ -185,10 +157,10 @@ function CheckoutContent() {
 
     // ─── Service Type Detection ────────────────────────
     const slug = service?.slug || '';
-    const price = plan ? parseFloat(plan.price) : 0;
-    const isSpotifyGlobal = slug === 'spotify' && price <= 100;
-    const isYouTubeIndia = slug === 'youtube' && price > 100;
-    const isYouTubeGlobal = slug === 'youtube' && price <= 100;
+    const planCurrency = plan?.currency || 'INR';
+    const isSpotifyGlobal = slug === 'spotify' && planCurrency === 'USD';
+    const isYouTubeIndia = slug === 'youtube' && planCurrency === 'INR';
+    const isYouTubeGlobal = slug === 'youtube' && planCurrency === 'USD';
     const needsPhone = slug === 'sonyliv' || slug === 'zee5';
     const isManualService = isSpotifyGlobal || isYouTubeIndia || isYouTubeGlobal || needsPhone;
 

@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { ChevronRight, ChevronDown, ShieldCheck, Download, Tv, MonitorPlay, CheckCircle2, Truck, Headphones, Lock, CreditCard, HelpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
+import { getServiceBySlug } from '@/lib/api';
+import type { Service, Plan } from '@/lib/types';
 
 const MINIO = 'https://bucket-production-6fef.up.railway.app/streamkart-assets';
 const LOGO_URL = `${MINIO}/logos/sonyliv.jpg`;
@@ -10,11 +14,30 @@ const HERO_BG = `${MINIO}/slider/sonyliv-hero-bg.png`;
 
 export default function SonyLivProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
+    const [service, setService] = useState<Service | null>(null);
+    const { user } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        getServiceBySlug('sonyliv').then(setService).catch(console.error);
+    }, []);
+
+    const handleBuy = (plan: Plan | undefined) => {
+        if (!plan) return;
+        const dest = `/checkout?planId=${plan.id}&service=sonyliv`;
+        if (!user) {
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+        } else {
+            router.push(dest);
+        }
+    };
 
     const toggleFaq = (index: number) => {
         if (faqOpen === index) setFaqOpen(null);
         else setFaqOpen(index);
     };
+
+    const currentPlan = service?.plans?.[0];
 
     return (
         <div style={{ background: '#f8f9fb', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
@@ -186,16 +209,21 @@ export default function SonyLivProductPage() {
                     {/* Right Col - Price & CTA */}
                     <div style={{ padding: '40px', flex: 0.8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '3rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>₹399</span>
+                            <span style={{ fontSize: '3rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>
+                                {!currentPlan ? '...' : `${currentPlan.currency === 'USD' ? '$' : '₹'}${parseFloat(currentPlan.price).toLocaleString()}`}
+                            </span>
                         </div>
-                        <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500, marginBottom: '24px' }}>for 1 Year</div>
+                        <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500, marginBottom: '24px' }}>
+                            for {!currentPlan ? '...' : `${currentPlan.durationDays} Days`}
+                        </div>
 
                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f3e8ff', color: '#6b21a8', padding: '6px 12px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, marginBottom: '32px' }}>
                             <CheckCircle2 size={14} /> One-time payment
                         </div>
 
-                        <Link href="/checkout?planId=plan-sl-1&service=sonyliv" style={{ width: '100%', textDecoration: 'none' }}>
-                            <button style={{
+                        <button 
+                            onClick={() => handleBuy(currentPlan)}
+                            style={{
                                 width: '100%',
                                 background: '#0f172a',
                                 color: '#fff',
@@ -211,10 +239,10 @@ export default function SonyLivProductPage() {
                                 cursor: 'pointer',
                                 marginBottom: '20px',
                                 boxShadow: '0 10px 20px rgba(15,23,42,0.2)'
-                            }}>
-                                <Lock size={20} /> Buy Now Securely
-                            </button>
-                        </Link>
+                            }}
+                        >
+                            <Lock size={20} /> Buy Now Securely
+                        </button>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <ShieldCheck size={24} color="#9ca3af" />
@@ -376,8 +404,9 @@ export default function SonyLivProductPage() {
                         </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                        <Link href="/checkout?planId=plan-sl-1&service=sonyliv" style={{ textDecoration: 'none' }}>
-                            <button style={{
+                        <button 
+                            onClick={() => handleBuy(currentPlan)}
+                            style={{
                                 background: '#fcd34d',
                                 color: '#111827',
                                 border: 'none',
@@ -390,10 +419,10 @@ export default function SonyLivProductPage() {
                                 gap: '12px',
                                 cursor: 'pointer',
                                 boxShadow: '0 10px 20px rgba(252,211,77,0.2)'
-                            }}>
-                                Get SonyLIV 1 Year Now <ChevronRight size={20} />
-                            </button>
-                        </Link>
+                            }}
+                        >
+                            Get SonyLIV Now <ChevronRight size={20} />
+                        </button>
                         <div style={{ color: '#d1d5db', fontSize: '0.85rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span>1 Year Premium Access</span>
                             <div style={{ width: '4px', height: '4px', background: '#d1d5db', borderRadius: '50%' }}></div>
