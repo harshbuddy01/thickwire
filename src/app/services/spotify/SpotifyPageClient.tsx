@@ -21,9 +21,8 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
     // In a real app with currencies, we'd filter by currency.
     // For now, we'll put cheaper plans (< 500) in India, and expensive in Global as a heuristic,
     // or just show all if there's only a few.
-    // Heuristic to split plans: if price > 100, we treat it as INR (India), otherwise USD (Global)
-    const indianPlans = service.plans.filter(p => parseFloat(p.price) > 100);
-    const globalPlans = service.plans.filter(p => parseFloat(p.price) <= 100);
+    const indianPlans = service.plans.filter(p => p.currency === 'INR' || !p.currency);
+    const globalPlans = service.plans.filter(p => p.currency === 'USD');
 
     const displayPlans = region === 'india' ? indianPlans : globalPlans;
 
@@ -129,7 +128,7 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                                             <div className={styles['spotify-plan-badge']}>Individual</div>
                                         </div>
                                         <div className={styles['spotify-plan-price']}>
-                                            <h4>${parseFloat(plan.price).toLocaleString()}</h4>
+                                            <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
                                             <p>for {plan.durationDays} Days</p>
                                         </div>
                                     </div>
