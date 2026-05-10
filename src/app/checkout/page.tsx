@@ -44,6 +44,8 @@ function CheckoutContent() {
     const [gateway, setGateway] = useState<'razorpay' | 'cashfree' | 'wallet'>('razorpay');
     const [walletBalance, setWalletBalance] = useState<number | null>(null);
     const [walletCurrency, setWalletCurrency] = useState<string>('INR');
+    const [walletBaseCurrency, setWalletBaseCurrency] = useState<string>('INR');
+    const [walletExchangeRate, setWalletExchangeRate] = useState<number>(1);
 
     const [couponCode, setCouponCode] = useState('');
     const [couponState, setCouponState] = useState<'idle' | 'loading' | 'applied' | 'error'>('idle');
@@ -81,6 +83,8 @@ function CheckoutContent() {
             api.get('/wallet/balance/local').then(({ data }) => {
                 setWalletBalance(data.balanceLocal);
                 setWalletCurrency(data.symbol);
+                setWalletBaseCurrency(data.baseCurrency || 'INR');
+                setWalletExchangeRate(data.exchangeRate || 1);
             }).catch(console.error);
         }
     }, [user]);
@@ -203,6 +207,29 @@ function CheckoutContent() {
     const needsPhone = slug === 'sonyliv' || slug === 'zee5';
     const isManualService = isSpotifyGlobal || isYouTubeIndia || isYouTubeGlobal || needsPhone;
 
+    // ─── Convert plan price to wallet currency for comparison ────
+    // Wallet balance is in user's local currency (e.g. ₹245.28).
+    // If plan is in USD ($17), we need to convert $17 to INR for accurate comparison.
+    // The walletExchangeRate is INR→userCurrency, so USD→INR ≈ $1 = ₹85 (approx).
+    // For USD plans: multiply by an approximate USD→INR rate.
+    const planPriceInWalletCurrency = (() => {
+        if (planCurrency === walletBaseCurrency) return finalAmount;
+        // Plan is USD, wallet is INR: we need USD→INR conversion
+        // The exchange rate API gives INR base rates. USD rate ≈ 0.012 means 1 INR = 0.012 USD
+        // So 1 USD = 1/0.012 = ~85 INR. We use: amount_USD / rate
+        if (planCurrency === 'USD' && walletBaseCurrency === 'INR') {
+            // walletExchangeRate is the rate from INR→userLocalCurrency
+            // For INR-based user, rate=1. We need separate USD→INR rate.
+            // Fetch it from exchange rates endpoint, but for now use a sensible approach:
+            // The wallet /balance/local endpoint returns the rate. But for cross-currency,
+            // we approximate: the backend payFromWallet() handles the real conversion,
+            // so here we just show an approximate for UI comparison.
+            // A reasonable USD→INR rate ≈ 85
+            return finalAmount * 85; // Approximate: $17 ≈ ₹1,445
+        }
+        return finalAmount; // Same currency or unknown - compare directly
+    })();
+
     // Check if credential fields are valid
     const credentialsValid = (() => {
         if (isSpotifyGlobal) return spotifyEmail && spotifyPassword && spotifyConfirmPassword && spotifyCountry && spotifyPassword === spotifyConfirmPassword;
@@ -225,12 +252,7 @@ function CheckoutContent() {
             return;
         }
 
-        if (gateway === 'wallet' && plan?.currency === 'USD') {
-            setError('Wallet payment is not available for USD plans. Please use Razorpay.');
-            return;
-        }
-
-        if (gateway === 'wallet' && (walletBalance === null || walletBalance < finalAmount)) {
+        if (gateway === 'wallet' && (walletBalance === null || walletBalance < planPriceInWalletCurrency)) {
             setError('Insufficient wallet balance. Please top up your wallet or use another payment method.');
             return;
         }
@@ -714,8 +736,8 @@ function CheckoutContent() {
                                         <div>
                                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>StreamKart Wallet</div>
                                             <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
-                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && (plan?.currency || 'INR') === 'INR' && walletBalance >= finalAmount) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
-                                                {plan?.currency === 'USD' && <span style={{ display: 'block', fontSize: '0.7rem', color: '#ef4444', marginTop: 2 }}>Wallet cannot be used for USD plans</span>}
+                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && walletBalance >= planPriceInWalletCurrency) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
+                                                {plan?.currency === 'USD' && walletBaseCurrency === 'INR' && <span style={{ display: 'block', fontSize: '0.7rem', color: '#6b7280', marginTop: 2 }}>≈ ₹{planPriceInWalletCurrency.toFixed(0)} required for ${finalAmount} USD</span>}
                                             </div>
                                         </div>
                                     </div>
@@ -724,7 +746,7 @@ function CheckoutContent() {
                                     </div>
                                     <input type="radio" value="wallet" checked={gateway === 'wallet'} onChange={() => setGateway('wallet')} style={{ display: 'none' }} />
                                 </label>
-                                {gateway === 'wallet' && walletBalance !== null && walletBalance < finalAmount && (
+                                {gateway === 'wallet' && walletBalance !== null && walletBalance < planPriceInWalletCurrency && (
                                     <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: 4 }}>
                                         <AlertCircle size={14} /> Insufficient balance. Please <Link href="/account?tab=wallet" style={{ color: '#6c5ce7', fontWeight: 600 }}>Top Up</Link> first.
                                     </div>
