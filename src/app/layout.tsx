@@ -33,7 +33,7 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.png" type="image/png" />
+                <link rel="icon" href="/favicon.ico?v=2" />
                 <link rel="preconnect" href="https://assets.streamkart.store" />
             </head>
             <body className={poppins.className}>
