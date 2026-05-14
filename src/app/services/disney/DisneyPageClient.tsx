@@ -279,7 +279,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Headset size={20} color="#6366f1" />
-                                    <div><div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#111827' }}>24/7 Support</div><div style={{ fontSize: '0.65rem', color: '#64748b' }}>We're Here</div></div>
+                                    <div><div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#111827' }}>24/7 Support</div><div style={{ fontSize: '0.65rem', color: '#64748b' }}>We&apos;re Here</div></div>
                                 </div>
                             </div>
 
