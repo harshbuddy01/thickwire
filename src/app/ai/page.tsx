@@ -212,11 +212,11 @@ export default function AICategoryPage() {
                 }
                 .streaming-services-grid {
                     display: grid;
-                    grid-template-columns: repeat(6, 1fr);
+                    grid-template-columns: repeat(4, 1fr);
                 }
-                @media (max-width: 1400px) {
+                @media (max-width: 1200px) {
                     .streaming-services-grid {
-                        grid-template-columns: repeat(4, 1fr);
+                        grid-template-columns: repeat(3, 1fr);
                     }
                 }
                 @media (max-width: 1024px) {
