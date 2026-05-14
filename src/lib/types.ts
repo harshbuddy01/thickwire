@@ -32,7 +32,7 @@ export interface CreateOrderRequest {
     customerPhone: string;
     planId: string;
     couponCode?: string;
-    gateway?: 'razorpay' | 'cashfree' | 'wallet';
+    gateway?: 'razorpay' | 'cashfree' | 'wallet' | 'upi-direct';
     whatsappOptedIn?: boolean;
     serviceCredentials?: Record<string, any>;
 }
