@@ -23,7 +23,7 @@ export default function Zee5ProductPage() {
     }, []);
 
     const handleBuy = (plan: Plan | undefined) => {
-        if (!plan || !plan.inStock) return;
+        if (!plan) return;
         const dest = `/checkout?planId=${plan.id}&service=zee5`;
         if (!user) {
             router.push(`/login?redirect=${encodeURIComponent(dest)}`);
@@ -175,7 +175,6 @@ export default function Zee5ProductPage() {
 
                         <button 
                             onClick={() => handleBuy(currentPlan)}
-                            disabled={!currentPlan?.inStock}
                             style={{
                                 width: '100%',
                                 background: '#0a0a0f',
@@ -189,13 +188,13 @@ export default function Zee5ProductPage() {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '12px',
-                                cursor: currentPlan?.inStock ? 'pointer' : 'not-allowed',
+                                cursor: 'pointer',
                                 marginBottom: '20px',
                                 boxShadow: '0 10px 20px rgba(10,10,15,0.2)',
-                                opacity: currentPlan?.inStock ? 1 : 0.5
+                                opacity: 1
                             }}
                         >
-                            <Lock size={20} /> {currentPlan?.inStock ? 'Buy Now Securely' : 'Out of Stock'}
+                            <Lock size={20} /> Buy Now Securely
                         </button>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -362,7 +361,6 @@ export default function Zee5ProductPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '16px' }}>
                         <button 
                             onClick={() => handleBuy(currentPlan)}
-                            disabled={!currentPlan?.inStock}
                             style={{
                                 background: '#facc15',
                                 color: '#111827',
@@ -374,12 +372,12 @@ export default function Zee5ProductPage() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px',
-                                cursor: currentPlan?.inStock ? 'pointer' : 'not-allowed',
+                                cursor: 'pointer',
                                 boxShadow: '0 10px 20px rgba(250,204,21,0.2)',
-                                opacity: currentPlan?.inStock ? 1 : 0.5
+                                opacity: 1
                             }}
                         >
-                            {currentPlan?.inStock ? 'Get ZEE5 Now' : 'Out of Stock'} <ChevronRight size={18} />
+                            Get ZEE5 Now <ChevronRight size={18} />
                         </button>
                         <div style={{ color: '#d1d5db', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span>1 Year Access</span>

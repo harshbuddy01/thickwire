@@ -259,7 +259,7 @@ export default function AccountPage() {
                                                 <div style={{ fontSize: '0.75rem', color: '#999' }}>Order #{order.id.substring(0, 8)} • {new Date(order.createdAt).toLocaleDateString()}</div>
                                             </div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                                <span style={{ ...s.badge, background: order.status === 'FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.status === 'FULFILLED' ? '#16a34a' : '#2563eb' }}>{order.status}</span>
+                                                <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
                                                 <ChevronRight size={16} style={{ color: '#ccc' }} />
                                             </div>
                                         </Link>
@@ -387,7 +387,7 @@ export default function AccountPage() {
                                             <div style={{ fontSize: '0.85rem', color: '#888' }}>{order.plan?.name} • ₹{order.amount}</div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <span style={{ ...s.badge, background: order.status === 'FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.status === 'FULFILLED' ? '#16a34a' : '#2563eb', marginBottom: 6, display: 'inline-block' }}>{order.status}</span>
+                                            <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb', marginBottom: 6, display: 'inline-block' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
                                             <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{new Date(order.createdAt).toLocaleString()}</div>
                                         </div>
                                     </div>

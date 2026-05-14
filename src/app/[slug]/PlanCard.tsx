@@ -14,20 +14,10 @@ export default function PlanCard({ plan, serviceSlug, serviceName }: PlanCardPro
     const { user } = useAuth();
     const router = useRouter();
 
-    const stockStatus = !plan.inStock
-        ? 'out-of-stock'
-        : plan.stockCount <= 5
-            ? 'low-stock'
-            : 'in-stock';
-
-    const stockLabel = !plan.inStock
-        ? 'Out of Stock'
-        : plan.stockCount <= 5
-            ? `Only ${plan.stockCount} left`
-            : 'In Stock';
+    const stockStatus = plan.stockCount <= 5 ? 'low-stock' : 'in-stock';
+    const stockLabel = plan.stockCount <= 5 ? `Only ${plan.stockCount} left` : 'In Stock';
 
     const handleBuy = () => {
-        if (!plan.inStock) return;
         const dest = `/checkout?planId=${plan.id}&service=${serviceSlug}`;
         if (!user) {
             router.push(`/login?redirect=${encodeURIComponent(dest)}`);
@@ -55,11 +45,9 @@ export default function PlanCard({ plan, serviceSlug, serviceName }: PlanCardPro
             <div className="plan-card-duration">{plan.durationDays} days validity</div>
             <button
                 onClick={handleBuy}
-                disabled={!plan.inStock}
-                className={`btn btn-primary btn-full ${!plan.inStock ? 'btn-disabled' : ''}`}
-                style={!plan.inStock ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+                className="btn btn-primary btn-full"
             >
-                {plan.inStock ? 'Buy Now →' : 'Out of Stock'}
+                Buy Now →
             </button>
         </div>
     );

@@ -67,7 +67,6 @@ export default function HboPageClient({ service }: { service: Service }) {
                                 </ul>
 
                                 <div style={{ marginTop: 'auto' }}>
-                                    {plan.inStock ? (
                                         <Link 
                                             href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                             style={{ textDecoration: 'none' }}
@@ -76,11 +75,6 @@ export default function HboPageClient({ service }: { service: Service }) {
                                                 <Lock size={18} /> Buy Now Securely
                                             </button>
                                         </Link>
-                                    ) : (
-                                        <button className={`hbo-buy-btn ${styles['hbo-buy-btn'] || ''}`.trim()} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                            Out of Stock
-                                        </button>
-                                    )}
                                     <div className={`hbo-secure-text ${styles['hbo-secure-text'] || ''}`.trim()}>
                                         <ShieldCheck size={14} /> Secure & Safe Payment
                                     </div>

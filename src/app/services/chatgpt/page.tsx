@@ -23,7 +23,7 @@ export default function ChatGPTProductPage() {
     }, []);
 
     const handleBuy = (plan: Plan) => {
-        if (!plan.inStock) return;
+        if (!plan) return;
         const dest = `/checkout?planId=${plan.id}&service=chatgpt`;
         if (!user) {
             router.push(`/login?redirect=${encodeURIComponent(dest)}`);
@@ -174,7 +174,6 @@ export default function ChatGPTProductPage() {
                                     
                                     <button 
                                         onClick={() => handleBuy(plan)}
-                                        disabled={!plan.inStock}
                                         style={{
                                             width: '100%',
                                             background: isPopular ? 'linear-gradient(to right, #F3E5AB, #D4AF37)' : 'transparent',
@@ -184,28 +183,26 @@ export default function ChatGPTProductPage() {
                                             borderRadius: '12px',
                                             fontSize: '1.05rem',
                                             fontWeight: 800,
-                                            cursor: plan.inStock ? 'pointer' : 'not-allowed',
+                                            cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             gap: '10px',
                                             transition: 'all 0.2s',
                                             boxShadow: isPopular ? '0 8px 24px rgba(253, 224, 71, 0.3)' : 'none',
-                                            opacity: plan.inStock ? 1 : 0.5,
+                                            opacity: 1,
                                             marginTop: 'auto'
                                         }}
                                         onMouseEnter={(e) => { 
-                                            if (!plan.inStock) return;
                                             if (isPopular) e.currentTarget.style.transform = 'translateY(-2px)';
                                             else e.currentTarget.style.background = 'rgba(253, 224, 71, 0.1)';
                                         }}
                                         onMouseLeave={(e) => { 
-                                            if (!plan.inStock) return;
                                             if (isPopular) e.currentTarget.style.transform = 'translateY(0)';
                                             else e.currentTarget.style.background = 'transparent';
                                         }}
                                     >
-                                        <ShoppingCart size={18} /> {plan.inStock ? 'Buy Now' : 'Out of Stock'}
+                                        <ShoppingCart size={18} /> Buy Now
                                     </button>
                                 </div>
                             );

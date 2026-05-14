@@ -82,7 +82,6 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                         </ul>
 
                                         <div style={{ marginTop: 'auto' }}>
-                                            {plan.inStock ? (
                                                 <Link 
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                     style={{ textDecoration: 'none' }}
@@ -91,11 +90,6 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                         <Lock size={18} /> Buy Now Securely
                                                     </button>
                                                 </Link>
-                                            ) : (
-                                                <button className={styles['youtube-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                                    Out of Stock
-                                                </button>
-                                            )}
                                             <div className={styles['youtube-secure-text']}>
                                                 <ShieldCheck size={14} /> Secure & Safe Payment
                                             </div>
@@ -143,7 +137,6 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                         </div>
 
                                         <div style={{ marginTop: 'auto' }}>
-                                            {plan.inStock ? (
                                                 <Link 
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                     style={{ textDecoration: 'none' }}
@@ -152,11 +145,6 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                                                         <Lock size={18} /> Buy Now Securely
                                                     </button>
                                                 </Link>
-                                            ) : (
-                                                <button className={styles['youtube-buy-btn']} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                                    Out of Stock
-                                                </button>
-                                            )}
                                             <div className={styles['youtube-secure-text']}>
                                                 <ShieldCheck size={14} /> Secure & Safe Payment
                                             </div>

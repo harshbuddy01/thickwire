@@ -72,7 +72,6 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                                     <li><Check size={16} className={colors.text} /> {plan.name.toLowerCase().includes('ads free') || plan.name.toLowerCase().includes('ad free') ? 'Ads Free Experience' : 'Ads Supported'}</li>
                                                     <li><Check size={16} className={colors.text} /> Download & Watch</li>
                                                 </ul>
-                                                {plan.inStock ? (
                                                     <Link
                                                         href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                         className={`plan-btn ${colors.btn}`}
@@ -80,11 +79,6 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                                     >
                                                         <ShoppingCart size={18} /> Buy Now →
                                                     </Link>
-                                                ) : (
-                                                    <button className={`plan-btn ${colors.btn}`} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                                        Out of Stock
-                                                    </button>
-                                                )}
                                             </div>
                                         </div>
                                     ) : (
@@ -101,7 +95,6 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                                 <li><Check size={16} className={colors.text} /> {plan.name.toLowerCase().includes('ads free') || plan.name.toLowerCase().includes('ad free') ? 'Ads Free Experience' : 'Ads Supported'}</li>
                                                 <li><Check size={16} className={colors.text} /> Download & Watch</li>
                                             </ul>
-                                            {plan.inStock ? (
                                                 <Link
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                     className={`plan-btn ${colors.btn}`}
@@ -109,11 +102,6 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                                 >
                                                     <ShoppingCart size={18} /> Buy Now →
                                                 </Link>
-                                            ) : (
-                                                <button className={`plan-btn ${colors.btn}`} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                                    Out of Stock
-                                                </button>
-                                            )}
                                         </div>
                                     )}
                                 </div>

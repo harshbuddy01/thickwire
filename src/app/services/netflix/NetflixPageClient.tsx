@@ -93,7 +93,6 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                                             <li><Check size={16} className={colors.text} /> Ad-free Experience</li>
                                             <li><Check size={16} className={colors.text} /> Works on TV, Mobile, Laptop</li>
                                         </ul>
-                                        {plan.inStock ? (
                                             <Link
                                                 href={`/checkout?planId=${plan.id}&service=${service.slug}`}
                                                 className={`${styles['plan-btn']} ${colors.btn}`}
@@ -101,11 +100,6 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                                             >
                                                 <ShoppingCart size={18} /> Buy Now →
                                             </Link>
-                                        ) : (
-                                            <button className={`${styles['plan-btn']} ${colors.btn}`} disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-                                                Out of Stock
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
                             );
