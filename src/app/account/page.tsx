@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import api from '@/lib/api';
 import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet } from 'lucide-react';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import WalletTopupSection from '@/components/WalletTopupSection';
+import { playNotificationSound } from '@/lib/notificationSound';
 
 const s: { [k: string]: React.CSSProperties } = {
     page: { minHeight: '80vh', padding: '40px 20px 60px' },
@@ -85,6 +86,15 @@ export default function AccountPage() {
     const [isSubmittingReply, setIsSubmittingReply] = useState(false);
     const [ratingSubmitting, setRatingSubmitting] = useState(false);
 
+    // Refs for notification sounds
+    const prevTicketMessageCountsRef = useRef<Record<string, number>>({});
+    const isFirstTicketLoadRef = useRef(true);
+    const selectedSupportTicketRef = useRef<any>(null);
+
+    useEffect(() => {
+        selectedSupportTicketRef.current = selectedSupportTicket;
+    }, [selectedSupportTicket]);
+
     useEffect(() => {
         if (!loading && !user) {
             router.push('/login');
@@ -93,20 +103,68 @@ export default function AccountPage() {
         }
     }, [user, loading, router]);
 
+    // Poll tickets separately for notifications
+    useEffect(() => {
+        if (!user) return;
+        const interval = setInterval(() => fetchTickets(true), 8000);
+        return () => clearInterval(interval);
+    }, [user]);
+
+    const fetchTickets = useCallback(async (silent = false) => {
+        try {
+            const { data } = await api.get('/support/my-tickets');
+            
+            if (!isFirstTicketLoadRef.current) {
+                const prevCounts = prevTicketMessageCountsRef.current;
+                
+                for (const ticket of data) {
+                    const prevCount = prevCounts[ticket.id] || 0;
+                    const currentCount = ticket.messages?.length || 0;
+                    
+                    if (currentCount > prevCount) {
+                        const newMessages = (ticket.messages || []).slice(prevCount);
+                        const hasNewAdminMsg = newMessages.some((m: any) => m.sender === 'ADMIN');
+                        
+                        if (hasNewAdminMsg) {
+                            playNotificationSound();
+                            break; // One sound is enough
+                        }
+                    }
+                }
+            }
+            
+            const counts: Record<string, number> = {};
+            for (const t of data) {
+                counts[t.id] = t.messages?.length || 0;
+            }
+            prevTicketMessageCountsRef.current = counts;
+            isFirstTicketLoadRef.current = false;
+            
+            setTickets(data);
+            
+            if (selectedSupportTicketRef.current) {
+                const updated = data.find((t: any) => t.id === selectedSupportTicketRef.current.id);
+                if (updated) setSelectedSupportTicket(updated);
+            }
+        } catch (error) {
+            console.error('Failed to fetch tickets:', error);
+        }
+    }, []);
+
     const fetchData = async () => {
         try {
-            const [ordersRes, subsRes, ticketsRes, walletRes, walletTxRes] = await Promise.all([
+            const [ordersRes, subsRes, walletRes, walletTxRes] = await Promise.all([
                 api.get('/account/orders'),
                 api.get('/account/subscriptions'),
-                api.get('/support/my-tickets'),
                 api.get('/wallet/balance/local').catch(() => ({ data: null })),
                 api.get('/wallet/transactions').catch(() => ({ data: { items: [] } }))
             ]);
             setOrders(ordersRes.data);
             setSubscriptions(subsRes.data);
-            setTickets(ticketsRes.data);
             if (walletRes.data) setWalletData(walletRes.data);
             if (walletTxRes.data?.items) setWalletTransactions(walletTxRes.data.items);
+            
+            await fetchTickets();
         } catch (err) {
             console.error('Failed to fetch account data:', err);
         } finally {
