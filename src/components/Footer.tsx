@@ -230,6 +230,11 @@ export default function Footer() {
 
       {/* ─── Mobile Footer CSS ─── */}
       <style>{`
+        @media (min-width: 769px) {
+          .footer-col-header { cursor: default !important; }
+          .footer-col-chevron { display: none !important; }
+          .footer-col-links { max-height: none !important; opacity: 1 !important; visibility: visible !important; }
+        }
         @media (max-width: 768px) {
           .footer-usp-bar {
             grid-template-columns: 1fr 1fr !important;
@@ -256,12 +261,22 @@ export default function Footer() {
             justify-content: space-between !important;
             align-items: center !important;
             padding: 14px 0 !important;
+            margin-bottom: 0 !important;
             cursor: pointer !important;
             user-select: none;
           }
           .footer-col-links {
+            max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+          }
+          .footer-col-mobile-wrap.is-open .footer-col-links {
+            max-height: 500px;
+            opacity: 1;
+            visibility: visible;
+            padding-bottom: 20px;
           }
           .footer-features-bar {
             grid-template-columns: 1fr 1fr !important;
@@ -288,8 +303,6 @@ export default function Footer() {
   );
 }
 
-/* ── Sub-components ── */
-
 function FooterCol({ title, children, isOpen, onToggle }: {
   title: string;
   children: React.ReactNode;
@@ -297,11 +310,10 @@ function FooterCol({ title, children, isOpen, onToggle }: {
   onToggle: () => void;
 }) {
   return (
-    <div className="footer-col-mobile-wrap">
-      {/* Desktop: always visible title */}
+    <div className={`footer-col-mobile-wrap ${isOpen ? 'is-open' : ''}`}>
       <h4
         className="footer-col-header"
-        style={{ fontSize: '0.95rem', fontWeight: 800, marginBottom: '20px', position: 'relative', cursor: 'default' }}
+        style={{ fontSize: '0.95rem', fontWeight: 800, marginBottom: '20px', position: 'relative' }}
         onClick={onToggle}
       >
         {title}
@@ -315,28 +327,13 @@ function FooterCol({ title, children, isOpen, onToggle }: {
         >
           <ChevronDown size={16} color="#999" />
         </span>
-        <style>{`
-          @media (min-width: 769px) {
-            .footer-col-header { cursor: default !important; }
-            .footer-col-chevron { display: none !important; }
-          }
-        `}</style>
       </h4>
       <div
         className="footer-col-links"
         style={{
-          maxHeight: isOpen ? '300px' : undefined,
           display: 'flex', flexDirection: 'column', gap: '12px'
         }}
       >
-        <style>{`
-          @media (max-width: 768px) {
-            .footer-col-links {
-              max-height: ${isOpen ? '300px' : '0'} !important;
-              padding-bottom: ${isOpen ? '16px' : '0'} !important;
-            }
-          }
-        `}</style>
         {children}
       </div>
     </div>
