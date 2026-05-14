@@ -2,261 +2,243 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-    ChevronRight, 
-    ShieldCheck, 
-    Zap, 
-    Tag, 
-    Headphones, 
-    ArrowRight
-} from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
 
 const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 const BANNER_IMG = `${MINIO}/slider/WhatsApp%20Image%202026-05-06%20at%2008.50.27.jpeg`;
 
 const GROSSING_SERVICES = [
-    { id: 'capcut', name: 'CapCut Pro', desc: 'Video Editing Premium', price: '₹149', logo: `${MINIO}/logos/capcut.png` },
-    { id: 'canva', name: 'Canva Pro', desc: 'Graphic Design Premium', price: '₹99', logo: `${MINIO}/logos/canva.png` },
-    { id: 'duolingo', name: 'Duolingo Super', desc: 'Language Learning Premium', price: '₹149', logo: `${MINIO}/logos/duolingo.png` },
-    { id: 'edx', name: 'edX Subscription', desc: 'Learning Platform Premium', price: '₹299', logo: `${MINIO}/logos/edx.png` },
-    { id: 'chatgpt', name: 'ChatGPT Plus', desc: 'AI Assistant Premium', price: '₹299', logo: `${MINIO}/logos/chatgpt.png` },
-    { id: 'perplexity', name: 'Perplexity AI', desc: 'AI Search Premium', price: '₹199', logo: `${MINIO}/logos/perplexity.png` },
-    { id: 'tradingview', name: 'TradingView', desc: 'Pro Trading Tools', price: '₹349', logo: `${MINIO}/logos/tradingview.png` },
-    { id: 'adobe', name: 'Adobe Suite', desc: 'Creative Professional Suite', price: '₹399', logo: `${MINIO}/logos/adobe.png` },
-    { id: 'linkedin', name: 'LinkedIn Prem.', desc: 'Career & Business Advanced', price: '₹249', logo: `${MINIO}/logos/linkedin.png` },
-    { id: 'windows', name: 'Windows Pro', desc: 'Official OS Activation', price: '₹499', logo: `${MINIO}/logos/windows.png` },
-    { id: 'office', name: 'Office 365', desc: 'Productivity Suit License', price: '₹399', logo: `${MINIO}/logos/office.png` },
-    { id: 'gcp', name: 'Google Cloud', desc: 'Enterprise Cloud & AI Tools', price: '₹599', logo: `${MINIO}/logos/gcp.png` },
+    { id: 'capcut', name: 'CapCut Pro', slug: 'capcut', plan: 'Video Editing Premium', logo: 'logos/capcut.png', bg: '#000000' },
+    { id: 'canva', name: 'Canva Pro', slug: 'canva', plan: 'Graphic Design Premium', logo: 'logos/canva.png', bg: '#003B46' },
+    { id: 'duolingo', name: 'Duolingo Super', slug: 'duolingo', plan: 'Language Learning Premium', logo: 'logos/duolingo.png', bg: '#1E3A08' },
+    { id: 'edx', name: 'edX Subscription', slug: 'edx', plan: 'Learning Platform Premium', logo: 'logos/edx.png', bg: '#00262B' },
+    { id: 'chatgpt', name: 'ChatGPT Plus', slug: 'chatgpt', plan: 'AI Assistant Premium', logo: 'logos/chatgpt.png', bg: '#0B3026' },
+    { id: 'perplexity', name: 'Perplexity AI', slug: 'perplexity', plan: 'AI Search Premium', logo: 'logos/perplexity.png', bg: '#1A1A1A' },
+    { id: 'tradingview', name: 'TradingView', slug: 'tradingview', plan: 'Pro Trading Tools', logo: 'logos/tradingview.png', bg: '#131722' },
+    { id: 'adobe', name: 'Adobe Suite', slug: 'adobe', plan: 'Creative Professional Suite', logo: 'logos/adobe.png', bg: '#330000' },
+    { id: 'linkedin', name: 'LinkedIn Prem.', slug: 'linkedin', plan: 'Career & Business Advanced', logo: 'logos/linkedin.png', bg: '#03244D' },
+    { id: 'windows', name: 'Windows Pro', slug: 'windows', plan: 'Official OS Activation', logo: 'logos/windows.png', bg: '#00204A' },
+    { id: 'office', name: 'Office 365', slug: 'office', plan: 'Productivity Suite License', logo: 'logos/office.png', bg: '#3B1000' },
+    { id: 'gcp', name: 'Google Cloud', slug: 'gcp', plan: 'Enterprise Cloud & AI Tools', logo: 'logos/gcp.png', bg: '#0A234A' },
 ];
 
 export default function GrossingCategoryPage() {
-    const sliderRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (sliderRef.current) {
-                const slider = sliderRef.current;
-                const cardWidth = 374; // card width (350) + gap (24)
-                const maxScroll = slider.scrollWidth - slider.clientWidth;
-                
-                if (slider.scrollLeft >= maxScroll - 10) {
-                    slider.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    slider.scrollBy({ left: cardWidth, behavior: 'smooth' });
-                }
-            }
-        }, 5000); // Every 5 seconds
-
-        return () => clearInterval(interval);
-    }, []);
-
     return (
-        <div style={{ background: '#ffffff', minHeight: '100vh', paddingBottom: '80px', fontFamily: '"Times New Roman", Times, serif' }}>
-            
-            {/* Mobile Responsive Styles */}
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes floatAnimation {
-                    0% { transform: translateY(0); }
-                    50% { transform: translateY(-10px); }
-                    100% { transform: translateY(0); }
-                }
-                .slider-container {
-                    position: relative;
-                    width: 100%;
-                    overflow: hidden;
-                    padding: 20px 0 60px 0;
-                }
-                .service-slider {
-                    display: flex;
-                    gap: 24px;
-                    overflow-x: auto;
-                    scroll-behavior: smooth;
-                    padding-bottom: 20px;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                }
-                .service-slider::-webkit-scrollbar {
-                    display: none;
-                }
-                .service-card {
-                    flex: 0 0 350px;
-                    background: #f3f4f6;
-                    border-radius: 24px;
-                    padding: 24px;
-                    display: flex;
-                    flex-direction: column;
-                    transition: all 0.5s ease;
-                    border: none;
-                    animation: floatAnimation 6s ease-in-out infinite;
-                }
-                .service-card:nth-child(even) {
-                    animation-delay: 1s;
-                }
-                .service-card:hover {
-                    animation-play-state: paused;
-                    transform: translateY(-15px) !important;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
-                }
-                .service-logo-container {
-                    width: 100px;
-                    height: 100px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-bottom: 24px;
-                }
-                .usp-bar {
-                    background: #1a1c23;
-                    border-radius: 24px;
-                    padding: 32px 60px;
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 40px;
-                    color: #fff;
-                }
+        <div style={{ background: '#0a0a0f', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
 
-                @media (max-width: 768px) {
-                    .service-slider {
-                        gap: 16px;
-                        padding-left: 20px;
-                        padding-right: 20px;
-                    }
-                    .service-card {
-                        flex: 0 0 280px;
-                        padding: 20px;
-                        border-radius: 20px;
-                    }
-                    .service-logo-container {
-                        width: 80px;
-                        height: 80px;
-                        margin-bottom: 16px;
-                    }
-                    .service-name {
-                        font-size: 1.25rem !important;
-                    }
-                    .usp-bar {
-                        grid-template-columns: 1fr 1fr;
-                        padding: 24px;
-                        gap: 20px;
-                    }
-                }
-            `}} />
-            
-            {/* Breadcrumbs */}
-            <div className="container" style={{ padding: '24px 0', fontSize: '0.9rem', color: '#666' }}>
-                <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
-                <span style={{ margin: '0 12px' }}>›</span>
-                <span style={{ color: '#1a1c23', fontWeight: 'bold' }}>Grossing</span>
+            {/* Breadcrumb */}
+            <div className="container" style={{ paddingTop: '20px', color: '#fff' }}>
+                <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', marginBottom: '24px' }}>
+                    <Link href="/" style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>Home</Link>
+                    <ChevronRight size={14} />
+                    <span style={{ color: '#fff', fontWeight: 500 }}>Grossing</span>
+                </nav>
             </div>
 
-            {/* Banner Section */}
-            <div className="container" style={{ marginBottom: '40px' }}>
-                <div style={{
-                    position: 'relative',
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                    background: '#fff'
+            <div className="container">
+
+                {/* Banner */}
+                <div style={{ 
+                    borderRadius: '24px', 
+                    overflow: 'hidden', 
+                    marginBottom: '32px', 
+                    width: '100%', 
+                    aspectRatio: '1440 / 360', 
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    background: '#1a1c23'
                 }}>
-                    <Image 
-                        src={BANNER_IMG} 
-                        alt="Banner" 
-                        width={1200}
-                        height={350}
-                        style={{ width: '100%', height: 'auto', display: 'block' }} 
+                    <Image
+                        src={BANNER_IMG}
+                        alt="Top Grossing"
+                        width={1440}
+                        height={360}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         priority
                     />
                 </div>
-            </div>
 
-            {/* Header */}
-            <div className="container" style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#1a1c23', margin: '0 0 4px 0' }}>Trending Digital Services</h1>
-                    <p style={{ fontSize: '1rem', color: '#666', margin: 0 }}>Slide to discover our best-selling subscriptions.</p>
-                </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <button 
-                        onClick={() => document.getElementById('service-slider')!.scrollBy({left: -350, behavior: 'smooth'})}
-                        style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#fff', border: '1px solid #ddd', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <ChevronRight size={24} style={{ transform: 'rotate(180deg)' }} />
-                    </button>
-                    <button 
-                        onClick={() => document.getElementById('service-slider')!.scrollBy({left: 350, behavior: 'smooth'})}
-                        style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#1a1c23', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
-            </div>
+                {/* Light Wrapper */}
+                <div className="streaming-white-wrapper" style={{ 
+                    background: '#ffffff', 
+                    borderRadius: '32px', 
+                    padding: '48px', 
+                    border: '1px solid #e9ecef',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.02)'
+                }}>
 
-            {/* Service Slider Section */}
-            <div className="container" style={{ padding: 0, maxWidth: '100%', overflow: 'hidden' }}>
-                <div className="slider-container">
-                    <div id="service-slider" ref={sliderRef} className="service-slider" style={{ paddingLeft: 'calc((100vw - 1200px) / 2)', paddingRight: 'calc((100vw - 1200px) / 2)' }}>
-                        {GROSSING_SERVICES.map((service) => (
-                            <Link href={`/services/${service.id}`} key={service.id} style={{ textDecoration: 'none' }}>
-                                <div className="service-card"
-                                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.05)' }}
-                                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
-                                >
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '20px' }}>
-                                        <div className="service-logo-container">
-                                            <Image 
-                                                src={service.logo} 
-                                                alt={service.name} 
-                                                width={100}
-                                                height={100}
-                                                style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
-                                                onError={(e) => {
-                                                    e.currentTarget.style.display = 'none';
-                                                    e.currentTarget.parentElement!.innerHTML = `<div style="background:#fff;width:100%;height:100%;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#1a1c23;font-weight:bold;font-size:1.5rem;">${service.name.substring(0,1)}</div>`;
-                                                }}
-                                            />
-                                        </div>
-                                        <div style={{ background: '#ecfdf5', color: '#059669', fontSize: '0.75rem', fontWeight: 'bold', padding: '5px 12px', borderRadius: '100px', textTransform: 'uppercase' }}>
-                                            Popular
-                                        </div>
+                    {/* Section heading */}
+                    <div style={{ marginBottom: '40px' }}>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1a1c23', margin: '0 0 8px 0', letterSpacing: '-0.03em' }}>
+                            Trending Digital Services
+                        </h2>
+                        <p style={{ fontSize: '0.95rem', color: '#6c757d', margin: 0, fontWeight: 500 }}>
+                            Discover our best-selling premium subscriptions.
+                        </p>
+                    </div>
+
+                    {/* 6-column Grid */}
+                    <div className="streaming-services-grid" style={{ 
+                        gap: '20px', 
+                        marginBottom: '40px' 
+                    }}>
+                        {GROSSING_SERVICES.map(s => (
+                            <div key={s.id} style={{
+                                background: s.bg,
+                                borderRadius: '24px',
+                                padding: '24px 20px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                cursor: 'pointer',
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+                            }} className="streaming-card-hover">
+
+                                {/* Logo Area */}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                                    <div style={{
+                                        width: '80px',
+                                        height: '80px',
+                                        flexShrink: 0,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        borderRadius: '16px',
+                                        padding: '8px'
+                                    }}>
+                                        <Image
+                                            src={`${MINIO}/${s.logo}`}
+                                            alt={s.name}
+                                            width={80}
+                                            height={80}
+                                            style={{ 
+                                                width: '100%', 
+                                                height: '100%', 
+                                                objectFit: 'contain', 
+                                                display: 'block',
+                                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
+                                            }}
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = 'none';
+                                                e.currentTarget.parentElement!.innerHTML = `<span style="font-size: 28px; font-weight: 800; color: #fff">${s.name.charAt(0)}</span>`;
+                                            }}
+                                        />
                                     </div>
 
-                                    <h3 className="service-name" style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#1a1c23', margin: '0 0 10px 0' }}>{service.name}</h3>
-                                    <p className="service-desc" style={{ fontSize: '0.95rem', color: '#6b7280', margin: '0 0 24px 0', lineHeight: 1.5, height: '44px', overflow: 'hidden' }}>
-                                        {service.desc}
-                                    </p>
-                                    
-                                    <div className="service-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #e5e7eb', paddingTop: '20px', marginTop: 'auto' }}>
-                                        <div>
-                                            <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#1a1c23' }}>From {service.price}</span>
-                                            <span style={{ fontSize: '0.85rem', color: '#9ca3af' }}> /mo</span>
+                                    <div style={{ minWidth: 0, flex: 1 }}>
+                                        <div style={{
+                                            fontSize: '1rem',
+                                            fontWeight: 800,
+                                            color: '#ffffff',
+                                            lineHeight: 1.2,
+                                            marginBottom: '2px'
+                                        }}>
+                                            {s.name}
                                         </div>
-                                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1a1c23', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
-                                            <ArrowRight size={20} />
+                                        <div style={{ 
+                                            fontSize: '0.75rem', 
+                                            color: 'rgba(255,255,255,0.5)', 
+                                            fontWeight: 500 
+                                        }}>
+                                            {s.plan}
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+
+                                {/* Button */}
+                                <Link href={`/services/${s.slug}`} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    background: 'rgba(255,255,255,0.1)',
+                                    padding: '12px',
+                                    borderRadius: '14px',
+                                    color: '#fff',
+                                    textDecoration: 'none',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 700,
+                                    marginTop: 'auto',
+                                    transition: 'all 0.2s ease',
+                                    border: '1px solid rgba(255,255,255,0.05)'
+                                }} className="streaming-btn-hover">
+                                    <span>View Plans</span>
+                                    <ChevronRight size={16} strokeWidth={3} />
+                                </Link>
+                            </div>
                         ))}
                     </div>
+
+                    {/* Features Strip */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        background: '#f8f9fa',
+                        borderRadius: '24px',
+                        padding: '32px 48px',
+                        border: '1px solid #e9ecef',
+                        gap: '24px',
+                        flexWrap: 'wrap'
+                    }}>
+                        {[
+                            { Icon: ShieldCheck, title: 'Secure', sub: 'Encrypted.' },
+                            { Icon: Truck, title: 'Instant', sub: 'Delivery.' },
+                            { Icon: BadgePercent, title: 'Official', sub: 'Genuine.' },
+                            { Icon: BadgePercent, title: 'Best Price', sub: 'Guaranteed.' },
+                            { Icon: Headphones, title: 'Support', sub: '24/7 Care.' },
+                        ].map(({ Icon, title, sub }, i) => (
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 0', minWidth: '150px' }}>
+                                <div style={{ color: '#1a1c23' }}>
+                                    <Icon size={28} strokeWidth={2.5} />
+                                </div>
+                                <div>
+                                    <div style={{ fontWeight: 800, color: '#1a1c23', fontSize: '0.95rem' }}>{title}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#6c757d', fontWeight: 500 }}>{sub}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </div>
 
-            {/* Bottom USP Bar */}
-            <div className="container">
-                <div className="usp-bar">
-                    {[
-                        { icon: <ShieldCheck size={28} />, title: '100% Safe & Secure' },
-                        { icon: <Zap size={28} />, title: 'Instant Delivery' },
-                        { icon: <ShieldCheck size={28} />, title: 'Official Access' },
-                        { icon: <Headphones size={28} />, title: '24/7 Support' }
-                    ].map((usp, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                            <div style={{ color: '#fff' }}>{usp.icon}</div>
-                            <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{usp.title}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
+            <style jsx global>{`
+                .streaming-card-hover:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+                    border-color: rgba(255,255,255,0.2);
+                }
+                .streaming-btn-hover:hover {
+                    background: rgba(255,255,255,0.2);
+                }
+                .streaming-services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                }
+                @media (max-width: 1400px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                }
+                @media (max-width: 1024px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .streaming-services-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 480px) {
+                    .streaming-services-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
