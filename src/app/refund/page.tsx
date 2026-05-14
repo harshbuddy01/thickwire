@@ -57,7 +57,7 @@ export default function RefundPolicyPage() {
                         <ul>
                             <li>You changed your mind after the credentials have been delivered and used.</li>
                             <li>You are unable to use the service due to technical issues on your device or ISP (we will try to help, but no refund).</li>
-                            <li>The account was banned due to violation of the service provider's terms of use (e.g., sharing password).</li>
+                            <li>The account was banned due to violation of the service provider&apos;s terms of use (e.g., sharing password).</li>
                         </ul>
 
                         <h2>3. Replacement Warranty</h2>
@@ -82,7 +82,7 @@ export default function RefundPolicyPage() {
 
                         <h2>5. Refund Processing</h2>
                         <p>
-                            Once approved, the refund will be credited back to your original payment method (UPI, Bank, or Wallet) within 5-7 working days, depending on your bank's processing time.
+                            Once approved, the refund will be credited back to your original payment method (UPI, Bank, or Wallet) within 5-7 working days, depending on your bank&apos;s processing time.
                         </p>
                     </div>
                 </div>

@@ -69,7 +69,7 @@ export default function SupportPage() {
                         </div>
                         <h1 className={styles['page-title']}>Ticket Submitted!</h1>
                         <p className={styles['page-subtitle']} style={{ maxWidth: '500px', margin: '0 auto 40px auto' }}>
-                            We've received your support request. A confirmation email has been sent, 
+                            We&apos;ve received your support request. A confirmation email has been sent, 
                             and our team will respond within 12-24 hours.
                         </p>
                         <Link href="/" style={{
@@ -101,7 +101,7 @@ export default function SupportPage() {
                         <div>
                             <h1 className={styles['page-title']}>Support Center</h1>
                             <p className={styles['page-subtitle']} style={{ marginBottom: '40px' }}>
-                                Facing an issue? We're here to help you 24/7. 
+                                Facing an issue? We&apos;re here to help you 24/7. 
                                 Fill out the form and our experts will get back to you.
                             </p>
 

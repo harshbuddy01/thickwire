@@ -46,7 +46,7 @@ export default function ContactPage() {
                         <div className={styles['rich-text']}>
                             <h2>How can we help?</h2>
                             <p>
-                                Whether you're looking for answers, would like to solve a problem, or just want to let us know how we did, you'll find many ways to contact us right here.
+                                Whether you&apos;re looking for answers, would like to solve a problem, or just want to let us know how we did, you&apos;ll find many ways to contact us right here.
                             </p>
                             
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '32px' }}>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                                 Need Technical Support?
                             </h3>
                             <p style={{ color: '#64748b', marginBottom: '24px', fontSize: '0.95rem' }}>
-                                If you're facing an issue with a specific order, please open a support ticket for faster resolution.
+                                If you&apos;re facing an issue with a specific order, please open a support ticket for faster resolution.
                             </p>
                             <Link href="/support" style={{
                                 background: '#1a1c23',

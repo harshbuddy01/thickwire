@@ -108,7 +108,7 @@ export default function FAQPage() {
                         border: '1px solid #e2e8f0'
                     }}>
                         <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '12px' }}>
-                            Didn't find what you were looking for?
+                            Didn&apos;t find what you were looking for?
                         </h3>
                         <p style={{ color: '#64748b', marginBottom: '24px' }}>
                             Our dedicated support team is ready to help you with any specific queries.
