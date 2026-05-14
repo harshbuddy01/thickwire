@@ -722,29 +722,21 @@ function CheckoutContent() {
                                 {/* UPI Direct Inline Flow */}
                                 {gateway === 'upi-direct' && (
                                     <div style={{ padding: 20, background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: 16 }}>
-                                        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 16 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
                                             {/* QR Code */}
-                                            <div style={{ width: 140, height: 140, background: '#fff', borderRadius: 12, border: '2px dashed #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                                            <div style={{ width: '100%', maxWidth: 300, background: '#fff', borderRadius: 16, border: '2px dashed #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 12 }}>
                                                 {upiDetails?.qrImageUrl ? (
-                                                    <img src={upiDetails.qrImageUrl} alt="UPI QR" width={130} height={130} style={{ objectFit: 'contain' }} />
+                                                    <img src={upiDetails.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', objectFit: 'contain', display: 'block' }} />
                                                 ) : (
-                                                    <Smartphone size={40} style={{ color: '#d8b4fe' }} />
+                                                    <div style={{ padding: 40 }}><Smartphone size={40} style={{ color: '#d8b4fe' }} /></div>
                                                 )}
                                             </div>
-                                            <div style={{ flex: 1, minWidth: 200 }}>
-                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#7c3aed', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>UPI ID</div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', borderRadius: 10, padding: '8px 12px', border: '1px solid #e9d5ff', marginBottom: 12 }}>
-                                                    <code style={{ fontWeight: 700, fontSize: '0.9rem', color: '#6c5ce7', flex: 1 }}>{upiDetails?.upiId || 'Loading...'}</code>
-                                                    <button type="button" onClick={() => { if (upiDetails?.upiId) { navigator.clipboard.writeText(upiDetails.upiId); setUpiCopied(true); setTimeout(() => setUpiCopied(false), 2000); } }}
-                                                        style={{ background: upiCopied ? '#10b981' : '#6c5ce7', border: 'none', borderRadius: 6, padding: '4px 10px', color: 'white', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>
-                                                        {upiCopied ? '✓ Copied' : 'Copy'}
-                                                    </button>
-                                                </div>
-                                                <div style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.6 }}>
-                                                    1. Pay <strong>{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount}</strong> to the UPI ID above<br/>
-                                                    2. Copy the 12-digit UTR from your payment app<br/>
-                                                    3. Submit below — wallet credited instantly
-                                                </div>
+                                            <div style={{ width: '100%', marginTop: 16, fontSize: '0.85rem', color: '#4b5563', lineHeight: 1.6, background: '#fff', padding: 16, borderRadius: 12, border: '1px solid #e9d5ff' }}>
+                                                <div style={{ fontWeight: 700, color: '#6c5ce7', marginBottom: 8, fontSize: '0.9rem' }}>Payment Instructions:</div>
+                                                1. Scan the QR code above using any UPI app (GPay, PhonePe, Paytm)<br/>
+                                                2. Pay exactly <strong>{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount}</strong><br/>
+                                                3. Copy the 12-digit UTR from your payment app<br/>
+                                                4. Submit below — your wallet will be credited instantly
                                             </div>
                                         </div>
                                         <div style={{ display: 'flex', gap: 10 }}>
