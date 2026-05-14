@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ServicesDirectoryPage() {
-    let services = [];
+    let services: any[] = [];
     try {
         services = await getServices();
     } catch (e) {
