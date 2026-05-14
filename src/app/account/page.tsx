@@ -7,6 +7,7 @@ import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldChec
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import WalletTopupSection from '@/components/WalletTopupSection';
 
 const s: { [k: string]: React.CSSProperties } = {
     page: { minHeight: '80vh', padding: '40px 20px 60px' },
@@ -70,8 +71,6 @@ export default function AccountPage() {
     const [tickets, setTickets] = useState<any[]>([]);
     const [walletData, setWalletData] = useState<any>(null);
     const [walletTransactions, setWalletTransactions] = useState<any[]>([]);
-    const [topUpAmount, setTopUpAmount] = useState('');
-    const [isToppingUp, setIsToppingUp] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
 
     // Modal State
@@ -159,47 +158,7 @@ export default function AccountPage() {
         }
     };
 
-    const handleTopUp = async () => {
-        if (!topUpAmount || Number(topUpAmount) <= 0) return alert('Enter a valid amount');
-        setIsToppingUp(true);
-        try {
-            const { data } = await api.post('/wallet/topup', { amount: Number(topUpAmount), currency: walletData?.currency || 'INR' });
-            
-            const options = {
-                key: data.keyId,
-                amount: Math.round(data.amount * 100),
-                currency: data.currency,
-                name: 'StreamKart Wallet',
-                description: 'Wallet Top-Up',
-                order_id: data.razorpayOrderId,
-                handler: async function (response: any) {
-                    try {
-                        await api.post('/wallet/topup/confirm', {
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature
-                        });
-                        alert('Wallet topped up successfully!');
-                        setTopUpAmount('');
-                        fetchData();
-                    } catch (err) {
-                        alert('Failed to confirm top-up. Please contact support.');
-                    }
-                },
-                prefill: { name: user?.name || '', email: user?.email || '', contact: user?.phone || '' },
-                theme: { color: '#6c5ce7' }
-            };
 
-            const rzp = new (window as any).Razorpay(options);
-            rzp.on('payment.failed', function () { alert('Payment failed'); });
-            rzp.open();
-        } catch (err) {
-            console.error('Failed to init top-up:', err);
-            alert('Top-up failed to initiate');
-        } finally {
-            setIsToppingUp(false);
-        }
-    };
 
     const daysUntil = (date: string) => {
         if (!date) return 0;
@@ -328,30 +287,11 @@ export default function AccountPage() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="account-topup-box" style={{ background: 'rgba(255,255,255,0.1)', padding: 20, borderRadius: 16, width: '100%', maxWidth: 300 }}>
-                                        <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 12 }}>Top Up Wallet</h3>
-                                        <div style={{ display: 'flex', gap: 8 }}>
-                                            <div style={{ position: 'relative', flex: 1 }}>
-                                                <span style={{ position: 'absolute', left: 12, top: 10, fontWeight: 700, opacity: 0.8 }}>{walletData?.symbol || '₹'}</span>
-                                                <input 
-                                                    type="number" 
-                                                    value={topUpAmount}
-                                                    onChange={e => setTopUpAmount(e.target.value)}
-                                                    placeholder="Amount"
-                                                    style={{ width: '100%', padding: '10px 10px 10px 28px', borderRadius: 10, border: 'none', outline: 'none', fontSize: '0.95rem', fontWeight: 600, color: '#333' }}
-                                                />
-                                            </div>
-                                            <button 
-                                                onClick={handleTopUp}
-                                                disabled={isToppingUp}
-                                                style={{ padding: '0 20px', background: '#fff', color: '#6c5ce7', border: 'none', borderRadius: 10, fontWeight: 800, cursor: isToppingUp ? 'not-allowed' : 'pointer' }}
-                                            >
-                                                {isToppingUp ? '...' : 'Add'}
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
+
+                            {/* WalletTopupSection — handles UPI (India) and International flows */}
+                            <WalletTopupSection walletData={walletData} onSuccess={fetchData} />
 
                             <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a1c23', marginBottom: 16 }}>Transaction History</h3>
                             {walletTransactions.length === 0 ? (

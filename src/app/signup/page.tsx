@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, User, AlertCircle, Loader2, Play, CheckCircle2 } from 'lucide-react';
 import '../auth-styles.css';
 import styles from '../auth/auth.module.css';
+import WalletOnboardingPopup from '@/components/WalletOnboardingPopup';
 
 function SignupContent() {
     const [name, setName] = useState('');
@@ -16,6 +17,7 @@ function SignupContent() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [showOnboarding, setShowOnboarding] = useState(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -32,10 +34,8 @@ function SignupContent() {
             // Auto-login: store the access token immediately
             setAuth(data.accessToken);
             setIsSuccess(true);
-            // Brief success flash, then redirect to account
-            setTimeout(() => {
-                router.push(redirectUrl);
-            }, 1500);
+            // Show onboarding popup, then redirect
+            setShowOnboarding(true);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to create account. Please try again.');
         } finally {
@@ -73,6 +73,12 @@ function SignupContent() {
                         <Loader2 size={28} style={{ animation: 'spin 1s linear infinite', color: '#10b981' }} />
                     </div>
                 </div>
+                {showOnboarding && (
+                    <WalletOnboardingPopup onClose={() => {
+                        setShowOnboarding(false);
+                        router.push(redirectUrl);
+                    }} />
+                )}
             </div>
         );
     }
