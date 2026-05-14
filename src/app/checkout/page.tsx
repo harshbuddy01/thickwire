@@ -41,7 +41,7 @@ function CheckoutContent() {
     });
 
     const [whatsappOptedIn, setWhatsappOptedIn] = useState(true);
-    const [gateway, setGateway] = useState<'razorpay' | 'cashfree' | 'wallet' | 'upi-direct'>('razorpay');
+    const [gateway, setGateway] = useState<'wallet' | 'upi-direct'>('wallet');
     const [walletBalance, setWalletBalance] = useState<number | null>(null);
     const [walletCurrency, setWalletCurrency] = useState<string>('INR');
     const [walletBaseCurrency, setWalletBaseCurrency] = useState<string>('INR');
@@ -67,6 +67,8 @@ function CheckoutContent() {
     const [utrNumber, setUtrNumber] = useState('');
     const [upiCopied, setUpiCopied] = useState(false);
     const [utrResult, setUtrResult] = useState<any>(null);
+    const [requestingCredit, setRequestingCredit] = useState(false);
+    const [creditRequestSuccess, setCreditRequestSuccess] = useState(false);
 
     const { user, loading: authLoading } = useAuth();
 
@@ -102,7 +104,10 @@ function CheckoutContent() {
         const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
         setIsIndianUser(isIN);
         if (isIN) {
+            setGateway('upi-direct');
             api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
+        } else {
+            setGateway('wallet');
         }
     }, []);
 
@@ -199,20 +204,22 @@ function CheckoutContent() {
         if (plan) setFinalAmount(parseFloat(plan.price));
     };
 
-    const loadCashfreeScript = () => {
-        return new Promise((resolve) => {
-            if (window.Cashfree) {
-                resolve(window.Cashfree);
-                return;
-            }
-            const script = document.createElement('script');
-            script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-            script.onload = () => {
-                const cf = window.Cashfree({ mode: process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? 'production' : 'sandbox' });
-                resolve(cf);
-            };
-            document.body.appendChild(script);
-        });
+    const handleRequestWalletCredit = async () => {
+        setRequestingCredit(true);
+        try {
+            await api.post('/tickets', {
+                subject: 'Manual Wallet Credit Request',
+                message: `Hi, I want to purchase ${service?.name} - ${plan?.name} but my wallet balance is insufficient. I need ${plan?.currency === 'USD' ? '$' : '₹'}${finalAmount} to proceed. Please provide payment instructions or credit my wallet.`,
+                priority: 'HIGH',
+                category: 'PAYMENT'
+            });
+            setCreditRequestSuccess(true);
+            setTimeout(() => setCreditRequestSuccess(false), 5000);
+        } catch (err) {
+            alert('Failed to request credit. Please contact support manually.');
+        } finally {
+            setRequestingCredit(false);
+        }
     };
 
     // ─── Service Type Detection ────────────────────────
@@ -264,7 +271,7 @@ function CheckoutContent() {
             return;
         }
 
-        if (gateway !== 'razorpay' && gateway !== 'wallet' && gateway !== 'upi-direct') {
+        if (gateway !== 'wallet' && gateway !== 'upi-direct') {
             setError('Please select a payment method.');
             return;
         }
@@ -366,53 +373,9 @@ function CheckoutContent() {
             }
 
             const res = await createOrder(payload);
-
-            if (gateway === 'razorpay' && res.keyId && res.razorpayOrderId) {
-                const options: RazorpayOptions = {
-                    key: res.keyId,
-                    amount: res.amount * 100,
-                    currency: res.currency,
-                    name: 'StreamKart',
-                    description: `${service?.name} — ${plan.name}`,
-                    order_id: res.razorpayOrderId,
-                    handler: async (response: any) => {
-                        try {
-                            const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
-                            const token = localStorage.getItem('accessToken');
-                            const verifyRes = await fetch(`${apiBase}/orders/verify-payment`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-                                },
-                                credentials: 'include',
-                                body: JSON.stringify({
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature,
-                                })
-                            });
-                            
-                            const verifyData = await verifyRes.json();
-                            if (verifyData.success) {
-                                router.push(`/order/${res.orderId}?gateway=razorpay`);
-                            } else {
-                                setError('Payment verification failed. Please contact support.');
-                            }
-                        } catch (e) {
-                            setError('Error verifying payment. Please contact support.');
-                        }
-                    },
-                    prefill: {
-                        name: form.customerName,
-                        email: form.customerEmail,
-                        contact: form.customerPhone,
-                    },
-                    theme: { color: '#111827' },
-                };
-                const rzp = new window.Razorpay(options);
-                rzp.open();
-            }
+            // Since wallet payment is done via the /wallet/pay endpoint right now,
+            // the logic above for wallet will redirect before reaching this.
+            // If any further wallet logic is needed, it goes here.
         } catch (err: any) {
             console.error(err);
             setError(err?.response?.data?.message || 'Something went wrong. Please try again.');
@@ -452,7 +415,6 @@ function CheckoutContent() {
 
     return (
         <div style={{ minHeight: '100vh', background: '#f8fafc', paddingBottom: 60, fontFamily: 'var(--font-poppins), sans-serif' }}>
-            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
             
             {/* Header */}
             <header style={{ background: '#fff', padding: '16px 24px', borderBottom: '1px solid #e2e8f0' }}>
@@ -745,29 +707,11 @@ function CheckoutContent() {
                                 </div>
                             </div>
 
-                            <div className="checkout-split-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                                {/* Razorpay (Active) */}
-                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'razorpay' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'razorpay' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
-                                    {gateway === 'razorpay' && <div style={{ position: 'absolute', top: 0, right: 0, background: '#10b981', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>SELECTED</div>}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                        <div style={{ width: 44, height: 44, background: '#111827', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 12L12 2L2 12L12 22L22 12Z" fill="currentColor"/></svg>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>Razorpay</div>
-                                            <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>UPI, Cards, Netbanking & Wallets</div>
-                                        </div>
-                                    </div>
-                                    <div style={{ width: 22, height: 22, borderRadius: '50%', background: gateway === 'razorpay' ? '#10b981' : 'transparent', border: gateway === 'razorpay' ? 'none' : '2px solid #d1d5db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        {gateway === 'razorpay' && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
-                                    </div>
-                                    <input type="radio" value="razorpay" checked={gateway === 'razorpay'} onChange={() => setGateway('razorpay')} style={{ display: 'none' }} />
-                                </label>
-
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                 {/* UPI Direct (for Indian users) */}
-                                {isIndianUser ? (
+                                {isIndianUser && (
                                     <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'upi-direct' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'upi-direct' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
-                                        {gateway === 'upi-direct' && <div style={{ position: 'absolute', top: 0, right: 0, background: '#6c5ce7', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>UPI DIRECT</div>}
+                                        {gateway === 'upi-direct' && <div style={{ position: 'absolute', top: 0, right: 0, background: '#6c5ce7', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>SELECTED</div>}
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                             <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                                                 <Smartphone size={22} />
@@ -782,88 +726,89 @@ function CheckoutContent() {
                                         </div>
                                         <input type="radio" value="upi-direct" checked={gateway === 'upi-direct'} onChange={() => setGateway('upi-direct')} style={{ display: 'none' }} />
                                     </label>
-                                ) : (
-                                    /* Cashfree (Disabled for non-Indian) */
-                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 16, cursor: 'not-allowed', opacity: 0.6 }}>
+                                )}
+
+                                {/* UPI Direct Inline Flow */}
+                                {gateway === 'upi-direct' && (
+                                    <div style={{ padding: 20, background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: 16 }}>
+                                        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 16 }}>
+                                            {/* QR Code */}
+                                            <div style={{ width: 140, height: 140, background: '#fff', borderRadius: 12, border: '2px dashed #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                                                {upiDetails?.qrImageUrl ? (
+                                                    <img src={upiDetails.qrImageUrl} alt="UPI QR" width={130} height={130} style={{ objectFit: 'contain' }} />
+                                                ) : (
+                                                    <Smartphone size={40} style={{ color: '#d8b4fe' }} />
+                                                )}
+                                            </div>
+                                            <div style={{ flex: 1, minWidth: 200 }}>
+                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#7c3aed', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>UPI ID</div>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', borderRadius: 10, padding: '8px 12px', border: '1px solid #e9d5ff', marginBottom: 12 }}>
+                                                    <code style={{ fontWeight: 700, fontSize: '0.9rem', color: '#6c5ce7', flex: 1 }}>{upiDetails?.upiId || 'Loading...'}</code>
+                                                    <button type="button" onClick={() => { if (upiDetails?.upiId) { navigator.clipboard.writeText(upiDetails.upiId); setUpiCopied(true); setTimeout(() => setUpiCopied(false), 2000); } }}
+                                                        style={{ background: upiCopied ? '#10b981' : '#6c5ce7', border: 'none', borderRadius: 6, padding: '4px 10px', color: 'white', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>
+                                                        {upiCopied ? '✓ Copied' : 'Copy'}
+                                                    </button>
+                                                </div>
+                                                <div style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.6 }}>
+                                                    1. Pay <strong>{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount}</strong> to the UPI ID above<br/>
+                                                    2. Copy the 12-digit UTR from your payment app<br/>
+                                                    3. Submit below — wallet credited instantly
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 10 }}>
+                                            <input type="text" placeholder="Enter 12-digit UTR number" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} maxLength={20}
+                                                style={{ flex: 1, padding: '12px 14px', borderRadius: 10, border: '1px solid #e9d5ff', fontSize: '0.9rem', fontWeight: 600, fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box' }} />
+                                        </div>
+                                        {utrResult && (
+                                            <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 10, background: utrResult.status === 'MATCHED' ? '#f0fdf4' : utrResult.status === 'PENDING' ? '#fffbeb' : '#fef2f2', border: `1px solid ${utrResult.status === 'MATCHED' ? '#bbf7d0' : utrResult.status === 'PENDING' ? '#fde68a' : '#fecaca'}`, fontSize: '0.85rem', fontWeight: 600, color: utrResult.status === 'MATCHED' ? '#166534' : utrResult.status === 'PENDING' ? '#92400e' : '#991b1b' }}>
+                                                {utrResult.message}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                
+                                {/* Wallet Option */}
+                                <div>
+                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'wallet' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'wallet' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                            <div style={{ width: 44, height: 44, background: '#111827', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: '1.2rem' }}>
-                                                F
+                                            <div style={{ width: 44, height: 44, background: '#111827', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
                                             </div>
                                             <div>
-                                                <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>Cashfree <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 600, marginLeft: 4 }}>Unavailable</span></div>
-                                                <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>UPI, Cards, Netbanking & Wallets</div>
+                                                <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>StreamKart Wallet</div>
+                                                <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
+                                                    Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && walletBalance >= planPriceInWalletCurrency) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
+                                                    {plan?.currency === 'USD' && walletBaseCurrency === 'INR' && <span style={{ display: 'block', fontSize: '0.7rem', color: '#6b7280', marginTop: 2 }}>≈ ₹{planPriceInWalletCurrency.toFixed(0)} required for ${finalAmount} USD</span>}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div style={{ width: 22, height: 22, borderRadius: '50%', border: '2px solid #d1d5db' }}></div>
+                                        <div style={{ width: 22, height: 22, borderRadius: '50%', background: gateway === 'wallet' ? '#10b981' : 'transparent', border: gateway === 'wallet' ? 'none' : '2px solid #d1d5db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            {gateway === 'wallet' && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
+                                        </div>
+                                        <input type="radio" value="wallet" checked={gateway === 'wallet'} onChange={() => setGateway('wallet')} style={{ display: 'none' }} />
                                     </label>
-                                )}
-                            </div>
-
-                            {/* UPI Direct Inline Flow */}
-                            {gateway === 'upi-direct' && (
-                                <div style={{ marginTop: 16, padding: 20, background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: 16 }}>
-                                    <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', marginBottom: 16 }}>
-                                        {/* QR Code */}
-                                        <div style={{ width: 140, height: 140, background: '#fff', borderRadius: 12, border: '2px dashed #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                                            {upiDetails?.qrImageUrl ? (
-                                                <img src={upiDetails.qrImageUrl} alt="UPI QR" width={130} height={130} style={{ objectFit: 'contain' }} />
-                                            ) : (
-                                                <Smartphone size={40} style={{ color: '#d8b4fe' }} />
-                                            )}
-                                        </div>
-                                        <div style={{ flex: 1, minWidth: 200 }}>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#7c3aed', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>UPI ID</div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', borderRadius: 10, padding: '8px 12px', border: '1px solid #e9d5ff', marginBottom: 12 }}>
-                                                <code style={{ fontWeight: 700, fontSize: '0.9rem', color: '#6c5ce7', flex: 1 }}>{upiDetails?.upiId || 'Loading...'}</code>
-                                                <button type="button" onClick={() => { if (upiDetails?.upiId) { navigator.clipboard.writeText(upiDetails.upiId); setUpiCopied(true); setTimeout(() => setUpiCopied(false), 2000); } }}
-                                                    style={{ background: upiCopied ? '#10b981' : '#6c5ce7', border: 'none', borderRadius: 6, padding: '4px 10px', color: 'white', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer' }}>
-                                                    {upiCopied ? '✓ Copied' : 'Copy'}
-                                                </button>
+                                    
+                                    {gateway === 'wallet' && walletBalance !== null && walletBalance < planPriceInWalletCurrency && (
+                                        <div style={{ marginTop: 12, padding: '16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 12, color: '#92400e', fontSize: '0.9rem', fontWeight: 500 }}>
+                                                <AlertCircle size={18} style={{ flexShrink: 0, marginTop: 2 }} />
+                                                Please contact the admin for adding the payment in the wallet before proceeding to buy.
                                             </div>
-                                            <div style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.6 }}>
-                                                1. Pay <strong>{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount}</strong> to the UPI ID above<br/>
-                                                2. Copy the 12-digit UTR from your payment app<br/>
-                                                3. Submit below — wallet credited instantly
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style={{ display: 'flex', gap: 10 }}>
-                                        <input type="text" placeholder="Enter 12-digit UTR number" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} maxLength={20}
-                                            style={{ flex: 1, padding: '12px 14px', borderRadius: 10, border: '1px solid #e9d5ff', fontSize: '0.9rem', fontWeight: 600, fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box' }} />
-                                    </div>
-                                    {utrResult && (
-                                        <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 10, background: utrResult.status === 'MATCHED' ? '#f0fdf4' : utrResult.status === 'PENDING' ? '#fffbeb' : '#fef2f2', border: `1px solid ${utrResult.status === 'MATCHED' ? '#bbf7d0' : utrResult.status === 'PENDING' ? '#fde68a' : '#fecaca'}`, fontSize: '0.85rem', fontWeight: 600, color: utrResult.status === 'MATCHED' ? '#166534' : utrResult.status === 'PENDING' ? '#92400e' : '#991b1b' }}>
-                                            {utrResult.message}
+                                            <button 
+                                                type="button"
+                                                onClick={handleRequestWalletCredit}
+                                                disabled={requestingCredit}
+                                                style={{ background: '#d97706', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, cursor: requestingCredit ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 6, transition: 'all 0.2s' }}
+                                                onMouseOver={(e) => e.currentTarget.style.background = '#b45309'}
+                                                onMouseOut={(e) => e.currentTarget.style.background = '#d97706'}
+                                            >
+                                                {requestingCredit ? 'Requesting...' : 'Request Wallet Credit'}
+                                            </button>
+                                            {creditRequestSuccess && <div style={{ color: '#16a34a', fontSize: '0.8rem', marginTop: 8, fontWeight: 600 }}>Request submitted! Admin will contact you shortly.</div>}
                                         </div>
                                     )}
                                 </div>
-                            )}
-                            
-                            {/* Wallet Option */}
-                            <div style={{ marginTop: 16 }}>
-                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'wallet' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'wallet' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                        <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>StreamKart Wallet</div>
-                                            <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>
-                                                Available Balance: <span style={{ fontWeight: 700, color: (walletBalance !== null && walletBalance >= planPriceInWalletCurrency) ? '#10b981' : '#ef4444' }}>{walletBalance !== null ? `${walletCurrency}${walletBalance.toFixed(2)}` : 'Loading...'}</span>
-                                                {plan?.currency === 'USD' && walletBaseCurrency === 'INR' && <span style={{ display: 'block', fontSize: '0.7rem', color: '#6b7280', marginTop: 2 }}>≈ ₹{planPriceInWalletCurrency.toFixed(0)} required for ${finalAmount} USD</span>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style={{ width: 22, height: 22, borderRadius: '50%', background: gateway === 'wallet' ? '#10b981' : 'transparent', border: gateway === 'wallet' ? 'none' : '2px solid #d1d5db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        {gateway === 'wallet' && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
-                                    </div>
-                                    <input type="radio" value="wallet" checked={gateway === 'wallet'} onChange={() => setGateway('wallet')} style={{ display: 'none' }} />
-                                </label>
-                                {gateway === 'wallet' && walletBalance !== null && walletBalance < planPriceInWalletCurrency && (
-                                    <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#ef4444', display: 'flex', alignItems: 'center', gap: 4 }}>
-                                        <AlertCircle size={14} /> Insufficient balance. Please <Link href="/account?tab=wallet" style={{ color: '#6c5ce7', fontWeight: 600 }}>Top Up</Link> first.
-                                    </div>
-                                )}
                             </div>
                         </div>
 
