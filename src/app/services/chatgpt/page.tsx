@@ -83,7 +83,7 @@ export default function ChatGPTProductPage() {
                         gap: '24px',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                     }}>
-                        <style>{`
+                        <style dangerouslySetInnerHTML={{ __html: `
                             @media (max-width: 768px) {
                                 .chatgpt-plans-container-new {
                                     display: flex !important;
@@ -102,7 +102,7 @@ export default function ChatGPTProductPage() {
                                     max-width: 280px !important;
                                 }
                             }
-                        `}</style>
+                        ` }} />
                         {!service ? (
                             <div style={{ padding: '40px', color: '#6b7280', gridColumn: '1 / -1', textAlign: 'center' }}>Loading plans...</div>
                         ) : service.plans.length === 0 ? (

@@ -60,6 +60,8 @@ function CheckoutContent() {
     const [spotifyCountry, setSpotifyCountry] = useState('');
     const [showSpotifyPassword, setShowSpotifyPassword] = useState(false);
     const [youtubeEmail, setYoutubeEmail] = useState('');
+    const [serviceEmail, setServiceEmail] = useState('');
+    const [serviceMobile, setServiceMobile] = useState('');
 
     // UPI Direct state
     const [isIndianUser, setIsIndianUser] = useState(false);
@@ -186,11 +188,15 @@ function CheckoutContent() {
     // ─── Service Type Detection ────────────────────────
     const slug = service?.slug || '';
     const planCurrency = plan?.currency || 'INR';
+    const planNameLower = (plan?.name || '').toLowerCase();
+
     const isSpotifyGlobal = slug === 'spotify' && planCurrency === 'USD';
     const isYouTubeIndia = slug === 'youtube' && planCurrency === 'INR';
     const isYouTubeGlobal = slug === 'youtube' && planCurrency === 'USD';
-    const needsPhone = slug === 'sonyliv' || slug === 'zee5';
-    const isManualService = isSpotifyGlobal || isYouTubeIndia || isYouTubeGlobal || needsPhone;
+    
+    const needsServiceEmail = planNameLower.includes('email') || slug === 'elevenlabs' || slug === 'canva-edu' || slug === 'linkedin-business' || slug === 'nord-vpn' || isYouTubeIndia;
+    const needsPhone = slug === 'sonyliv' || slug === 'zee5' || slug === 'jiohotstar' || slug === 'disney-plus' || planNameLower.includes('mobile');
+    const isManualService = isSpotifyGlobal || isYouTubeGlobal || needsServiceEmail || needsPhone;
 
     // ─── Convert plan price to wallet currency for comparison ────
     // Wallet balance is in user's local currency (e.g. ₹245.28).
@@ -218,8 +224,9 @@ function CheckoutContent() {
     // Check if credential fields are valid
     const credentialsValid = (() => {
         if (isSpotifyGlobal) return spotifyEmail && spotifyPassword && spotifyConfirmPassword && spotifyCountry && spotifyPassword === spotifyConfirmPassword;
-        if (isYouTubeIndia) return youtubeEmail.includes('@');
-        return true; // auto-delivery or YouTube Global or needsPhone (phone is already validated) — no extra fields
+        if (needsServiceEmail) return serviceEmail.includes('@');
+        if (needsPhone) return serviceMobile.length >= 10;
+        return true; 
     })();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -251,8 +258,12 @@ function CheckoutContent() {
             setError('Please fill in all Spotify account details.');
             return;
         }
-        if (isYouTubeIndia && !youtubeEmail) {
-            setError('Please enter your YouTube account email.');
+        if (needsServiceEmail && !isSpotifyGlobal && !serviceEmail) {
+            setError(`Please enter your ${service?.name} account email.`);
+            return;
+        }
+        if (needsPhone && !serviceMobile) {
+            setError(`Please enter your mobile number for ${service?.name} activation.`);
             return;
         }
 
@@ -272,10 +283,10 @@ function CheckoutContent() {
             let serviceCredentials: Record<string, any> | undefined;
             if (isSpotifyGlobal) {
                 serviceCredentials = { spotifyEmail, spotifyPassword, spotifyCountry };
-            } else if (isYouTubeIndia) {
-                serviceCredentials = { youtubeEmail };
+            } else if (needsServiceEmail) {
+                serviceCredentials = { activationEmail: serviceEmail };
             } else if (needsPhone) {
-                serviceCredentials = { mobileNumber: form.customerPhone.replace(/\D/g, '') };
+                serviceCredentials = { mobileNumber: serviceMobile.replace(/\D/g, '') };
             }
 
             const payload = {
@@ -518,11 +529,6 @@ function CheckoutContent() {
                                                 onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                                             />
                                         </div>
-                                        {needsPhone && (
-                                            <div style={{ fontSize: '0.75rem', color: '#10b981', marginTop: 6, fontWeight: 500 }}>
-                                                * This number will also be used to activate your {service?.name} subscription.
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -607,20 +613,21 @@ function CheckoutContent() {
                             </div>
                         )}
 
-                        {isYouTubeIndia && (
+                        {/* ─── Generic Service Email Field ─── */}
+                        {needsServiceEmail && !isSpotifyGlobal && (
                             <div style={{ marginBottom: 32 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                                     <div style={{ width: 40, height: 40, background: '#fef2f2', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
-                                        <Play size={20} />
+                                        <Globe size={20} />
                                     </div>
                                     <div>
-                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>YouTube Account Details</div>
-                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>For India customers only</div>
+                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>{service?.name} Account Details</div>
+                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>Enter the email address you want to activate</div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Enter your YouTube email</label>
-                                    <input type="email" placeholder="you@gmail.com" required value={youtubeEmail} onChange={(e) => setYoutubeEmail(e.target.value)}
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Activation Email</label>
+                                    <input type="email" placeholder="you@gmail.com" required value={serviceEmail} onChange={(e) => setServiceEmail(e.target.value)}
                                         style={{ width: '100%', padding: '14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
                                         onFocus={(e) => e.target.style.borderColor = '#dc2626'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                                     />
@@ -628,8 +635,30 @@ function CheckoutContent() {
                                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginTop: 16, padding: '14px 16px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 12 }}>
                                     <ShieldCheck size={18} style={{ color: '#0284c7', flexShrink: 0, marginTop: 2 }} />
                                     <div style={{ fontSize: '0.8rem', color: '#0369a1', lineHeight: 1.5 }}>
-                                        You will need an active YouTube account to continue. <strong>We do not ask for your password.</strong> We will never access your account.
+                                        You will need an active account to continue. <strong>We do not ask for your password.</strong> We will never access your account.
                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ─── Generic Service Mobile Field ─── */}
+                        {needsPhone && (
+                            <div style={{ marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                                    <div style={{ width: 40, height: 40, background: '#fef2f2', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
+                                        <Smartphone size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 700, color: '#111827', fontSize: '1.05rem' }}>{service?.name} Account Details</div>
+                                        <div style={{ color: '#6b7280', fontSize: '0.85rem' }}>Enter the mobile number you want to activate</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Activation Mobile Number</label>
+                                    <input type="tel" placeholder="+91 98765 43210" required value={serviceMobile} onChange={(e) => setServiceMobile(e.target.value)}
+                                        style={{ width: '100%', padding: '14px 16px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' }}
+                                        onFocus={(e) => e.target.style.borderColor = '#dc2626'} onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                                    />
                                 </div>
                             </div>
                         )}
