@@ -160,18 +160,15 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                     <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                         {/* QR Code */}
                         <div style={{
-                            width: 180, height: 180, background: '#f8fafc', borderRadius: 16,
+                            width: 220, minHeight: 220, background: '#f8fafc', borderRadius: 16,
                             border: '2px dashed #e2e8f0', display: 'flex', alignItems: 'center',
-                            justifyContent: 'center', overflow: 'hidden', flexShrink: 0,
+                            justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: 12
                         }}>
                             {qrDetails?.qrImageUrl ? (
-                                <Image
+                                <img
                                     src={qrDetails.qrImageUrl}
                                     alt="UPI QR Code"
-                                    width={170}
-                                    height={170}
-                                    style={{ objectFit: 'contain' }}
-                                    unoptimized
+                                    style={{ width: '100%', height: 'auto', borderRadius: 8 }}
                                 />
                             ) : (
                                 <QrCode size={60} style={{ color: '#cbd5e1' }} />
@@ -179,29 +176,31 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                         </div>
 
                         {/* UPI ID + Instructions */}
-                        <div style={{ flex: 1, minWidth: 200 }}>
-                            <div style={{ marginBottom: 16 }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                    UPI ID
-                                </div>
-                                <div style={{
-                                    display: 'flex', alignItems: 'center', gap: 8,
-                                    background: '#f1f5f9', borderRadius: 12, padding: '10px 14px',
-                                    border: '1px solid #e2e8f0',
-                                }}>
-                                    <code style={{ fontWeight: 700, fontSize: '0.95rem', color: '#6c5ce7', flex: 1 }}>
-                                        {qrDetails?.upiId || 'Loading...'}
-                                    </code>
-                                    <button onClick={handleCopyUpi} style={{
-                                        background: copied ? '#10b981' : '#6c5ce7', border: 'none',
-                                        borderRadius: 8, padding: '6px 12px', color: 'white',
-                                        fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
-                                        display: 'flex', alignItems: 'center', gap: 4, transition: 'background 0.2s',
+                        <div style={{ flex: 1, minWidth: 200, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            {qrDetails?.upiId && qrDetails.upiId.includes('@') && (
+                                <div style={{ marginBottom: 16 }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                        UPI ID
+                                    </div>
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: 8,
+                                        background: '#f1f5f9', borderRadius: 12, padding: '10px 14px',
+                                        border: '1px solid #e2e8f0',
                                     }}>
-                                        {copied ? <><CheckCircle2 size={12} /> Copied</> : <><Copy size={12} /> Copy</>}
-                                    </button>
+                                        <code style={{ fontWeight: 700, fontSize: '0.95rem', color: '#6c5ce7', flex: 1 }}>
+                                            {qrDetails.upiId}
+                                        </code>
+                                        <button onClick={handleCopyUpi} style={{
+                                            background: copied ? '#10b981' : '#6c5ce7', border: 'none',
+                                            borderRadius: 8, padding: '6px 12px', color: 'white',
+                                            fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer',
+                                            display: 'flex', alignItems: 'center', gap: 4, transition: 'background 0.2s',
+                                        }}>
+                                            {copied ? <><CheckCircle2 size={12} /> Copied</> : <><Copy size={12} /> Copy</>}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {qrDetails?.instructions && (
                                 <ol style={{ margin: 0, paddingLeft: 18, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.8 }}>
