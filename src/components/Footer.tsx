@@ -34,9 +34,8 @@ export default function Footer() {
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
 
-        {/* ─── USP Bar (Homepage only) ─── */}
-        {pathname === '/' && (
-          <div style={{
+        {/* ─── Top USP Bar ─── */}
+        <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '16px',
@@ -68,7 +67,6 @@ export default function Footer() {
               </div>
             ))}
           </div>
-        )}
 
         {/* ─── Main Footer Grid ─── */}
         <div style={{
@@ -194,26 +192,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── Bottom Features Bar ─── */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px',
-          padding: '24px 0', borderTop: '1px solid #f0f0f0', marginBottom: '16px'
-        }} className="footer-features-bar">
-          {[
-            { icon: <Lock size={18} color="#666" />, title: 'Secure Payments', sub: 'Multiple payment options' },
-            { icon: <UserCheck size={18} color="#666" />, title: 'Buyer Protection', sub: '100% money-back guarantee' },
-            { icon: <Clock size={18} color="#666" />, title: 'Fast & Reliable', sub: 'Quick delivery you can trust' },
-            { icon: <Headphones size={18} color="#666" />, title: '24/7 Customer Care', sub: "We're always here to help" },
-          ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {item.icon}
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '0.82rem' }}>{item.title}</div>
-                <div style={{ fontSize: '0.72rem', color: '#999' }}>{item.sub}</div>
-              </div>
-            </div>
-          ))}
-        </div>
 
         {/* ─── Copyright ─── */}
         <div style={{
@@ -277,11 +255,6 @@ export default function Footer() {
             opacity: 1;
             visibility: visible;
             padding-bottom: 20px;
-          }
-          .footer-features-bar {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 12px !important;
-            padding: 16px 0 !important;
           }
           .footer-copyright {
             flex-direction: column !important;
