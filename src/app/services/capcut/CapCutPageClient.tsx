@@ -1,261 +1,204 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Check, Lock, ChevronDown, HelpCircle, ShieldCheck, Zap, Mail, LayoutTemplate, Star, Crown } from 'lucide-react';
+import { ChevronRight, Check, ShoppingCart, ChevronDown, ShieldCheck, Zap, Headphones, Scissors, Sparkles, Film, Palette } from 'lucide-react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import type { Service, Plan } from '@/lib/types';
-import ProgressiveImage from '@/components/ProgressiveImage';
+import type { Service } from '@/lib/types';
+import styles from '../service-page.module.css';
 
 const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
 export default function CapCutPageClient({ service }: { service: Service }) {
-    const router = useRouter();
-    const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+    const [openFaq, setOpenFaq] = useState<number | null>(0);
+    const toggleFaq = (index: number) => setOpenFaq(openFaq === index ? null : index);
 
-    // Group plans
-    const month1Plan = service.plans.find(p => p.durationDays === 30 || p.durationDays === 31 || p.name.includes('1 Month'));
-    const multiMonthPlans = service.plans.filter(p => p.id !== month1Plan?.id).sort((a, b) => a.durationDays - b.durationDays);
+    const colorSchemes = [
+        { card: styles['card-accent'], badge: styles['badge-accent'], text: styles['text-accent'], btn: styles['bg-accent'] },
+        { card: styles['card-primary'], badge: styles['badge-primary'], text: styles['text-primary'], btn: styles['bg-primary'] },
+        { card: styles['card-success'], badge: styles['badge-success'], text: styles['text-success'], btn: styles['bg-success'] },
+        { card: styles['card-warm'], badge: styles['badge-warm'], text: styles['text-warm'], btn: styles['bg-warm'] },
+    ];
 
-    const handleBuy = (planId: string) => {
-        router.push(`/checkout?planId=${planId}&service=${service.slug}`);
+    const formatDuration = (days: number) => {
+        if (days >= 365) {
+            const years = Math.floor(days / 365);
+            return `${days} Days (${years} Year${years > 1 ? 's' : ''})`;
+        }
+        if (days >= 30) {
+            const months = Math.floor(days / 30);
+            return `${days} Days (${months} Month${months > 1 ? 's' : ''})`;
+        }
+        return `${days} Days`;
     };
 
     return (
-        <div style={{ background: '#fcfcfc', minHeight: '100vh', fontFamily: 'var(--font-poppins), sans-serif', paddingBottom: '80px' }}>
-            {/* ─── Breadcrumbs ────────────────────────────────────── */}
+        <div className={styles['service-page']}>
             <div className="container">
                 <nav style={{ padding: '20px 0', fontSize: '13px', color: '#6b7280', display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <Link href="/" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
                     <ChevronRight size={14} />
-                    <Link href="/services" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>All Services</Link>
+                    <Link href="/services" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>Services</Link>
                     <ChevronRight size={14} />
-                    <span style={{ fontWeight: 700, color: '#111827' }}>CapCut Pro</span>
+                    <span style={{ fontWeight: 700, color: '#7c3aed' }}>CapCut Pro</span>
                 </nav>
             </div>
 
             <div className="container">
-                {/* ─── Hero Banner ────────────────────────────────────── */}
-                <div style={{
-                    position: 'relative',
-                    width: '100%',
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    background: '#080808',
-                    marginBottom: '40px'
-                }}>
-                    <img src={`${MINIO_URL}/slider/IMG_0116.PNG`} alt="CapCut Pro Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div className={styles['hero-image-container']}>
+                    <img src={`${MINIO_URL}/slider/capcut-banner.png`} alt="CapCut Pro Banner" className={styles['hero-banner-image']} />
                 </div>
 
-                <div className="service-layout-grid">
-                    
-                    {/* ─── Left Column (Main Content) ───────────────────── */}
+                <div className={styles['plans-section']}>
+                    <h2 className={styles['section-title']}>Choose Your Plan</h2>
+                    <p className={styles['section-subtitle']}>Unlock all CapCut Pro features. Create stunning videos effortlessly.</p>
+
+                    <div className={styles['plans-grid']}>
+                        {service.plans.map((plan, index) => {
+                            const colors = colorSchemes[index % colorSchemes.length];
+                            const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
+
+                            return (
+                                <div key={plan.id} className={`${styles['plan-card']} ${colors.card} ${isBestValue ? styles['best-value'] : ''}`}>
+                                    {isBestValue && <div className={styles['best-value-ribbon']}>BEST VALUE</div>}
+                                    <div className={`${styles['plan-badge']} ${colors.badge}`}>PRO PLAN</div>
+                                    <div className={styles['plan-content']}>
+                                        <h3 className={styles['plan-name']}>{plan.name}</h3>
+                                        <div className={styles['plan-price']}>
+                                            <span className={styles.currency}>{plan.currency === 'USD' ? '$' : '₹'}</span>
+                                            <span className={styles.amount}>{parseFloat(plan.price).toLocaleString()}</span>
+                                            {plan.originalPrice && (
+                                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '16px', marginLeft: '8px', fontWeight: 500 }}>
+                                                    {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.originalPrice).toLocaleString()}
+                                                </span>
+                                            )}
+                                            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700, marginTop: '4px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                {formatDuration(plan.durationDays)}
+                                            </div>
+                                        </div>
+                                        <ul className={styles['plan-features']}>
+                                            <li><Check size={16} className={colors.text} /> No Watermark on Exports</li>
+                                            <li><Check size={16} className={colors.text} /> Premium Effects & Filters</li>
+                                            <li><Check size={16} className={colors.text} /> AI-Powered Editing Tools</li>
+                                            <li><Check size={16} className={colors.text} /> Cloud Storage Included</li>
+                                            <li><Check size={16} className={colors.text} /> 24/7 Priority Support</li>
+                                        </ul>
+                                        <Link
+                                            href={`/checkout?planId=${plan.id}&service=${service.slug}`}
+                                            className={`${styles['plan-btn']} ${colors.btn}`}
+                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
+                                        >
+                                            <ShoppingCart size={18} /> Buy Now →
+                                        </Link>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className={styles['info-split']}>
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                            <Check size={20} color="#111827" />
-                            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: '#111827' }}>Choose Your Plan</h2>
-                        </div>
-                        <p style={{ color: '#6b7280', fontSize: '0.95rem', margin: '0 0 24px 0' }}>Select the plan that best fits your needs</p>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}>
-                            {/* 1 Month Plan Card */}
-                            {month1Plan && (
-                                <div style={{
-                                    border: '2px solid #3b82f6',
-                                    borderRadius: '16px',
-                                    padding: '24px',
-                                    background: '#fff',
-                                    position: 'relative',
-                                    boxShadow: '0 8px 30px rgba(59,130,246,0.08)'
-                                }}>
-                                    <div style={{ position: 'absolute', top: '16px', right: '16px', background: '#3b82f6', color: '#fff', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Check size={12} strokeWidth={4} />
-                                    </div>
-                                    <h3 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', fontWeight: 800, color: '#111827' }}>CapCut PRO</h3>
-                                    <p style={{ margin: '0 0 12px 0', fontSize: '0.95rem', color: '#4b5563', fontWeight: 500 }}>01 Month Access</p>
-                                    
-                                    <span style={{ background: '#eff6ff', color: '#3b82f6', padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>
-                                        On Email
-                                    </span>
-
-                                    <div style={{ marginTop: '32px', marginBottom: '16px' }}>
-                                        <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, letterSpacing: '1px' }}>PRICE</div>
-                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                                            <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>{parseFloat(month1Plan.price).toLocaleString()}₹</span>
-                                            <span style={{ fontSize: '1rem', color: '#6b7280', fontWeight: 600 }}>/ ${(parseFloat(month1Plan.price) / 84).toFixed(1)}$</span>
-                                        </div>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => handleBuy(month1Plan.id)}
-                                        style={{ width: '100%', background: '#111827', color: '#fff', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}
-                                    >
-                                        Buy Now <Lock size={16} />
-                                    </button>
-                                </div>
-                            )}
-
-                            {/* Multi-Month Plan Card */}
-                            {multiMonthPlans.length > 0 && (
-                                <div style={{
-                                    border: '1px solid #e5e7eb',
-                                    borderRadius: '16px',
-                                    padding: '24px',
-                                    background: '#fff',
-                                }}>
-                                    <h3 style={{ margin: '0 0 4px 0', fontSize: '1.1rem', fontWeight: 800, color: '#111827' }}>CapCut PRO</h3>
-                                    <p style={{ margin: '0 0 12px 0', fontSize: '0.95rem', color: '#4b5563', fontWeight: 500 }}>3 & 12 Month Access</p>
-                                    
-                                    <span style={{ background: '#eff6ff', color: '#3b82f6', padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>
-                                        On Email
-                                    </span>
-
-                                    <div style={{ marginTop: '32px', marginBottom: '16px' }}>
-                                        <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, letterSpacing: '1px', marginBottom: '8px' }}>PRICE</div>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                            {multiMonthPlans.map(plan => (
-                                                <div key={plan.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f3f4f6', paddingBottom: '8px', cursor: 'pointer' }} onClick={() => handleBuy(plan.id)}>
-                                                    <span style={{ fontSize: '0.95rem', color: '#4b5563', fontWeight: 500 }}>{plan.name.split(' ')[0]} Months</span>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <span style={{ fontWeight: 800, color: '#111827' }}>{parseFloat(plan.price).toLocaleString()}₹ <span style={{ color: '#6b7280', fontWeight: 600, fontSize: '0.85rem' }}>/ ${(parseFloat(plan.price) / 84).toFixed(0)}$</span></span>
-                                                        <ChevronRight size={16} color="#9ca3af" />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <button style={{ width: '100%', background: '#fff', color: '#111827', border: '1px solid #111827', padding: '12px', borderRadius: '10px', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
-                                        View Details <LayoutTemplate size={16} />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Why Choose CapCut PRO */}
-                        <div style={{ background: 'linear-gradient(90deg, #f5f3ff, #ede9fe)', borderRadius: '16px', padding: '32px', position: 'relative', overflow: 'hidden' }}>
-                            <div style={{ position: 'relative', zIndex: 1 }}>
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#111827', margin: '0 0 20px 0' }}>Why Choose CapCut PRO?</h3>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        Remove Watermark
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        Unlimited Projects
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        Premium Effects & Filters
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        AI Features Access
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        High Quality Export
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4b5563', fontWeight: 500 }}>
-                                        <div style={{ background: '#8b5cf6', color: '#fff', borderRadius: '50%', padding: '2px' }}><Check size={12} strokeWidth={4} /></div>
-                                        Priority Support
-                                    </div>
+                        <h3 className={styles['section-title']}>Why Choose CapCut Pro?</h3>
+                        <div className={styles['why-list']}>
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-accent']}`}><Scissors size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>Professional Editing</strong>
+                                    <p>Advanced timeline editing, keyframes, and multi-layer support.</p>
                                 </div>
                             </div>
-                            <div style={{ position: 'absolute', right: '10%', bottom: '-20px', opacity: 0.5 }}>
-                                <Crown size={120} color="#c4b5fd" />
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-accent']}`}><Sparkles size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>AI-Powered Tools</strong>
+                                    <p>Auto-captions, background removal, and smart effects powered by AI.</p>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Footer Strip */}
-                        <div style={{ display: 'flex', gap: '32px', marginTop: '32px', borderTop: '1px solid #e5e7eb', paddingTop: '24px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#6b7280', fontWeight: 500 }}>
-                                <ShieldCheck size={18} /> Safe & Secure Payment
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-accent']}`}><Film size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>No Watermark</strong>
+                                    <p>Export unlimited videos in HD/4K without any watermark branding.</p>
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#6b7280', fontWeight: 500 }}>
-                                <Check size={18} /> 30-Day Money Back Guarantee
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#6b7280', fontWeight: 500 }}>
-                                <ShieldCheck size={18} /> 100% Genuine & Legal
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-accent']}`}><Palette size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>Premium Assets</strong>
+                                    <p>Access thousands of premium effects, transitions, fonts, and music.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* ─── Right Column (Sidebar) ──────────────────────── */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        
-                        <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '20px', background: '#fff', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <Mail size={24} color="#4b5563" />
-                                <div>
-                                    <div style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 500 }}>Delivery</div>
-                                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#111827' }}>On Email</div>
+                    <div>
+                        <h3 className={styles['section-title']}>Frequently Asked Questions</h3>
+                        <div className={styles['faq-accordion']}>
+                            {[
+                                { q: "How will I get CapCut Pro access?", a: "After purchase, your Pro access details will be delivered instantly to your email and visible in your StreamKart dashboard." },
+                                { q: "Does this work on mobile and desktop?", a: "Yes! CapCut Pro works on Android, iOS, Windows, and Mac. Your subscription syncs across all devices." },
+                                { q: "Can I export without watermark?", a: "Absolutely! With Pro, all exports are watermark-free in full HD and 4K quality." },
+                                { q: "Is there a warranty?", a: "We provide a full replacement warranty for the entire plan duration. Any issues are resolved instantly." },
+                                { q: "Can I cancel anytime?", a: "Your plan is valid for the purchased duration. No auto-renewal or hidden charges." }
+                            ].map((item, idx) => (
+                                <div key={idx} className={`${styles['faq-item']} ${openFaq === idx ? styles.open : ''}`} onClick={() => toggleFaq(idx)}>
+                                    <div className={styles['faq-question']}>
+                                        <span>{item.q}</span>
+                                        <ChevronDown size={16} className={styles['faq-arrow']} />
+                                    </div>
+                                    <div className={styles['faq-answer']}>
+                                        <div className={styles['faq-answer-inner']}>{item.a}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '1px solid #e5e7eb', paddingLeft: '16px' }}>
-                                <Zap size={24} color="#4b5563" />
-                                <div>
-                                    <div style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 500 }}>Delivery Time</div>
-                                    <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#111827' }}>Instant (5-15 mins)</div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
-
-                        <div style={{ background: '#f8fafc', borderRadius: '16px', padding: '24px', border: '1px solid #e5e7eb' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                <HelpCircle size={18} color="#4b5563" />
-                                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#111827' }}>How it works?</h4>
-                            </div>
-                            <ol style={{ margin: 0, paddingLeft: '20px', color: '#4b5563', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '12px', fontWeight: 500 }}>
-                                <li>Complete the payment</li>
-                                <li>You will receive your CapCut PRO access on email</li>
-                                <li>Login and enjoy all PRO features</li>
-                            </ol>
-                        </div>
-
-                        <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ background: '#f3f4f6', padding: '10px', borderRadius: '50%' }}>
-                                    <HelpCircle size={20} color="#4b5563" />
-                                </div>
-                                <div>
-                                    <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 700, color: '#111827' }}>Need Help?</h4>
-                                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#6b7280' }}>Our support team is always here to help you.</p>
-                                </div>
-                            </div>
-                            <Link href="/support" style={{ border: '1px solid #ef4444', color: '#ef4444', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none' }}>
-                                Contact Support
-                            </Link>
-                        </div>
-
-                        <div style={{ border: '1px solid #e5e7eb', borderRadius: '16px', padding: '24px', background: '#fff' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', borderBottom: '1px solid #e5e7eb', paddingBottom: '20px', marginBottom: '20px' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px' }}>
-                                    <ShieldCheck size={24} color="#4b5563" />
-                                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#4b5563' }}>100% Secure<br/>Transactions</span>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px' }}>
-                                    <Zap size={24} color="#4b5563" />
-                                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#4b5563' }}>Instant<br/>Delivery</span>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px' }}>
-                                    <Star size={24} color="#4b5563" />
-                                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#4b5563' }}>Trusted by<br/>Thousands</span>
-                                </div>
-                            </div>
-
-                            <div style={{ fontSize: '0.8rem', color: '#6b7280', fontWeight: 500, marginBottom: '12px' }}>We Accept</div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#111827', fontWeight: 800, fontSize: '1rem', fontStyle: 'italic' }}>
-                                <span style={{ color: '#1a1f71' }}>VISA</span>
-                                <span style={{ color: '#eb001b' }}>Mastercard</span>
-                                <span>UPI</span>
-                                <span style={{ color: '#002663' }}>RuPay</span>
-                                <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#6b7280', fontStyle: 'normal' }}>& more</span>
-                            </div>
-                        </div>
-
                     </div>
+                </div>
+
+                <div className={styles['trust-strip']}>
+                    <div className={styles['trust-item']}>
+                        <ShieldCheck size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>100% Safe & Secure</strong>
+                            <span>Your data and payments are fully protected.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Sparkles size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>Premium Quality</strong>
+                            <span>Export in HD & 4K with no watermark.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Zap size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>Instant Delivery</strong>
+                            <span>Quick activation & instant access.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Headphones size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>24/7 Support</strong>
+                            <span>We&apos;re here anytime you need us.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles['bottom-cta']}>
+                    <div className={styles['cta-content']}>
+                        <div className={styles['cta-icon-box']}>
+                            <Scissors size={24} color="#7c3aed" />
+                        </div>
+                        <div className={styles['cta-text']}>
+                            <h3>Ready to create stunning content?</h3>
+                            <p>Unlock CapCut Pro and edit like a professional.</p>
+                        </div>
+                    </div>
+                    <button className={styles['cta-button']} onClick={() => document.querySelector(`.${styles['plans-section']}`)?.scrollIntoView({ behavior: 'smooth' })}>
+                        Choose Your Plan <ChevronRight size={18} />
+                    </button>
                 </div>
             </div>
         </div>

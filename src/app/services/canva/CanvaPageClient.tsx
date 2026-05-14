@@ -1,193 +1,203 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Check, Lock, Mail, Play, Palette } from 'lucide-react';
+import { ChevronRight, Check, ShoppingCart, ChevronDown, ShieldCheck, Zap, Headphones, Palette, Layers, Image, Wand2 } from 'lucide-react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import type { Service, Plan } from '@/lib/types';
+import type { Service } from '@/lib/types';
+import styles from '../service-page.module.css';
 
 const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
 export default function CanvaPageClient({ service }: { service: Service }) {
-    const router = useRouter();
-    const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+    const [openFaq, setOpenFaq] = useState<number | null>(0);
+    const toggleFaq = (index: number) => setOpenFaq(openFaq === index ? null : index);
 
-    const plans = service.plans;
-    const selectedPlan = plans.find(p => p.id === selectedPlanId) || plans[0];
+    const colorSchemes = [
+        { card: styles['card-success'], badge: styles['badge-success'], text: styles['text-success'], btn: styles['bg-success'] },
+        { card: styles['card-accent'], badge: styles['badge-accent'], text: styles['text-accent'], btn: styles['bg-accent'] },
+        { card: styles['card-primary'], badge: styles['badge-primary'], text: styles['text-primary'], btn: styles['bg-primary'] },
+    ];
 
-    if (!selectedPlanId && selectedPlan) {
-        setSelectedPlanId(selectedPlan.id);
-    }
-
-    const handleBuy = () => {
-        if (selectedPlanId) {
-            router.push(`/checkout?planId=${selectedPlanId}&service=${service.slug}`);
+    const formatDuration = (days: number) => {
+        if (days >= 365) {
+            const years = Math.floor(days / 365);
+            return `${days} Days (${years} Year${years > 1 ? 's' : ''})`;
         }
+        if (days >= 30) {
+            const months = Math.floor(days / 30);
+            return `${days} Days (${months} Month${months > 1 ? 's' : ''})`;
+        }
+        return `${days} Days`;
     };
 
     return (
-        <div style={{ background: '#f8fafc', minHeight: '100vh', fontFamily: 'var(--font-poppins), sans-serif', paddingBottom: '80px' }}>
+        <div className={styles['service-page']}>
             <div className="container">
                 <nav style={{ padding: '20px 0', fontSize: '13px', color: '#6b7280', display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <Link href="/" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
                     <ChevronRight size={14} />
-                    <Link href="/services" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>All Services</Link>
+                    <Link href="/services" style={{ color: '#111827', textDecoration: 'none', fontWeight: 500 }}>Services</Link>
                     <ChevronRight size={14} />
-                    <span style={{ fontWeight: 700, color: '#111827' }}>Canva Edu</span>
+                    <span style={{ fontWeight: 700, color: '#059669' }}>Canva Edu</span>
                 </nav>
             </div>
 
             <div className="container">
-                <div style={{
-                    width: '100%',
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    background: '#f8fafc',
-                    marginBottom: '40px'
-                }}>
-                    <img src={`${MINIO_URL}/slider/canva.PNG`} alt="Canva Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div className={styles['hero-image-container']}>
+                    <img src={`${MINIO_URL}/slider/canva-banner.png`} alt="Canva Edu Banner" className={styles['hero-banner-image']} />
                 </div>
 
-                <div className="service-layout-grid">
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-                        
-                        <section>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ width: '28px', height: '28px', background: '#7b1fa2', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem' }}>1</div>
-                                    <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: '#111827' }}>Choose Your Plan</h2>
-                                </div>
-                            </div>
+                <div className={styles['plans-section']}>
+                    <h2 className={styles['section-title']}>Choose Your Plan</h2>
+                    <p className={styles['section-subtitle']}>Unlock all Canva Pro features with an Education account.</p>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-                                {plans.map((plan) => {
-                                    const isSelected = selectedPlanId === plan.id;
+                    <div className={styles['plans-grid']}>
+                        {service.plans.map((plan, index) => {
+                            const colors = colorSchemes[index % colorSchemes.length];
+                            const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
 
-                                    return (
-                                        <div 
-                                            key={plan.id}
-                                            onClick={() => setSelectedPlanId(plan.id)}
-                                            style={{
-                                                border: `2px solid ${isSelected ? '#7b1fa2' : '#e2e8f0'}`,
-                                                borderRadius: '16px',
-                                                padding: '24px 20px',
-                                                background: '#fff',
-                                                cursor: 'pointer',
-                                                position: 'relative',
-                                                transition: 'all 0.2s',
-                                                boxShadow: isSelected ? '0 10px 25px rgba(123,31,162,0.1)' : 'none',
-                                                display: 'flex',
-                                                flexDirection: 'column'
-                                            }}
+                            return (
+                                <div key={plan.id} className={`${styles['plan-card']} ${colors.card} ${isBestValue ? styles['best-value'] : ''}`}>
+                                    {isBestValue && <div className={styles['best-value-ribbon']}>BEST VALUE</div>}
+                                    <div className={`${styles['plan-badge']} ${colors.badge}`}>EDU PLAN</div>
+                                    <div className={styles['plan-content']}>
+                                        <h3 className={styles['plan-name']}>{plan.name}</h3>
+                                        <div className={styles['plan-price']}>
+                                            <span className={styles.currency}>{plan.currency === 'USD' ? '$' : '₹'}</span>
+                                            <span className={styles.amount}>{parseFloat(plan.price).toLocaleString()}</span>
+                                            {plan.originalPrice && (
+                                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '16px', marginLeft: '8px', fontWeight: 500 }}>
+                                                    {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.originalPrice).toLocaleString()}
+                                                </span>
+                                            )}
+                                            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 700, marginTop: '4px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                {formatDuration(plan.durationDays)}
+                                            </div>
+                                        </div>
+                                        <ul className={styles['plan-features']}>
+                                            <li><Check size={16} className={colors.text} /> All Canva Pro Features</li>
+                                            <li><Check size={16} className={colors.text} /> 100M+ Premium Templates</li>
+                                            <li><Check size={16} className={colors.text} /> Background Remover & AI Tools</li>
+                                            <li><Check size={16} className={colors.text} /> Brand Kit & Custom Fonts</li>
+                                            <li><Check size={16} className={colors.text} /> 24/7 Priority Support</li>
+                                        </ul>
+                                        <Link
+                                            href={`/checkout?planId=${plan.id}&service=${service.slug}`}
+                                            className={`${styles['plan-btn']} ${colors.btn}`}
+                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
                                         >
-                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '24px' }}>
-                                                <div style={{ background: isSelected ? '#f3e5f5' : '#f8fafc', color: isSelected ? '#7b1fa2' : '#64748b', padding: '12px', borderRadius: '12px' }}>
-                                                    <Palette size={24} />
-                                                </div>
-                                                <div>
-                                                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#111827' }}>{plan.name}</h3>
-                                                </div>
-                                            </div>
-
-                                            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#111827' }}>₹{parseFloat(plan.price).toLocaleString()}</div>
-                                            </div>
-
-                                            <button style={{ width: '100%', background: isSelected ? '#7b1fa2' : '#fff', color: isSelected ? '#fff' : '#7b1fa2', border: `1px solid ${isSelected ? '#7b1fa2' : '#cbd5e1'}`, padding: '12px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}>
-                                                Buy Now
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </section>
-
-                        <section>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                                <div style={{ width: '28px', height: '28px', background: '#7b1fa2', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem' }}>2</div>
-                                <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: '#111827' }}>How It Works?</h2>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', background: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#f3e5f5', color: '#7b1fa2', padding: '10px', borderRadius: '8px' }}><Check size={20} /></div>
-                                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>1. Choose Plan</div><div style={{ fontSize: '0.7rem', color: '#64748b' }}>Select the plan that suits your needs.</div></div>
+                                            <ShoppingCart size={18} /> Buy Now →
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#f3e5f5', color: '#7b1fa2', padding: '10px', borderRadius: '8px' }}><Lock size={20} /></div>
-                                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>2. Complete Payment</div><div style={{ fontSize: '0.7rem', color: '#64748b' }}>Secure payment through our trusted gateway.</div></div>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#f3e5f5', color: '#7b1fa2', padding: '10px', borderRadius: '8px' }}><Mail size={20} /></div>
-                                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>3. Get Access</div><div style={{ fontSize: '0.7rem', color: '#64748b' }}>Receive your account details on email.</div></div>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#f3e5f5', color: '#7b1fa2', padding: '10px', borderRadius: '8px' }}><Play size={20} /></div>
-                                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>4. Start Streaming</div><div style={{ fontSize: '0.7rem', color: '#64748b' }}>Login and enjoy unlimited entertainment.</div></div>
-                                </div>
-                            </div>
-                        </section>
-
+                            );
+                        })}
                     </div>
+                </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', position: 'sticky', top: '100px' }}>
-                        
-                        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '24px' }}>
-                            <h3 style={{ margin: '0 0 24px 0', fontSize: '1.1rem', fontWeight: 800, color: '#111827' }}>Order Summary</h3>
-                            
-                            {selectedPlan && (
-                                <>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                                        <div style={{ width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0, background: '#7b1fa2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <svg viewBox="0 0 100 100" width="32" height="32"><circle cx="50" cy="50" r="45" fill="#fff" opacity="0.15"/><text x="50" y="66" fontSize="52" fontWeight="900" fill="#fff" textAnchor="middle" fontFamily="sans-serif">C</text></svg>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#111827' }}>Canva Edu</div>
-                                            <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{selectedPlan.name}</div>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '16px', borderBottom: '1px solid #f1f5f9', marginBottom: '16px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#64748b' }}>
-                                            <span>Price</span>
-                                            <span style={{ color: '#111827', fontWeight: 600 }}>₹{parseFloat(selectedPlan.price).toLocaleString()}</span>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                                        <span style={{ fontSize: '1rem', fontWeight: 800, color: '#111827' }}>Total</span>
-                                        <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111827' }}>₹{parseFloat(selectedPlan.price).toLocaleString()}</span>
-                                    </div>
-                                </>
-                            )}
-
-                            <div style={{ marginBottom: '24px' }}>
-                                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: '12px' }}>Delivery Method</div>
-                                <div style={{ border: '1px solid #e2e8f0', background: '#fff', padding: '16px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ background: '#f3e5f5', color: '#7b1fa2', padding: '8px', borderRadius: '8px' }}><Mail size={18} /></div>
-                                    <div style={{ flex: 1 }}><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>Email Delivery</div></div>
+                <div className={styles['info-split']}>
+                    <div>
+                        <h3 className={styles['section-title']}>Why Choose Canva Edu?</h3>
+                        <div className={styles['why-list']}>
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><Palette size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>Premium Templates</strong>
+                                    <p>Access 100M+ professional templates for any project.</p>
                                 </div>
                             </div>
-
-                            {selectedPlan && (
-                                <button 
-                                    onClick={handleBuy}
-                                    style={{ width: '100%', background: '#7b1fa2', color: '#fff', border: 'none', padding: '16px', borderRadius: '12px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', boxShadow: '0 4px 14px rgba(123,31,162,0.3)' }}
-                                >
-                                    Buy Now — ₹{parseFloat(selectedPlan.price).toLocaleString()}
-                                </button>
-                            )}
-                            
-                            <div style={{ marginTop: '32px' }}>
-                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b', marginBottom: '12px' }}>We Accept</div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <svg width="40" height="24" viewBox="0 0 80 48" fill="none"><rect width="80" height="48" rx="6" fill="#fff" stroke="#e2e8f0"/><path d="M20 12l8 24h6l-8-24h-6z" fill="#097939"/><path d="M30 12l8 24h6l-8-24h-6z" fill="#ED752E"/><text x="52" y="30" fontSize="12" fontWeight="700" fill="#333" fontFamily="sans-serif">UPI</text></svg>
-                                    <svg width="48" height="24" viewBox="0 0 96 48" fill="none"><rect width="96" height="48" rx="6" fill="#fff" stroke="#e2e8f0"/><text x="12" y="33" fontSize="20" fontWeight="800" fontStyle="italic" fill="#1a1f71" fontFamily="sans-serif">VISA</text></svg>
-                                    <svg width="40" height="24" viewBox="0 0 80 48" fill="none"><rect width="80" height="48" rx="6" fill="#fff" stroke="#e2e8f0"/><circle cx="32" cy="24" r="14" fill="#eb001b"/><circle cx="48" cy="24" r="14" fill="#f79e1b"/><path d="M40 13.4a14 14 0 010 21.2 14 14 0 000-21.2z" fill="#ff5f00"/></svg>
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><Wand2 size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>AI Magic Tools</strong>
+                                    <p>Background remover, Magic Write, text-to-image, and more.</p>
+                                </div>
+                            </div>
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><Layers size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>Brand Kit</strong>
+                                    <p>Upload custom logos, fonts, and colors for consistent branding.</p>
+                                </div>
+                            </div>
+                            <div className={styles['why-item']}>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><Image size={16} /></div>
+                                <div className={styles['why-text']}>
+                                    <strong>Premium Stock</strong>
+                                    <p>Access millions of premium photos, videos, and graphics.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div>
+                        <h3 className={styles['section-title']}>Frequently Asked Questions</h3>
+                        <div className={styles['faq-accordion']}>
+                            {[
+                                { q: "How will I get Canva Edu access?", a: "After purchase, your access details will be delivered instantly to your email and visible in your StreamKart dashboard." },
+                                { q: "Is this the same as Canva Pro?", a: "Canva Edu includes all Canva Pro features plus additional education-specific tools and resources." },
+                                { q: "Can I use it on my existing email?", a: "The account is activated on your email. You get full access to all premium features." },
+                                { q: "Is there a warranty?", a: "We provide a full replacement warranty for the entire plan duration. Any issues are resolved instantly." },
+                                { q: "Can I export in high quality?", a: "Yes! Export in PNG, PDF, SVG, MP4, and more — all in the highest quality without watermarks." }
+                            ].map((item, idx) => (
+                                <div key={idx} className={`${styles['faq-item']} ${openFaq === idx ? styles.open : ''}`} onClick={() => toggleFaq(idx)}>
+                                    <div className={styles['faq-question']}>
+                                        <span>{item.q}</span>
+                                        <ChevronDown size={16} className={styles['faq-arrow']} />
+                                    </div>
+                                    <div className={styles['faq-answer']}>
+                                        <div className={styles['faq-answer-inner']}>{item.a}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles['trust-strip']}>
+                    <div className={styles['trust-item']}>
+                        <ShieldCheck size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>100% Safe & Secure</strong>
+                            <span>Your data and payments are fully protected.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Palette size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>All Pro Features</strong>
+                            <span>Full access to every premium tool.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Zap size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>Instant Delivery</strong>
+                            <span>Quick activation & instant access.</span>
+                        </div>
+                    </div>
+                    <div className={styles['trust-item']}>
+                        <Headphones size={24} className={styles['trust-icon']} />
+                        <div className={styles['trust-text']}>
+                            <strong>24/7 Support</strong>
+                            <span>We&apos;re here anytime you need us.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles['bottom-cta']}>
+                    <div className={styles['cta-content']}>
+                        <div className={styles['cta-icon-box']}>
+                            <Palette size={24} color="#059669" />
+                        </div>
+                        <div className={styles['cta-text']}>
+                            <h3>Ready to design like a pro?</h3>
+                            <p>Get Canva Edu and unlock unlimited creative possibilities.</p>
+                        </div>
+                    </div>
+                    <button className={styles['cta-button']} onClick={() => document.querySelector(`.${styles['plans-section']}`)?.scrollIntoView({ behavior: 'smooth' })}>
+                        Choose Your Plan <ChevronRight size={18} />
+                    </button>
                 </div>
             </div>
         </div>
