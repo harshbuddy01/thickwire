@@ -29,7 +29,7 @@ export interface Plan {
 export interface CreateOrderRequest {
     customerName: string;
     customerEmail: string;
-    customerPhone: string;
+    customerPhone?: string;
     planId: string;
     couponCode?: string;
     gateway?: 'razorpay' | 'cashfree' | 'wallet' | 'upi-direct';

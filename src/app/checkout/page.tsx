@@ -233,11 +233,7 @@ function CheckoutContent() {
         e.preventDefault();
         if (!plan) return;
 
-        const phoneRegex = /^[6-9]\d{9}$/;
-        if (!phoneRegex.test(form.customerPhone.replace(/\D/g, ''))) {
-            setError('Please enter a valid 10-digit Indian mobile number.');
-            return;
-        }
+
 
         if (gateway !== 'wallet' && gateway !== 'upi-direct') {
             setError('Please select a payment method.');
@@ -491,44 +487,24 @@ function CheckoutContent() {
                                     </div>
                                 </div>
 
-                                <div className="checkout-split-row" style={{ display: 'flex', gap: 20 }}>
-                                    <div style={{ flex: 1 }}>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Email Address</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                                            </div>
-                                            <input 
-                                                type="email" 
-                                                required
-                                                readOnly
-                                                disabled
-                                                value={form.customerEmail}
-                                                style={{ width: '100%', padding: '14px 16px 14px 44px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', background: '#f9fafb', color: '#6b7280' }} 
-                                            />
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Email Address</label>
+                                    <div style={{ position: 'relative' }}>
+                                        <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }}>
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, fontSize: '0.75rem', color: '#6b7280' }}>
-                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                                            <span>Credentials will be sent to this email. You can change this in <Link href="/account" style={{ color: '#10b981', textDecoration: 'none' }}>settings</Link>.</span>
-                                        </div>
+                                        <input 
+                                            type="email" 
+                                            required
+                                            readOnly
+                                            disabled
+                                            value={form.customerEmail}
+                                            style={{ width: '100%', padding: '14px 16px 14px 44px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', background: '#f9fafb', color: '#6b7280' }} 
+                                        />
                                     </div>
-                                    <div style={{ flex: 1 }}>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#111827', marginBottom: 8 }}>Phone Number</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                            </div>
-                                            <input 
-                                                type="tel" 
-                                                placeholder="+91 98765 43210" 
-                                                required
-                                                value={form.customerPhone}
-                                                onChange={(e) => setForm({ ...form, customerPhone: e.target.value })}
-                                                style={{ width: '100%', padding: '14px 16px 14px 44px', border: '1px solid #e5e7eb', borderRadius: 12, fontSize: '0.95rem', outline: 'none', transition: 'all 0.2s' }} 
-                                                onFocus={(e) => e.target.style.borderColor = '#10b981'}
-                                                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
-                                            />
-                                        </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, fontSize: '0.75rem', color: '#6b7280' }}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                        <span>Credentials will be sent to this email. You can change this in <Link href="/account" style={{ color: '#10b981', textDecoration: 'none' }}>settings</Link>.</span>
                                     </div>
                                 </div>
                             </div>
