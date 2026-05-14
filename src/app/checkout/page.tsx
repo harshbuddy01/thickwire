@@ -237,42 +237,6 @@ function CheckoutContent() {
             return;
         }
 
-        // UPI Direct flow: submit UTR, credit wallet, then pay from wallet
-        if (gateway === 'upi-direct') {
-            if (!utrNumber.trim() || utrNumber.trim().length < 10) {
-                setError('Please enter a valid UTR number (at least 10 digits).');
-                return;
-            }
-            setSubmitting(true);
-            setError(null);
-            setUtrResult(null);
-            try {
-                const { data: utrData } = await api.post('/wallet/utr/submit', {
-                    utr: utrNumber.trim(),
-                    amount: finalAmount,
-                });
-                setUtrResult(utrData);
-                if (utrData.status === 'MATCHED') {
-                    // Wallet credited — now pay from wallet
-                    try {
-                        const res = await api.post('/wallet/pay', { planId: plan.id });
-                        if (res.data?.success) {
-                            router.push(`/order/${res.data.orderId}?gateway=wallet`);
-                            return;
-                        }
-                    } catch (walletErr: any) {
-                        setError(walletErr?.response?.data?.message || 'UTR matched and wallet credited, but purchase failed. Please go to Wallet and try again.');
-                    }
-                }
-                // PENDING status — user sees message, no auto-purchase
-            } catch (err: any) {
-                setUtrResult({ status: 'error', message: err.response?.data?.message || 'Failed to submit UTR. Please try again.' });
-            } finally {
-                setSubmitting(false);
-            }
-            return;
-        }
-
         if (gateway === 'wallet' && (walletBalance === null || walletBalance < planPriceInWalletCurrency)) {
             setError('Insufficient wallet balance. Please top up your wallet or use another payment method.');
             return;
@@ -292,8 +256,17 @@ function CheckoutContent() {
             return;
         }
 
+        // Validate UPI Direct early
+        if (gateway === 'upi-direct') {
+            if (!utrNumber.trim() || utrNumber.trim().length < 10) {
+                setError('Please enter a valid UTR number (at least 10 digits).');
+                return;
+            }
+        }
+
         setSubmitting(true);
         setError(null);
+        setUtrResult(null);
 
         try {
             let serviceCredentials: Record<string, any> | undefined;
@@ -314,9 +287,39 @@ function CheckoutContent() {
                 ...(serviceCredentials ? { serviceCredentials } : {})
             };
 
+            if (gateway === 'upi-direct') {
+                const { data: utrData } = await api.post('/wallet/utr/submit', {
+                    utr: utrNumber.trim(),
+                    amount: finalAmount,
+                });
+                setUtrResult(utrData);
+                
+                if (utrData.status === 'MATCHED') {
+                    // Wallet credited — now create order and pay from wallet
+                    try {
+                        const resOrder = await createOrder(payload);
+                        const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
+                        if (res.data?.success) {
+                            router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                            return;
+                        }
+                    } catch (walletErr: any) {
+                        setError(walletErr?.response?.data?.message || 'UTR matched and wallet credited, but purchase failed. Please go to Wallet and try again.');
+                    }
+                }
+                // If PENDING, we still create the order so admin can fulfill it later when they approve UTR
+                if (utrData.status === 'PENDING') {
+                    await createOrder(payload);
+                }
+                setSubmitting(false);
+                return;
+            }
+
+            // Wallet Flow
             if (gateway === 'wallet') {
                 try {
-                    const res = await api.post('/wallet/pay', { planId: plan.id });
+                    const resOrder = await createOrder(payload);
+                    const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
                     if (res.data && res.data.success) {
                         router.push(`/order/${res.data.orderId}?gateway=wallet`);
                         return;
@@ -333,10 +336,8 @@ function CheckoutContent() {
                 }
             }
 
-            const res = await createOrder(payload);
-            // Since wallet payment is done via the /wallet/pay endpoint right now,
-            // the logic above for wallet will redirect before reaching this.
-            // If any further wallet logic is needed, it goes here.
+            // Other Gateways
+            await createOrder(payload);
         } catch (err: any) {
             console.error(err);
             setError(err?.response?.data?.message || 'Something went wrong. Please try again.');
