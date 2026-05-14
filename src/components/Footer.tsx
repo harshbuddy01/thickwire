@@ -13,16 +13,16 @@ import {
 
 export default function Footer() {
   const pathname = usePathname();
-  const [openCol, setOpenCol] = useState<string | null>(null);
-
-  if (pathname === '/checkout') return null;
+  const [openCols, setOpenCols] = useState<string[]>([]);
+  
+  const toggleCol = (col: string) => {
+    setOpenCols(prev => prev.includes(col) ? prev.filter(c => c !== col) : [...prev, col]);
+  };
 
   const accentColor = '#b87a1d';
   const MINIO = 'https://assets.streamkart.store/streamkart-assets';
 
-  const toggleCol = (col: string) => {
-    setOpenCol(prev => prev === col ? null : col);
-  };
+  if (pathname === '/checkout') return null;
 
   return (
     <footer style={{
@@ -75,14 +75,14 @@ export default function Footer() {
           padding: '48px',
           boxShadow: '0 4px 30px rgba(0,0,0,0.02)',
           display: 'grid',
-          gridTemplateColumns: '1.5fr 1fr 1fr 1fr 1.5fr',
+          gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
           gap: '40px',
           border: '1px solid #f0f0f0',
           marginBottom: '32px'
         }} className="footer-main-grid">
 
           {/* Brand Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} className="footer-brand-col">
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
                 <div style={{ width: '40px', height: '40px', position: 'relative', flexShrink: 0 }}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="#b87a1d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
@@ -124,7 +124,8 @@ export default function Footer() {
             <div style={{ padding: '14px', borderRadius: '14px', border: '1px solid #f5f5f5', background: '#fafafa' }}>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#999', marginBottom: '8px' }}>We Accept</div>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Visa_2021.svg/1200px-Visa_2021.svg.png" alt="Visa" width={42} height={14} style={{ height: 'auto' }} />
+                <Image src="https://razorpay.com/favicon.png" alt="Razorpay" width={20} height={20} style={{ height: 'auto' }} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#333' }}>Razorpay</span>
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" width={28} height={18} style={{ height: 'auto' }} />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" width={40} height={14} style={{ height: 'auto' }} />
               </div>
@@ -132,7 +133,7 @@ export default function Footer() {
           </div>
 
           {/* Categories */}
-          <FooterCol title="Categories" isOpen={openCol === 'cat'} onToggle={() => toggleCol('cat')}>
+          <FooterCol title="Categories" isOpen={openCols.includes('cat')} onToggle={() => toggleCol('cat')}>
             <FooterLink href="/streaming" icon={<PlayCircle size={15} />}>Streaming</FooterLink>
             <FooterLink href="/audiobooks" icon={<BookOpen size={15} />}>Audiobooks</FooterLink>
             <FooterLink href="/news" icon={<Newspaper size={15} />}>News</FooterLink>
@@ -141,17 +142,20 @@ export default function Footer() {
             <FooterLink href="/activation" icon={<Key size={15} />}>Activation</FooterLink>
           </FooterCol>
 
-          {/* Support */}
-          <FooterCol title="Support" isOpen={openCol === 'sup'} onToggle={() => toggleCol('sup')}>
-            <FooterLink href="/contact" icon={<Phone size={15} />}>Contact Us</FooterLink>
+          {/* Support & Legal */}
+          <FooterCol title="Quick Links" isOpen={openCols.includes('quick')} onToggle={() => toggleCol('quick')}>
+            <FooterLink href="/support" icon={<Headphones size={15} />}>Support</FooterLink>
+            <FooterLink href="/contact" icon={<MessageCircle size={15} />}>Contact Us</FooterLink>
             <FooterLink href="/faq" icon={<HelpCircle size={15} />}>FAQ</FooterLink>
             <FooterLink href="/refund" icon={<RefreshCcw size={15} />}>Refund Policy</FooterLink>
-            <FooterLink href="/terms" icon={<FileText size={15} />}>Terms & Conditions</FooterLink>
-            <FooterLink href="/privacy" icon={<ShieldCheck size={15} />}>Privacy Policy</FooterLink>
+            <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #f5f5f5' }}>
+              <FooterLink href="/terms" icon={<FileText size={15} />}>Terms & Conditions</FooterLink>
+              <FooterLink href="/privacy" icon={<ShieldCheck size={15} />}>Privacy Policy</FooterLink>
+            </div>
           </FooterCol>
 
           {/* Top Picks */}
-          <FooterCol title="Top Picks" isOpen={openCol === 'top'} onToggle={() => toggleCol('top')}>
+          <FooterCol title="Top Picks" isOpen={openCols.includes('top')} onToggle={() => toggleCol('top')}>
             <FooterLink href="/services/netflix" icon={<Image src={`${MINIO}/logos/netflix.svg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Netflix</FooterLink>
             <FooterLink href="/services/spotify" icon={<Image src={`${MINIO}/logos/spotify.png`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Spotify</FooterLink>
             <FooterLink href="/services/disney" icon={<Image src={`${MINIO}/logos/disney.jpg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Disney+</FooterLink>
@@ -159,35 +163,50 @@ export default function Footer() {
             <FooterLink href="/services/prime" icon={<Image src={`${MINIO}/logos/prime.svg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Amazon Prime</FooterLink>
           </FooterCol>
 
-          {/* Newsletter */}
-          <div style={{
-            background: '#fafafa', border: '1px solid #f0f0f0', borderRadius: '20px', padding: '24px',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'
-          }}>
+        </div>
+        
+        {/* ─── Horizontal Newsletter ─── */}
+        <div style={{
+          background: '#fff',
+          border: '1px solid #f0f0f0',
+          borderRadius: '24px',
+          padding: '32px 48px',
+          marginBottom: '32px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '40px',
+          boxShadow: '0 4px 25px rgba(0,0,0,0.02)'
+        }} className="footer-newsletter-row">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1 }}>
             <div style={{
-              width: '46px', height: '46px', borderRadius: '50%', background: '#fff9f0',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', color: accentColor, marginBottom: '16px'
+              width: '52px', height: '52px', borderRadius: '50%', background: '#fff9f0',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: accentColor, flexShrink: 0
             }}>
-              <Mail size={22} />
+              <Mail size={24} />
             </div>
-            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 8px 0' }}>Stay Updated!</h4>
-            <p style={{ fontSize: '0.82rem', color: '#777', marginBottom: '16px', lineHeight: 1.5 }}>
-              Get exclusive offers & updates straight to your inbox.
-            </p>
+            <div>
+              <h4 style={{ fontSize: '1.25rem', fontWeight: 800, margin: '0 0 4px 0' }}>Stay Updated!</h4>
+              <p style={{ fontSize: '0.88rem', color: '#777', margin: 0 }}>Get exclusive offers & updates straight to your inbox.</p>
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '12px', flex: 1.2, maxWidth: '600px' }} className="newsletter-form-wrap">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
               style={{
-                width: '100%', padding: '11px 13px', borderRadius: '10px', border: '1px solid #eee',
-                marginBottom: '12px', outline: 'none', fontSize: '0.88rem', fontFamily: 'inherit'
+                flex: 1, padding: '14px 20px', borderRadius: '14px', border: '1px solid #eee',
+                outline: 'none', fontSize: '0.95rem', fontFamily: 'inherit', background: '#fafafa'
               }}
             />
             <button style={{
-              width: '100%', background: accentColor, color: '#fff', border: 'none', borderRadius: '10px',
-              padding: '11px', fontWeight: 700, fontFamily: 'inherit',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer'
+              background: accentColor, color: '#fff', border: 'none', borderRadius: '14px',
+              padding: '0 32px', fontWeight: 700, fontFamily: 'inherit',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer',
+              whiteSpace: 'nowrap', transition: 'all 0.2s'
             }}>
-              Subscribe <ArrowRight size={16} />
+              Subscribe <ArrowRight size={18} />
             </button>
           </div>
         </div>
@@ -207,7 +226,7 @@ export default function Footer() {
       </div>
 
       {/* ─── Mobile Footer CSS ─── */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (min-width: 769px) {
           .footer-col-header { cursor: default !important; }
           .footer-col-chevron { display: none !important; }
@@ -225,8 +244,11 @@ export default function Footer() {
             grid-template-columns: 1fr !important;
             padding: 20px !important;
             border-radius: 16px !important;
-            gap: 0 !important;
+            gap: 32px !important;
             margin-bottom: 20px !important;
+          }
+          .footer-brand-col {
+            margin-bottom: 12px;
           }
           .footer-col-mobile-wrap {
             border-bottom: 1px solid #f0f0f0;
@@ -256,6 +278,23 @@ export default function Footer() {
             visibility: visible;
             padding-bottom: 20px;
           }
+          .footer-newsletter-row {
+            flex-direction: column !important;
+            padding: 24px !important;
+            text-align: center !important;
+            gap: 24px !important;
+          }
+          .footer-newsletter-row > div:first-child {
+            flex-direction: column !important;
+            gap: 12px !important;
+          }
+          .newsletter-form-wrap {
+            width: 100% !important;
+            flex-direction: column !important;
+          }
+          .newsletter-form-wrap button {
+            padding: 14px !important;
+          }
           .footer-copyright {
             flex-direction: column !important;
             gap: 6px !important;
@@ -271,7 +310,7 @@ export default function Footer() {
             grid-template-columns: 1fr !important;
           }
         }
-      `}</style>
+      ` }} />
     </footer>
   );
 }

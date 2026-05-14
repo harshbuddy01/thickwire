@@ -1,11 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-import Image from 'next/image';
 import ProgressiveImage from '@/components/ProgressiveImage';
-
-import Link from 'next/link';
 
 const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
@@ -18,37 +14,83 @@ const slides = [
 
 export default function HeroSlider() {
     const [current, setCurrent] = useState(0);
+    const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % slides.length);
-        }, 6000);
+            setCurrent((prev) => {
+                let next = prev + direction;
+                
+                // If we reach the end, reverse direction
+                if (next === slides.length - 1) {
+                    setDirection(-1);
+                } else if (next === 0) {
+                    setDirection(1);
+                }
+                
+                return next;
+            });
+        }, 5000);
         return () => clearInterval(timer);
-    }, []);
+    }, [direction]);
 
     return (
-        <div className="hero-slider" style={{ position: 'relative', overflow: 'hidden', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', aspectRatio: '2/1', backgroundColor: '#111' }}>
-            {slides.map((slide, index) => (
-                <div 
-                    key={slide.id} 
-                    style={{ 
-                        position: 'absolute', 
-                        top: 0, 
-                        left: 0, 
-                        width: '100%', 
-                        height: '100%', 
-                        opacity: current === index ? 1 : 0, 
-                        transition: 'opacity 0.8s ease-in-out',
-                        zIndex: current === index ? 1 : 0
-                    }}
-                >
-                    {current === index && (
-                        <ProgressiveImage src={slide.src} alt={slide.alt} priority={index === 0} />
-                    )}
-                </div>
-            ))}
+        <div className="hero-slider" style={{ 
+            position: 'relative', 
+            overflow: 'hidden', 
+            borderRadius: '24px', 
+            boxShadow: '0 20px 40px rgba(0,0,0,0.15)', 
+            aspectRatio: '2/1', 
+            backgroundColor: '#111' 
+        }}>
+            {/* Sliding Container */}
+            <div style={{
+                display: 'flex',
+                width: `${slides.length * 100}%`,
+                height: '100%',
+                transform: `translateX(-${(current * 100) / slides.length}%)`,
+                transition: 'transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)'
+            }}>
+                {slides.map((slide) => (
+                    <div 
+                        key={slide.id} 
+                        style={{ 
+                            width: `${100 / slides.length}%`, 
+                            height: '100%',
+                            position: 'relative'
+                        }}
+                    >
+                        <ProgressiveImage src={slide.src} alt={slide.alt} priority={slide.id === 1} />
+                        
+                        {/* Premium Glassy Overlay */}
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            background: 'linear-gradient(to right, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1))',
+                            pointerEvents: 'none'
+                        }} />
+                    </div>
+                ))}
+            </div>
 
-            <div className="slider-dots" style={{ position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 10 }}>
+            {/* Navigation Dots */}
+            <div className="slider-dots" style={{ 
+                position: 'absolute', 
+                bottom: '20px', 
+                left: '50%', 
+                transform: 'translateX(-50%)', 
+                display: 'flex', 
+                gap: '10px', 
+                zIndex: 10,
+                background: 'rgba(0,0,0,0.2)',
+                padding: '6px 12px',
+                borderRadius: '20px',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.1)'
+            }}>
                 {slides.map((_, index) => (
                     <button
                         key={index}
@@ -57,10 +99,10 @@ export default function HeroSlider() {
                             width: current === index ? '20px' : '6px',
                             height: '6px',
                             borderRadius: '3px',
-                            background: current === index ? '#6c5ce7' : 'rgba(255,255,255,0.4)',
+                            background: current === index ? '#fff' : 'rgba(255,255,255,0.4)',
                             border: 'none',
                             cursor: 'pointer',
-                            transition: 'all 0.3s'
+                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                         }}
                     />
                 ))}

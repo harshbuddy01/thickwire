@@ -23,6 +23,7 @@ export default function Header() {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchOpen, setSearchOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
     const [services, setServices] = useState<Service[]>([]);
     const [suggestions, setSuggestions] = useState<Service[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -33,6 +34,9 @@ export default function Header() {
         const handleClickOutside = (e: MouseEvent) => {
             if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
                 setShowSuggestions(false);
+            }
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setMenuOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -170,52 +174,83 @@ export default function Header() {
                             <Heart size={20} />
                         </Link>
 
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative' }} ref={menuRef}>
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
-                                className="header-icon-link user-btn"
-                                style={{ border: 'none', cursor: 'pointer' }}
+                                className={`header-icon-link user-btn ${menuOpen ? 'active' : ''}`}
+                                style={{ 
+                                    border: 'none', 
+                                    cursor: 'pointer',
+                                    background: menuOpen ? '#f1f5f9' : 'transparent',
+                                    borderRadius: '12px',
+                                    transition: 'all 0.2s'
+                                }}
                                 aria-label="Account"
                             >
                                 <User size={20} />
                             </button>
 
                             {menuOpen && (
-                                <>
-                                    <div
-                                        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 40 }}
-                                        onClick={() => setMenuOpen(false)}
-                                    />
-                                    <div style={dropdownStyles.menu}>
-                                        {!loading && !user ? (
-                                            <>
-                                                <div style={dropdownStyles.menuHeader}>
-                                                    <p style={dropdownStyles.menuTitle}>Welcome to StreamKart</p>
-                                                    <p style={dropdownStyles.menuSubtitle}>Login for the best experience</p>
+                                <div className="user-dropdown-premium" style={dropdownStyles.menu}>
+                                    {!loading && !user ? (
+                                        <>
+                                            <div style={dropdownStyles.menuHeader}>
+                                                <div style={{ width: 40, height: 40, background: '#fff9f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#b87a1d' }}>
+                                                    <User size={20} />
                                                 </div>
-                                                <div style={dropdownStyles.menuDivider} />
-                                                <Link href="/login" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>Login</Link>
-                                                <Link href="/signup" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>Sign Up</Link>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <div style={dropdownStyles.menuHeader}>
-                                                    <p style={dropdownStyles.menuTitle}>{user?.name}</p>
-                                                    <p style={dropdownStyles.menuSubtitle}>{user?.email}</p>
+                                                <p style={dropdownStyles.menuTitle}>Welcome to StreamKart</p>
+                                                <p style={dropdownStyles.menuSubtitle}>Join our premium community</p>
+                                            </div>
+                                            <div style={{ padding: '8px 16px 16px' }}>
+                                                <Link href="/login" onClick={() => setMenuOpen(false)} style={{
+                                                    ...dropdownStyles.primaryBtn,
+                                                    background: '#1a1c23',
+                                                    marginBottom: 8
+                                                }}>
+                                                    Login
+                                                </Link>
+                                                <Link href="/signup" onClick={() => setMenuOpen(false)} style={{
+                                                    ...dropdownStyles.primaryBtn,
+                                                    background: '#b87a1d',
+                                                }}>
+                                                    Sign Up
+                                                </Link>
+                                            </div>
+                                            <div style={dropdownStyles.menuDivider} />
+                                            <Link href="/support" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
+                                                <HeadphonesIcon size={16} style={{ opacity: 0.6 }} /> Help Center
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div style={dropdownStyles.menuHeader}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+                                                    <div style={{ width: 36, height: 36, background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#1a1c23' }}>
+                                                        {user?.name?.[0]?.toUpperCase()}
+                                                    </div>
+                                                    <div>
+                                                        <p style={dropdownStyles.menuTitle}>{user?.name}</p>
+                                                        <p style={dropdownStyles.menuSubtitle}>{user?.email}</p>
+                                                    </div>
                                                 </div>
-                                                <div style={dropdownStyles.menuDivider} />
-                                                <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>My Account</Link>
-                                                <div style={dropdownStyles.menuDivider} />
-                                                <button
-                                                    onClick={() => { setMenuOpen(false); logout(); }}
-                                                    style={{ ...dropdownStyles.menuItem, color: '#ef4444', border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Outfit, sans-serif' }}
-                                                >
-                                                    <LogOut size={14} /> Log Out
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </>
+                                            </div>
+                                            <div style={dropdownStyles.menuDivider} />
+                                            <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
+                                                <Package size={16} style={{ opacity: 0.6 }} /> My Account
+                                            </Link>
+                                            <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
+                                                <Wallet size={16} style={{ opacity: 0.6 }} /> Wallet Balance
+                                            </Link>
+                                            <div style={dropdownStyles.menuDivider} />
+                                            <button
+                                                onClick={() => { setMenuOpen(false); logout(); }}
+                                                style={{ ...dropdownStyles.menuItem, color: '#ef4444', border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}
+                                            >
+                                                <LogOut size={16} /> Log Out
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -370,27 +405,45 @@ const dropdownStyles: { [key: string]: React.CSSProperties } = {
     menu: {
         position: 'absolute',
         right: 0,
-        marginTop: 12,
-        width: 240,
-        background: '#fff',
-        border: '1px solid #f0f0f0',
-        borderRadius: 18,
-        boxShadow: '0 20px 50px rgba(0,0,0,0.12)',
+        top: 'calc(100% + 15px)',
+        width: 280,
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(0,0,0,0.05)',
+        borderRadius: 24,
+        boxShadow: '0 25px 60px rgba(0,0,0,0.15)',
         padding: '8px 0',
-        zIndex: 50,
+        zIndex: 100,
         overflow: 'hidden',
+        animation: 'dropdownAppear 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     },
-    menuHeader: { padding: '14px 18px' },
-    menuTitle: { fontSize: '0.85rem', fontWeight: 700, color: '#1a1c23', marginBottom: 2 },
-    menuSubtitle: { fontSize: '0.75rem', color: '#999' },
-    menuDivider: { height: 1, background: '#f3f4f6', margin: '2px 0' },
+    menuHeader: { padding: '20px 24px 12px' },
+    menuTitle: { fontSize: '1rem', fontWeight: 800, color: '#1a1c23', marginBottom: 2, fontFamily: 'Outfit, sans-serif' },
+    menuSubtitle: { fontSize: '0.8rem', color: '#64748b', fontFamily: 'Outfit, sans-serif' },
+    menuDivider: { height: 1, background: '#f1f5f9', margin: '8px 0' },
     menuItem: {
-        display: 'block',
-        padding: '11px 18px',
-        fontSize: '0.85rem',
-        color: '#333',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '12px 24px',
+        fontSize: '0.9rem',
+        color: '#334155',
         textDecoration: 'none',
-        transition: 'background 0.15s',
-        fontWeight: 500,
+        transition: 'all 0.2s',
+        fontWeight: 600,
+        fontFamily: 'Outfit, sans-serif',
     },
+    primaryBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '12px',
+        borderRadius: '14px',
+        color: '#fff',
+        fontWeight: 700,
+        fontSize: '0.9rem',
+        textDecoration: 'none',
+        transition: 'transform 0.2s, opacity 0.2s',
+        fontFamily: 'Outfit, sans-serif',
+    }
 };

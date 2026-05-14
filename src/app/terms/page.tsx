@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, FileText, Scale, ShieldAlert, Gavel } from 'lucide-react';
+import { ChevronRight, FileText, ShieldCheck, Scale, AlertCircle } from 'lucide-react';
 import styles from '../static-page.module.css';
 
 export default function TermsPage() {
@@ -15,75 +15,66 @@ export default function TermsPage() {
                 </nav>
 
                 <div className={styles['content-wrapper']}>
-                    <h1 className={styles['page-title']}>Terms & Conditions</h1>
+                    <h1 className={styles['page-title']}>Terms of Service</h1>
                     <p className={styles['page-subtitle']}>
-                        By using StreamKart, you agree to the following terms and conditions. 
-                        Please read them carefully before making a purchase.
+                        Welcome to StreamKart. By using our platform, you agree to the following terms. 
+                        Please read them carefully to ensure a smooth experience.
                     </p>
 
                     <div className={styles['contact-grid']}>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><Scale size={24} /></div>
-                            <h3>Agreement</h3>
-                            <p>Use of our platform constitutes acceptance of these terms.</p>
+                            <div className={styles['contact-icon']}><ShieldCheck size={26} /></div>
+                            <h3>Safe Usage</h3>
+                            <p>Guidelines on how to use your premium accounts safely.</p>
                         </div>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><ShieldAlert size={24} /></div>
-                            <h3>User Conduct</h3>
-                            <p>Users must not misuse accounts or share credentials illegally.</p>
-                        </div>
-                        <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><Gavel size={24} /></div>
+                            <div className={styles['contact-icon']}><Scale size={26} /></div>
                             <h3>Legal Use</h3>
-                            <p>All services are for personal, non-commercial use only.</p>
+                            <p>Our commitment to providing official digital services.</p>
+                        </div>
+                        <div className={styles['contact-card']}>
+                            <div className={styles['contact-icon']}><AlertCircle size={26} /></div>
+                            <h3>Restrictions</h3>
+                            <p>Important rules regarding account sharing and modifications.</p>
                         </div>
                     </div>
 
                     <div className={styles['rich-text']}>
-                        <h2>1. Introduction</h2>
+                        <h2>1. Acceptance of Terms</h2>
                         <p>
-                            Welcome to StreamKart. These Terms and Conditions govern your use of our website and services. By accessing or using our platform, you agree to be bound by these terms.
+                            By accessing and using StreamKart (streamkart.store), you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.
                         </p>
 
-                        <h2>2. Service Provision</h2>
+                        <h2>2. Service Description</h2>
                         <p>
-                            StreamKart acts as a facilitator for digital subscriptions. We provide access to various premium services. While we ensure the validity of the accounts we sell, we are not the owners of the underlying streaming or AI platforms.
+                            StreamKart provides premium digital subscriptions and activation services for various entertainment and AI platforms. We act as a facilitator to provide you with official premium access at competitive prices.
                         </p>
 
-                        <h2>3. User Account and Security</h2>
-                        <p>
-                            When you purchase a service, you may receive credentials (email/password) or an activation link. You are responsible for:
-                        </p>
+                        <h2>3. User Responsibilities</h2>
                         <ul>
-                            <li>Maintaining the confidentiality of the credentials.</li>
-                            <li>Not changing the password or account settings unless explicitly permitted.</li>
-                            <li>Not sharing the account with others beyond the specified device limit.</li>
+                            <li><strong>Account Security:</strong> You are responsible for maintaining the confidentiality of the credentials provided to you.</li>
+                            <li><strong>Prohibited Actions:</strong> You may not change the email, password, or profile settings of shared accounts unless explicitly stated in the product description.</li>
+                            <li><strong>No Reselling:</strong> The services purchased are for personal use only. Reselling credentials without prior authorization is strictly prohibited.</li>
                         </ul>
 
-                        <h2>4. Payment and Pricing</h2>
+                        <h2>4. Delivery & Payments</h2>
                         <p>
-                            All prices are listed in INR (₹) or USD ($). Payments are processed securely via our payment partners (Razorpay). We reserve the right to change prices at any time without prior notice.
+                            All payments are processed securely through Razorpay. Digital products are delivered via your dashboard and registered email. We aim for instant delivery but reserve up to 24 hours for manual verification if required.
                         </p>
 
-                        <h2>5. Limitations of Liability</h2>
+                        <h2>5. Termination</h2>
                         <p>
-                            StreamKart shall not be liable for any indirect, incidental, or consequential damages resulting from the use or inability to use the services. We do not guarantee that the services will be uninterrupted or error-free, as they depend on third-party providers.
+                            We reserve the right to terminate your access to our services if you are found violating any of these terms, including but not limited to attempted fraud, harassment of support staff, or unauthorized account modifications.
                         </p>
 
-                        <h2>6. Termination of Service</h2>
+                        <h2>6. Limitation of Liability</h2>
                         <p>
-                            We reserve the right to terminate your access to our services without refund if you are found to be in violation of these terms, including but not limited to:
+                            StreamKart is not responsible for any downtime or changes in policy made by the third-party service providers (e.g., Netflix, Spotify, OpenAI). However, we will always strive to provide replacements or alternatives as per our warranty policy.
                         </p>
-                        <ul>
-                            <li>Attempting to change account credentials without permission.</li>
-                            <li>Reselling the accounts provided to you.</li>
-                            <li>Using the services for any illegal activities.</li>
-                        </ul>
 
-                        <h2>7. Changes to Terms</h2>
-                        <p>
-                            We may update these Terms & Conditions from time to time. Your continued use of the platform after any changes signifies your acceptance of the new terms.
-                        </p>
+                        <div style={{ marginTop: '56px', borderTop: '1px solid #f0f0f0', paddingTop: '32px', color: '#94a3b8', fontSize: '0.9rem' }}>
+                            Last Updated: May 2026. StreamKart reserves the right to update these terms at any time.
+                        </div>
                     </div>
                 </div>
             </div>

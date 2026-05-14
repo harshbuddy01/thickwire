@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, RefreshCcw, ShieldCheck, Clock, CreditCard } from 'lucide-react';
+import { ChevronRight, RefreshCcw, ShieldCheck, Clock, CreditCard, ArrowRight } from 'lucide-react';
 import styles from '../static-page.module.css';
 
 export default function RefundPolicyPage() {
@@ -15,75 +15,101 @@ export default function RefundPolicyPage() {
                 </nav>
 
                 <div className={styles['content-wrapper']}>
-                    <h1 className={styles['page-title']}>Refund Policy</h1>
+                    <h1 className={styles['page-title']}>Refund & Replacement</h1>
                     <p className={styles['page-subtitle']}>
-                        We want you to be completely satisfied with your purchase. 
-                        Please read our refund and replacement policy carefully.
+                        We stand by the quality of our services. If something isn&apos;t right, 
+                        we&apos;re committed to making it fair for you.
                     </p>
 
                     <div className={styles['contact-grid']}>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><RefreshCcw size={24} /></div>
+                            <div className={styles['contact-icon']}><RefreshCcw size={26} /></div>
                             <h3>Full Refund</h3>
-                            <p>If the service is not delivered within 24 hours of purchase.</p>
+                            <p>Eligible if service is not delivered within 24 hours.</p>
                         </div>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><ShieldCheck size={24} /></div>
-                            <h3>Replacement</h3>
-                            <p>100% replacement warranty if you face any issues during the validity.</p>
+                            <div className={styles['contact-icon']}><ShieldCheck size={26} /></div>
+                            <h3>100% Warranty</h3>
+                            <p>Full-duration replacement if you face any issues.</p>
                         </div>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><Clock size={24} /></div>
-                            <h3>Quick Response</h3>
-                            <p>All refund requests are processed within 2-3 business days.</p>
+                            <div className={styles['contact-icon']}><Clock size={26} /></div>
+                            <h3>Quick Action</h3>
+                            <p>Replacement provided within 12-24 hours.</p>
                         </div>
                     </div>
 
                     <div className={styles['rich-text']}>
                         <h2>1. Eligibility for Refund</h2>
                         <p>
-                            Refunds are eligible only under the following circumstances:
+                            At StreamKart, customer satisfaction is our priority. Refunds are generally eligible under the following specific conditions:
                         </p>
                         <ul>
-                            <li>The service was not delivered within the promised timeframe (usually 24 hours).</li>
-                            <li>The credentials provided are invalid and our support team is unable to replace them.</li>
-                            <li>The subscription was canceled by the provider before the expiry date and we are unable to provide a replacement.</li>
+                            <li><strong>Delivery Failure:</strong> If we fail to deliver your credentials within 24 hours of successful payment.</li>
+                            <li><strong>Invalid Credentials:</strong> If the provided login details are invalid and we are unable to replace them within 48 hours.</li>
+                            <li><strong>Service Termination:</strong> If a subscription is terminated by the provider prematurely and no replacement is available.</li>
                         </ul>
 
                         <h2>2. Non-Refundable Situations</h2>
                         <p>
-                            We cannot offer refunds in the following cases:
+                            To maintain our competitive pricing, we cannot offer refunds in these cases:
                         </p>
                         <ul>
-                            <li>You changed your mind after the credentials have been delivered and used.</li>
-                            <li>You are unable to use the service due to technical issues on your device or ISP (we will try to help, but no refund).</li>
-                            <li>The account was banned due to violation of the service provider&apos;s terms of use (e.g., sharing password).</li>
+                            <li>Change of mind after the digital product (credentials) has been delivered and viewed.</li>
+                            <li>Technical issues at the user&apos;s end (e.g., VPN issues, device compatibility, or ISP blocks).</li>
+                            <li>Account bans caused by violating the service provider&apos;s Terms of Service (e.g., password sharing or illegal activity).</li>
                         </ul>
 
-                        <h2>3. Replacement Warranty</h2>
+                        <h2>3. The Replacement Warranty</h2>
                         <p>
-                            Most of our services come with a full-duration replacement warranty. If your account stops working:
+                            Every premium plan sold on StreamKart comes with a <strong>Full-Duration Replacement Warranty</strong>. If your account stops working:
                         </p>
                         <ol>
-                            <li>Contact our support team immediately via the dashboard or WhatsApp.</li>
-                            <li>Provide your Order ID and a screenshot of the issue.</li>
-                            <li>We will provide a replacement or fix the issue within 12-24 hours.</li>
+                            <li>Open a support ticket or message us on WhatsApp with your Order ID.</li>
+                            <li>Provide a clear screenshot of the error message you are seeing.</li>
+                            <li>Our automated system or support team will provide a fresh replacement within 12-24 hours.</li>
                         </ol>
 
-                        <h2>4. How to Request a Refund</h2>
+                        <h2>4. Processing Your Refund</h2>
                         <p>
-                            To request a refund, please email us at <strong>payments@streamkart.store</strong> or open a support ticket from your dashboard. Please include:
+                            Once a refund is approved by our billing team, it will be initiated immediately.
                         </p>
                         <ul>
-                            <li>Order ID</li>
-                            <li>Reason for refund</li>
-                            <li>Screenshot of the issue (if applicable)</li>
+                            <li><strong>UPI/Wallets:</strong> Usually reflects within 24-48 hours.</li>
+                            <li><strong>Credit/Debit Cards:</strong> May take 5-7 business days depending on your bank.</li>
                         </ul>
-
-                        <h2>5. Refund Processing</h2>
-                        <p>
-                            Once approved, the refund will be credited back to your original payment method (UPI, Bank, or Wallet) within 5-7 working days, depending on your bank&apos;s processing time.
-                        </p>
+                        
+                        <div style={{ 
+                            marginTop: '64px', 
+                            padding: '40px', 
+                            background: '#fafafa', 
+                            borderRadius: '24px', 
+                            border: '1px solid #f0f0f0',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            gap: '24px'
+                        }}>
+                            <div style={{ flex: 1, minWidth: '300px' }}>
+                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.3rem', fontWeight: 900 }}>Need to request a refund?</h3>
+                                <p style={{ margin: 0, color: '#64748b' }}>Our billing team handles all requests with the highest priority.</p>
+                            </div>
+                            <Link href="/support" style={{
+                                background: '#1a1c23',
+                                color: '#fff',
+                                padding: '14px 32px',
+                                borderRadius: '14px',
+                                fontWeight: 800,
+                                textDecoration: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                transition: 'all 0.3s ease'
+                            }}>
+                                Contact Billing <ArrowRight size={18} />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

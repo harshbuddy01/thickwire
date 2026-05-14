@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, HelpCircle, ChevronDown, Zap, ShieldCheck, Headphones } from 'lucide-react';
+import { ChevronRight, HelpCircle, ChevronDown, Zap, ShieldCheck, Headphones, ArrowRight, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import styles from '../static-page.module.css';
 
@@ -53,35 +53,35 @@ export default function FAQPage() {
                 <nav className={styles['breadcrumb-nav']}>
                     <Link href="/">Home</Link>
                     <ChevronRight size={14} />
-                    <span className={styles.current}>Frequently Asked Questions</span>
+                    <span className={styles.current}>FAQ</span>
                 </nav>
 
                 <div className={styles['content-wrapper']}>
-                    <h1 className={styles['page-title']}>FAQ</h1>
+                    <h1 className={styles['page-title']}>Frequently Asked Questions</h1>
                     <p className={styles['page-subtitle']}>
                         Find quick answers to common questions about our services, 
-                        payments, and delivery process.
+                        payments, and instant delivery process.
                     </p>
 
                     <div className={styles['contact-grid']}>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><Zap size={24} /></div>
+                            <div className={styles['contact-icon']}><Zap size={26} /></div>
                             <h3>Instant Help</h3>
                             <p>Most answers can be found right here in the FAQ.</p>
                         </div>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><ShieldCheck size={24} /></div>
+                            <div className={styles['contact-icon']}><ShieldCheck size={26} /></div>
                             <h3>Safe Purchase</h3>
                             <p>Learn about our security and official accounts.</p>
                         </div>
                         <div className={styles['contact-card']}>
-                            <div className={styles['contact-icon']}><Headphones size={24} /></div>
-                            <h3>Still Unsure?</h3>
-                            <p>Our support team is available 24/7 to assist you.</p>
+                            <div className={styles['contact-icon']}><Headphones size={26} /></div>
+                            <h3>24/7 Support</h3>
+                            <p>Our support team is available anytime to assist you.</p>
                         </div>
                     </div>
 
-                    <div style={{ marginTop: '48px' }}>
+                    <div style={{ marginTop: '64px' }}>
                         {faqs.map((faq, index) => (
                             <div 
                                 key={index} 
@@ -90,7 +90,7 @@ export default function FAQPage() {
                             >
                                 <div className={styles['faq-question']}>
                                     <span>{faq.q}</span>
-                                    <ChevronDown size={20} className={styles['faq-arrow']} />
+                                    <ChevronDown size={22} className={styles['faq-arrow']} />
                                 </div>
                                 <div className={styles['faq-answer']}>
                                     {faq.a}
@@ -100,30 +100,40 @@ export default function FAQPage() {
                     </div>
 
                     <div style={{ 
-                        marginTop: '64px', 
-                        padding: '32px', 
-                        background: '#f8fafc', 
-                        borderRadius: '24px', 
+                        marginTop: '80px', 
+                        padding: '48px', 
+                        background: '#fafafa', 
+                        borderRadius: '32px', 
                         textAlign: 'center',
-                        border: '1px solid #e2e8f0'
+                        border: '1px solid #f0f0f0'
                     }}>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1e293b', marginBottom: '12px' }}>
-                            Didn&apos;t find what you were looking for?
+                        <div style={{ 
+                            width: '56px', height: '56px', background: '#fff', borderRadius: '50%',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px auto',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.05)', color: '#b87a1d'
+                        }}>
+                            <MessageCircle size={28} />
+                        </div>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1e293b', marginBottom: '16px' }}>
+                            Still have questions?
                         </h3>
-                        <p style={{ color: '#64748b', marginBottom: '24px' }}>
-                            Our dedicated support team is ready to help you with any specific queries.
+                        <p style={{ color: '#64748b', marginBottom: '32px', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 32px auto' }}>
+                            If you didn&apos;t find your answer here, our team is ready to provide personal assistance.
                         </p>
                         <Link href="/support" style={{
                             background: '#b87a1d',
                             color: '#fff',
-                            padding: '12px 32px',
-                            borderRadius: '12px',
-                            fontWeight: 700,
+                            padding: '16px 48px',
+                            borderRadius: '16px',
+                            fontWeight: 800,
                             textDecoration: 'none',
-                            display: 'inline-block',
-                            transition: 'all 0.2s ease'
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 10px 25px rgba(184, 122, 29, 0.2)'
                         }}>
-                            Contact Support
+                            Get in Touch <ArrowRight size={18} />
                         </Link>
                     </div>
                 </div>
