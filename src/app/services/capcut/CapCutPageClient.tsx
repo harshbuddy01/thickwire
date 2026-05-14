@@ -45,7 +45,7 @@ export default function CapCutPageClient({ service }: { service: Service }) {
 
             <div className="container">
                 <div className={styles['hero-image-container']}>
-                    <img src={`${MINIO_URL}/slider/capcut-banner.png`} alt="CapCut Pro Banner" className={styles['hero-banner-image']} />
+                    <img src={`${MINIO_URL}/slider/IMG_0116.PNG`} alt="CapCut Pro Banner" className={styles['hero-banner-image']} />
                 </div>
 
                 <div className={styles['plans-section']}>

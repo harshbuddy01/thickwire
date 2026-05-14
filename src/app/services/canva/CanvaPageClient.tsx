@@ -44,7 +44,7 @@ export default function CanvaPageClient({ service }: { service: Service }) {
 
             <div className="container">
                 <div className={styles['hero-image-container']}>
-                    <img src={`${MINIO_URL}/slider/canva-banner.png`} alt="Canva Edu Banner" className={styles['hero-banner-image']} />
+                    <img src={`${MINIO_URL}/slider/canva.PNG`} alt="Canva Edu Banner" className={styles['hero-banner-image']} />
                 </div>
 
                 <div className={styles['plans-section']}>
