@@ -770,8 +770,20 @@ a {
   position: relative;
 }
 
+/* ─── Service Pages Layout ─── */
+.service-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  align-items: start;
+}
+
 /* ─── Responsive ─── */
 @media (max-width: 1024px) {
+  .service-layout-grid {
+    grid-template-columns: 1fr;
+  }
+
   .trending-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -837,6 +849,13 @@ a {
     padding: 0 !important;
     margin: 0 !important;
   }
+
+  /* Force inline grids (like 'How it works' and 'Choose Plan') to stack on mobile */
+  .service-layout-grid > div > section > div[style*="grid-template-columns"],
+  .service-layout-grid > div > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
   .blocks-parent-grid > a, .blocks-parent-grid > div {
     flex: unset !important;
     max-width: 100% !important;

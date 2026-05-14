@@ -53,7 +53,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
                     <img src={`${MINIO_URL}/slider/diney+.PNG`} alt="Disney+ Hotstar Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '32px', alignItems: 'start' }}>
+                <div className="service-layout-grid">
                     
                     {/* ─── Left Column (Main Content) ───────────────────── */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>

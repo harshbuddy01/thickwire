@@ -47,7 +47,7 @@ export default function CapCutPageClient({ service }: { service: Service }) {
                     <img src={`${MINIO_URL}/slider/IMG_0116.PNG`} alt="CapCut Pro Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '32px', alignItems: 'start' }}>
+                <div className="service-layout-grid">
                     
                     {/* ─── Left Column (Main Content) ───────────────────── */}
                     <div>

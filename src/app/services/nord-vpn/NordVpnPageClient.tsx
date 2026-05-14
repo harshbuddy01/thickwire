@@ -74,7 +74,7 @@ export default function NordVpnPageClient({ service }: { service: Service }) {
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '32px', alignItems: 'start' }}>
+                <div className="service-layout-grid">
                     
                     {/* ─── Left Column (Main Content) ───────────────────── */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
