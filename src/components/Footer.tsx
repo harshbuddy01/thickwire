@@ -84,13 +84,13 @@ export default function Footer() {
           {/* Brand Column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                <div style={{ width: '40px', height: '40px', position: 'relative', flexShrink: 0 }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#b87a1d" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '100%', height: '100%' }}>
-                        <circle cx="9" cy="21" r="1.5" stroke="none" fill="#b87a1d" />
-                        <circle cx="20" cy="21" r="1.5" stroke="none" fill="#b87a1d" />
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                        <polygon points="10 9 15 12 10 15 10 9" fill="#b87a1d" stroke="none" />
-                    </svg>
+                <div style={{ width: '42px', height: '42px', position: 'relative', flexShrink: 0, borderRadius: '50%', overflow: 'hidden', border: '1px solid #f0f0f0' }}>
+                    <Image 
+                        src="/logo-3d.png" 
+                        alt="StreamKart Logo" 
+                        fill 
+                        style={{ objectFit: 'cover' }}
+                    />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <h2 style={{
