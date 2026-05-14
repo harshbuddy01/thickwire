@@ -124,7 +124,7 @@ export default function Footer() {
             <div style={{ padding: '14px', borderRadius: '14px', border: '1px solid #f5f5f5', background: '#fafafa' }}>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#999', marginBottom: '8px' }}>We Accept</div>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-                <Image src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" width={40} height={14} style={{ height: 'auto' }} />
+                <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Visa_2021.svg/1200px-Visa_2021.svg.png" alt="Visa" width={42} height={14} style={{ height: 'auto' }} />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" width={28} height={18} style={{ height: 'auto' }} />
                 <Image src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" width={40} height={14} style={{ height: 'auto' }} />
               </div>
