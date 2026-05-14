@@ -17,46 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function NetflixPage() {
-    let service: Service;
-    try {
-        service = await getServiceBySlug('netflix');
-    } catch {
-        service = {
-            id: 'mock-netflix',
-            name: 'Netflix',
-            slug: 'netflix',
-            logoUrl: null,
-            description: 'Unlimited movies, TV shows, and more.',
-            displayOrder: 1,
-            plans: [
-                {
-                    id: 'plan-nf-1',
-                    name: 'Mobile Plan',
-                    slug: 'mobile',
-                    description: null,
-                    price: '149',
-                    originalPrice: null,
-                    durationDays: 30,
-                    displayOrder: 1,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-nf-2',
-                    name: 'Premium Plan',
-                    slug: 'premium',
-                    description: null,
-                    price: '649',
-                    originalPrice: null,
-                    durationDays: 30,
-                    displayOrder: 2,
-                    inStock: true,
-                    stockCount: 100
-                }
-            ]
-        };
-    }
+import { notFound } from 'next/navigation';
 
-    return <NetflixPageClient service={service} />;
+export default async function Page() {
+    try {
+        const service = await getServiceBySlug('netflix');
+        if (!service) return notFound();
+        return <NetflixPageClient service={service} />;
+    } catch (e) {
+        return notFound();
+    }
 }

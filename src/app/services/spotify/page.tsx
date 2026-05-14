@@ -17,49 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function SpotifyPage() {
-    let service: Service;
-    try {
-        service = await getServiceBySlug('spotify');
-    } catch {
-        // Fallback mock data if API fails or service doesn't exist
-        service = {
-            id: 'mock-spotify',
-            name: 'Spotify Premium',
-            slug: 'spotify',
-            logoUrl: null,
-            description: 'Listen without limits. Anytime, anywhere.',
-            displayOrder: 1,
-            plans: [
-                {
-                    id: 'plan-1',
-                    name: '3 Months Plan',
-                    slug: '3-months',
-                    description: null,
-                    price: '149',
-                    originalPrice: null,
-                    currency: 'INR',
-                    durationDays: 90,
-                    displayOrder: 1,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-2',
-                    name: '12 Months Plan',
-                    slug: '12-months',
-                    description: null,
-                    price: '26',
-                    originalPrice: null,
-                    currency: 'USD',
-                    durationDays: 365,
-                    displayOrder: 2,
-                    inStock: true,
-                    stockCount: 100
-                }
-            ]
-        };
-    }
+import { notFound } from 'next/navigation';
 
-    return <SpotifyPageClient service={service} />;
+export default async function Page() {
+    try {
+        const service = await getServiceBySlug('spotify');
+        if (!service) return notFound();
+        return <SpotifyPageClient service={service} />;
+    } catch (e) {
+        return notFound();
+    }
 }

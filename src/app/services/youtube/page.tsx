@@ -17,62 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function YoutubePage() {
-    let service: Service;
-    try {
-        service = await getServiceBySlug('youtube');
-    } catch {
-        // Fallback mock data if API fails or service doesn't exist
-        service = {
-            id: 'mock-youtube',
-            name: 'YouTube Premium',
-            slug: 'youtube',
-            logoUrl: null,
-            description: 'Watch more. Ad-free. Background play and downloads.',
-            displayOrder: 1,
-            plans: [
-                {
-                    id: 'plan-yt-1',
-                    name: '4 Months Plan',
-                    slug: '4-months',
-                    description: null,
-                    price: '499',
-                    originalPrice: null,
-                    currency: 'INR',
-                    durationDays: 120,
-                    displayOrder: 1,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-yt-2',
-                    name: '12 Months Plan',
-                    slug: '12-months',
-                    description: null,
-                    price: '899',
-                    originalPrice: null,
-                    currency: 'INR',
-                    durationDays: 365,
-                    displayOrder: 2,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-yt-3',
-                    name: '1 Year Plan',
-                    slug: '1-year',
-                    description: null,
-                    price: '17',
-                    originalPrice: null,
-                    currency: 'USD',
-                    durationDays: 365,
-                    displayOrder: 3,
-                    inStock: true,
-                    stockCount: 100
-                }
-            ]
-        };
-    }
+import { notFound } from 'next/navigation';
 
-    return <YoutubePageClient service={service} />;
+export default async function Page() {
+    try {
+        const service = await getServiceBySlug('youtube');
+        if (!service) return notFound();
+        return <YoutubePageClient service={service} />;
+    } catch (e) {
+        return notFound();
+    }
 }

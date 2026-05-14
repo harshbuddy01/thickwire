@@ -17,62 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function HboPage() {
-    let service: Service;
-    try {
-        service = await getServiceBySlug('hbomax');
-    } catch {
-        // Fallback mock data if API fails or service doesn't exist
-        service = {
-            id: 'mock-hbo',
-            name: 'HBO Max',
-            slug: 'hbo',
-            logoUrl: null,
-            description: 'Iconic stories. Unforgettable entertainment.',
-            displayOrder: 1,
-            plans: [
-                {
-                    id: 'plan-hbo-1',
-                    name: '3 Months Plan',
-                    slug: '3-months',
-                    description: null,
-                    price: '5',
-                    originalPrice: null,
-                    currency: 'USD',
-                    durationDays: 90,
-                    displayOrder: 1,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-hbo-2',
-                    name: '6 Months Plan',
-                    slug: '6-months',
-                    description: null,
-                    price: '10',
-                    originalPrice: null,
-                    currency: 'USD',
-                    durationDays: 180,
-                    displayOrder: 2,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-hbo-3',
-                    name: '12 Months Plan',
-                    slug: '12-months',
-                    description: null,
-                    price: '18',
-                    originalPrice: null,
-                    currency: 'USD',
-                    durationDays: 365,
-                    displayOrder: 3,
-                    inStock: true,
-                    stockCount: 100
-                }
-            ]
-        };
-    }
+import { notFound } from 'next/navigation';
 
-    return <HboPageClient service={service} />;
+export default async function Page() {
+    try {
+        const service = await getServiceBySlug('hbomax');
+        if (!service) return notFound();
+        return <HboPageClient service={service} />;
+    } catch (e) {
+        return notFound();
+    }
 }

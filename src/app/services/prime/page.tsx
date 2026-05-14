@@ -17,58 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     }
 }
 
-export default async function PrimePage() {
-    let service: Service;
-    try {
-        service = await getServiceBySlug('prime');
-    } catch {
-        service = {
-            id: 'mock-prime',
-            name: 'Prime Video',
-            slug: 'prime',
-            logoUrl: null,
-            description: 'Enjoy exclusive Amazon Originals as well as popular movies and TV shows.',
-            displayOrder: 1,
-            plans: [
-                {
-                    id: 'plan-pr-1',
-                    name: 'Mobile Edition',
-                    slug: 'mobile',
-                    description: null,
-                    price: '299',
-                    originalPrice: null,
-                    durationDays: 30,
-                    displayOrder: 1,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-pr-2',
-                    name: 'Prime Lite',
-                    slug: 'lite',
-                    description: null,
-                    price: '799',
-                    originalPrice: null,
-                    durationDays: 365,
-                    displayOrder: 2,
-                    inStock: true,
-                    stockCount: 100
-                },
-                {
-                    id: 'plan-pr-3',
-                    name: 'Prime Annual',
-                    slug: 'annual',
-                    description: null,
-                    price: '1499',
-                    originalPrice: null,
-                    durationDays: 365,
-                    displayOrder: 3,
-                    inStock: true,
-                    stockCount: 100
-                }
-            ]
-        };
-    }
+import { notFound } from 'next/navigation';
 
-    return <PrimePageClient service={service} />;
+export default async function Page() {
+    try {
+        const service = await getServiceBySlug('prime');
+        if (!service) return notFound();
+        return <PrimePageClient service={service} />;
+    } catch (e) {
+        return notFound();
+    }
 }
