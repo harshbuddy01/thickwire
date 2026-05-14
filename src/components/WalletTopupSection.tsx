@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
-import { QrCode, Copy, CheckCircle2, Clock, AlertCircle, Globe, Loader2, Send } from 'lucide-react';
+import { QrCode, Copy, CheckCircle2, Clock, AlertCircle, Globe, Loader2, Send, Download } from 'lucide-react';
 import Image from 'next/image';
 
 interface WalletTopupSectionProps {
@@ -49,6 +49,16 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         }
+    };
+
+    const handleDownloadQr = () => {
+        if (!qrDetails?.qrImageUrl) return;
+        const link = document.createElement('a');
+        link.href = qrDetails.qrImageUrl;
+        link.download = 'StreamKart_Payment_QR.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const handleSubmitUtr = async () => {
@@ -159,19 +169,37 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
 
                     <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                         {/* QR Code */}
-                        <div style={{
-                            width: 220, minHeight: 220, background: '#f8fafc', borderRadius: 16,
-                            border: '2px dashed #e2e8f0', display: 'flex', alignItems: 'center',
-                            justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: 12
-                        }}>
-                            {qrDetails?.qrImageUrl ? (
-                                <img
-                                    src={qrDetails.qrImageUrl}
-                                    alt="UPI QR Code"
-                                    style={{ width: '100%', height: 'auto', borderRadius: 8 }}
-                                />
-                            ) : (
-                                <QrCode size={60} style={{ color: '#cbd5e1' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            <div style={{
+                                width: 220, minHeight: 220, background: '#f8fafc', borderRadius: 16,
+                                border: '2px dashed #e2e8f0', display: 'flex', alignItems: 'center',
+                                justifyContent: 'center', overflow: 'hidden', flexShrink: 0, padding: 12
+                            }}>
+                                {qrDetails?.qrImageUrl ? (
+                                    <img
+                                        src={qrDetails.qrImageUrl}
+                                        alt="UPI QR Code"
+                                        style={{ width: '100%', height: 'auto', borderRadius: 8 }}
+                                    />
+                                ) : (
+                                    <QrCode size={60} style={{ color: '#cbd5e1' }} />
+                                )}
+                            </div>
+                            
+                            {qrDetails?.qrImageUrl && (
+                                <button
+                                    onClick={handleDownloadQr}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                        width: '100%', padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0',
+                                        borderRadius: 12, color: '#334155', fontSize: '0.85rem', fontWeight: 700,
+                                        cursor: 'pointer', transition: 'all 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#0f172a'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#334155'; }}
+                                >
+                                    <Download size={16} /> Save QR Code
+                                </button>
                             )}
                         </div>
 
