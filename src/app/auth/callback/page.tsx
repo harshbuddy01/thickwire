@@ -10,14 +10,17 @@ function AuthCallbackContent() {
     const { setAuth } = useAuth();
 
     useEffect(() => {
-        const token = searchParams.get('token');
-        const redirectTo = searchParams.get('redirect') || '/account';
-        if (token) {
-            setAuth(token);
-            router.push(redirectTo);
-        } else {
-            router.push('/login?error=Google_Auth_Failed');
-        }
+        const handleCallback = async () => {
+            const token = searchParams.get('token');
+            const redirectTo = searchParams.get('redirect') || '/';
+            if (token) {
+                await setAuth(token);
+                router.push(redirectTo);
+            } else {
+                router.push('/login?error=Google_Auth_Failed');
+            }
+        };
+        handleCallback();
     }, [searchParams, router, setAuth]);
 
     return (

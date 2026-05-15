@@ -32,7 +32,7 @@ function SignupContent() {
         try {
             const { data } = await api.post('/auth/signup', { name, email, password });
             // Auto-login: store the access token immediately
-            setAuth(data.accessToken);
+            await setAuth(data.accessToken);
             setIsSuccess(true);
             // Show onboarding popup, then redirect
             setShowOnboarding(true);

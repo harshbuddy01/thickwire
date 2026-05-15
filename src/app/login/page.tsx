@@ -27,7 +27,7 @@ function LoginContent() {
 
         try {
             const { data } = await api.post('/auth/login', { email, password });
-            setAuth(data.accessToken);
+            await setAuth(data.accessToken);
             router.push(redirectUrl);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Invalid email or password');

@@ -17,7 +17,7 @@ export interface CustomerProfile {
 interface AuthContextType {
     user: CustomerProfile | null;
     loading: boolean;
-    setAuth: (accessToken: string) => void;
+    setAuth: (accessToken: string) => Promise<void>;
     logout: () => Promise<void>;
     refreshProfile: () => Promise<void>;
 }
@@ -43,9 +43,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const setAuth = (accessToken: string) => {
+    const setAuth = async (accessToken: string) => {
         localStorage.setItem('accessToken', accessToken);
-        refreshProfile();
+        await refreshProfile();
     };
 
     const logout = async () => {
