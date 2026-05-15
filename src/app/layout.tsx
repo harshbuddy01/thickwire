@@ -22,6 +22,10 @@ export const metadata: Metadata = {
         description: 'Instantly buy premium digital services. Secure, automated delivery.',
         type: 'website',
     },
+    icons: {
+        icon: '/favicon.png',
+        apple: '/favicon.png',
+    },
 };
 
 export default function RootLayout({
@@ -33,7 +37,6 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.png" type="image/png" />
                 <link rel="preconnect" href="https://assets.streamkart.store" />
             </head>
             <body className={poppins.className}>
