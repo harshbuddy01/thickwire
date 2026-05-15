@@ -266,6 +266,9 @@ export default function Header() {
                                                 </Link>
                                             </div>
                                             <div style={dropdownStyles.menuDivider} />
+                                            <button onClick={() => { setMenuOpen(false); setSupplierModalOpen(true); }} style={{ ...dropdownStyles.menuItem, border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <Package size={16} style={{ opacity: 0.6 }} /> Become a Supplier
+                                            </button>
                                             <Link href="/support" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
                                                 <HeadphonesIcon size={16} style={{ opacity: 0.6 }} /> Help Center
                                             </Link>
@@ -290,6 +293,10 @@ export default function Header() {
                                             <Link href="/account" onClick={() => setMenuOpen(false)} style={dropdownStyles.menuItem}>
                                                 <Wallet size={16} style={{ opacity: 0.6 }} /> Wallet Balance
                                             </Link>
+                                            <div style={dropdownStyles.menuDivider} />
+                                            <button onClick={() => { setMenuOpen(false); setSupplierModalOpen(true); }} style={{ ...dropdownStyles.menuItem, border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                <Package size={16} style={{ opacity: 0.6 }} /> Become a Supplier
+                                            </button>
                                             <div style={dropdownStyles.menuDivider} />
                                             <button
                                                 onClick={() => { setMenuOpen(false); logout(); }}
