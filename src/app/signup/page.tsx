@@ -51,35 +51,37 @@ function SignupContent() {
 
     if (isSuccess) {
         return (
-            <div className="auth-container">
-                <div className="fluid-bg">
-                    <div className="fluid-blob1"></div>
-                    <div className="fluid-blob2"></div>
-                    <div className="fluid-blob3"></div>
-                    <div className="fluid-blob4"></div>
-                </div>
-                <div className="glass-card" style={{ textAlign: 'center' }}>
-                    <div style={{ width: 80, height: 80, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px', color: '#fff', boxShadow: '0 15px 30px rgba(16, 185, 129, 0.3)' }}>
-                        <CheckCircle2 size={40} />
-                    </div>
-                    <h2 className="auth-title">Welcome to StreamKart!</h2>
-                    <p className="auth-subtitle" style={{ marginBottom: 16, lineHeight: 1.6 }}>
-                        Your account has been created successfully. Redirecting you now...
-                    </p>
-                    <p className="auth-subtitle" style={{ marginBottom: 32, lineHeight: 1.6, fontSize: '0.85rem', opacity: 0.7 }}>
-                        We&apos;ve sent a verification link to <span style={{ color: '#0f172a', fontWeight: 800 }}>{email}</span>. Please verify when you get a chance.
-                    </p>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Loader2 size={28} style={{ animation: 'spin 1s linear infinite', color: '#10b981' }} />
-                    </div>
-                </div>
+            <>
                 {showOnboarding && (
                     <WalletOnboardingPopup onClose={() => {
                         setShowOnboarding(false);
                         router.push(redirectUrl);
                     }} />
                 )}
-            </div>
+                <div className="auth-container">
+                    <div className="fluid-bg">
+                        <div className="fluid-blob1"></div>
+                        <div className="fluid-blob2"></div>
+                        <div className="fluid-blob3"></div>
+                        <div className="fluid-blob4"></div>
+                    </div>
+                    <div className="glass-card" style={{ textAlign: 'center' }}>
+                        <div style={{ width: 80, height: 80, background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px', color: '#fff', boxShadow: '0 15px 30px rgba(16, 185, 129, 0.3)' }}>
+                            <CheckCircle2 size={40} />
+                        </div>
+                        <h2 className="auth-title">Welcome to StreamKart!</h2>
+                        <p className="auth-subtitle" style={{ marginBottom: 16, lineHeight: 1.6 }}>
+                            Your account has been created successfully. Redirecting you now...
+                        </p>
+                        <p className="auth-subtitle" style={{ marginBottom: 32, lineHeight: 1.6, fontSize: '0.85rem', opacity: 0.7 }}>
+                            We&apos;ve sent a verification link to <span style={{ color: '#0f172a', fontWeight: 800 }}>{email}</span>. Please verify when you get a chance.
+                        </p>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Loader2 size={28} style={{ animation: 'spin 1s linear infinite', color: '#10b981' }} />
+                        </div>
+                    </div>
+                </div>
+            </>
         );
     }
 

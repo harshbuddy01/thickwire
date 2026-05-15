@@ -8,7 +8,7 @@ interface WalletOnboardingPopupProps {
 }
 
 export default function WalletOnboardingPopup({ onClose }: WalletOnboardingPopupProps) {
-    const [isIndian, setIsIndian] = useState<boolean | null>(null);
+    const [isIndian, setIsIndian] = useState<boolean>(true);
     const [step, setStep] = useState(0);
 
     useEffect(() => {
@@ -56,12 +56,12 @@ export default function WalletOnboardingPopup({ onClose }: WalletOnboardingPopup
 
     const steps = isIndian ? indianSteps : internationalSteps;
 
-    if (isIndian === null) return null;
+
 
     return (
         <div style={{
             position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(8px)',
-            zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
+            zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
             animation: 'fadeIn 0.3s ease-out',
         }}>
             <div style={{
