@@ -95,21 +95,6 @@ export default function AccountPage() {
         selectedSupportTicketRef.current = selectedSupportTicket;
     }, [selectedSupportTicket]);
 
-    useEffect(() => {
-        if (!loading && !user) {
-            router.push('/login');
-        } else if (user) {
-            fetchData();
-        }
-    }, [user, loading, router]);
-
-    // Poll tickets separately for notifications
-    useEffect(() => {
-        if (!user) return;
-        const interval = setInterval(() => fetchTickets(true), 8000);
-        return () => clearInterval(interval);
-    }, [user]);
-
     const fetchTickets = useCallback(async (silent = false) => {
         try {
             const { data } = await api.get('/support/my-tickets');
@@ -151,7 +136,7 @@ export default function AccountPage() {
         }
     }, []);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const [ordersRes, subsRes, walletRes, walletTxRes] = await Promise.all([
                 api.get('/account/orders'),
@@ -170,7 +155,22 @@ export default function AccountPage() {
         } finally {
             setIsFetching(false);
         }
-    };
+    }, [fetchTickets]);
+
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/login');
+        } else if (user) {
+            fetchData();
+        }
+    }, [user, loading, router, fetchData]);
+
+    // Poll tickets separately for notifications
+    useEffect(() => {
+        if (!user) return;
+        const interval = setInterval(() => fetchTickets(true), 8000);
+        return () => clearInterval(interval);
+    }, [user, fetchTickets]);
 
     const handleSendTicketReply = async () => {
         if (!selectedSupportTicket || !ticketReplyText.trim()) return;
@@ -215,8 +215,6 @@ export default function AccountPage() {
             setLoadingModal(false);
         }
     };
-
-
 
     const daysUntil = (date: string) => {
         if (!date) return 0;

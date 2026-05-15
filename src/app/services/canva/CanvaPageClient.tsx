@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Check, ShoppingCart, ChevronDown, ShieldCheck, Zap, Headphones, Palette, Layers, Image, Wand2 } from 'lucide-react';
+import { ChevronRight, Check, ShoppingCart, ChevronDown, ShieldCheck, Zap, Headphones, Palette, Layers, Image as ImageIcon, Wand2 } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 import type { Service } from '@/lib/types';
 import styles from '../service-page.module.css';
@@ -43,8 +44,14 @@ export default function CanvaPageClient({ service }: { service: Service }) {
             </div>
 
             <div className="container">
-                <div className={styles['hero-image-container']}>
-                    <img src={`${MINIO_URL}/slider/canva.PNG`} alt="Canva Edu Banner" className={styles['hero-banner-image']} />
+                <div className={styles['hero-image-container']} style={{ position: 'relative', width: '100%', height: 'auto', aspectRatio: '1200 / 400', borderRadius: '24px', overflow: 'hidden' }}>
+                    <Image 
+                        src={`${MINIO_URL}/slider/canva.PNG`} 
+                        alt="Canva Edu Banner" 
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        priority
+                    />
                 </div>
 
                 <div className={styles['plans-section']}>
@@ -121,7 +128,7 @@ export default function CanvaPageClient({ service }: { service: Service }) {
                                 </div>
                             </div>
                             <div className={styles['why-item']}>
-                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><Image size={16} /></div>
+                                <div className={`${styles['why-icon']} ${styles['why-icon-success']}`}><ImageIcon size={16} /></div>
                                 <div className={styles['why-text']}>
                                     <strong>Premium Stock</strong>
                                     <p>Access millions of premium photos, videos, and graphics.</p>

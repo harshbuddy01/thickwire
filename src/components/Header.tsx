@@ -140,7 +140,14 @@ export default function Header() {
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                             {item.logoUrl ? (
-                                                <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, borderRadius: 4, objectFit: 'contain' }} />
+                                                <div style={{ position: 'relative', width: 24, height: 24, borderRadius: 4, overflow: 'hidden', flexShrink: 0 }}>
+                                                    <Image 
+                                                        src={item.logoUrl} 
+                                                        alt={item.name} 
+                                                        fill
+                                                        style={{ objectFit: 'contain' }}
+                                                    />
+                                                </div>
                                             ) : (
                                                 <Search size={16} color="#999" />
                                             )}
@@ -293,7 +300,14 @@ export default function Header() {
                                         >
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                 {item.logoUrl ? (
-                                                    <img src={item.logoUrl} alt={item.name} style={{ width: 24, height: 24, borderRadius: 4, objectFit: 'contain' }} />
+                                                    <div style={{ position: 'relative', width: 24, height: 24, borderRadius: 4, overflow: 'hidden', flexShrink: 0 }}>
+                                                        <Image 
+                                                            src={item.logoUrl} 
+                                                            alt={item.name} 
+                                                            fill
+                                                            style={{ objectFit: 'contain' }}
+                                                        />
+                                                    </div>
                                                 ) : (
                                                     <Search size={16} color="#999" />
                                                 )}

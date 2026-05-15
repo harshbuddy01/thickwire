@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Mail, MessageCircle, Phone, Globe, Clock, MapPin, ArrowRight } from 'lucide-react';
+import { ChevronRight, Mail, MessageCircle, Phone, Globe, Clock, MapPin, ArrowRight, Headphones } from 'lucide-react';
 import styles from '../static-page.module.css';
 
 export default function ContactPage() {
