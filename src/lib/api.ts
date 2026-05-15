@@ -86,6 +86,11 @@ export async function getOrderStatus(orderId: string): Promise<OrderStatus> {
     return data;
 }
 
+export async function getAbandonedCart() {
+    const { data } = await api.get('/orders/abandoned-cart');
+    return data;
+}
+
 // ─── Coupons ────────────────────────────────────────
 
 export async function validateCoupon(payload: {
@@ -145,6 +150,18 @@ export async function applyReferralCode(code: string) {
 
 export async function getActiveFlashSales() {
     const { data } = await api.get('/flash-sales');
+    return data;
+}
+
+// ─── Supplier ───────────────────────────────────────
+
+export async function sendSupplierOtp(email: string) {
+    const { data } = await api.post('/supplier/send-otp', { email });
+    return data;
+}
+
+export async function submitSupplierApplication(payload: { email: string; phone: string; description: string; otp: string }) {
+    const { data } = await api.post('/supplier/submit', payload);
     return data;
 }
 

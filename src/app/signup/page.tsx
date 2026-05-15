@@ -22,7 +22,7 @@ function SignupContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { setAuth } = useAuth();
-    const redirectUrl = searchParams.get('redirect') || '/account';
+    const redirectUrl = searchParams.get('redirect') || '/';
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();

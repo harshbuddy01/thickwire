@@ -12,8 +12,9 @@ import {
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Fuse from 'fuse.js';
-import { getServices } from '@/lib/api';
+import { getServices, getAbandonedCart } from '@/lib/api';
 import type { Service } from '@/lib/types';
+import SupplierModal from './SupplierModal';
 
 export default function Header() {
     const { user, loading, logout } = useAuth();
@@ -22,14 +23,22 @@ export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchOpen, setSearchOpen] = useState(false);
+    const [supplierModalOpen, setSupplierModalOpen] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const [services, setServices] = useState<Service[]>([]);
     const [suggestions, setSuggestions] = useState<Service[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [abandonedCart, setAbandonedCart] = useState<any>(null);
 
     useEffect(() => {
         getServices().then(setServices).catch(console.error);
+        
+        if (user) {
+            getAbandonedCart().then(data => setAbandonedCart(data)).catch(() => setAbandonedCart(null));
+        } else {
+            setAbandonedCart(null);
+        }
         
         const handleClickOutside = (e: MouseEvent) => {
             if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
@@ -66,6 +75,17 @@ export default function Header() {
 
     return (
         <>
+            {/* ─── Abandoned Cart Banner ───────────────────────────────── */}
+            {abandonedCart && (
+                <div style={{ background: '#b87a1d', color: '#fff', padding: '12px 16px', textAlign: 'center', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', zIndex: 1000, position: 'relative' }}>
+                    <ShoppingCart size={16} />
+                    <span>You left <strong>{abandonedCart.serviceName} — {abandonedCart.planName}</strong> in your cart!</span>
+                    <Link href={`/order/${abandonedCart.id}`} style={{ background: '#fff', color: '#b87a1d', padding: '4px 12px', borderRadius: '20px', textDecoration: 'none', marginLeft: '12px', fontSize: '0.85rem' }}>
+                        Complete Purchase
+                    </Link>
+                </div>
+            )}
+
             {/* ─── Top Bar ─────────────────────────────────────────── */}
             <div className="header-top">
                 <div className="container">
@@ -162,6 +182,28 @@ export default function Header() {
                     </div>
 
                     <div className="nav-icons-group">
+                        <button 
+                            className="mobile-hide"
+                            onClick={() => setSupplierModalOpen(true)}
+                            style={{
+                                background: 'linear-gradient(135deg, #b87a1d, #d4af37)',
+                                color: '#fff',
+                                border: 'none',
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                fontWeight: 700,
+                                fontSize: '0.85rem',
+                                cursor: 'pointer',
+                                marginRight: '16px',
+                                transition: 'transform 0.2s',
+                                fontFamily: "'Outfit', sans-serif"
+                            }}
+                            onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                            onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                        >
+                            Become a Supplier
+                        </button>
+
                         {/* Mobile: search toggle */}
                         <button
                             className="header-icon-link mobile-search-toggle"
@@ -411,6 +453,10 @@ export default function Header() {
                     <span>{user ? 'Account' : 'Login'}</span>
                 </Link>
             </nav>
+
+            {supplierModalOpen && (
+                <SupplierModal onClose={() => setSupplierModalOpen(false)} />
+            )}
         </>
     );
 }
