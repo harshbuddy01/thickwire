@@ -2213,7 +2213,8 @@ textarea.form-input {
 
   /* Hero Slider Mobile Height */
   .hero-slider {
-    aspect-ratio: 2/1 !important;
+    aspect-ratio: 16/10 !important;
+    min-height: 180px !important;
     border-radius: 16px !important;
   }
 
@@ -2255,7 +2256,8 @@ textarea.form-input {
 
   /* Service Page Hero */
   .hero-image-container {
-    aspect-ratio: 16/8 !important;
+    aspect-ratio: 16/10 !important;
+    min-height: 180px !important;
     border-radius: 16px !important;
   }
   .hero-banner-image {
@@ -2613,6 +2615,8 @@ textarea.form-input {
     margin-bottom: 20px !important;
   }
   .hero-slider {
+    aspect-ratio: 16/10 !important;
+    min-height: 180px !important;
     border-radius: 16px !important;
   }
   /* Section heads */
@@ -2924,7 +2928,8 @@ textarea.form-input {
 
   /* Service Page Hero Banners */
   .hero-image-container {
-    aspect-ratio: 16/9 !important;
+    aspect-ratio: 16/10 !important;
+    min-height: 180px !important;
     border-radius: 20px !important;
   }
 }
