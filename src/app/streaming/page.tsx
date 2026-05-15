@@ -37,15 +37,7 @@ export default function StreamingCategoryPage() {
             <div className="container">
 
                 {/* Banner */}
-                <div style={{ 
-                    borderRadius: '24px', 
-                    overflow: 'hidden', 
-                    marginBottom: '32px', 
-                    width: '100%', 
-                    aspectRatio: '1440 / 360', 
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
-                    border: '1px solid rgba(255,255,255,0.05)'
-                }}>
+                <div className="category-banner-container">
                     <Image
                         src={`${MINIO}/slider/file_00000000b220720cb2fb31789491ad9f.png`}
                         alt="Streaming"
