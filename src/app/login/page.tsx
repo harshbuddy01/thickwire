@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
@@ -17,8 +17,15 @@ function LoginContent() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { setAuth } = useAuth();
+    const { user, loading: authLoading, setAuth } = useAuth();
     const redirectUrl = searchParams.get('redirect') || '/';
+
+    // If user is already logged in, redirect away from login page
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.push(redirectUrl);
+        }
+    }, [authLoading, user, redirectUrl, router]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();

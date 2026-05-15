@@ -40,22 +40,17 @@ api.interceptors.response.use(
                     { withCredentials: true }
                 );
                 localStorage.setItem('accessToken', data.accessToken);
-                if (originalRequest.headers && typeof originalRequest.headers.set === 'function') {
-                    originalRequest.headers.set('Authorization', `Bearer ${data.accessToken}`);
-                } else {
-                    originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-                }
+                originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
                 return api(originalRequest);
             } catch (err) {
                 if (typeof window !== 'undefined') {
-                    localStorage.removeItem('accessToken');
-                    // Don't force redirect — let AuthContext handle it gracefully.
-                    // Only redirect if user is on a protected page (e.g. /account).
-                    const protectedPaths = ['/account', '/checkout'];
+                    // NEVER clear token or redirect during OAuth callback — let the callback page handle it
                     const currentPath = window.location.pathname;
-                    if (protectedPaths.some(p => currentPath.startsWith(p))) {
-                        window.location.href = '/login';
+                    if (currentPath.startsWith('/auth/callback')) {
+                        return Promise.reject(error);
                     }
+                    localStorage.removeItem('accessToken');
+                    // Don't force redirect — let AuthContext / ProtectedRoute handle it gracefully
                 }
                 return Promise.reject(error);
             }
