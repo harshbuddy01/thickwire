@@ -2256,8 +2256,8 @@ textarea.form-input {
 
   /* Service Page Hero */
   .hero-image-container {
-    aspect-ratio: 16/10 !important;
-    min-height: 180px !important;
+    aspect-ratio: 16/8 !important;
+    min-height: 140px !important;
     border-radius: 16px !important;
   }
   .hero-banner-image {

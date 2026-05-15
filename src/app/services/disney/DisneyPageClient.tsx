@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Check, Lock, ChevronDown, ShieldCheck, Zap, Mail, Globe, Headset, Star, Search, UserCheck, Play, HelpCircle, Activity, Smartphone, Monitor, Tv } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -43,14 +44,16 @@ export default function DisneyPageClient({ service }: { service: Service }) {
 
             <div className="container">
                 {/* ─── Hero Banner ────────────────────────────────────── */}
-                <div style={{
-                    width: '100%',
-                    borderRadius: '24px',
-                    overflow: 'hidden',
-                    background: '#040b16', // Dark background matching Hotstar
-                    marginBottom: '40px'
-                }}>
-                    <img src={`${MINIO_URL}/slider/diney+.PNG`} alt="Disney+ Hotstar Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <div className="hero-image-container" style={{ position: 'relative', width: '100%', background: '#040b16', marginBottom: '40px' }}>
+                    <Image
+                        src={`${MINIO_URL}/slider/diney+.PNG`}
+                        alt="Disney+ Hotstar Banner"
+                        fill
+                        priority
+                        className="hero-banner-image"
+                        style={{ objectFit: 'cover' }}
+                        sizes="100vw"
+                    />
                 </div>
 
                 <div className="service-layout-grid">
