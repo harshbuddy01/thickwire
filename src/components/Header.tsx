@@ -50,7 +50,7 @@ export default function Header() {
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [user]);
 
     const fuse = useMemo(() => new Fuse(services, {
         keys: ['name', 'description'],

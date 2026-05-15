@@ -112,7 +112,7 @@ export default function SupplierModal({ onClose }: { onClose: () => void }) {
                 {step === 2 && (
                     <div className="supplier-step">
                         <h2>Verify Your Email</h2>
-                        <p>We've sent an OTP to <strong>{formData.email}</strong>. Enter it below to submit your application.</p>
+                        <p>We&apos;ve sent an OTP to <strong>{formData.email}</strong>. Enter it below to submit your application.</p>
                         
                         {error && <div className="supplier-error">{error}</div>}
 
