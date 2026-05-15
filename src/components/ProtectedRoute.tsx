@@ -11,7 +11,10 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     useEffect(() => {
         if (!loading && !user) {
-            router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+            if (!token) {
+                router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+            }
         }
     }, [user, loading, router, pathname]);
 

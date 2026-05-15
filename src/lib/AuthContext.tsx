@@ -38,8 +38,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const { data } = await api.get('/auth/me');
             setUser(data);
-        } catch {
+        } catch (err: any) {
+            console.error('Failed to refresh profile:', err?.response?.data || err.message);
             setUser(null);
+            throw err;
         }
     };
 
@@ -51,8 +53,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = async () => {
         try {
             await api.post('/auth/logout');
-        } catch {
-            // ignore
+        } catch (err) {
+            console.error('Logout API failed:', err);
         }
         localStorage.removeItem('accessToken');
         setUser(null);
@@ -75,7 +77,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                             const { data } = await api.post('/auth/refresh');
                             localStorage.setItem('accessToken', data.accessToken);
                             await refreshProfile();
-                        } catch {
+                        } catch (refreshErr) {
+                            console.error('Refresh token failed:', refreshErr);
                             // No valid session — user genuinely needs to log in
                         }
                     }
@@ -87,7 +90,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     const { data } = await api.post('/auth/refresh');
                     localStorage.setItem('accessToken', data.accessToken);
                     await refreshProfile();
-                } catch {
+                } catch (refreshErr) {
+                    console.error('Initial refresh token failed:', refreshErr);
                     // No valid session
                 }
             }

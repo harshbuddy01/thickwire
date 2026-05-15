@@ -21,7 +21,7 @@ api.interceptors.request.use((config) => {
     if (typeof window !== 'undefined') {
         const token = localStorage.getItem('accessToken');
         if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.set('Authorization', `Bearer ${token}`);
         }
     }
     return config;
@@ -40,7 +40,11 @@ api.interceptors.response.use(
                     { withCredentials: true }
                 );
                 localStorage.setItem('accessToken', data.accessToken);
-                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                if (originalRequest.headers && typeof originalRequest.headers.set === 'function') {
+                    originalRequest.headers.set('Authorization', `Bearer ${data.accessToken}`);
+                } else {
+                    originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+                }
                 return api(originalRequest);
             } catch (err) {
                 if (typeof window !== 'undefined') {
