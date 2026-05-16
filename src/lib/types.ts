@@ -69,6 +69,7 @@ export interface SupportTicketRequest {
     orderId?: string;
     subject: string;
     message: string;
+    attachmentUrl?: string;
 }
 
 export interface SupportTicket {

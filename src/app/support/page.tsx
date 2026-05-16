@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Headphones, Send, MessageCircle, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ChevronRight, Headphones, Send, MessageCircle, Clock, ShieldCheck, ArrowRight, Image as ImageIcon, X } from 'lucide-react';
 import { createSupportTicket } from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import styles from '../static-page.module.css';
@@ -17,6 +17,7 @@ export default function SupportPage() {
     });
 
     const [submitting, setSubmitting] = useState(false);
+    const [ticketAttachment, setTicketAttachment] = useState<string | null>(null);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { user } = useAuth();
@@ -40,6 +41,7 @@ export default function SupportPage() {
             const payload = {
                 ...form,
                 orderId: form.orderId || undefined,
+                attachmentUrl: ticketAttachment || undefined,
             };
             await createSupportTicket(payload);
             setSubmitted(true);
@@ -47,6 +49,21 @@ export default function SupportPage() {
             setError(err?.response?.data?.message || 'Failed to submit. Please try again.');
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert("File size must be under 5MB");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setTicketAttachment(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -208,6 +225,26 @@ export default function SupportPage() {
                                         value={form.message}
                                         onChange={(e) => setForm({ ...form, message: e.target.value })}
                                     />
+                                </div>
+
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 800, color: '#475569', marginBottom: '10px' }}>Attachment (optional)</label>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                        <label style={{ cursor: 'pointer', padding: '12px 24px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontWeight: 600, fontSize: '0.9rem', transition: 'background 0.2s' }}>
+                                            <input type="file" accept="image/*,video/*" onChange={handleAttachmentChange} style={{ display: 'none' }} />
+                                            <ImageIcon size={18} /> Upload Image/Video
+                                        </label>
+                                        {ticketAttachment && (
+                                            <div style={{ position: 'relative', display: 'inline-block' }}>
+                                                {ticketAttachment.startsWith('data:video') ? (
+                                                    <video src={ticketAttachment} style={{ height: '48px', borderRadius: '8px' }} />
+                                                ) : (
+                                                    <img src={ticketAttachment} alt="Preview" style={{ height: '48px', borderRadius: '8px', objectFit: 'cover' }} />
+                                                )}
+                                                <button type="button" onClick={() => setTicketAttachment(null)} style={{ position: 'absolute', top: -8, right: -8, background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><X size={12} /></button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <button

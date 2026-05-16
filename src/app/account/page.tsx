@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import api from '@/lib/api';
-import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet } from 'lucide-react';
+import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet, Image as ImageIcon, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -83,6 +83,7 @@ export default function AccountPage() {
     // Support Ticket State
     const [selectedSupportTicket, setSelectedSupportTicket] = useState<any>(null);
     const [ticketReplyText, setTicketReplyText] = useState('');
+    const [ticketAttachment, setTicketAttachment] = useState<string | null>(null);
     const [isSubmittingReply, setIsSubmittingReply] = useState(false);
     const [ratingSubmitting, setRatingSubmitting] = useState(false);
 
@@ -173,13 +174,17 @@ export default function AccountPage() {
     }, [user, fetchTickets]);
 
     const handleSendTicketReply = async () => {
-        if (!selectedSupportTicket || !ticketReplyText.trim()) return;
+        if (!selectedSupportTicket || (!ticketReplyText.trim() && !ticketAttachment)) return;
         setIsSubmittingReply(true);
         try {
-            const { data } = await api.post(`/support/${selectedSupportTicket.id}/reply`, { replyText: ticketReplyText });
+            const { data } = await api.post(`/support/${selectedSupportTicket.id}/reply`, { 
+                replyText: ticketReplyText || (ticketAttachment ? 'Sent an attachment' : ''),
+                attachmentUrl: ticketAttachment
+            });
             setSelectedSupportTicket(data);
             setTickets(tickets.map(t => t.id === data.id ? data : t));
             setTicketReplyText('');
+            setTicketAttachment(null);
         } catch (err) {
             console.error('Failed to send reply:', err);
         } finally {
@@ -197,6 +202,21 @@ export default function AccountPage() {
             console.error('Failed to submit rating:', err);
         } finally {
             setRatingSubmitting(false);
+        }
+    };
+
+    const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                alert("File size must be under 5MB");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setTicketAttachment(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -681,6 +701,15 @@ export default function AccountPage() {
                                         borderTopRightRadius: msg.sender === 'CUSTOMER' ? '4px' : '16px',
                                         borderTopLeftRadius: msg.sender === 'ADMIN' ? '4px' : '16px',
                                     }}>
+                                        {msg.attachmentUrl && (
+                                            <div style={{ marginBottom: msg.text ? '8px' : 0 }}>
+                                                {msg.attachmentUrl.startsWith('data:video') ? (
+                                                    <video src={msg.attachmentUrl} controls style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} />
+                                                ) : (
+                                                    <img src={msg.attachmentUrl} alt="Attachment" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
+                                                )}
+                                            </div>
+                                        )}
                                         {msg.text}
                                         <div style={{ fontSize: '0.65rem', marginTop: '6px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8', textAlign: msg.sender === 'CUSTOMER' ? 'right' : 'left' }}>
                                             {new Date(msg.createdAt).toLocaleString()}
@@ -726,28 +755,44 @@ export default function AccountPage() {
                         </div>
 
                         {selectedSupportTicket.status !== 'RESOLVED' && (
-                            <div style={{ padding: '20px', borderTop: '1px solid #e2e8f0', background: '#f8fafc', display: 'flex', gap: '12px' }}>
-                                <textarea
-                                    value={ticketReplyText}
-                                    onChange={(e) => setTicketReplyText(e.target.value)}
-                                    placeholder="Type your reply here..."
-                                    style={{
-                                        flex: 1, height: '80px', padding: '12px', borderRadius: '12px', border: '1px solid #cbd5e1',
-                                        resize: 'none', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem'
-                                    }}
-                                />
-                                <button
-                                    disabled={!ticketReplyText.trim() || isSubmittingReply}
-                                    onClick={handleSendTicketReply}
-                                    style={{
-                                        background: !ticketReplyText.trim() ? '#cbd5e1' : '#6c5ce7',
-                                        color: 'white', border: 'none', borderRadius: '12px', padding: '0 20px',
-                                        fontWeight: 600, cursor: !ticketReplyText.trim() ? 'not-allowed' : 'pointer',
-                                        transition: 'background 0.2s'
-                                    }}
-                                >
-                                    {isSubmittingReply ? 'Sending...' : 'Reply'}
-                                </button>
+                            <div style={{ padding: '20px', borderTop: '1px solid #e2e8f0', background: '#f8fafc', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {ticketAttachment && (
+                                    <div style={{ position: 'relative', display: 'inline-block', width: 'fit-content' }}>
+                                        {ticketAttachment.startsWith('data:video') ? (
+                                            <video src={ticketAttachment} style={{ height: '80px', borderRadius: '8px' }} />
+                                        ) : (
+                                            <img src={ticketAttachment} style={{ height: '80px', borderRadius: '8px', objectFit: 'cover' }} alt="Preview" />
+                                        )}
+                                        <button onClick={() => setTicketAttachment(null)} style={{ position: 'absolute', top: -8, right: -8, background: '#ef4444', color: 'white', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><X size={12} /></button>
+                                    </div>
+                                )}
+                                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                    <label style={{ cursor: 'pointer', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '12px', background: '#e2e8f0', borderRadius: '12px', transition: 'background 0.2s' }}>
+                                        <input type="file" accept="image/*,video/*" onChange={handleAttachmentChange} style={{ display: 'none' }} />
+                                        <ImageIcon size={20} />
+                                    </label>
+                                    <textarea
+                                        value={ticketReplyText}
+                                        onChange={(e) => setTicketReplyText(e.target.value)}
+                                        placeholder="Type your reply here..."
+                                        style={{
+                                            flex: 1, height: '48px', padding: '12px', borderRadius: '12px', border: '1px solid #cbd5e1',
+                                            resize: 'none', outline: 'none', fontFamily: 'inherit', fontSize: '0.9rem'
+                                        }}
+                                    />
+                                    <button
+                                        disabled={(!ticketReplyText.trim() && !ticketAttachment) || isSubmittingReply}
+                                        onClick={handleSendTicketReply}
+                                        style={{
+                                            background: (!ticketReplyText.trim() && !ticketAttachment) ? '#cbd5e1' : '#6c5ce7',
+                                            color: 'white', border: 'none', borderRadius: '12px', padding: '0 20px', height: '48px',
+                                            fontWeight: 600, cursor: (!ticketReplyText.trim() && !ticketAttachment) ? 'not-allowed' : 'pointer',
+                                            transition: 'background 0.2s'
+                                        }}
+                                    >
+                                        {isSubmittingReply ? 'Sending...' : 'Reply'}
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
