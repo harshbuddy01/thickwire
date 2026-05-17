@@ -24,11 +24,7 @@ export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: 
 
     const handleBuy = () => {
         const dest = `/checkout?planId=${plan.id}&service=${serviceSlug}`;
-        if (!user) {
-            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
-        } else {
-            router.push(dest);
-        }
+        router.push(dest);
     };
 
     return (
