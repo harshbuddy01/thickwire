@@ -28,10 +28,13 @@ function AuthCallbackContent() {
                 console.error('setAuth failed in callback:', err);
             }
 
-            // ALWAYS navigate regardless of whether profile fetch succeeded.
-            // The token is saved in localStorage, so the destination page
-            // will pick it up via AuthContext init().
-            router.push(redirectTo);
+            const isNewUser = searchParams.get('isNewUser') === 'true';
+
+            if (isNewUser) {
+                router.push(`/signup?onboarding=true&redirect=${encodeURIComponent(redirectTo)}`);
+            } else {
+                router.push(redirectTo);
+            }
         };
         handleCallback();
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
@@ -23,6 +23,15 @@ function SignupContent() {
     const searchParams = useSearchParams();
     const { setAuth } = useAuth();
     const redirectUrl = searchParams.get('redirect') || '/';
+    const onboardingQuery = searchParams.get('onboarding') === 'true';
+
+    // Handle Google auth redirect for new users
+    useEffect(() => {
+        if (onboardingQuery) {
+            setIsSuccess(true);
+            setShowOnboarding(true);
+        }
+    }, [onboardingQuery]);
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
