@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const setAuth = async (accessToken: string) => {
         isSettingAuth.current = true;
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('hasSession', 'true');
         await refreshProfile();
         isSettingAuth.current = false;
     };
@@ -61,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             console.error('Logout API failed:', err);
         }
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('hasSession');
         setUser(null);
         window.location.href = '/login';
     };
@@ -85,19 +87,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                         try {
                             const { data } = await api.post('/auth/refresh');
                             localStorage.setItem('accessToken', data.accessToken);
+                            localStorage.setItem('hasSession', 'true');
                             await refreshProfile();
                         } catch {
+                            localStorage.removeItem('hasSession');
                             // No valid session
                         }
                     }
                 }
-            } else {
+            } else if (localStorage.getItem('hasSession') === 'true') {
                 // No access token — try refresh token via cookie
                 try {
                     const { data } = await api.post('/auth/refresh');
                     localStorage.setItem('accessToken', data.accessToken);
                     await refreshProfile();
                 } catch {
+                    localStorage.removeItem('hasSession');
                     // No valid session — user is genuinely logged out
                 }
             }

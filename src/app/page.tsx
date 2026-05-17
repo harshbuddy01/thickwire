@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import HeroSlider from '@/components/HeroSlider';
 import ProgressiveImage from '@/components/ProgressiveImage';
-import { ChevronRight, ShieldCheck, Tag, Zap, Headphones } from 'lucide-react';
+
 
 const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
 
