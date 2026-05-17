@@ -174,6 +174,8 @@ function CheckoutContent() {
         setRequestingCredit(true);
         try {
             await api.post('/support', {
+                customerName: form.customerName || 'Guest User',
+                customerEmail: form.customerEmail || 'no-email@example.com',
                 subject: 'Manual Wallet Credit Request',
                 message: `Hi, I want to purchase ${service?.name} - ${plan?.name} but my wallet balance is insufficient. I need ${plan?.currency === 'USD' ? '$' : '₹'}${finalAmount} to proceed. Please provide payment instructions or credit my wallet.`,
                 priority: 'HIGH',
