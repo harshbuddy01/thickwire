@@ -302,7 +302,7 @@ function CheckoutContent() {
             if (gateway === 'upi-direct') {
                 const { data: utrData } = await api.post('/wallet/utr/submit', {
                     utr: utrNumber.trim(),
-                    amount: finalAmount,
+                    amount: Math.round(planPriceInWalletCurrency),
                 });
                 setUtrResult(utrData);
                 
@@ -715,7 +715,7 @@ function CheckoutContent() {
                                             <div style={{ width: '100%', marginTop: 16, fontSize: '0.85rem', color: '#4b5563', lineHeight: 1.6, background: '#fff', padding: 16, borderRadius: 12, border: '1px solid #e9d5ff' }}>
                                                 <div style={{ fontWeight: 700, color: '#6c5ce7', marginBottom: 8, fontSize: '0.9rem' }}>Payment Instructions:</div>
                                                 1. Scan the QR code above using any UPI app (GPay, PhonePe, Paytm)<br/>
-                                                2. Pay exactly <strong>{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount}</strong><br/>
+                                                2. Pay exactly <strong>₹{Math.round(planPriceInWalletCurrency)}</strong> {plan?.currency !== 'INR' && <span style={{ fontSize: '0.75rem', fontWeight: 'normal' }}>(converted from {plan?.currency === 'USD' ? '$' : plan?.currency}{finalAmount})</span>}<br/>
                                                 3. Copy the 12-digit UTR from your payment app<br/>
                                                 4. Submit below — your wallet will be credited instantly
                                             </div>
