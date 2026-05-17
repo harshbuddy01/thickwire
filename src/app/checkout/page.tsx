@@ -109,11 +109,11 @@ function CheckoutContent() {
         const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
         setIsIndianUser(isIN);
         if (isIN) {
-            setGateway('upi-direct');
+            // Pre-fetch QR details but do not auto-select UPI Direct
             api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
-        } else {
-            setGateway('wallet');
         }
+        // Default to wallet
+        setGateway('wallet');
     }, []);
 
     useEffect(() => {
