@@ -78,23 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             const token = localStorage.getItem('accessToken');
             if (token) {
-                try {
-                    await refreshProfile();
-                } catch (err: any) {
-                    if (err?.response?.status === 401) {
-                        localStorage.removeItem('accessToken');
-                        // Try refresh token via cookie
-                        try {
-                            const { data } = await api.post('/auth/refresh');
-                            localStorage.setItem('accessToken', data.accessToken);
-                            localStorage.setItem('hasSession', 'true');
-                            await refreshProfile();
-                        } catch {
-                            localStorage.removeItem('hasSession');
-                            // No valid session
-                        }
-                    }
-                }
+                await refreshProfile();
             } else if (localStorage.getItem('hasSession') === 'true') {
                 // No access token — try refresh token via cookie
                 try {
