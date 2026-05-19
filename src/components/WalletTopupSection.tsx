@@ -23,6 +23,10 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
     const [topUpAmount, setTopUpAmount] = useState('');
     const [isToppingUp, setIsToppingUp] = useState(false);
 
+    // Crypto top-up states
+    const [cryptoAmount, setCryptoAmount] = useState('');
+    const [isCryptoLoading, setIsCryptoLoading] = useState(false);
+
     useEffect(() => {
         // Auto-detect if Indian user
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -339,9 +343,104 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
     }
 
     // ─── International User Flow ──────────────────────────
+
+    const handleCryptoTopUp = async () => {
+        if (!cryptoAmount || Number(cryptoAmount) < 5) return alert('Minimum crypto top-up is $5');
+        setIsCryptoLoading(true);
+        try {
+            const { data } = await api.post('/wallet/topup/crypto', {
+                amount: Number(cryptoAmount),
+            });
+            if (data.invoiceUrl) {
+                window.location.href = data.invoiceUrl;
+            } else {
+                alert('Failed to create crypto payment. Please try again.');
+            }
+        } catch (err: any) {
+            alert(err.response?.data?.message || 'Failed to initiate crypto top-up. Please try again.');
+        } finally {
+            setIsCryptoLoading(false);
+        }
+    };
+
     return (
         <div>
-            {/* Razorpay Top-Up (if supported in their currency) */}
+            {/* Crypto Top-Up */}
+            <div style={{
+                background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20,
+                padding: 24, marginBottom: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
+                position: 'relative', overflow: 'hidden',
+            }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #f7931a, #f3ba2f, #f7931a)' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <div style={{
+                        width: 36, height: 36, borderRadius: 10,
+                        background: 'linear-gradient(135deg, #f7931a, #f3ba2f)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
+                    }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 4.6-4.6a2 2 0 0 1 2.8 0l.6.6a2 2 0 0 0 2.8 0l1.4-1.4a4 4 0 0 0 0-5.65l-1.4-1.4"/><path d="M12 2v2"/></svg>
+                    </div>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1a1c23', margin: 0 }}>
+                        Top Up with Crypto
+                    </h3>
+                    <span style={{ fontSize: '0.7rem', background: '#fef3c7', color: '#d97706', padding: '2px 8px', borderRadius: 4, fontWeight: 700 }}>RECOMMENDED</span>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: 16, lineHeight: 1.5 }}>
+                    Pay with USDT, BTC, ETH, SOL, BNB, and 100+ cryptocurrencies. Funds are credited to your wallet automatically.
+                </p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                        <span style={{ position: 'absolute', left: 12, top: 11, fontWeight: 700, opacity: 0.6 }}>$</span>
+                        <input
+                            type="number"
+                            value={cryptoAmount}
+                            onChange={e => setCryptoAmount(e.target.value)}
+                            placeholder="Amount in USD (min $5)"
+                            min={5}
+                            style={{
+                                width: '100%', padding: '12px 12px 12px 28px', borderRadius: 12,
+                                border: '1px solid #e2e8f0', fontSize: '0.95rem', fontWeight: 600,
+                                outline: 'none', boxSizing: 'border-box',
+                            }}
+                        />
+                    </div>
+                    <button
+                        onClick={handleCryptoTopUp}
+                        disabled={isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 5}
+                        style={{
+                            padding: '12px 24px',
+                            background: isCryptoLoading ? '#94a3b8' : 'linear-gradient(135deg, #f7931a, #f3ba2f)',
+                            color: 'white', border: 'none', borderRadius: 12, fontWeight: 800,
+                            cursor: (isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 5) ? 'not-allowed' : 'pointer',
+                            fontFamily: 'Outfit, sans-serif', boxShadow: '0 4px 12px rgba(247,147,26,0.3)',
+                            minWidth: 80,
+                        }}
+                    >
+                        {isCryptoLoading ? '...' : 'Pay'}
+                    </button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
+                    {[5, 10, 20, 50, 100].map((amt) => (
+                        <button
+                            key={amt}
+                            type="button"
+                            onClick={() => setCryptoAmount(String(amt))}
+                            style={{
+                                padding: '6px 14px', borderRadius: 8,
+                                background: cryptoAmount === String(amt) ? '#f7931a' : '#f8fafc',
+                                border: `1px solid ${cryptoAmount === String(amt) ? '#f7931a' : '#e2e8f0'}`,
+                                color: cryptoAmount === String(amt) ? '#fff' : '#64748b',
+                                fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer',
+                                transition: 'all 0.15s',
+                            }}
+                        >
+                            ${amt}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Razorpay Top-Up (Card payment) */}
             <div style={{
                 background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20,
                 padding: 24, marginBottom: 20, boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
@@ -390,7 +489,7 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                     Need another payment method?
                 </h3>
                 <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: 16, lineHeight: 1.6 }}>
-                    We support bank transfers, PayPal, and cryptocurrency. Click below to create a support ticket and our team will share payment details.
+                    We also support bank transfers and PayPal. Click below to create a support ticket and our team will share payment details.
                 </p>
                 <button
                     onClick={handleRequestCredit}
