@@ -3379,13 +3379,35 @@ textarea.form-input {
   .checkout-main-layout {
     flex-direction: column !important;
     gap: 20px !important;
+    padding-bottom: 120px !important; /* Space for sticky pay button */
   }
   .checkout-summary-column {
     width: 100% !important;
-    order: -1 !important;
+    order: unset !important; /* Move full summary to bottom */
+  }
+  .checkout-mobile-summary {
+    display: block !important; /* Show compact summary at top */
   }
   .checkout-info-cards {
     grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Sticky Pay Button */
+  .checkout-sticky-pay-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 16px 20px 24px 20px;
+    border-top: 1px solid #e2e8f0;
+    z-index: 999;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  }
+  .checkout-secure-badge {
+    margin-top: 8px !important;
   }
 }
 

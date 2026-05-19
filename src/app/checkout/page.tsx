@@ -482,6 +482,17 @@ function CheckoutContent() {
                         </div>
                     )}
 
+                    {/* Mobile Compact Summary (Visible only on mobile/tablet) */}
+                    <div className="checkout-mobile-summary" style={{ display: 'none', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 16, padding: '16px 20px', marginBottom: 32 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                            <span style={{ color: '#6b7280', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase' }}>{service.name} • {plan.name}</span>
+                            <span style={{ fontWeight: 800, color: '#111827', fontSize: '1.2rem' }}>{plan.currency === 'USD' ? '$' : '₹'}{finalAmount.toLocaleString()}</span>
+                        </div>
+                        <div style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <CheckCircle2 size={14} /> {plan.durationDays} Days Access
+                        </div>
+                    </div>
+
                     <form onSubmit={handleSubmit}>
                         
                         {/* Contact Info */}
@@ -841,19 +852,21 @@ function CheckoutContent() {
                         </div>
 
                         {/* Pay Button */}
-                        <button
-                            type="submit"
-                            disabled={submitting || !credentialsValid}
-                            style={{ width: '100%', height: 64, background: (submitting || !credentialsValid) ? '#9ca3af' : 'linear-gradient(90deg, #111827 0%, #1f2937 100%)', color: '#fff', border: 'none', borderRadius: 12, fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, cursor: (submitting || !credentialsValid) ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: (submitting || !credentialsValid) ? 'none' : '0 8px 24px rgba(17, 24, 39, 0.2)' }}
-                        >
-                            {submitting ? 'Processing securely...' : (
-                                <>
-                                    <Lock size={20} /> {gateway === 'upi-direct' ? 'Submit UTR & Pay' : `Pay Securely ${plan.currency === 'USD' ? '$' : '₹'}${finalAmount.toLocaleString()}`}
-                                </>
-                            )}
-                        </button>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, color: '#6b7280', fontSize: '0.85rem' }}>
-                            <ShieldCheck size={16} /> 256-bit SSL encrypted & secured by Razorpay
+                        <div className="checkout-sticky-pay-container">
+                            <button
+                                type="submit"
+                                disabled={submitting || !credentialsValid}
+                                style={{ width: '100%', height: 64, background: (submitting || !credentialsValid) ? '#9ca3af' : 'linear-gradient(90deg, #111827 0%, #1f2937 100%)', color: '#fff', border: 'none', borderRadius: 12, fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, cursor: (submitting || !credentialsValid) ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: (submitting || !credentialsValid) ? 'none' : '0 8px 24px rgba(17, 24, 39, 0.2)' }}
+                            >
+                                {submitting ? 'Processing securely...' : (
+                                    <>
+                                        <Lock size={20} /> {gateway === 'upi-direct' ? 'Submit UTR & Pay' : `Pay Securely ${plan.currency === 'USD' ? '$' : '₹'}${finalAmount.toLocaleString()}`}
+                                    </>
+                                )}
+                            </button>
+                            <div className="checkout-secure-badge" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 16, color: '#6b7280', fontSize: '0.85rem' }}>
+                                <ShieldCheck size={16} /> 256-bit SSL encrypted & secured by Razorpay
+                            </div>
                         </div>
 
                     </form>
