@@ -6,9 +6,10 @@ import Script from 'next/script';
 import { createOrder, getServiceBySlug, validateCoupon, api } from '@/lib/api';
 import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
-import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play, Eye, EyeOff, Globe, Smartphone } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play, Eye, EyeOff, Globe, Smartphone, Clock } from 'lucide-react';
 import Link from 'next/link';
 import styles from './checkout.module.css';
+import './mobile-glass.css';
 
 export default function CheckoutPage() {
     return (
@@ -427,6 +428,8 @@ function CheckoutContent() {
     }
 
     return (
+        <>
+        <div className="desktop-checkout-view">
         <div style={{ minHeight: '100vh', background: '#f8fafc', paddingBottom: 60, fontFamily: 'var(--font-poppins), sans-serif' }}>
             
             {/* Header */}
@@ -1066,5 +1069,265 @@ function CheckoutContent() {
             </div>
             
         </div>
+        </div>
+
+        {/* Mobile Glassy Checkout View */}
+        <div className="mobile-checkout-view mcg-root">
+            <div className="mcg-bg-gradient"></div>
+            <div className="mcg-z1">
+                
+                <div className="mcg-nav">
+                    <div className="mcg-nlogo">
+                        <div className="mcg-nmark"><Play size={17} color="#fff" fill="#fff" /></div>
+                        <span className="mcg-ntitle">StreamKart</span>
+                    </div>
+                    <div className="mcg-nsecure">
+                        <Lock size={12} color="#22c55e" />
+                        Secure Checkout
+                    </div>
+                </div>
+
+                <div className="mcg-steprow">
+                    <div className="mcg-sp">
+                        <div className="mcg-snum mcg-act">1</div>
+                        <span className="mcg-stxt mcg-act">Details</span>
+                    </div>
+                    <div className="mcg-sbar mcg-act"></div>
+                    <div className="mcg-sp">
+                        <div className="mcg-snum mcg-idle">2</div>
+                        <span className="mcg-stxt mcg-idle">Payment</span>
+                    </div>
+                    <div className="mcg-sbar mcg-idle"></div>
+                    <div className="mcg-sp">
+                        <div className="mcg-snum mcg-idle">3</div>
+                        <span className="mcg-stxt mcg-idle">Done</span>
+                    </div>
+                </div>
+
+                <div className={`mcg-nf-card ${slug === 'netflix' ? 'mcg-default' : slug === 'prime' ? 'mcg-prime' : slug === 'spotify' ? 'mcg-spotify' : slug === 'youtube' ? 'mcg-youtube' : 'mcg-default'}`}>
+                    <div className="mcg-nf-circle1"></div>
+                    <div className="mcg-nf-circle2"></div>
+                    <div className="mcg-nf-inner">
+                        <div className="mcg-nf-row1">
+                            <span className="mcg-nf-bigN">{service?.name?.[0]?.toUpperCase()}</span>
+                            <div className="mcg-nf-tag">
+                                <div className="mcg-nf-tag-top">{plan?.durationDays}</div>
+                                <div className="mcg-nf-tag-bot">DAYS</div>
+                            </div>
+                        </div>
+                        <div className="mcg-nf-row2">
+                            <div>
+                                <div className="mcg-nf-name">{service?.name}</div>
+                                <div className="mcg-nf-sub">Official · Shared · Instant delivery</div>
+                            </div>
+                            <div className="mcg-nf-price-block">
+                                <div className="mcg-nf-amt">{plan?.currency === 'USD' ? '$' : '₹'}{parseFloat(plan?.price || '0').toLocaleString()}</div>
+                                {plan?.originalPrice && <div className="mcg-nf-save">You save {plan?.currency === 'USD' ? '$' : '₹'}{(parseFloat(plan.originalPrice) - parseFloat(plan.price)).toLocaleString()}</div>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mcg-meta-row">
+                    <div className="mcg-mpill mcg-g"><Zap size={13} />Instant</div>
+                    <div className="mcg-mpill mcg-g"><ShieldCheck size={13} />100% Safe</div>
+                    <div className="mcg-mpill mcg-a"><Award size={13} />Official</div>
+                </div>
+
+                <div className="mcg-gcard">
+                    <div className="mcg-urgency">
+                        <Clock size={14} color="#f59e0b" />
+                        Price locked · Complete your purchase now
+                    </div>
+                    <div className="mcg-sec-label">Contact details</div>
+                    <div className="mcg-row-field">
+                        <div className="mcg-ico"><User size={17} /></div>
+                        <div className="mcg-rfv">
+                            <input type="text" placeholder="Your Name" value={form.customerName} onChange={e => setForm({...form, customerName: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="mcg-row-field mcg-active">
+                        <div className="mcg-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+                        <div style={{ flex: 1 }}>
+                            <div className="mcg-rfv">{form.customerEmail || 'you@example.com'}</div>
+                            <div className="mcg-rfh">Credentials delivered here</div>
+                        </div>
+                        <div className="mcg-tick"><CheckCircle2 size={12} color="#fff" /></div>
+                    </div>
+
+                    {needsPhone && (
+                        <div className="mcg-row-field">
+                            <div className="mcg-ico"><Smartphone size={17} /></div>
+                            <div className="mcg-rfv">
+                                <input type="text" placeholder="Mobile Number" value={serviceMobile} onChange={e => setServiceMobile(e.target.value)} />
+                            </div>
+                        </div>
+                    )}
+
+                    {isSpotifyGlobal && (
+                        <>
+                            <div className="mcg-sec-label" style={{ paddingTop: 4 }}>Spotify Details</div>
+                            <div className="mcg-row-field">
+                                <div className="mcg-ico"><Globe size={17} /></div>
+                                <div className="mcg-rfv">
+                                    <input type="email" placeholder="Spotify Email" value={spotifyEmail} onChange={e => setSpotifyEmail(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="mcg-row-field">
+                                <div className="mcg-ico"><Lock size={17} /></div>
+                                <div className="mcg-rfv" style={{ display: 'flex' }}>
+                                    <input type={showSpotifyPassword ? 'text' : 'password'} placeholder="Password" value={spotifyPassword} onChange={e => setSpotifyPassword(e.target.value)} />
+                                    <div onClick={() => setShowSpotifyPassword(!showSpotifyPassword)} style={{ padding: '0 8px' }}>
+                                        {showSpotifyPassword ? <EyeOff size={16} color="#aaa" /> : <Eye size={16} color="#aaa" />}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mcg-row-field">
+                                <div className="mcg-ico"><Lock size={17} /></div>
+                                <div className="mcg-rfv">
+                                    <input type={showSpotifyPassword ? 'text' : 'password'} placeholder="Confirm Password" value={spotifyConfirmPassword} onChange={e => setSpotifyConfirmPassword(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="mcg-row-field">
+                                <div className="mcg-ico"><Globe size={17} /></div>
+                                <div className="mcg-rfv">
+                                    <input type="text" placeholder="Country" value={spotifyCountry} onChange={e => setSpotifyCountry(e.target.value)} />
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    <div className="mcg-sec-label" style={{ paddingTop: 4 }}>Notifications</div>
+                    <div className="mcg-wa-field" onClick={() => setWhatsappOptedIn(!whatsappOptedIn)} style={{ cursor: 'pointer' }}>
+                        <div className="mcg-wa-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg></div>
+                        <div className="mcg-wa-texts">
+                            <div className="mcg-wa-t">WhatsApp updates</div>
+                            <div className="mcg-wa-s">Credentials sent right after payment</div>
+                        </div>
+                        <div className={`mcg-tog ${!whatsappOptedIn ? 'mcg-off' : ''}`}></div>
+                    </div>
+                </div>
+
+                <div className="mcg-gcard" style={{ marginTop: 0 }}>
+                    <div className="mcg-sec-label">Payment method</div>
+                    
+                    {isIndianUser && planCurrency === 'INR' && (
+                        <div className={`mcg-pay-opt ${gateway === 'upi-direct' ? 'mcg-sel' : ''}`} onClick={() => setGateway('upi-direct')}>
+                            <div className="mcg-pay-ico-wrap mcg-upi"><CreditCard size={22} color="#fff" /></div>
+                            <div className="mcg-pay-details">
+                                <div className="mcg-pay-name">UPI Direct</div>
+                                <div className="mcg-pay-sub">Fastest · Zero extra charges</div>
+                                <div className="mcg-pay-tags">
+                                    <span className="mcg-ptag">GPay</span>
+                                    <span className="mcg-ptag">PhonePe</span>
+                                    <span className="mcg-ptag">Paytm</span>
+                                </div>
+                            </div>
+                            <div className={`mcg-radio ${gateway === 'upi-direct' ? 'mcg-on' : ''}`}></div>
+                        </div>
+                    )}
+
+                    {gateway === 'upi-direct' && upiDetails && (
+                        <div className="mcg-utr-block">
+                            <img src={upiDetails.qrImageUrl} alt="QR" style={{ width: '100%', borderRadius: 12 }} />
+                            <div style={{ fontSize: 12, textAlign: 'center', fontWeight: 600 }}>UPI ID: {upiDetails.upiId}</div>
+                            <input type="text" placeholder="Enter 12-digit UTR Number" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} className="mcg-utr-input" />
+                        </div>
+                    )}
+
+                    {!isIndianUser && planCurrency === 'USD' && (
+                        <div className={`mcg-pay-opt ${gateway === 'nowpayments' ? 'mcg-sel' : ''}`} onClick={() => setGateway('nowpayments')}>
+                            <div className="mcg-pay-ico-wrap mcg-crypto"><CreditCard size={22} color="#fff" /></div>
+                            <div className="mcg-pay-details">
+                                <div className="mcg-pay-name">Crypto</div>
+                                <div className="mcg-pay-sub">USDT, BTC, ETH & more</div>
+                            </div>
+                            <div className={`mcg-radio ${gateway === 'nowpayments' ? 'mcg-on' : ''}`}></div>
+                        </div>
+                    )}
+
+                    <div className={`mcg-pay-opt ${gateway === 'wallet' ? 'mcg-sel' : (walletBalance === null || walletBalance < planPriceInWalletCurrency) ? 'mcg-low' : ''}`} onClick={() => setGateway('wallet')}>
+                        <div className="mcg-pay-ico-wrap mcg-wlt"><ShoppingBag size={22} color="#fff" /></div>
+                        <div className="mcg-pay-details">
+                            <div className="mcg-pay-name">SK Wallet</div>
+                            {(walletBalance === null || walletBalance < planPriceInWalletCurrency) ? (
+                                <div className="mcg-pay-sub mcg-warn">Balance {walletCurrency}{(walletBalance || 0).toLocaleString()} — insufficient</div>
+                            ) : (
+                                <div className="mcg-pay-sub">Balance {walletCurrency}{(walletBalance || 0).toLocaleString()}</div>
+                            )}
+                        </div>
+                        <div className={`mcg-radio ${gateway === 'wallet' ? 'mcg-on' : ''}`}></div>
+                    </div>
+
+                    {gateway === 'wallet' && (walletBalance === null || walletBalance < planPriceInWalletCurrency) && (
+                        <div className="mcg-warn-box">
+                            <AlertCircle size={16} />
+                            <span>Wallet balance too low. Add funds to use it.</span>
+                            <button className="mcg-wreq" type="button" onClick={handleRequestWalletCredit}>{requestingCredit ? '...' : 'Request'}</button>
+                        </div>
+                    )}
+
+                    <div className="mcg-sec-label" style={{ paddingTop: 4 }}>Discount</div>
+                    <div className="mcg-disc-row">
+                        <input className="mcg-dinp" placeholder="Enter discount code" value={couponCode} onChange={e => setCouponCode(e.target.value.toUpperCase())} />
+                        {couponState === 'applied' ? (
+                            <button type="button" className="mcg-dapl mcg-active" onClick={removeCoupon}>Remove</button>
+                        ) : (
+                            <button type="button" className="mcg-dapl" onClick={handleApplyCoupon}>{couponState === 'loading' ? '...' : 'Apply'}</button>
+                        )}
+                    </div>
+                    {couponError && <div style={{ color: '#e50914', fontSize: 11, margin: '-10px 16px 16px', fontWeight: 600 }}>{couponError}</div>}
+                </div>
+
+                <div className="mcg-trust-grid">
+                    <div className="mcg-tcell">
+                        <div className="mcg-tci mcg-g"><ShieldCheck size={17} /></div>
+                        <div>
+                            <span className="mcg-tct">100% Secure</span>
+                            <span className="mcg-tcs">256-bit SSL encrypted</span>
+                        </div>
+                    </div>
+                    <div className="mcg-tcell">
+                        <div className="mcg-tci mcg-y"><Zap size={17} /></div>
+                        <div>
+                            <span className="mcg-tct">Instant Access</span>
+                            <span className="mcg-tcs">Right after payment</span>
+                        </div>
+                    </div>
+                    <div className="mcg-tcell">
+                        <div className="mcg-tci mcg-b"><Award size={17} /></div>
+                        <div>
+                            <span className="mcg-tct">Official Only</span>
+                            <span className="mcg-tcs">Genuine accounts always</span>
+                        </div>
+                    </div>
+                    <div className="mcg-tcell">
+                        <div className="mcg-tci mcg-p"><Headphones size={17} /></div>
+                        <div>
+                            <span className="mcg-tct">24/7 Support</span>
+                            <span className="mcg-tcs">Always here for you</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mcg-cta-section">
+                    <div className="mcg-summary-row">
+                        <span className="mcg-srl">{service?.name} · {plan?.durationDays} days · {gateway === 'upi-direct' ? 'UPI' : gateway === 'nowpayments' ? 'Crypto' : 'Wallet'}</span>
+                        <span className="mcg-srr">{plan?.currency === 'USD' ? '$' : '₹'}{finalAmount.toLocaleString()}</span>
+                    </div>
+                    <button className="mcg-paybtn" onClick={handleSubmit} disabled={submitting || !credentialsValid}>
+                        <Lock size={19} />
+                        <span className="mcg-pblab">{submitting ? 'Processing...' : `Pay ${plan?.currency === 'USD' ? '$' : '₹'}${finalAmount.toLocaleString()} Securely`}</span>
+                        <ChevronRight size={19} color="#fff" />
+                    </button>
+                    <div className="mcg-paynote">
+                        <ShieldCheck size={13} />
+                        256-bit SSL · Secured checkout
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </>
     );
 }

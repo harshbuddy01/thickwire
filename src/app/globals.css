@@ -3473,3 +3473,19 @@ h2:has(span) {
 .luxury-plan-card .amount, .luxury-plan-card .amount *, .spotify-plan-price, .spotify-plan-price *, .youtube-plan-price, .youtube-plan-price *, .premium-summary-total, .premium-summary-total * {
   font-family: var(--font-mona) !important;
 }
+
+/* View Toggle for Checkout */
+.desktop-checkout-view {
+  display: block;
+}
+.mobile-checkout-view {
+  display: none;
+}
+@media (max-width: 900px) {
+  .desktop-checkout-view {
+    display: none !important;
+  }
+  .mobile-checkout-view {
+    display: block !important;
+  }
+}
