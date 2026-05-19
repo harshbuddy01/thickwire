@@ -332,6 +332,13 @@ function CheckoutContent() {
             if (gateway === 'wallet') {
                 try {
                     const resOrder = await createOrder(payload);
+
+                    // Free order via 100% coupon — already fulfilled server-side
+                    if (resOrder.freeOrder) {
+                        router.push(`/order/${resOrder.orderId}?gateway=coupon`);
+                        return;
+                    }
+
                     const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
                     if (res.data && res.data.success) {
                         router.push(`/order/${res.data.orderId}?gateway=wallet`);
@@ -351,6 +358,12 @@ function CheckoutContent() {
 
             // Other Gateways
             const resOrder = await createOrder(payload);
+
+            // Free order via 100% coupon — already fulfilled server-side
+            if (resOrder.freeOrder) {
+                router.push(`/order/${resOrder.orderId}?gateway=coupon`);
+                return;
+            }
 
             if (gateway === 'nowpayments' && resOrder.nowpaymentsInvoiceUrl) {
                 window.location.href = resOrder.nowpaymentsInvoiceUrl;

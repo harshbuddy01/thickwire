@@ -52,6 +52,9 @@ export interface CreateOrderResponse {
 
     // NOWPayments
     nowpaymentsInvoiceUrl?: string;
+
+    // Free order (100% coupon)
+    freeOrder?: boolean;
 }
 
 export interface OrderStatus {
