@@ -76,7 +76,7 @@ export default function Header() {
     return (
         <>
             {/* ─── Abandoned Cart Banner ───────────────────────────────── */}
-            {abandonedCart && (
+            {abandonedCart && !pathname.startsWith('/order/') && (
                 <div style={{ background: '#b87a1d', color: '#fff', padding: '12px 16px', textAlign: 'center', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', zIndex: 1000, position: 'relative' }}>
                     <ShoppingCart size={16} />
                     <span>You left <strong>{abandonedCart.serviceName} — {abandonedCart.planName}</strong> in your cart!</span>
