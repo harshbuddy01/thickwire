@@ -32,7 +32,7 @@ export interface CreateOrderRequest {
     customerPhone?: string;
     planId: string;
     couponCode?: string;
-    gateway?: 'razorpay' | 'cashfree' | 'wallet' | 'upi-direct';
+    gateway?: 'razorpay' | 'cashfree' | 'wallet' | 'upi-direct' | 'nowpayments';
     whatsappOptedIn?: boolean;
     serviceCredentials?: Record<string, any>;
 }
@@ -49,6 +49,9 @@ export interface CreateOrderResponse {
     // Cashfree properties
     cashfreeSessionId?: string;
     cashfreeOrderId?: string;
+
+    // NOWPayments
+    nowpaymentsInvoiceUrl?: string;
 }
 
 export interface OrderStatus {
