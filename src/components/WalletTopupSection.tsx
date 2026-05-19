@@ -354,7 +354,7 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
     // ─── International User Flow ──────────────────────────
 
     const handleCryptoTopUp = async () => {
-        if (!cryptoAmount || Number(cryptoAmount) < 5) return alert('Minimum crypto top-up is $5');
+        if (!cryptoAmount || Number(cryptoAmount) < 1) return alert('Minimum crypto top-up is $1');
         setIsCryptoLoading(true);
         try {
             const { data } = await api.post('/wallet/topup/crypto', {
@@ -404,8 +404,8 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                             type="number"
                             value={cryptoAmount}
                             onChange={e => setCryptoAmount(e.target.value)}
-                            placeholder="Amount in USD (min $5)"
-                            min={5}
+                            placeholder="Amount in USD (min $1)"
+                            min={1}
                             style={{
                                 width: '100%', padding: '12px 12px 12px 28px', borderRadius: 12,
                                 border: '1px solid #e2e8f0', fontSize: '0.95rem', fontWeight: 600,
@@ -415,12 +415,12 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                     </div>
                     <button
                         onClick={handleCryptoTopUp}
-                        disabled={isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 5}
+                        disabled={isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 1}
                         style={{
                             padding: '12px 24px',
                             background: isCryptoLoading ? '#94a3b8' : 'linear-gradient(135deg, #f7931a, #f3ba2f)',
                             color: 'white', border: 'none', borderRadius: 12, fontWeight: 800,
-                            cursor: (isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 5) ? 'not-allowed' : 'pointer',
+                            cursor: (isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 1) ? 'not-allowed' : 'pointer',
                             fontFamily: 'Outfit, sans-serif', boxShadow: '0 4px 12px rgba(247,147,26,0.3)',
                             minWidth: 80,
                         }}
@@ -429,7 +429,7 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                     </button>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
-                    {[5, 10, 20, 50, 100].map((amt) => (
+                    {[1, 5, 10, 20, 50].map((amt) => (
                         <button
                             key={amt}
                             type="button"
