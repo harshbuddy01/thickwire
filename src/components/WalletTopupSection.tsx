@@ -28,14 +28,23 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
     const [isCryptoLoading, setIsCryptoLoading] = useState(false);
 
     useEffect(() => {
-        // Auto-detect if Indian user
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
-        setIsIndian(isIN);
-
-        if (isIN) {
-            fetchQrDetails();
-        }
+        // Auto-detect if Indian user via IP geolocation (respects VPN)
+        const detectCountry = async () => {
+            try {
+                const res = await fetch('https://ip-api.com/json/?fields=countryCode');
+                const data = await res.json();
+                const isIN = data.countryCode === 'IN';
+                setIsIndian(isIN);
+                if (isIN) fetchQrDetails();
+            } catch {
+                // Fallback to timezone if IP detection fails
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
+                setIsIndian(isIN);
+                if (isIN) fetchQrDetails();
+            }
+        };
+        detectCountry();
     }, []);
 
     const fetchQrDetails = async () => {

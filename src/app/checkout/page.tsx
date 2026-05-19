@@ -103,19 +103,34 @@ function CheckoutContent() {
         }
     }, [user]);
 
-    // Detect Indian user via timezone
+    // Detect Indian user via IP geolocation (respects VPN)
     useEffect(() => {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
-        setIsIndianUser(isIN);
-        if (isIN) {
-            // Pre-fetch QR details but do not auto-select UPI Direct
-            api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
-            setGateway('wallet');
-        } else {
-            // Non-Indian users: default depends on plan currency (set after plan loads)
-            setGateway('wallet');
-        }
+        const detectCountry = async () => {
+            try {
+                const res = await fetch('https://ip-api.com/json/?fields=countryCode');
+                const data = await res.json();
+                const isIN = data.countryCode === 'IN';
+                setIsIndianUser(isIN);
+                if (isIN) {
+                    api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
+                    setGateway('wallet');
+                } else {
+                    setGateway('wallet');
+                }
+            } catch {
+                // Fallback to timezone if IP detection fails
+                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const isIN = tz.startsWith('Asia/Kolkata') || tz.startsWith('Asia/Calcutta');
+                setIsIndianUser(isIN);
+                if (isIN) {
+                    api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
+                    setGateway('wallet');
+                } else {
+                    setGateway('wallet');
+                }
+            }
+        };
+        detectCountry();
     }, []);
 
     useEffect(() => {
@@ -124,7 +139,7 @@ function CheckoutContent() {
             setDiscountAmount(0);
             setCouponState('idle');
             setCouponCode('');
-            // Auto-select crypto for USD plans for non-Indian users
+            // Auto-select crypto for USD plans for non-Indian users (always prioritize crypto for international users)
             if (plan.currency === 'USD' && !isIndianUser) {
                 setGateway('nowpayments');
             }
@@ -809,8 +824,8 @@ function CheckoutContent() {
                                     )}
                                 </div>
 
-                                {/* Crypto Option (Only for USD plans) */}
-                                {planCurrency === 'USD' && <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'nowpayments' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'nowpayments' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden' }}>
+                                {/* Crypto Option (Only for USD plans and sufficient wallet balance) */}
+                                {planCurrency === 'USD' && !isIndianUser && <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'nowpayments' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'nowpayments' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden' }}>
                                     {!isIndianUser && gateway === 'nowpayments' && <div style={{ position: 'absolute', top: 0, right: 0, background: '#f7931a', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>SELECTED</div>}
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                         <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #f7931a, #f3ba2f)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
