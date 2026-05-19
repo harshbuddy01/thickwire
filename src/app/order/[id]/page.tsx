@@ -129,13 +129,20 @@ function OrderContent({ orderId }: { orderId: string }) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="fade-up-4" style={{ display: 'flex', gap: 12 }}>
-                    <Link href="/account" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#111827', color: '#fff', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 8px 24px rgba(17,24,39,0.15)', transition: 'all 0.2s' }}>
-                        <Package size={18} /> Track Order
-                    </Link>
-                    <Link href="/support" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#f8fafc', color: '#111827', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', border: '1px solid #e5e7eb', transition: 'all 0.2s' }}>
-                        <Headphones size={18} /> Contact Support
-                    </Link>
+                <div className="fade-up-4" style={{ display: 'flex', gap: 12, flexDirection: 'column' }}>
+                    {order.paymentStatus === 'PENDING' && order.service.slug && order.planId && (
+                        <Link href={`/checkout?service=${order.service.slug}&plan=${order.planId}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#f59e0b', color: '#fff', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 8px 24px rgba(245,158,11,0.25)', transition: 'all 0.2s', width: '100%' }}>
+                            <ArrowRight size={18} /> Complete Payment
+                        </Link>
+                    )}
+                    <div style={{ display: 'flex', gap: 12, width: '100%' }}>
+                        <Link href="/account" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#111827', color: '#fff', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 8px 24px rgba(17,24,39,0.15)', transition: 'all 0.2s' }}>
+                            <Package size={18} /> Track Order
+                        </Link>
+                        <Link href="/support" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#f8fafc', color: '#111827', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', border: '1px solid #e5e7eb', transition: 'all 0.2s' }}>
+                            <Headphones size={18} /> Contact Support
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Security badge */}
