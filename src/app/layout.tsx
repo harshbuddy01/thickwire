@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
+import localFont from 'next/font/local';
+import { GeistSans } from 'geist/font/sans';
+import '@fontsource-variable/mona-sans';
 import './globals.css';
 import { AuthProvider } from '@/lib/AuthContext';
 import Header from '@/components/Header';
@@ -34,8 +37,9 @@ export default function RootLayout({
             <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="preconnect" href="https://assets.streamkart.store" />
+                <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,900&display=swap" rel="stylesheet" />
             </head>
-            <body className={outfit.className}>
+            <body className={`${outfit.className} ${GeistSans.variable}`}>
                 <AuthProvider>
                     <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
                     <Header />

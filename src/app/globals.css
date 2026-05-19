@@ -3436,3 +3436,36 @@ textarea.form-input {
 }
 
 .category-banner-container { width: 100%; aspect-ratio: 1440 / 360; border-radius: 24px; overflow: hidden; margin-bottom: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05); background: #1a1c23; } @media (max-width: 768px) { .category-banner-container { aspect-ratio: 16/10 !important; min-height: 180px !important; border-radius: 16px !important; } }
+
+/* ─── NEW FONTS APPLIED ─── */
+:root {
+  --font-geist: var(--font-geist-sans), 'Geist Sans', sans-serif;
+  --font-satoshi: 'Satoshi', sans-serif;
+  --font-mona: 'Mona Sans Variable', 'Mona Sans', sans-serif;
+}
+
+/* Navbar */
+header, .header-top, .nav-logo-text, .nav-links a, .nav-action-btn, .mobile-nav-menu {
+  font-family: var(--font-geist) !important;
+}
+
+/* Cards */
+.plan-card, .luxury-plan-card, .plan-card-exact, .p-card-bold, .spotify-plan-card, 
+.youtube-plan-card, .hbo-plan-card, .chatgpt-plan-card, .service-card, .prime-plan-card,
+.account-profile-card, .account-wallet-card, .account-sidebar .sidebar-card, .stat-card,
+.premium-checkout-card, .premium-summary-card {
+  font-family: var(--font-geist) !important;
+}
+
+/* Hero Banner */
+.hero-title, .netflix-big-title, .hero-brand-name, .category-title, .page-header h1, 
+.chatgpt-hero-title, .sonyliv-hero-title, .zee5-hero-title, .gemini-title {
+  font-family: var(--font-satoshi) !important;
+  font-weight: 700 !important;
+}
+
+/* Pricing Text */
+.plan-price .amount, .chatgpt-plan-price, .price-row .val, .p-val, 
+.luxury-plan-card .amount, .spotify-plan-price, .youtube-plan-price, .premium-summary-total {
+  font-family: var(--font-mona) !important;
+}
