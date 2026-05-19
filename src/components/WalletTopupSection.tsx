@@ -354,7 +354,7 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
     // ─── International User Flow ──────────────────────────
 
     const handleCryptoTopUp = async () => {
-        if (!cryptoAmount || Number(cryptoAmount) < 1) return alert('Minimum crypto top-up is $1');
+        if (!cryptoAmount || Number(cryptoAmount) <= 0) return alert('Please enter a valid amount');
         setIsCryptoLoading(true);
         try {
             const { data } = await api.post('/wallet/topup/crypto', {
@@ -404,8 +404,9 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                             type="number"
                             value={cryptoAmount}
                             onChange={e => setCryptoAmount(e.target.value)}
-                            placeholder="Amount in USD (min $1)"
-                            min={1}
+                            placeholder="Amount in USD"
+                            min={0.01}
+                            step={0.01}
                             style={{
                                 width: '100%', padding: '12px 12px 12px 28px', borderRadius: 12,
                                 border: '1px solid #e2e8f0', fontSize: '0.95rem', fontWeight: 600,
@@ -415,12 +416,12 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                     </div>
                     <button
                         onClick={handleCryptoTopUp}
-                        disabled={isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 1}
+                        disabled={isCryptoLoading || !cryptoAmount || Number(cryptoAmount) <= 0}
                         style={{
                             padding: '12px 24px',
                             background: isCryptoLoading ? '#94a3b8' : 'linear-gradient(135deg, #f7931a, #f3ba2f)',
                             color: 'white', border: 'none', borderRadius: 12, fontWeight: 800,
-                            cursor: (isCryptoLoading || !cryptoAmount || Number(cryptoAmount) < 1) ? 'not-allowed' : 'pointer',
+                            cursor: (isCryptoLoading || !cryptoAmount || Number(cryptoAmount) <= 0) ? 'not-allowed' : 'pointer',
                             fontFamily: 'Outfit, sans-serif', boxShadow: '0 4px 12px rgba(247,147,26,0.3)',
                             minWidth: 80,
                         }}
