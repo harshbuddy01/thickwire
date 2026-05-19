@@ -41,7 +41,7 @@ function CheckoutContent() {
     });
 
     const [whatsappOptedIn, setWhatsappOptedIn] = useState(true);
-    const [gateway, setGateway] = useState<'wallet' | 'upi-direct'>('wallet');
+    const [gateway, setGateway] = useState<'wallet' | 'upi-direct' | 'nowpayments'>('wallet');
     const [walletBalance, setWalletBalance] = useState<number | null>(null);
     const [walletCurrency, setWalletCurrency] = useState<string>('INR');
     const [walletBaseCurrency, setWalletBaseCurrency] = useState<string>('INR');
@@ -111,9 +111,10 @@ function CheckoutContent() {
         if (isIN) {
             // Pre-fetch QR details but do not auto-select UPI Direct
             api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);
+            setGateway('wallet');
+        } else {
+            setGateway('nowpayments');
         }
-        // Default to wallet
-        setGateway('wallet');
     }, []);
 
     useEffect(() => {
@@ -240,7 +241,7 @@ function CheckoutContent() {
 
 
 
-        if (gateway !== 'wallet' && gateway !== 'upi-direct') {
+        if (gateway !== 'wallet' && gateway !== 'upi-direct' && gateway !== 'nowpayments') {
             setError('Please select a payment method.');
             return;
         }
@@ -349,7 +350,12 @@ function CheckoutContent() {
             }
 
             // Other Gateways
-            await createOrder(payload);
+            const resOrder = await createOrder(payload);
+
+            if (gateway === 'nowpayments' && resOrder.nowpaymentsInvoiceUrl) {
+                window.location.href = resOrder.nowpaymentsInvoiceUrl;
+                return;
+            }
         } catch (err: any) {
             console.error(err);
             setError(err?.response?.data?.message || 'Something went wrong. Please try again.');
@@ -773,6 +779,24 @@ function CheckoutContent() {
                                         </div>
                                     )}
                                 </div>
+
+                                {/* Crypto Option (Global) */}
+                                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: gateway === 'nowpayments' ? '#f0fdf4' : '#fff', border: `1px solid ${gateway === 'nowpayments' ? '#10b981' : '#e5e7eb'}`, borderRadius: 16, cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden' }}>
+                                    {!isIndianUser && gateway === 'nowpayments' && <div style={{ position: 'absolute', top: 0, right: 0, background: '#f7931a', color: '#fff', fontSize: '0.65rem', fontWeight: 800, padding: '2px 8px', borderBottomLeftRadius: 8 }}>SELECTED</div>}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                        <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #f7931a, #f3ba2f)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 4.6-4.6a2 2 0 0 1 2.8 0l.6.6a2 2 0 0 0 2.8 0l1.4-1.4a4 4 0 0 0 0-5.65l-1.4-1.4"/><path d="M12 2v2"/></svg>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontWeight: 800, color: '#111827', fontSize: '1rem' }}>Pay with Crypto <span style={{ fontSize: '0.7rem', background: '#fef3c7', color: '#d97706', padding: '2px 6px', borderRadius: 4, marginLeft: 4 }}>Global</span></div>
+                                            <div style={{ color: '#6b7280', fontSize: '0.75rem' }}>USDT, BTC, ETH, SOL and more</div>
+                                        </div>
+                                    </div>
+                                    <div style={{ width: 22, height: 22, borderRadius: '50%', background: gateway === 'nowpayments' ? '#10b981' : 'transparent', border: gateway === 'nowpayments' ? 'none' : '2px solid #d1d5db', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {gateway === 'nowpayments' && <CheckCircle2 size={14} color="#fff" strokeWidth={3} />}
+                                    </div>
+                                    <input type="radio" value="nowpayments" checked={gateway === 'nowpayments'} onChange={() => setGateway('nowpayments')} style={{ display: 'none' }} />
+                                </label>
                             </div>
                         </div>
 
