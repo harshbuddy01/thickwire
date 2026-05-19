@@ -108,9 +108,9 @@ function CheckoutContent() {
     useEffect(() => {
         const detectCountry = async () => {
             try {
-                const res = await fetch('https://ip-api.com/json/?fields=countryCode');
+                const res = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await res.json();
-                const isIN = data.countryCode === 'IN';
+                const isIN = data.country === 'IN';
                 setIsIndianUser(isIN);
                 if (isIN) {
                     api.get('/wallet/utr/qr-details').then(({ data }) => setUpiDetails(data)).catch(console.error);

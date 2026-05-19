@@ -31,9 +31,9 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
         // Auto-detect if Indian user via IP geolocation (respects VPN)
         const detectCountry = async () => {
             try {
-                const res = await fetch('https://ip-api.com/json/?fields=countryCode');
+                const res = await fetch('https://get.geojs.io/v1/ip/country.json');
                 const data = await res.json();
-                const isIN = data.countryCode === 'IN';
+                const isIN = data.country === 'IN';
                 setIsIndian(isIN);
                 if (isIN) fetchQrDetails();
             } catch {
