@@ -3438,34 +3438,38 @@ textarea.form-input {
 .category-banner-container { width: 100%; aspect-ratio: 1440 / 360; border-radius: 24px; overflow: hidden; margin-bottom: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05); background: #1a1c23; } @media (max-width: 768px) { .category-banner-container { aspect-ratio: 16/10 !important; min-height: 180px !important; border-radius: 16px !important; } }
 
 /* ─── NEW FONTS APPLIED ─── */
-:root {
-  --font-geist: var(--font-geist-sans), 'Geist Sans', sans-serif;
+body {
+  --font-geist: var(--font-geist-sans, 'Geist Sans', sans-serif);
   --font-satoshi: 'Satoshi', sans-serif;
-  --font-mona: 'Mona Sans Variable', 'Mona Sans', sans-serif;
+  --font-mona: 'Mona Sans', 'Mona Sans Variable', sans-serif;
 }
 
 /* Navbar */
-header, .header-top, .nav-logo-text, .nav-links a, .nav-action-btn, .mobile-nav-menu {
+header, header *, .header-top, .header-top *, .nav-logo-text, .nav-logo-text *, .nav-links a, .nav-links a *, .nav-action-btn, .nav-action-btn *, .mobile-nav-menu, .mobile-nav-menu * {
   font-family: var(--font-geist) !important;
 }
 
 /* Cards */
-.plan-card, .luxury-plan-card, .plan-card-exact, .p-card-bold, .spotify-plan-card, 
-.youtube-plan-card, .hbo-plan-card, .chatgpt-plan-card, .service-card, .prime-plan-card,
-.account-profile-card, .account-wallet-card, .account-sidebar .sidebar-card, .stat-card,
-.premium-checkout-card, .premium-summary-card {
+.plan-card, .plan-card *, .luxury-plan-card, .luxury-plan-card *, .plan-card-exact, .plan-card-exact *, .p-card-bold, .p-card-bold *, .spotify-plan-card, .spotify-plan-card *, 
+.youtube-plan-card, .youtube-plan-card *, .hbo-plan-card, .hbo-plan-card *, .chatgpt-plan-card, .chatgpt-plan-card *, .service-card, .service-card *, .prime-plan-card, .prime-plan-card *,
+.account-profile-card, .account-profile-card *, .account-wallet-card, .account-wallet-card *, .account-sidebar .sidebar-card, .account-sidebar .sidebar-card *, .stat-card, .stat-card *,
+.premium-checkout-card, .premium-checkout-card *, .premium-summary-card, .premium-summary-card * {
   font-family: var(--font-geist) !important;
 }
 
 /* Hero Banner */
-.hero-title, .netflix-big-title, .hero-brand-name, .category-title, .page-header h1, 
-.chatgpt-hero-title, .sonyliv-hero-title, .zee5-hero-title, .gemini-title {
+.hero-title, .hero-title *, .netflix-big-title, .netflix-big-title *, .hero-brand-name, .hero-brand-name *, .category-title, .category-title *, .page-header h1, .page-header h1 *, 
+.chatgpt-hero-title, .chatgpt-hero-title *, .sonyliv-hero-title, .sonyliv-hero-title *, .zee5-hero-title, .zee5-hero-title *, .gemini-title, .gemini-title *,
+h2:has(span) {
   font-family: var(--font-satoshi) !important;
   font-weight: 700 !important;
 }
+.main-hero-area *, .sonyliv-hero *, .zee5-hero *, .gemini-top-section * {
+  font-family: var(--font-satoshi) !important;
+}
 
 /* Pricing Text */
-.plan-price .amount, .chatgpt-plan-price, .price-row .val, .p-val, 
-.luxury-plan-card .amount, .spotify-plan-price, .youtube-plan-price, .premium-summary-total {
+.plan-price .amount, .plan-price .amount *, .chatgpt-plan-price, .chatgpt-plan-price *, .price-row .val, .price-row .val *, .p-val, .p-val *, 
+.luxury-plan-card .amount, .luxury-plan-card .amount *, .spotify-plan-price, .spotify-plan-price *, .youtube-plan-price, .youtube-plan-price *, .premium-summary-total, .premium-summary-total * {
   font-family: var(--font-mona) !important;
 }
