@@ -63,7 +63,8 @@ export interface OrderStatus {
     fulfillmentStatus: 'PENDING' | 'FULFILLED' | 'MANUAL_PENDING' | 'MANUAL_FULFILLED';
     deliveredAt: string | null;
     createdAt: string;
-    service: { name: string };
+    planId?: string;
+    service: { name: string; slug?: string };
     plan: { name: string };
 }
 
