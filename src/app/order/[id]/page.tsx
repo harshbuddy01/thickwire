@@ -131,7 +131,7 @@ function OrderContent({ orderId }: { orderId: string }) {
                 {/* Action Buttons */}
                 <div className="fade-up-4" style={{ display: 'flex', gap: 12, flexDirection: 'column' }}>
                     {order.paymentStatus === 'PENDING' && order.service.slug && order.planId && (
-                        <Link href={`/checkout?service=${order.service.slug}&plan=${order.planId}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#f59e0b', color: '#fff', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 8px 24px rgba(245,158,11,0.25)', transition: 'all 0.2s', width: '100%' }}>
+                        <Link href={`/checkout?service=${order.service.slug}&planId=${order.planId}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: '#f59e0b', color: '#fff', padding: '16px 24px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem', boxShadow: '0 8px 24px rgba(245,158,11,0.25)', transition: 'all 0.2s', width: '100%' }}>
                             <ArrowRight size={18} /> Complete Payment
                         </Link>
                     )}

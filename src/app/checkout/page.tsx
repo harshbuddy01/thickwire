@@ -26,7 +26,7 @@ export default function CheckoutPage() {
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const planId = searchParams.get('planId');
+    const planId = searchParams.get('planId') || searchParams.get('plan');
     const serviceSlug = searchParams.get('service');
 
     const [service, setService] = useState<Service | null>(null);
