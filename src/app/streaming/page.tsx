@@ -7,19 +7,23 @@ import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'luci
 const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 const SERVICES = [
-    { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflix.svg',     bg: '#141414' },
-    { id: 'prime',       name: 'Prime Video',        slug: 'prime',       plan: 'All Plans',          logo: 'logos/prime.svg',       bg: '#0F2535' },
-    { id: 'hotstar',     name: 'Disney+ Hotstar',    slug: 'hotstar',     plan: 'Premium Plans',      logo: 'logos/hotstar.svg',     bg: '#0E1A3C' },
-    { id: 'zee5',        name: 'ZEE5',               slug: 'zee5',        plan: 'Premium Plans',      logo: 'logos/zee5.jpg',        bg: '#1A0A2E' },
-    { id: 'sonyliv',     name: 'Sony LIV',           slug: 'sonyliv',     plan: 'Premium Plans',      logo: 'logos/sonyliv.jpg',     bg: '#1A1A1A' },
-    { id: 'chaupal',     name: 'Chaupal',            slug: 'chaupal',     plan: 'Premium Plans',      logo: 'logos/chaupal.svg',     bg: '#120E00' },
-    { id: 'youtube',     name: 'YouTube Premium',    slug: 'youtube',     plan: 'Ad-free Experience', logo: 'logos/youtube.png',     bg: '#1A0000' },
-    { id: 'disney',      name: 'Disney+',            slug: 'disney',      plan: 'Premium Plans',      logo: 'logos/disney.jpg',      bg: '#040D2E' },
-    { id: 'crunchyroll', name: 'Crunchyroll',        slug: 'crunchyroll', plan: 'Premium Plans',      logo: 'logos/crunchyroll.png', bg: '#1A0D00' },
-    { id: 'hbomax',      name: 'HBO Max',            slug: 'hbomax',      plan: 'Premium Plans',      logo: 'logos/hbomax.jpg',      bg: '#0F0520' },
-    { id: 'jiosaavn',    name: 'JioSaavn',           slug: 'jiosaavn',    plan: 'Music & Podcasts',   logo: 'logos/jiosaavn.png',    bg: '#001A19' },
-    { id: 'spotify',     name: 'Spotify',            slug: 'spotify',     plan: 'Premium Plans',      logo: 'logos/spotify.png',     bg: '#001A0A' },
+    { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflix.svg',                    bg: '#141414', logoFit: 'icon' },
+    { id: 'prime',       name: 'Prime Video',        slug: 'prime',       plan: 'All Plans',          logo: 'logos/prime.svg',                      bg: '#07151F', logoFit: 'wide' },
+    { id: 'jiohotstar',  name: 'Jio Hotstar',        slug: 'jiohotstar',  plan: 'Premium Plans',      logo: 'logos/hotstar.svg',                    bg: '#0A1838', logoFit: 'wide' },
+    { id: 'zee5',        name: 'ZEE5',               slug: 'zee5',        plan: 'Premium Plans',      logo: 'logos/zee5.svg',                       bg: '#1A0A2E', logoFit: 'icon' },
+    { id: 'sonyliv',     name: 'Sony LIV',           slug: 'sonyliv',     plan: 'Premium Plans',      logo: 'logos/sonyliv.svg',                    bg: '#1A1A1A', logoFit: 'icon' },
+    { id: 'chaupal',     name: 'Chaupal',            slug: 'chaupal',     plan: 'Premium Plans',      logo: 'logos/chaupal.svg',                    bg: '#120E00', logoFit: 'icon' },
+    { id: 'youtube',     name: 'YouTube Premium',    slug: 'youtube',     plan: 'Ad-free Experience', logo: 'logos/youtube.svg',                    bg: '#1A0000', logoFit: 'icon' },
+    { id: 'disney',      name: 'Disney+',            slug: 'disney',      plan: 'Premium Plans',      logo: 'logos/disney.svg',                     bg: '#040D2E', logoFit: 'wide' },
+    { id: 'crunchyroll', name: 'Crunchyroll',        slug: 'crunchyroll', plan: 'Premium Plans',      logo: 'logos/crunchyroll.png',                bg: '#1A0D00', logoFit: 'icon' },
+    { id: 'hbomax',      name: 'HBO Max',            slug: 'hbomax',      plan: 'Premium Plans',      logo: 'logos/hbomax.svg',                     bg: '#0F0520', logoFit: 'wide' },
+    { id: 'jiosaavn',    name: 'JioSaavn',           slug: 'jiosaavn',    plan: 'Music & Podcasts',   logo: 'logos/jiosaavn.png',                   bg: '#001A19', logoFit: 'wide' },
+    { id: 'spotify',     name: 'Spotify',            slug: 'spotify',     plan: 'Premium Plans',      logo: 'logos/spotify.png',                    bg: '#001A0A', logoFit: 'icon' },
 ];
+
+function logoSrc(src: string) {
+    return src.startsWith('http') ? src : `${MINIO}/${src}`;
+}
 
 export default function StreamingCategoryPage() {
     return (
@@ -69,6 +73,8 @@ export default function StreamingCategoryPage() {
 
                     {/* 6-column Grid */}
                     <div className="streaming-services-grid" style={{ 
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
                         gap: '20px', 
                         marginBottom: '40px' 
                     }}>
@@ -93,16 +99,19 @@ export default function StreamingCategoryPage() {
                                         flexShrink: 0,
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'center',
+                                        borderRadius: '18px',
+                                        background: 'rgba(255,255,255,0.04)',
+                                        boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06)'
                                     }}>
                                         <Image
-                                            src={`${MINIO}/${s.logo}`}
+                                            src={logoSrc(s.logo)}
                                             alt={s.name}
-                                            width={80}
-                                            height={80}
+                                            width={s.logoFit === 'wide' ? 120 : 80}
+                                            height={s.logoFit === 'wide' ? 64 : 80}
                                             style={{ 
-                                                width: '100%', 
-                                                height: '100%', 
+                                                width: s.logoFit === 'wide' ? '92%' : '78%',
+                                                height: s.logoFit === 'wide' ? '68%' : '78%',
                                                 objectFit: 'contain', 
                                                 display: 'block',
                                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
