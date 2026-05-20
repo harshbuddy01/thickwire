@@ -6,7 +6,7 @@ import { useState } from 'react';
 import type { Service } from '@/lib/types';
 import styles from '../service-page.module.css';
 
-const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 export default function CapCutPageClient({ service }: { service: Service }) {
     const [openFaq, setOpenFaq] = useState<number | null>(0);

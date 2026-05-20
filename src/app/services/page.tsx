@@ -5,7 +5,7 @@ import { getServices } from '@/lib/api';
 import Link from 'next/link';
 import { ChevronRight, Search, Zap, ShieldCheck, Sparkles, ArrowRight, Star, X } from 'lucide-react';
 
-const MINIO_BASE = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_BASE = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 const ACCENT = '#b87a1d';
 
 // Fallback Data

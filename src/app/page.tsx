@@ -4,7 +4,7 @@ import HeroSlider from '@/components/HeroSlider';
 import ProgressiveImage from '@/components/ProgressiveImage';
 
 
-const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 export default function HomePage() {
     return (

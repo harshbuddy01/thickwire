@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import api from './api';
+import api, { setAccessToken, setCsrfToken, registerAuthCallbacks } from './api';
 
 export interface CustomerProfile {
     id: string;
@@ -40,17 +40,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const { data } = await api.get('/auth/me');
             setUser(data);
-        } catch (err: any) {
-            console.error('refreshProfile failed:', err?.response?.status, err?.response?.data || err.message);
+        } catch (err: unknown) {
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('refreshProfile failed:', err);
+            }
             setUser(null);
-            // Do NOT throw — callers (callback page, setAuth) must not break on failure
         }
     };
 
-    const setAuth = async (accessToken: string) => {
+    const setAuth = async (token: string) => {
         isSettingAuth.current = true;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('hasSession', 'true');
+        setAccessToken(token);
         await refreshProfile();
         isSettingAuth.current = false;
     };
@@ -58,16 +58,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = async () => {
         try {
             await api.post('/auth/logout');
-        } catch (err) {
-            console.error('Logout API failed:', err);
+        } catch (err: unknown) {
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Logout API failed:', err);
+            }
         }
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('hasSession');
+        setAccessToken(null);
+        setCsrfToken(null);
         setUser(null);
         window.location.href = '/login';
     };
 
     useEffect(() => {
+        // Register callbacks so that Axios interceptor failures sync with UI State
+        registerAuthCallbacks(
+            (token) => {
+                setAccessToken(token);
+            },
+            () => {
+                setUser(null);
+                setAccessToken(null);
+                setCsrfToken(null);
+            }
+        );
+
         const init = async () => {
             // If setAuth is currently running (e.g. on /auth/callback),
             // don't interfere — let it finish first.
@@ -76,21 +90,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 return;
             }
 
-            const token = localStorage.getItem('accessToken');
-            if (token) {
-                await refreshProfile();
-            } else if (localStorage.getItem('hasSession') === 'true') {
-                // No access token — try refresh token via cookie
-                try {
-                    const { data } = await api.post('/auth/refresh');
-                    localStorage.setItem('accessToken', data.accessToken);
-                    await refreshProfile();
-                } catch {
-                    localStorage.removeItem('hasSession');
-                    // No valid session — user is genuinely logged out
+            try {
+                // Try to refresh credentials on page mount
+                const { data } = await api.post('/auth/refresh');
+                setAccessToken(data.accessToken);
+                if (data.csrfToken) {
+                    setCsrfToken(data.csrfToken);
                 }
+                await refreshProfile();
+            } catch (err: unknown) {
+                // No active session or session expired
+                setUser(null);
+                setAccessToken(null);
+                setCsrfToken(null);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
         init();
     }, []);

@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { ChevronRight, Headphones, Send, MessageCircle, Clock, ShieldCheck, ArrowRight, Image as ImageIcon, X } from 'lucide-react';
 import { createSupportTicket } from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
+import { supportTicketSchema } from '@/lib/validators';
+import axios from 'axios';
+import { rateLimiter, RATE_LIMITS, THROTTLES } from '@/lib/rateLimiter';
 import styles from '../static-page.module.css';
 
 export default function SupportPage() {
@@ -37,6 +40,27 @@ export default function SupportPage() {
         setSubmitting(true);
         setError(null);
 
+        const rl = rateLimiter.checkLimit('support_ticket', RATE_LIMITS.SUPPORT_TICKET.limit, RATE_LIMITS.SUPPORT_TICKET.windowMs);
+        if (!rl.allowed) {
+            setError(`Ticket submission limit reached. Please try again after ${rl.resetAt.toLocaleTimeString()}.`);
+            setSubmitting(false);
+            return;
+        }
+
+        const throttle = rateLimiter.throttle('support_submit', THROTTLES.SUPPORT_SUBMIT);
+        if (!throttle.allowed) {
+            setError(`Please wait ${Math.ceil(throttle.retryAfter / 1000)} seconds before trying again.`);
+            setSubmitting(false);
+            return;
+        }
+
+        const validation = supportTicketSchema.safeParse(form);
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            setSubmitting(false);
+            return;
+        }
+
         try {
             const payload = {
                 ...form,
@@ -45,8 +69,12 @@ export default function SupportPage() {
             };
             await createSupportTicket(payload);
             setSubmitted(true);
-        } catch (err: any) {
-            setError(err?.response?.data?.message || 'Failed to submit. Please try again.');
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.message || 'Failed to submit. Please try again.');
+            } else {
+                setError('Failed to submit. Please try again.');
+            }
         } finally {
             setSubmitting(false);
         }

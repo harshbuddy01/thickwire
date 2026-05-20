@@ -3,6 +3,8 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import { redirectUrlSchema } from '@/lib/validators';
+import { captureSecurityEvent } from '@/lib/sentry';
 
 function AuthCallbackContent() {
     const searchParams = useSearchParams();
@@ -13,7 +15,18 @@ function AuthCallbackContent() {
     useEffect(() => {
         const handleCallback = async () => {
             const token = searchParams.get('token');
-            const redirectTo = searchParams.get('redirect') || '/';
+            let redirectTo = searchParams.get('redirect') || '/';
+
+            // Validate redirect URL to prevent open redirect attacks
+            const validation = redirectUrlSchema.safeParse(redirectTo);
+            if (!validation.success) {
+                captureSecurityEvent({
+                    type: 'open_redirect_attempt',
+                    details: { attemptedUrl: redirectTo },
+                    severity: 'medium',
+                });
+                redirectTo = '/';
+            }
 
             if (!token) {
                 router.push('/login?error=Google_Auth_Failed');
@@ -23,9 +36,10 @@ function AuthCallbackContent() {
             try {
                 // Save token and fetch profile
                 await setAuth(token);
-            } catch (err) {
-                // setAuth should NOT throw anymore, but just in case
-                console.error('setAuth failed in callback:', err);
+            } catch (err: unknown) {
+                if (process.env.NODE_ENV !== 'production') {
+                    console.error('setAuth failed in callback:', err);
+                }
             }
 
             const isNewUser = searchParams.get('isNewUser') === 'true';

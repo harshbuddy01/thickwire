@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import PlanCard from './PlanCard';
 import Link from 'next/link';
 import { ChevronRight, ShieldCheck, Navigation, Headphones, HelpCircle } from 'lucide-react';
+import { serviceSlugParamSchema } from '@/lib/validators';
 
 export const revalidate = 30; // ISR: 30 seconds
 
@@ -13,6 +14,9 @@ export async function generateMetadata({
 }: {
     params: { slug: string };
 }): Promise<Metadata> {
+    if (!serviceSlugParamSchema.safeParse(params.slug).success) {
+        return { title: 'Service Not Found — StreamKart' };
+    }
     try {
         const service = await getServiceBySlug(params.slug);
         return {
@@ -29,6 +33,10 @@ export default async function ServicePage({
 }: {
     params: { slug: string };
 }) {
+    if (!serviceSlugParamSchema.safeParse(params.slug).success) {
+        notFound();
+    }
+
     let service: Service;
     try {
         service = await getServiceBySlug(params.slug);

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { getOrderStatus } from '@/lib/api';
 import type { OrderStatus } from '@/lib/types';
+import axios from 'axios';
 
 export function useOrderPolling(orderId: string | null) {
     const [order, setOrder] = useState<OrderStatus | null>(null);
@@ -11,6 +12,14 @@ export function useOrderPolling(orderId: string | null) {
 
     // Use a ref to track current order state to avoid stale closures
     const orderRef = useRef<OrderStatus | null>(null);
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     useEffect(() => {
         orderRef.current = order;
@@ -20,12 +29,24 @@ export function useOrderPolling(orderId: string | null) {
         if (!orderId) return;
         try {
             const data = await getOrderStatus(orderId);
-            setOrder(data);
-            setError(null);
-        } catch (err: any) {
-            setError(err.message || 'Failed to fetch order status');
+            if (isMounted.current) {
+                setOrder(data);
+                setError(null);
+            }
+        } catch (err: unknown) {
+            if (isMounted.current) {
+                if (axios.isAxiosError(err)) {
+                    setError(err.response?.data?.message || err.message || 'Failed to fetch order status');
+                } else if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Failed to fetch order status');
+                }
+            }
         } finally {
-            setLoading(false);
+            if (isMounted.current) {
+                setLoading(false);
+            }
         }
     }, [orderId]);
 
@@ -35,6 +56,7 @@ export function useOrderPolling(orderId: string | null) {
         fetchStatus();
 
         const interval = setInterval(() => {
+            if (!isMounted.current) return;
             const current = orderRef.current;
             if (!current) {
                 fetchStatus();
@@ -48,7 +70,11 @@ export function useOrderPolling(orderId: string | null) {
         }, 5000);
 
         // Auto-stop after 2 minutes
-        const timeout = setTimeout(() => clearInterval(interval), 120000);
+        const timeout = setTimeout(() => {
+            if (isMounted.current) {
+                clearInterval(interval);
+            }
+        }, 120000);
 
         return () => {
             clearInterval(interval);

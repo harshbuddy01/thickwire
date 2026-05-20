@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, AlertCircle, Loader2, Play } from 'lucide-react';
+import { loginSchema } from '@/lib/validators';
+import { rateLimiter, RATE_LIMITS } from '@/lib/rateLimiter';
 import '../auth-styles.css';
 import styles from '../auth/auth.module.css';
 
@@ -30,7 +32,21 @@ function LoginContent() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+
+        const rl = rateLimiter.checkLimit('login', RATE_LIMITS.LOGIN.limit, RATE_LIMITS.LOGIN.windowMs);
+        if (!rl.allowed) {
+            setError(`Too many login attempts. Please try again after ${rl.resetAt.toLocaleTimeString()}.`);
+            return;
+        }
+
         setIsLoading(true);
+
+        const validation = loginSchema.safeParse({ email, password });
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const { data } = await api.post('/auth/login', { email, password });

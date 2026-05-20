@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ProgressiveImage from '@/components/ProgressiveImage';
 
-const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 const slides = [
     { id: 1, src: `${MINIO_URL}/slider/slider1.png`, alt: 'Slide 1', link: '/' },

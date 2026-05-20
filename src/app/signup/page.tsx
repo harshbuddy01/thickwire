@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
 import { Mail, Lock, User, AlertCircle, Loader2, Play, CheckCircle2 } from 'lucide-react';
+import { signupSchema } from '@/lib/validators';
 import '../auth-styles.css';
 import styles from '../auth/auth.module.css';
 import WalletOnboardingPopup from '@/components/WalletOnboardingPopup';
@@ -37,6 +38,13 @@ function SignupContent() {
         e.preventDefault();
         setError('');
         setIsLoading(true);
+
+        const validation = signupSchema.safeParse({ name, email, password });
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const { data } = await api.post('/auth/signup', { name, email, password });

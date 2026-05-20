@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { CheckCircle2, XCircle, Clock, Headphones, ArrowRight, Package, Mail, ShieldCheck } from 'lucide-react';
+import { orderIdParamSchema } from '@/lib/validators';
 
 export default function OrderStatusPage({
     params,
@@ -23,8 +24,26 @@ export default function OrderStatusPage({
 }
 
 function OrderContent({ orderId }: { orderId: string }) {
-    const { order, loading, error } = useOrderPolling(orderId);
+    const validation = orderIdParamSchema.safeParse(orderId);
+    const { order, loading, error } = useOrderPolling(validation.success ? orderId : null);
     const searchParams = useSearchParams();
+
+    if (!validation.success) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: 24, fontFamily: 'var(--font-poppins), sans-serif' }}>
+                <div style={{ maxWidth: 480, width: '100%', background: '#fff', borderRadius: 24, padding: '48px 40px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.06)' }}>
+                    <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#fef2f2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+                        <XCircle size={40} color="#ef4444" />
+                    </div>
+                    <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>Invalid Order ID</h2>
+                    <p style={{ color: '#6b7280', fontSize: '0.95rem', margin: '0 0 32px' }}>The order ID format is invalid.</p>
+                    <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#111827', color: '#fff', padding: '14px 32px', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem' }}>
+                        Back to Home <ArrowRight size={18} />
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     if (loading) {
         return (

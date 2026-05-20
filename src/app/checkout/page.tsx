@@ -8,6 +8,8 @@ import type { Service, Plan, RazorpayOptions } from '@/lib/types';
 import { useAuth } from '@/lib/AuthContext';
 import { ShieldCheck, Lock, CheckCircle2, AlertCircle, ShoppingBag, User, CreditCard, Ticket, Zap, Award, Headphones, ChevronRight, Play, Eye, EyeOff, Globe, Smartphone, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { checkoutSchema, serviceSlugParamSchema } from '@/lib/validators';
+import { rateLimiter, THROTTLES } from '@/lib/rateLimiter';
 import styles from './checkout.module.css';
 import './mobile-glass.css';
 
@@ -26,8 +28,10 @@ export default function CheckoutPage() {
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const planId = searchParams.get('planId') || searchParams.get('plan');
-    const serviceSlug = searchParams.get('service');
+    const rawPlanId = searchParams.get('planId') || searchParams.get('plan');
+    const rawServiceSlug = searchParams.get('service');
+    const planId = rawPlanId && rawPlanId.trim().length > 0 ? rawPlanId.trim() : null;
+    const serviceSlug = rawServiceSlug && serviceSlugParamSchema.safeParse(rawServiceSlug).success ? rawServiceSlug : null;
 
     const [service, setService] = useState<Service | null>(null);
     const [plan, setPlan] = useState<Plan | null>(null);
@@ -259,6 +263,24 @@ function CheckoutContent() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!plan) return;
+
+        const validation = checkoutSchema.safeParse({
+            planId: plan.id,
+            gateway,
+            customerName: form.customerName,
+            customerEmail: form.customerEmail,
+            customerPhone: form.customerPhone,
+        });
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            return;
+        }
+
+        const throttle = rateLimiter.throttle('order_create', THROTTLES.ORDER_CREATE);
+        if (!throttle.allowed) {
+            setError(`Please wait ${Math.ceil(throttle.retryAfter / 1000)} seconds before trying again.`);
+            return;
+        }
 
 
 

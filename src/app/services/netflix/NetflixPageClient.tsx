@@ -8,7 +8,7 @@ import type { Service } from '@/lib/types';
 import ProgressiveImage from '@/components/ProgressiveImage';
 import styles from './netflix.module.css';
 
-const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 export default function NetflixPageClient({ service }: { service: Service }) {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 

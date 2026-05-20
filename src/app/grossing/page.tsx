@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
 
-const MINIO = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 const BANNER_IMG = `${MINIO}/slider/WhatsApp%20Image%202026-05-06%20at%2008.50.27.jpeg`;
 
 const GROSSING_SERVICES = [

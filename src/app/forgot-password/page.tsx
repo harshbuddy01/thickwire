@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { Mail, AlertCircle, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { forgotPasswordSchema } from '@/lib/validators';
+import { rateLimiter, RATE_LIMITS } from '@/lib/rateLimiter';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -13,7 +15,21 @@ export default function ForgotPasswordPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+
+        const rl = rateLimiter.checkLimit('password_reset', RATE_LIMITS.PASSWORD_RESET.limit, RATE_LIMITS.PASSWORD_RESET.windowMs);
+        if (!rl.allowed) {
+            setError(`Too many requests. Please try again after ${rl.resetAt.toLocaleTimeString()}.`);
+            return;
+        }
+
         setStatus('loading');
+
+        const validation = forgotPasswordSchema.safeParse({ email });
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            setStatus('idle');
+            return;
+        }
 
         try {
             await api.post('/auth/forgot-password', { email });

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import WalletTopupSection from '@/components/WalletTopupSection';
 import { playNotificationSound } from '@/lib/notificationSound';
+import { sanitizer } from '@/lib/sanitizer';
 
 const s: { [k: string]: React.CSSProperties } = {
     page: { minHeight: '80vh', padding: '40px 20px 60px' },
@@ -133,7 +134,9 @@ export default function AccountPage() {
                 if (updated) setSelectedSupportTicket(updated);
             }
         } catch (error) {
-            console.error('Failed to fetch tickets:', error);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Failed to fetch tickets:', error);
+            }
         }
     }, []);
 
@@ -152,7 +155,9 @@ export default function AccountPage() {
             
             await fetchTickets();
         } catch (err) {
-            console.error('Failed to fetch account data:', err);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Failed to fetch account data:', err);
+            }
         } finally {
             setIsFetching(false);
         }
@@ -186,7 +191,9 @@ export default function AccountPage() {
             setTicketReplyText('');
             setTicketAttachment(null);
         } catch (err) {
-            console.error('Failed to send reply:', err);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Failed to send reply:', err);
+            }
         } finally {
             setIsSubmittingReply(false);
         }
@@ -199,7 +206,9 @@ export default function AccountPage() {
             setSelectedSupportTicket(data);
             setTickets(tickets.map(t => t.id === data.id ? data : t));
         } catch (err) {
-            console.error('Failed to submit rating:', err);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Failed to submit rating:', err);
+            }
         } finally {
             setRatingSubmitting(false);
         }
@@ -229,7 +238,9 @@ export default function AccountPage() {
             const { data } = await api.get(`/account/orders/${orderId}/credential`);
             setSelectedCredential(data);
         } catch (err: any) {
-            console.error('Failed to load credential:', err);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Failed to load credential:', err);
+            }
             setSelectedCredential({ error: err.response?.data?.message || 'Failed to load credentials.' });
         } finally {
             setLoadingModal(false);
@@ -504,9 +515,10 @@ export default function AccountPage() {
                                                         {ticket.status}
                                                     </span>
                                                 </div>
-                                                <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                    {ticket.message}
-                                                </p>
+                                                <p 
+                                                    dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(ticket.message || '') }}
+                                                    style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                                />
                                                 <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
                                                     Created: {new Date(ticket.createdAt).toLocaleString()} • {ticket.messages?.length || 1} messages
                                                 </div>
@@ -710,7 +722,15 @@ export default function AccountPage() {
                                                 )}
                                             </div>
                                         )}
-                                        {msg.text}
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                            <div 
+                                                dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(msg.text || '') }} 
+                                                style={{ wordBreak: 'break-word' }}
+                                            />
+                                            <span style={{ fontSize: '0.6rem', opacity: 0.5, display: 'inline-flex', alignItems: 'center', gap: '2px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8' }}>
+                                                🛡️ Secured
+                                            </span>
+                                        </div>
                                         <div style={{ fontSize: '0.65rem', marginTop: '6px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8', textAlign: msg.sender === 'CUSTOMER' ? 'right' : 'left' }}>
                                             {new Date(msg.createdAt).toLocaleString()}
                                         </div>

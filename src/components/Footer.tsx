@@ -20,7 +20,7 @@ export default function Footer() {
   };
 
   const accentColor = '#b87a1d';
-  const MINIO = 'https://assets.streamkart.store/streamkart-assets';
+  const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
   if (pathname === '/checkout') return null;
 

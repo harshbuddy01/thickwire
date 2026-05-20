@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { Lock, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import { resetPasswordSchema } from '@/lib/validators';
+import axios from 'axios';
 
 function ResetPasswordContent() {
     const searchParams = useSearchParams();
@@ -18,14 +20,24 @@ function ResetPasswordContent() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        if (password !== confirm) { setError('Passwords do not match'); return; }
         if (!token) { setError('Missing reset token. Please use the link from your email.'); return; }
+
+        const validation = resetPasswordSchema.safeParse({ password, confirmPassword: confirm });
+        if (!validation.success) {
+            setError(validation.error.issues[0].message);
+            return;
+        }
+
         setStatus('loading');
         try {
             await api.post('/auth/reset-password', { token, password });
             setStatus('success');
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Failed to reset password. The link may be expired.');
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.message || 'Failed to reset password. The link may be expired.');
+            } else {
+                setError('Failed to reset password.');
+            }
             setStatus('idle');
         }
     };

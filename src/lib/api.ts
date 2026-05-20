@@ -15,43 +15,121 @@ export const api = axios.create({
     withCredentials: true, // Need this for HttpOnly refresh cookies
 });
 
+// ─── Token State & Callbacks ────────────────────────
+
+let accessToken: string | null = null;
+let csrfToken: string | null = null;
+
+let onAuthFailureCallback: (() => void) | null = null;
+let onAuthSuccessCallback: ((token: string) => void) | null = null;
+
+export const setAccessToken = (token: string | null) => {
+    accessToken = token;
+};
+
+export const setCsrfToken = (token: string | null) => {
+    csrfToken = token;
+};
+
+export const registerAuthCallbacks = (
+    onSuccess: (token: string) => void,
+    onFailure: () => void
+) => {
+    onAuthSuccessCallback = onSuccess;
+    onAuthFailureCallback = onFailure;
+};
+
+function getCsrfToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    
+    // 1. Check in-memory state
+    if (csrfToken) return csrfToken;
+    
+    // 2. Check meta tag
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta) {
+        return meta.getAttribute('content');
+    }
+    
+    // 3. Check cookie (fallback)
+    const match = document.cookie.match(/csrf-token=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : null;
+}
+
 // ─── Interceptors ───────────────────────────────────
 
 api.interceptors.request.use((config) => {
-    if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('accessToken');
+    if (accessToken && config.headers) {
+        config.headers.set('Authorization', `Bearer ${accessToken}`);
+    }
+    
+    if (['post', 'put', 'delete', 'patch'].includes(config.method?.toLowerCase() || '')) {
+        const token = getCsrfToken();
         if (token && config.headers) {
-            config.headers.set('Authorization', `Bearer ${token}`);
+            config.headers.set('X-CSRF-Token', token);
         }
     }
     return config;
 });
 
+let refreshPromise: Promise<string> | null = null;
+
+const refreshAccessToken = async (): Promise<string> => {
+    const { data } = await axios.post(
+        `${api.defaults.baseURL}/auth/refresh`,
+        {},
+        { withCredentials: true }
+    );
+    
+    const newToken = data.accessToken;
+    setAccessToken(newToken);
+    
+    if (data.csrfToken) {
+        setCsrfToken(data.csrfToken);
+    }
+    
+    if (onAuthSuccessCallback) {
+        onAuthSuccessCallback(newToken);
+    }
+    
+    return newToken;
+};
+
 api.interceptors.response.use(
     (response) => response,
-    async (error) => {
-        const originalRequest = error.config;
+    async (error: unknown) => {
+        if (!axios.isAxiosError(error)) {
+            return Promise.reject(error);
+        }
+        
+        const originalRequest = error.config as any;
+        if (!originalRequest) {
+            return Promise.reject(error);
+        }
+        
         if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/refresh') {
             originalRequest._retry = true;
+            
+            if (!refreshPromise) {
+                refreshPromise = refreshAccessToken().finally(() => {
+                    refreshPromise = null;
+                });
+            }
+            
             try {
-                const { data } = await axios.post(
-                    `${api.defaults.baseURL}/auth/refresh`,
-                    {},
-                    { withCredentials: true }
-                );
-                localStorage.setItem('accessToken', data.accessToken);
-                originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
-                return api(originalRequest);
-            } catch (err) {
-                if (typeof window !== 'undefined') {
-                    // NEVER clear token or redirect during OAuth callback — let the callback page handle it
-                    const currentPath = window.location.pathname;
-                    if (currentPath.startsWith('/auth/callback')) {
-                        return Promise.reject(error);
-                    }
-                    localStorage.removeItem('accessToken');
-                    // Don't force redirect — let AuthContext / ProtectedRoute handle it gracefully
+                const newToken = await refreshPromise;
+                if (originalRequest.headers) {
+                    originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
                 }
+                return api(originalRequest);
+            } catch (err: unknown) {
+                setAccessToken(null);
+                setCsrfToken(null);
+                
+                if (onAuthFailureCallback) {
+                    onAuthFailureCallback();
+                }
+                
                 return Promise.reject(error);
             }
         }

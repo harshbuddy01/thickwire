@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 
+const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
+
 const CRITICAL_IMAGES = [
-    'https://assets.streamkart.store/streamkart-assets/netflix_3d.png',
-    'https://assets.streamkart.store/streamkart-assets/chatgpt_3d.png',
-    'https://assets.streamkart.store/streamkart-assets/jiohotstar_3d.png',
-    'https://assets.streamkart.store/streamkart-assets/sonyliv_3d.png',
-    'https://assets.streamkart.store/streamkart-assets/slider/slider1.png',
+    `${CDN_URL}/netflix_3d.png`,
+    `${CDN_URL}/chatgpt_3d.png`,
+    `${CDN_URL}/jiohotstar_3d.png`,
+    `${CDN_URL}/sonyliv_3d.png`,
+    `${CDN_URL}/slider/slider1.png`,
 ];
 
 export default function PageLoader() {

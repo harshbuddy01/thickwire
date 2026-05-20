@@ -7,7 +7,7 @@ import { useState } from 'react';
 import type { Service, Plan } from '@/lib/types';
 import styles from './youtube.module.css';
 
-const MINIO_URL = 'https://assets.streamkart.store/streamkart-assets';
+const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 export default function YoutubePageClient({ service }: { service: Service }) {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
