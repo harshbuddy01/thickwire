@@ -29,7 +29,7 @@ html {
 }
 
 body {
-  font-family: var(--font-poppins), sans-serif;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
   background-color: #fafafa;
   color: var(--text-primary);
   line-height: 1.5;
@@ -3439,7 +3439,7 @@ textarea.form-input {
 
 /* ─── NEW FONTS APPLIED ─── */
 body {
-  --font-geist: var(--font-geist-sans, 'Geist Sans', sans-serif);
+  --font-geist: 'Geist', var(--font-geist-sans, 'Geist Sans'), sans-serif;
   --font-satoshi: 'Satoshi', sans-serif;
   --font-mona: 'Mona Sans', 'Mona Sans Variable', sans-serif;
 }
