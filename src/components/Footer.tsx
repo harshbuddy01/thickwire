@@ -22,7 +22,7 @@ export default function Footer() {
   const accentColor = '#b87a1d';
   const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
-  if (pathname === '/checkout') return null;
+  if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup') return null;
 
   return (
     <footer className="site-footer" style={{
@@ -277,9 +277,9 @@ export default function Footer() {
 
           {/* Top Picks */}
           <FooterCol title="Top Picks" isOpen={openCols.includes('top')} onToggle={() => toggleCol('top')}>
-            <FooterLink href="/services/netflix" icon={<Image src={`${MINIO}/logos/netflix.svg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Netflix</FooterLink>
+            <FooterLink href="/services/netflix" icon={<Image src={`${MINIO}/logos/netflixlogo.0.0.1466448626.png`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Netflix</FooterLink>
             <FooterLink href="/services/spotify" icon={<Image src={`${MINIO}/logos/spotify.png`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Spotify</FooterLink>
-            <FooterLink href="/services/disney" icon={<Image src={`${MINIO}/logos/disney.jpg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Disney+</FooterLink>
+            <FooterLink href="/services/disney" icon={<Image src={`${MINIO}/logos/opinions-on-the-new-disney-design-v0-y6jw0ri25wqc1.jpg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Disney+</FooterLink>
             <FooterLink href="/services/youtube" icon={<Image src={`${MINIO}/logos/youtube.png`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>YouTube Premium</FooterLink>
             <FooterLink href="/services/prime" icon={<Image src={`${MINIO}/logos/prime.svg`} alt="" width={16} height={16} style={{ objectFit: 'contain' }} />}>Amazon Prime</FooterLink>
           </FooterCol>

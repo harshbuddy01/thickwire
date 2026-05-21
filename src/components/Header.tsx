@@ -72,6 +72,53 @@ export default function Header() {
     if (pathname === '/checkout') return null;
 
     const isActive = (path: string) => pathname === path || pathname.startsWith(path + '/');
+    const isAuthPage = pathname === '/login' || pathname === '/signup';
+
+    if (isAuthPage) {
+        return (
+            <nav className="mobile-bottom-nav" aria-label="Main navigation">
+                <Link href="/" className="mobile-nav-item">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    <span>Home</span>
+                </Link>
+
+                <Link href="/streaming" className="mobile-nav-item">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <rect x="2" y="7" width="20" height="15" rx="2" />
+                        <polyline points="17 2 12 7 7 2" />
+                    </svg>
+                    <span>Browse</span>
+                </Link>
+
+                <Link href="/account" className="mobile-nav-item">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    <span>Orders</span>
+                </Link>
+
+                <Link href="/support" className="mobile-nav-item">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6 6l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                    <span>Support</span>
+                </Link>
+
+                <Link href={user ? '/account' : '/login'} className={`mobile-nav-item ${isActive('/login') || isActive('/signup') ? 'mobile-nav-item--active' : ''}`}>
+                    <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>{user ? 'Account' : 'Login'}</span>
+                </Link>
+            </nav>
+        );
+    }
 
     return (
         <>

@@ -21,15 +21,16 @@ const FALLBACK_SERVICES = [
 ];
 
 const LOGO_MAP: Record<string, string> = {
-    'netflix': `${MINIO_BASE}/logos/netflix.svg`,
+    'netflix': `${MINIO_BASE}/logos/netflixlogo.0.0.1466448626.png`,
     'spotify': `${MINIO_BASE}/logos/spotify.png`,
     'chatgpt': `${MINIO_BASE}/chatgpt_3d.png`,
     'youtube': `${MINIO_BASE}/logos/youtube.png`,
-    'disney': `${MINIO_BASE}/logos/disney.jpg`,
+    'disney': `${MINIO_BASE}/logos/opinions-on-the-new-disney-design-v0-y6jw0ri25wqc1.jpg`,
     'prime': `${MINIO_BASE}/logos/prime.svg`,
     'sonyliv': `${MINIO_BASE}/logos/sonyliv.png`,
     'zee5': `${MINIO_BASE}/logos/zee5.png`,
-    'jiohotstar': `${MINIO_BASE}/jiohotstar_3d.png`
+    'hotstar': `${MINIO_BASE}/logos/jiohotstar1573.logowik.com.webp`,
+    'jiohotstar': `${MINIO_BASE}/logos/jiohotstar1573.logowik.com.webp`
 };
 
 export default function ServicesDirectoryPage() {

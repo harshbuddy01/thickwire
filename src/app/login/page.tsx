@@ -5,17 +5,18 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuth } from '@/lib/AuthContext';
-import { Mail, Lock, AlertCircle, Loader2, Play } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 import { loginSchema } from '@/lib/validators';
 import { rateLimiter, RATE_LIMITS } from '@/lib/rateLimiter';
+import AuthExperience from '@/components/AuthExperience';
 import '../auth-styles.css';
-import styles from '../auth/auth.module.css';
 
 function LoginContent() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -66,25 +67,10 @@ function LoginContent() {
     };
 
     return (
-        <div className="auth-container">
-            <div className="fluid-bg">
-                <div className="fluid-blob1"></div>
-                <div className="fluid-blob2"></div>
-                <div className="fluid-blob3"></div>
-                <div className="fluid-blob4"></div>
-            </div>
-            
-            <div className="glass-card">
-                <div className="auth-header">
-                    <Link href="/" style={{ textDecoration: 'none' }}>
-                        <div className="auth-logo">
-                            <Play fill="#0f172a" size={28} />
-                        </div>
-                    </Link>
-                    <h1 className="auth-title">Welcome back</h1>
-                    <p className="auth-subtitle">Sign in to your StreamKart account.</p>
-                </div>
-
+        <AuthExperience
+            title={<>Welcome back to <span>StreamKart</span></>}
+            subtitle={<>Access your subscriptions, orders<br className="auth-title-break" /> and support in one place.</>}
+        >
                 {error && (
                     <div style={{ padding: '16px', background: 'rgba(254, 226, 226, 0.9)', border: '1px solid rgba(248, 113, 113, 0.5)', borderRadius: '16px', color: '#b91c1c', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.95rem', fontWeight: 600, boxShadow: '0 10px 20px rgba(220, 38, 38, 0.1)' }}>
                         <AlertCircle size={22} />
@@ -116,18 +102,26 @@ function LoginContent() {
                         <div className="auth-input-wrap">
                             <Lock size={22} className="auth-icon" />
                             <input
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your password"
                                 required
                                 className="auth-input"
                             />
+                            <button
+                                type="button"
+                                className="auth-password-toggle"
+                                onClick={() => setShowPassword((value) => !value)}
+                                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            >
+                                {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                            </button>
                         </div>
                     </div>
 
                     <button type="submit" className="auth-btn-primary" disabled={isLoading}>
-                        {isLoading ? <Loader2 size={28} style={{ animation: 'spin 1s linear infinite' }} /> : 'Sign In'}
+                        {isLoading ? <Loader2 size={28} style={{ animation: 'spin 1s linear infinite' }} /> : <><Lock size={20} /> Continue Securely</>}
                     </button>
                 </form>
 
@@ -143,10 +137,9 @@ function LoginContent() {
                 </button>
 
                 <p className="auth-footer-text">
-                    Don&apos;t have an account? <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} className="auth-link">Create one</Link>
+                    New here? <Link href={`/signup?redirect=${encodeURIComponent(redirectUrl)}`} className="auth-link">Create your account</Link> and get instant delivery.
                 </p>
-            </div>
-        </div>
+        </AuthExperience>
     );
 }
 
