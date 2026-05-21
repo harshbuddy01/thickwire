@@ -16,6 +16,8 @@ function VerifyEmailContent() {
     const [message, setMessage] = useState('Verifying your email...');
 
     useEffect(() => {
+        let timer: NodeJS.Timeout;
+
         if (!token) {
             setStatus('error');
             setMessage('Invalid verification link.');
@@ -28,7 +30,7 @@ function VerifyEmailContent() {
                 setAuth(data.accessToken);
                 setStatus('success');
                 setMessage('Email verified successfully! Redirecting...');
-                setTimeout(() => {
+                timer = setTimeout(() => {
                     window.location.href = '/account';
                 }, 2000);
             } catch (err: any) {
@@ -38,6 +40,10 @@ function VerifyEmailContent() {
         };
 
         verify();
+
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
     }, [token, setAuth]);
 
     const iconColor = status === 'loading' ? '#6c5ce7' : status === 'success' ? '#22c55e' : '#ef4444';
