@@ -2705,41 +2705,106 @@ textarea.form-input {
 @media (max-width: 768px) {
   .mobile-bottom-nav {
     display: flex !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: rgba(255,255,255,0.97);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(0,0,0,0.06);
-    z-index: 999;
-    padding-bottom: env(safe-area-inset-bottom);
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 440px !important;
+    height: 70px !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    background-image: radial-gradient(circle at 50% -20%, rgba(108, 92, 231, 0.05), transparent 60%) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    border-radius: 22px !important;
+    box-shadow: 
+      0 12px 32px rgba(31, 38, 135, 0.08), 
+      inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+    z-index: 9999 !important;
+    padding: 0 8px !important;
+    padding-bottom: 0 !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    transition: all 0.3s ease;
   }
+
   .mobile-nav-item {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     text-decoration: none;
-    color: #aaa;
+    color: #64748b !important;
     font-size: 10px;
-    font-weight: 600;
-    transition: color 0.2s;
+    font-weight: 700;
+    font-family: var(--font-outfit), 'Outfit', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
-    padding: 0;
+    padding: 8px 0;
+    position: relative;
+    z-index: 1;
   }
+
+  .mobile-nav-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%) scale(0.8);
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: transparent;
+    z-index: -1;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+  }
+
   .mobile-nav-item--active {
-    color: #6c5ce7;
+    color: #6c5ce7 !important;
   }
+
+  .mobile-nav-item--active::before {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.12) 0%, rgba(162, 155, 254, 0.08) 100%);
+    transform: translate(-50%, -55%) scale(1);
+    opacity: 1;
+    border: 1px solid rgba(108, 92, 231, 0.15);
+  }
+
   .mobile-nav-item svg {
-    transition: transform 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    stroke-width: 2;
+    color: #64748b;
   }
+
   .mobile-nav-item--active svg {
-    transform: scale(1.1);
+    color: #6c5ce7 !important;
+    transform: translateY(-2px);
+    filter: drop-shadow(0 4px 6px rgba(108, 92, 231, 0.25));
+  }
+
+  /* Dot indicator below active item */
+  .mobile-nav-item::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #6c5ce7;
+    position: absolute;
+    bottom: -1px;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-nav-item--active::after {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 8px rgba(108, 92, 231, 0.8);
   }
 }
 
