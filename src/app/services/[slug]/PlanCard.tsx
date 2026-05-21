@@ -15,7 +15,7 @@ interface PlanCardProps {
 
 export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: PlanCardProps) {
     const { user } = useAuth();
-    const { push } = useRouter();
+    const router = useRouter();
     const [isHovered, setIsHovered] = useState(false);
 
     const stockStatus = plan.stockCount <= 5 ? 'low-stock' : 'in-stock';
@@ -26,7 +26,7 @@ export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: 
 
     const handleBuy = () => {
         const dest = `/checkout?planId=${plan.id}&service=${serviceSlug}`;
-        push(dest);
+        router.push(dest);
     };
 
     return (

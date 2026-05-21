@@ -8,8 +8,8 @@ import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 function VerifyEmailContent() {
-    const { get } = useSearchParams();
-    const token = get('token');
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token');
     const { setAuth } = useAuth();
 
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');

@@ -18,17 +18,17 @@ function LoginContent() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { push } = useRouter();
-    const { get } = useSearchParams();
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const { user, loading: authLoading, setAuth } = useAuth();
-    const redirectUrl = get('redirect') || '/';
+    const redirectUrl = searchParams.get('redirect') || '/';
 
     // If user is already logged in, redirect away from login page
     useEffect(() => {
         if (!authLoading && user) {
-            push(redirectUrl);
+            router.push(redirectUrl);
         }
-    }, [authLoading, user, redirectUrl, push]);
+    }, [authLoading, user, redirectUrl, router]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,7 +52,7 @@ function LoginContent() {
         try {
             const { data } = await api.post('/auth/login', { email, password });
             await setAuth(data.accessToken);
-            push(redirectUrl);
+            router.push(redirectUrl);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Invalid email or password');
         } finally {

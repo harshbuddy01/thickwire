@@ -16,7 +16,7 @@ export default function Zee5ProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
     const [service, setService] = useState<Service | null>(null);
     const { user } = useAuth();
-    const { push } = useRouter();
+    const router = useRouter();
 
     useEffect(() => {
         getServiceBySlug('zee5').then(setService).catch(console.error);
@@ -26,9 +26,9 @@ export default function Zee5ProductPage() {
         if (!plan) return;
         const dest = `/checkout?planId=${plan.id}&service=zee5`;
         if (!user) {
-            push(`/login?redirect=${encodeURIComponent(dest)}`);
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
         } else {
-            push(dest);
+            router.push(dest);
         }
     };
 

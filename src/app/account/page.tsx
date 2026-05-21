@@ -81,7 +81,7 @@ function daysUntil(date: string) {
 
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
-    const { push } = useRouter();
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'wallet' | 'tickets' | 'settings'>('overview');
 
     const [orders, setOrders] = useState<any[]>([]);
@@ -183,11 +183,11 @@ export default function AccountPage() {
 
     useEffect(() => {
         if (!loading && !user) {
-            push('/login');
+            router.push('/login');
         } else if (user) {
             fetchData();
         }
-    }, [user, loading, push, fetchData]);
+    }, [user, loading, router, fetchData]);
 
     // Poll tickets separately for notifications
     useEffect(() => {

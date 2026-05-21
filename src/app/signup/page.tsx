@@ -21,11 +21,11 @@ function SignupContent() {
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    const { push } = useRouter();
-    const { get } = useSearchParams();
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const { setAuth } = useAuth();
-    const redirectUrl = get('redirect') || '/';
-    const onboardingQuery = get('onboarding') === 'true';
+    const redirectUrl = searchParams.get('redirect') || '/';
+    const onboardingQuery = searchParams.get('onboarding') === 'true';
 
     // Handle Google auth redirect for new users
     useEffect(() => {
@@ -73,7 +73,7 @@ function SignupContent() {
                 {showOnboarding && (
                     <WalletOnboardingPopup onClose={() => {
                         setShowOnboarding(false);
-                        push(redirectUrl);
+                        router.push(redirectUrl);
                     }} />
                 )}
                 <AuthExperience
