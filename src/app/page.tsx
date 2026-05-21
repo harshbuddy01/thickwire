@@ -16,9 +16,14 @@ export default function HomePage() {
             </div>
 
             {/* ─── Trending Now ─────────────────────────────────────── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', gap: '12px', flexWrap: 'nowrap' }}>
-                <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a1c23', margin: 0, whiteSpace: 'nowrap' }}>🔥 Trending <span style={{ color: '#6c5ce7' }}>Now</span></h2>
-                <Link href="/services" style={{ flexShrink: 0, padding: '8px 18px', background: '#f1f5f9', color: '#0f172a', borderRadius: '10px', fontWeight: 700, fontSize: '0.82rem', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            <div className="home-section-head home-section-head--trending">
+                <div className="home-section-copy">
+                    <span className="home-section-subtitle">🔥 HOT PICKS THIS WEEK</span>
+                    <h2 className="home-section-title">
+                        Trending <span className="home-script-text">Now</span>
+                    </h2>
+                </div>
+                <Link href="/services" className="home-section-action">
                     View All
                 </Link>
             </div>
@@ -42,8 +47,13 @@ export default function HomePage() {
             </div>
 
             {/* ─── Browse Categories ─────────────────────────────── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '40px', marginBottom: '20px', gap: '12px', flexWrap: 'nowrap' }} className="content-section-head">
-                <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#1a1c23', margin: 0, whiteSpace: 'nowrap' }}>🗂️ Browse <span style={{ color: '#6c5ce7' }}>Categories</span></h2>
+            <div className="home-section-head home-section-head--categories">
+                <div className="home-section-copy">
+                    <span className="home-section-subtitle">🗂️ CHOOSE YOUR LANE</span>
+                    <h2 className="home-section-title">
+                        Browse <span className="home-script-text">Categories</span>
+                    </h2>
+                </div>
             </div>
 
             <div className="blocks-parent-grid category-blocks-grid">
@@ -61,6 +71,9 @@ export default function HomePage() {
                 </Link>
                 <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
                     <ProgressiveImage src={`${MINIO_URL}/blocks/vpn.png`} alt="VPN Services" />
+                </div>
+                <div style={{ borderRadius: '24px', overflow: 'hidden', aspectRatio: '3/2' }}>
+                    <ProgressiveImage src="/assets/education.png" alt="New Category" />
                 </div>
             </div>
 

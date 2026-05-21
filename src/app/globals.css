@@ -430,6 +430,141 @@ a {
   text-decoration: underline;
 }
 
+/* ─── Homepage Handmade Section Heads ─── */
+.home-section-head {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 28px;
+  padding: 0 2px;
+  flex-wrap: wrap;
+}
+
+.home-section-head--categories {
+  margin-top: 56px;
+}
+
+.home-section-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.home-section-subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #6a707a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.home-section-title {
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 800;
+  color: #1a1c23;
+  font-size: clamp(1.75rem, 3.8vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.home-script-text {
+  font-family: 'Satisfy', 'Caveat', cursive;
+  font-size: 1.1em;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #6c5ce7 0%, #a55eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+  margin: 0 2px;
+  position: relative;
+  z-index: 1;
+}
+
+.home-script-text::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  height: 6px;
+  background: linear-gradient(90deg, rgba(108, 92, 231, 0.25) 0%, rgba(165, 94, 234, 0.1) 100%);
+  border-radius: 999px;
+  z-index: -1;
+  transform: skewX(-6deg);
+}
+
+.home-section-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(108, 92, 231, 0.05);
+  border: 1px solid rgba(108, 92, 231, 0.12);
+  color: #6c5ce7;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 2px;
+}
+
+.home-section-action:hover {
+  background: #6c5ce7;
+  color: #ffffff;
+  border-color: #6c5ce7;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.25);
+}
+
+@media (max-width: 768px) {
+  .home-section-head {
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+
+  .home-section-head--categories {
+    margin-top: 36px;
+  }
+
+  .home-section-subtitle {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+  }
+
+  .home-section-title {
+    font-size: clamp(1.4rem, 6.5vw, 1.7rem);
+    gap: 4px;
+  }
+
+  .home-section-action {
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-section-title {
+    font-size: 1.35rem;
+  }
+}
+
 /* ─── Trending Now 3D Cards ───────────────────────── */
 
 .trending-cards-grid {
