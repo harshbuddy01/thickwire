@@ -37,10 +37,14 @@ export default async function ServicePage({
         notFound();
     }
 
-    let service: Service;
+    let service: Service | null = null;
     try {
         service = await getServiceBySlug(params.slug);
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 
@@ -49,7 +53,7 @@ export default async function ServicePage({
     const gradient = `linear-gradient(135deg, hsl(${hue}, 80%, 15%), hsl(${(hue + 40) % 360}, 100%, 25%))`;
 
     return (
-        <div style={{ background: '#f8fafc', minHeight: '100vh', fontFamily: '"Times New Roman", Times, serif', fontWeight: 'bold' }}>
+        <div style={{ background: '#f8fafc', minHeight: '100vh', fontFamily: "'Outfit', sans-serif" }}>
             {/* Breadcrumb */}
             <div className="container">
                 <nav style={{ padding: '24px 0', fontSize: '13px', color: '#6b7280', display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -66,7 +70,7 @@ export default async function ServicePage({
                 {/* Decorative overlay */}
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 50%)' }}></div>
                 <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-                    <h1 style={{ fontSize: '3.5rem', fontWeight: 700, margin: '0 0 16px 0', letterSpacing: '-1px', fontFamily: '"Times New Roman", Times, serif' }}>{service.name}</h1>
+                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, margin: '0 0 16px 0', letterSpacing: '-0.04em' }}>{service.name}</h1>
                     <p style={{ fontSize: '1.2rem', opacity: 0.9, maxWidth: '600px', margin: '0 auto', fontWeight: 400, lineHeight: 1.6 }}>
                         {service.description || `Upgrade your experience with premium ${service.name} access. Choose a plan below and get instant activation.`}
                     </p>

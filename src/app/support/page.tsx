@@ -296,7 +296,7 @@ export default function SupportPage() {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{ __html: `
                 @media (max-width: 1024px) {
                     .support-split {
                         grid-template-columns: 1fr !important;
@@ -309,7 +309,7 @@ export default function SupportPage() {
                         gap: 20px !important;
                     }
                 }
-            `}</style>
+            ` }} />
         </div>
     );
 }

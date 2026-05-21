@@ -1,8 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight, ShieldCheck, Lock, EyeOff, Database } from 'lucide-react';
 import styles from '../static-page.module.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Privacy & Data Protection — StreamKart',
+    description: 'Your privacy is our priority. We secure all communications and never share or sell your data. Read our privacy policy.',
+};
 
 export default function PrivacyPolicyPage() {
     return (

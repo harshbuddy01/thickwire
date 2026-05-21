@@ -22,6 +22,10 @@ export default async function DisneyServicePage() {
     try {
         service = await getServiceBySlug('disney');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 

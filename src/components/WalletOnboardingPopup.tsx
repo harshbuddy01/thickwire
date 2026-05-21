@@ -88,7 +88,7 @@ export default function WalletOnboardingPopup({ onClose }: WalletOnboardingPopup
                     }}>
                         {steps[step].icon}
                     </div>
-                    <h2 style={{ fontSize: '1.4rem', fontWeight: 800, margin: '0 0 8px' }}>
+                    <h2 style={{ fontSize: '1.4rem', fontWeight: 600, margin: '0 0 8px' }}>
                         {steps[step].title}
                     </h2>
                     <p style={{ fontSize: '0.9rem', opacity: 0.9, margin: 0, lineHeight: 1.5 }}>
@@ -100,11 +100,11 @@ export default function WalletOnboardingPopup({ onClose }: WalletOnboardingPopup
                 <div style={{ padding: '24px 28px' }}>
                     {/* Progress dots */}
                     <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 24 }}>
-                        {steps.map((_, i) => (
-                            <div key={i} style={{
+                        {steps.map((item, i) => (
+                            <div key={item.title} style={{
                                 width: i === step ? 24 : 8, height: 8, borderRadius: 4,
                                 background: i === step ? '#6c5ce7' : '#e2e8f0',
-                                transition: 'all 0.3s ease',
+                                transition: 'width 0.3s ease, background-color 0.3s ease',
                             }} />
                         ))}
                     </div>

@@ -1,8 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight, FileText, ShieldCheck, Scale, AlertCircle } from 'lucide-react';
 import styles from '../static-page.module.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Terms of Service — StreamKart',
+    description: 'Read the terms of service and usage conditions for digital subscriptions purchased through StreamKart.',
+};
 
 export default function TermsPage() {
     return (

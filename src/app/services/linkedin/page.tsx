@@ -22,6 +22,10 @@ export default async function LinkedinServicePage() {
     try {
         service = await getServiceBySlug('linkedin');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 

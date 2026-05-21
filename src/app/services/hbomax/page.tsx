@@ -20,11 +20,16 @@ export async function generateMetadata(): Promise<Metadata> {
 import { notFound } from 'next/navigation';
 
 export default async function Page() {
+    let service;
     try {
-        const service = await getServiceBySlug('hbomax');
-        if (!service) return notFound();
-        return <HboPageClient service={service} />;
+        service = await getServiceBySlug('hbomax');
     } catch (e) {
-        return notFound();
+        // dynamic error handling or logging
     }
+
+    if (!service) {
+        notFound();
+    }
+
+    return <HboPageClient service={service} />;
 }

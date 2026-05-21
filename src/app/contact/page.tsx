@@ -1,8 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight, Mail, MessageCircle, Phone, Globe, Clock, MapPin, ArrowRight, Headphones } from 'lucide-react';
 import styles from '../static-page.module.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Contact Us — StreamKart',
+    description: 'Get in touch with StreamKart. Contact our 24/7 support team via WhatsApp, Email, or Phone for instant premium subscription help.',
+};
 
 export default function ContactPage() {
     return (
@@ -115,14 +119,14 @@ export default function ContactPage() {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{ __html: `
                 @media (max-width: 1024px) {
                     .contact-info-split {
                         grid-template-columns: 1fr !important;
                         gap: 48px !important;
                     }
                 }
-            `}</style>
+            ` }} />
         </div>
     );
 }

@@ -8,8 +8,8 @@ import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 function VerifyEmailContent() {
-    const searchParams = useSearchParams();
-    const token = searchParams.get('token');
+    const { get } = useSearchParams();
+    const token = get('token');
     const { setAuth } = useAuth();
 
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -57,7 +57,7 @@ function VerifyEmailContent() {
                 {status === 'success' && <CheckCircle2 size={48} style={{ color: iconColor }} />}
                 {status === 'error' && <AlertCircle size={48} style={{ color: iconColor }} />}
             </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>
                 {status === 'loading' && 'Verifying Email'}
                 {status === 'success' && 'Verified!'}
                 {status === 'error' && 'Verification Failed'}

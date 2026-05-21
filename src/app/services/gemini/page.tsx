@@ -8,6 +8,7 @@ const GEMINI_LOGO = 'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4
 
 export default function GeminiProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
+    const [buyHovered, setBuyHovered] = useState(false);
 
     const toggleFaq = (index: number) => {
         if (faqOpen === index) setFaqOpen(null);
@@ -248,18 +249,19 @@ export default function GeminiProductPage() {
                                 borderRadius: '16px',
                                 padding: '20px',
                                 fontSize: '1.2rem',
-                                fontWeight: 700,
+                                fontWeight: 600,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '12px',
                                 cursor: 'pointer',
                                 marginBottom: '24px',
-                                boxShadow: '0 16px 32px rgba(17,24,39,0.2)',
-                                transition: 'all 0.2s'
+                                boxShadow: buyHovered ? '0 20px 40px rgba(17,24,39,0.25)' : '0 16px 32px rgba(17,24,39,0.2)',
+                                transform: buyHovered ? 'translateY(-2px)' : 'translateY(0)',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
                             }}
-                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(17,24,39,0.25)' }}
-                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 16px 32px rgba(17,24,39,0.2)' }}
+                            onMouseEnter={() => setBuyHovered(true)}
+                            onMouseLeave={() => setBuyHovered(false)}
                             >
                                 <Lock size={20} /> Buy Now Securely
                             </button>
@@ -357,13 +359,15 @@ export default function GeminiProductPage() {
                                         <ChevronDown size={24} color="#9ca3af" style={{ transform: faqOpen === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                                     </div>
                                     <div style={{ 
-                                        maxHeight: faqOpen === i ? '200px' : '0', 
-                                        overflow: 'hidden', 
-                                        transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        display: 'grid',
+                                        gridTemplateRows: faqOpen === i ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
                                         opacity: faqOpen === i ? 1 : 0
                                     }}>
-                                        <div style={{ paddingTop: '20px', color: '#6b7280', fontSize: '1rem', lineHeight: 1.6 }}>
-                                            {item.a}
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ paddingTop: '20px', color: '#6b7280', fontSize: '1rem', lineHeight: 1.6 }}>
+                                                {item.a}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -396,13 +400,15 @@ export default function GeminiProductPage() {
                                         <ChevronDown size={24} color="#9ca3af" style={{ transform: faqOpen === i + 3 ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                                     </div>
                                     <div style={{ 
-                                        maxHeight: faqOpen === i + 3 ? '200px' : '0', 
-                                        overflow: 'hidden', 
-                                        transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        display: 'grid',
+                                        gridTemplateRows: faqOpen === i + 3 ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
                                         opacity: faqOpen === i + 3 ? 1 : 0
                                     }}>
-                                        <div style={{ paddingTop: '20px', color: '#6b7280', fontSize: '1rem', lineHeight: 1.6 }}>
-                                            {item.a}
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ paddingTop: '20px', color: '#6b7280', fontSize: '1rem', lineHeight: 1.6 }}>
+                                                {item.a}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

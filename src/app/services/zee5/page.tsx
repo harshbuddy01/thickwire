@@ -16,7 +16,7 @@ export default function Zee5ProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
     const [service, setService] = useState<Service | null>(null);
     const { user } = useAuth();
-    const router = useRouter();
+    const { push } = useRouter();
 
     useEffect(() => {
         getServiceBySlug('zee5').then(setService).catch(console.error);
@@ -26,9 +26,9 @@ export default function Zee5ProductPage() {
         if (!plan) return;
         const dest = `/checkout?planId=${plan.id}&service=zee5`;
         if (!user) {
-            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+            push(`/login?redirect=${encodeURIComponent(dest)}`);
         } else {
-            router.push(dest);
+            push(dest);
         }
     };
 
@@ -287,13 +287,15 @@ export default function Zee5ProductPage() {
                                         <ChevronDown size={20} color="#9ca3af" style={{ transform: faqOpen === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                                     </div>
                                     <div style={{ 
-                                        maxHeight: faqOpen === i ? '200px' : '0', 
-                                        overflow: 'hidden', 
-                                        transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        display: 'grid',
+                                        gridTemplateRows: faqOpen === i ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
                                         opacity: faqOpen === i ? 1 : 0
                                     }}>
-                                        <div style={{ paddingTop: '16px', color: '#6b7280', fontSize: '0.95rem', lineHeight: 1.6 }}>
-                                            {item.a}
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ paddingTop: '16px', color: '#6b7280', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                                                {item.a}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -326,13 +328,15 @@ export default function Zee5ProductPage() {
                                         <ChevronDown size={20} color="#9ca3af" style={{ transform: faqOpen === i + 3 ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                                     </div>
                                     <div style={{ 
-                                        maxHeight: faqOpen === i + 3 ? '200px' : '0', 
-                                        overflow: 'hidden', 
-                                        transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        display: 'grid',
+                                        gridTemplateRows: faqOpen === i + 3 ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
                                         opacity: faqOpen === i + 3 ? 1 : 0
                                     }}>
-                                        <div style={{ paddingTop: '16px', color: '#6b7280', fontSize: '0.95rem', lineHeight: 1.6 }}>
-                                            {item.a}
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ paddingTop: '16px', color: '#6b7280', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                                                {item.a}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

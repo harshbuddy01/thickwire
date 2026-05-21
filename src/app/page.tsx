@@ -2,7 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import HeroSlider from '@/components/HeroSlider';
 import ProgressiveImage from '@/components/ProgressiveImage';
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+    title: 'StreamKart | Premium Streaming & Subscription Marketplace',
+    description: 'Get instant premium access to Netflix, Spotify, ChatGPT, Disney+, Prime, SonyLIV, Zee5, and more. 24/7 support & best price guarantee.',
+};
 
 const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 

@@ -1,8 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Premium AI Subscriptions — StreamKart',
+    description: 'Unlock official premium access to ChatGPT Plus, Gemini Advanced, Claude Pro, Perplexity Pro, Midjourney and more from StreamKart.',
+};
 
 const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 const BANNER_IMG = `${MINIO}/slider/ChatGPT%20Image%20May%201,%202026,%2005_42_45%20AM.png`;
@@ -56,7 +60,7 @@ export default function AICategoryPage() {
 
                     {/* Section heading */}
                     <div style={{ marginBottom: '40px' }}>
-                        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1a1c23', margin: '0 0 8px 0', letterSpacing: '-0.03em' }}>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 600, color: '#1a1c23', margin: '0 0 8px 0', letterSpacing: '-0.03em' }}>
                             Pro AI Subscriptions
                         </h2>
                         <p style={{ fontSize: '0.95rem', color: '#6c757d', margin: 0, fontWeight: 500 }}>
@@ -77,7 +81,7 @@ export default function AICategoryPage() {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 border: '1px solid rgba(255,255,255,0.08)',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                 cursor: 'pointer',
                                 boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
                             }} className="streaming-card-hover">
@@ -106,10 +110,6 @@ export default function AICategoryPage() {
                                                 objectFit: 'contain', 
                                                 display: 'block',
                                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
-                                            }}
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = 'none';
-                                                e.currentTarget.parentElement!.innerHTML = `<span style="font-size: 28px; font-weight: 800; color: #fff">${s.name.charAt(0)}</span>`;
                                             }}
                                         />
                                     </div>
@@ -176,8 +176,8 @@ export default function AICategoryPage() {
                             { Icon: BadgePercent, title: 'Official', sub: 'Genuine.' },
                             { Icon: BadgePercent, title: 'Best Price', sub: 'Guaranteed.' },
                             { Icon: Headphones, title: 'Support', sub: '24/7 Care.' },
-                        ].map(({ Icon, title, sub }, i) => (
-                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 0', minWidth: '150px' }}>
+                        ].map(({ Icon, title, sub }) => (
+                            <div key={title} style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: '1 1 0', minWidth: '150px' }}>
                                 <div style={{ color: '#1a1c23' }}>
                                     <Icon size={28} strokeWidth={2.5} />
                                 </div>
@@ -192,7 +192,7 @@ export default function AICategoryPage() {
                 </div>
             </div>
 
-            <style jsx global>{`
+            <style>{`
                 .streaming-card-hover:hover {
                     transform: translateY(-10px);
                     box-shadow: 0 20px 40px rgba(0,0,0,0.4);

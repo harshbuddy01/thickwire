@@ -22,6 +22,10 @@ export default async function NordVpnServicePage() {
     try {
         service = await getServiceBySlug('nord-vpn');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 

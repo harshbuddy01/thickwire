@@ -20,11 +20,16 @@ export async function generateMetadata(): Promise<Metadata> {
 import { notFound } from 'next/navigation';
 
 export default async function Page() {
+    let service;
     try {
-        const service = await getServiceBySlug('spotify');
-        if (!service) return notFound();
-        return <SpotifyPageClient service={service} />;
+        service = await getServiceBySlug('spotify');
     } catch (e) {
-        return notFound();
+        // dynamic error handling or logging
     }
+
+    if (!service) {
+        notFound();
+    }
+
+    return <SpotifyPageClient service={service} />;
 }

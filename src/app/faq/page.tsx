@@ -84,9 +84,17 @@ export default function FAQPage() {
                     <div style={{ marginTop: '64px' }}>
                         {faqs.map((faq, index) => (
                             <div 
-                                key={index} 
+                                key={faq.q} 
                                 className={`${styles['faq-item']} ${openIndex === index ? styles.open : ''}`}
                                 onClick={() => toggleFaq(index)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        toggleFaq(index);
+                                    }
+                                }}
+                                role="button"
+                                tabIndex={0}
                             >
                                 <div className={styles['faq-question']}>
                                     <span>{faq.q}</span>

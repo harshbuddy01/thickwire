@@ -49,7 +49,7 @@ function ResetPasswordContent() {
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
                     <CheckCircle2 size={48} style={{ color: '#22c55e' }} />
                 </div>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>Password updated!</h2>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>Password updated!</h2>
                 <p style={{ color: '#888', textAlign: 'center', marginBottom: 28, fontSize: '0.9rem', lineHeight: 1.6 }}>
                     Your password has been successfully reset. You can now use your new password to log in.
                 </p>
@@ -63,7 +63,7 @@ function ResetPasswordContent() {
             <div style={styles.accentBar}></div>
             <div style={styles.glowOrb}></div>
             <div style={{ marginBottom: 28, position: 'relative', zIndex: 10 }}>
-                <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', marginBottom: 8 }}>Set new password</h1>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1a1c23', marginBottom: 8 }}>Set new password</h1>
                 <p style={{ fontSize: '0.85rem', color: '#888' }}>Please choose a strong password with at least 8 characters.</p>
             </div>
 
@@ -76,17 +76,17 @@ function ResetPasswordContent() {
 
             <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 10 }}>
                 <div style={{ marginBottom: 20 }}>
-                    <label style={styles.label}>New Password</label>
+                    <label htmlFor="new-password-input" style={styles.label}>New Password</label>
                     <div style={{ position: 'relative' }}>
                         <Lock size={18} style={styles.inputIcon} />
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={styles.input} placeholder="••••••••" minLength={8} required />
+                        <input id="new-password-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={styles.input} placeholder="••••••••" minLength={8} required />
                     </div>
                 </div>
                 <div style={{ marginBottom: 20 }}>
-                    <label style={styles.label}>Confirm Password</label>
+                    <label htmlFor="confirm-password-input" style={styles.label}>Confirm Password</label>
                     <div style={{ position: 'relative' }}>
                         <Lock size={18} style={styles.inputIcon} />
-                        <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} style={styles.input} placeholder="••••••••" required />
+                        <input id="confirm-password-input" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} style={styles.input} placeholder="••••••••" required />
                     </div>
                 </div>
                 <button type="submit" disabled={status === 'loading'} style={styles.submitBtn}>

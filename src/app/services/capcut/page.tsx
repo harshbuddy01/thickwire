@@ -22,6 +22,10 @@ export default async function CapCutServicePage() {
     try {
         service = await getServiceBySlug('capcut');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 

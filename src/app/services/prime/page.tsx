@@ -20,11 +20,16 @@ export async function generateMetadata(): Promise<Metadata> {
 import { notFound } from 'next/navigation';
 
 export default async function Page() {
+    let service;
     try {
-        const service = await getServiceBySlug('prime');
-        if (!service) return notFound();
-        return <PrimePageClient service={service} />;
+        service = await getServiceBySlug('prime');
     } catch (e) {
-        return notFound();
+        // dynamic error handling or logging
     }
+
+    if (!service) {
+        notFound();
+    }
+
+    return <PrimePageClient service={service} />;
 }

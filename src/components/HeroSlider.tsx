@@ -49,7 +49,7 @@ export default function HeroSlider() {
                 width: `${slides.length * 100}%`,
                 height: '100%',
                 transform: `translateX(-${(current * 100) / slides.length}%)`,
-                transition: 'transform 1.2s cubic-bezier(0.65, 0, 0.35, 1)'
+                transition: 'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)'
             }}>
                 {slides.map((slide) => (
                     <div 
@@ -102,7 +102,7 @@ export default function HeroSlider() {
                             background: current === index ? '#fff' : 'rgba(255,255,255,0.4)',
                             border: 'none',
                             cursor: 'pointer',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                         }}
                     />
                 ))}

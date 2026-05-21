@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
                         <CheckCircle2 size={48} style={{ color: '#6c5ce7' }} />
                     </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>Reset link sent!</h2>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#1a1c23', textAlign: 'center', marginBottom: 12 }}>Reset link sent!</h2>
                     <p style={{ color: '#888', textAlign: 'center', marginBottom: 28, fontSize: '0.9rem', lineHeight: 1.6 }}>
                         We&apos;ve sent a password reset link to <span style={{ color: '#1a1c23', fontWeight: 600 }}>{email}</span>.
                         Please check your inbox.
@@ -84,10 +84,11 @@ export default function ForgotPasswordPage() {
 
                 <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 10 }}>
                     <div style={styles.fieldGroup}>
-                        <label style={styles.label}>Email Address</label>
+                        <label htmlFor="email-input" style={styles.label}>Email Address</label>
                         <div style={styles.inputWrapper}>
                             <Mail size={18} style={styles.inputIcon} />
                             <input
+                                id="email-input"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -148,7 +149,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     title: {
         fontSize: '1.8rem',
-        fontWeight: 800,
+        fontWeight: 600,
         color: '#1a1c23',
         marginBottom: 8,
         letterSpacing: -0.5,

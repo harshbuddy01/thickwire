@@ -7,15 +7,15 @@ import { redirectUrlSchema } from '@/lib/validators';
 import { captureSecurityEvent } from '@/lib/sentry';
 
 function AuthCallbackContent() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+    const { get } = useSearchParams();
+    const { push } = useRouter();
     const { setAuth } = useAuth();
     const [error, setError] = useState('');
 
     useEffect(() => {
         const handleCallback = async () => {
-            const token = searchParams.get('token');
-            let redirectTo = searchParams.get('redirect') || '/';
+            const token = get('token');
+            let redirectTo = get('redirect') || '/';
 
             // Validate redirect URL to prevent open redirect attacks
             const validation = redirectUrlSchema.safeParse(redirectTo);
@@ -29,7 +29,7 @@ function AuthCallbackContent() {
             }
 
             if (!token) {
-                router.push('/login?error=Google_Auth_Failed');
+                push('/login?error=Google_Auth_Failed');
                 return;
             }
 
@@ -42,12 +42,12 @@ function AuthCallbackContent() {
                 }
             }
 
-            const isNewUser = searchParams.get('isNewUser') === 'true';
+            const isNewUser = get('isNewUser') === 'true';
 
             if (isNewUser) {
-                router.push(`/signup?onboarding=true&redirect=${encodeURIComponent(redirectTo)}`);
+                push(`/signup?onboarding=true&redirect=${encodeURIComponent(redirectTo)}`);
             } else {
-                router.push(redirectTo);
+                push(redirectTo);
             }
         };
         handleCallback();

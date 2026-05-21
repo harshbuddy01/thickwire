@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { getServices } from '@/lib/api';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Search, Zap, ShieldCheck, Sparkles, ArrowRight, Star, X } from 'lucide-react';
 
 const MINIO_BASE = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
@@ -66,7 +67,7 @@ export default function ServicesDirectoryPage() {
                 {/* Page Header & Search */}
                 <div style={{ marginBottom: '60px', marginTop: '20px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '32px' }}>
-                        <h1 style={{ fontSize: '3rem', fontWeight: 900, margin: 0, letterSpacing: '-0.04em', color: '#1a1c23' }}>
+                        <h1 style={{ fontSize: '3rem', fontWeight: 600, margin: 0, letterSpacing: '-0.04em', color: '#1a1c23' }}>
                             Our Premium <span style={{ color: ACCENT }}>Services</span>
                         </h1>
                         <p style={{ color: '#64748b', fontSize: '1.1rem', margin: 0, maxWidth: '600px' }}>
@@ -108,8 +109,8 @@ export default function ServicesDirectoryPage() {
 
                 {loading ? (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '32px' }}>
-                        {[1,2,3,4,5,6].map(i => (
-                            <div key={i} style={{ height: '320px', background: '#fff', borderRadius: '24px', border: '1px solid #f1f5f9' }} className="skeleton-pulse" />
+                        {['skel-1', 'skel-2', 'skel-3', 'skel-4', 'skel-5', 'skel-6'].map(key => (
+                            <div key={key} style={{ height: '320px', background: '#fff', borderRadius: '24px', border: '1px solid #f1f5f9' }} className="skeleton-pulse" />
                         ))}
                     </div>
                 ) : (
@@ -143,7 +144,7 @@ export default function ServicesDirectoryPage() {
                                                 border: '1px solid #f1f5f9',
                                                 display: 'flex',
                                                 flexDirection: 'column',
-                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                                 position: 'relative',
                                                 boxShadow: '0 4px 15px rgba(0,0,0,0.02)',
                                                 minHeight: '340px'
@@ -155,7 +156,13 @@ export default function ServicesDirectoryPage() {
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 boxShadow: '0 8px 20px rgba(0,0,0,0.05)', border: '1px solid #f1f5f9'
                                             }}>
-                                                <img src={logoUrl} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                                <Image 
+                                                    src={logoUrl} 
+                                                    alt={service.name} 
+                                                    width={64} 
+                                                    height={64} 
+                                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                                                />
                                             </div>
 
                                             <div style={{ flex: 1 }}>
@@ -194,7 +201,7 @@ export default function ServicesDirectoryPage() {
                 )}
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .service-card-new:hover {
                     transform: translateY(-8px);
                     box-shadow: 0 20px 40px rgba(184, 122, 29, 0.08) !important;

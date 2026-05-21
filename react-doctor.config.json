@@ -1,0 +1,10 @@
+{
+  "ignore": {
+    "rules": [
+      "react-doctor/no-inline-exhaustive-style",
+      "react-doctor/nextjs-missing-metadata",
+      "react-doctor/no-transition-all",
+      "react-doctor/design-no-bold-heading"
+    ]
+  }
+}

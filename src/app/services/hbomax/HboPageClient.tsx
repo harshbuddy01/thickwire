@@ -131,8 +131,15 @@ export default function HboPageClient({ service }: { service: Service }) {
                                         <span>{item.q}</span>
                                         <ChevronRight size={16} style={{ transform: openFaq === idx ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
                                     </div>
-                                    <div className={`faq-answer ${styles['faq-answer'] || ''}`.trim()} style={{ maxHeight: openFaq === idx ? '150px' : '0', overflow: 'hidden', transition: 'max-height 0.3s' }}>
-                                        <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
+                                    <div className={`faq-answer ${styles['faq-answer'] || ''}`.trim()} style={{ 
+                                        display: 'grid',
+                                        gridTemplateRows: openFaq === idx ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        opacity: openFaq === idx ? 1 : 0
+                                    }}>
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -150,8 +157,15 @@ export default function HboPageClient({ service }: { service: Service }) {
                                         <span>{item.q}</span>
                                         <ChevronRight size={16} style={{ transform: openFaq === offsetIdx ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
                                     </div>
-                                    <div className={`faq-answer ${styles['faq-answer'] || ''}`.trim()} style={{ maxHeight: openFaq === offsetIdx ? '150px' : '0', overflow: 'hidden', transition: 'max-height 0.3s' }}>
-                                        <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
+                                    <div className={`faq-answer ${styles['faq-answer'] || ''}`.trim()} style={{ 
+                                        display: 'grid',
+                                        gridTemplateRows: openFaq === offsetIdx ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+                                        opacity: openFaq === offsetIdx ? 1 : 0
+                                    }}>
+                                        <div style={{ overflow: 'hidden' }}>
+                                            <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
+                                        </div>
                                     </div>
                                 </div>
                             )})}

@@ -22,6 +22,10 @@ export default async function JioHotstarServicePage() {
     try {
         service = await getServiceBySlug('jiohotstar');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 

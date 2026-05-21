@@ -1,8 +1,12 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight, RefreshCcw, ShieldCheck, Clock, CreditCard, ArrowRight } from 'lucide-react';
 import styles from '../static-page.module.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Refund & Replacement Policy — StreamKart',
+    description: 'We stand by the quality of our digital services. Learn about our 100% replacement warranty and hassle-free refund process at StreamKart.',
+};
 
 export default function RefundPolicyPage() {
     return (
@@ -92,7 +96,7 @@ export default function RefundPolicyPage() {
                             gap: '24px'
                         }}>
                             <div style={{ flex: 1, minWidth: '300px' }}>
-                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.3rem', fontWeight: 900 }}>Need to request a refund?</h3>
+                                <h3 style={{ margin: '0 0 8px 0', fontSize: '1.3rem', fontWeight: 600 }}>Need to request a refund?</h3>
                                 <p style={{ margin: 0, color: '#64748b' }}>Our billing team handles all requests with the highest priority.</p>
                             </div>
                             <Link href="/support" style={{
@@ -100,12 +104,12 @@ export default function RefundPolicyPage() {
                                 color: '#fff',
                                 padding: '14px 32px',
                                 borderRadius: '14px',
-                                fontWeight: 800,
+                                fontWeight: 600,
                                 textDecoration: 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px',
-                                transition: 'all 0.3s ease'
+                                transition: 'background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease'
                             }}>
                                 Contact Billing <ArrowRight size={18} />
                             </Link>

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const { user, loading } = useAuth();
-    const router = useRouter();
+    const { push } = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
@@ -15,12 +15,12 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
             // where AuthContext hasn't finished hydrating yet
             const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
             if (!token) {
-                router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+                push(`/login?redirect=${encodeURIComponent(pathname)}`);
             }
             // If token exists but user is null, AuthContext init() is likely still processing.
             // Don't redirect — wait for the next render cycle.
         }
-    }, [user, loading, router, pathname]);
+    }, [user, loading, push, pathname]);
 
     if (loading) {
         return (

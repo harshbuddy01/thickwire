@@ -11,7 +11,7 @@ export default function NotFoundPage() {
             justifyContent: 'center',
             padding: '40px 16px',
             background: '#ffffff',
-            fontFamily: '"Times New Roman", Times, serif'
+            fontFamily: "'Outfit', sans-serif"
         }}>
             <div style={{
                 background: '#f3f4f6',
@@ -30,7 +30,7 @@ export default function NotFoundPage() {
                     </svg>
                 </div>
                 
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#1a1c23', marginBottom: '20px', letterSpacing: '-0.5px' }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 600, color: '#1a1c23', marginBottom: '20px', letterSpacing: '-0.5px' }}>
                     Service Coming Soon
                 </h1>
                 
@@ -47,10 +47,10 @@ export default function NotFoundPage() {
                             color: 'white',
                             padding: '18px 48px',
                             borderRadius: '100px',
-                            fontWeight: 'bold',
+                            fontWeight: 600,
                             fontSize: '1.1rem',
                             textDecoration: 'none',
-                            transition: 'all 0.3s ease',
+                            transition: 'background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
                             boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
                         }}
                     >
@@ -64,7 +64,7 @@ export default function NotFoundPage() {
                         style={{
                             fontSize: '1rem',
                             color: '#1a1c23',
-                            fontWeight: 'bold',
+                            fontWeight: 600,
                             textDecoration: 'underline',
                             cursor: 'pointer'
                         }}

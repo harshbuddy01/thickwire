@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import { useRouter } from 'next/navigation';
 import type { Plan } from '@/lib/types';
@@ -14,7 +15,8 @@ interface PlanCardProps {
 
 export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: PlanCardProps) {
     const { user } = useAuth();
-    const router = useRouter();
+    const { push } = useRouter();
+    const [isHovered, setIsHovered] = useState(false);
 
     const stockStatus = plan.stockCount <= 5 ? 'low-stock' : 'in-stock';
     const stockLabel = plan.stockCount <= 5 ? `Only ${plan.stockCount} left` : 'In Stock';
@@ -24,7 +26,7 @@ export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: 
 
     const handleBuy = () => {
         const dest = `/checkout?planId=${plan.id}&service=${serviceSlug}`;
-        router.push(dest);
+        push(dest);
     };
 
     return (
@@ -128,22 +130,18 @@ export default function PlanCard({ plan, serviceSlug, serviceName, isPopular }: 
                             border: 'none',
                             borderRadius: '14px',
                             fontSize: '1.05rem',
-                            fontWeight: 800,
+                            fontWeight: 600,
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            transition: 'all 0.2s ease',
+                            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                            transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                            boxShadow: isHovered ? '0 8px 25px rgba(0,0,0,0.2)' : 'none',
                         }}
-                        onMouseOver={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
-                        }}
-                        onMouseOut={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = 'none';
-                        }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
                     >
                         <Lock size={18} /> Buy Now Securely
                     </button>

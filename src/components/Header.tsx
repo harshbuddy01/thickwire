@@ -19,7 +19,7 @@ import SupplierModal from './SupplierModal';
 export default function Header() {
     const { user, loading, logout } = useAuth();
     const pathname = usePathname();
-    const router = useRouter();
+    const { push } = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchOpen, setSearchOpen] = useState(false);
@@ -176,7 +176,7 @@ export default function Header() {
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && searchQuery.trim()) {
                                     setShowSuggestions(false);
-                                    router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                    push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                 }
                             }}
                         />
@@ -185,7 +185,7 @@ export default function Header() {
                             onClick={() => {
                                 if (searchQuery.trim()) {
                                     setShowSuggestions(false);
-                                    router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                    push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                 }
                             }}
                         >
@@ -202,7 +202,7 @@ export default function Header() {
                                         onClick={() => {
                                             setSearchQuery('');
                                             setShowSuggestions(false);
-                                            router.push(`/services/${item.slug}`);
+                                            push(`/services/${item.slug}`);
                                         }}
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -375,7 +375,7 @@ export default function Header() {
                                     if (e.key === 'Enter' && searchQuery.trim()) {
                                         setSearchOpen(false);
                                         setShowSuggestions(false);
-                                        router.push(`/services?q=${encodeURIComponent(searchQuery)}`);
+                                        push(`/services?q=${encodeURIComponent(searchQuery)}`);
                                     }
                                 }}
                                 autoFocus={searchOpen}
@@ -391,7 +391,7 @@ export default function Header() {
                                                 setSearchQuery('');
                                                 setShowSuggestions(false);
                                                 setSearchOpen(false);
-                                                router.push(`/services/${item.slug}`);
+                                                push(`/services/${item.slug}`);
                                             }}
                                         >
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

@@ -26,10 +26,10 @@ export default function CheckoutPage() {
 }
 
 function CheckoutContent() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const rawPlanId = searchParams.get('planId') || searchParams.get('plan');
-    const rawServiceSlug = searchParams.get('service');
+    const { get } = useSearchParams();
+    const { push } = useRouter();
+    const rawPlanId = get('planId') || get('plan');
+    const rawServiceSlug = get('service');
     const planId = rawPlanId && rawPlanId.trim().length > 0 ? rawPlanId.trim() : null;
     const serviceSlug = rawServiceSlug && serviceSlugParamSchema.safeParse(rawServiceSlug).success ? rawServiceSlug : null;
 
@@ -84,10 +84,10 @@ function CheckoutContent() {
             const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
             if (!token) {
                 const dest = `/checkout?planId=${planId}&service=${serviceSlug}`;
-                router.push(`/login?redirect=${encodeURIComponent(dest)}`);
+                push(`/login?redirect=${encodeURIComponent(dest)}`);
             }
         }
-    }, [authLoading, user, planId, serviceSlug, router]);
+    }, [authLoading, user, planId, serviceSlug, push]);
 
     useEffect(() => {
         if (user) {
@@ -356,7 +356,7 @@ function CheckoutContent() {
                         const resOrder = await createOrder(payload);
                         const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
                         if (res.data?.success) {
-                            router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                            push(`/order/${res.data.orderId}?gateway=wallet`);
                             return;
                         }
                     } catch (walletErr: any) {
@@ -378,13 +378,13 @@ function CheckoutContent() {
 
                     // Free order via 100% coupon — already fulfilled server-side
                     if (resOrder.freeOrder) {
-                        router.push(`/order/${resOrder.orderId}?gateway=coupon`);
+                        push(`/order/${resOrder.orderId}?gateway=coupon`);
                         return;
                     }
 
                     const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
                     if (res.data && res.data.success) {
-                        router.push(`/order/${res.data.orderId}?gateway=wallet`);
+                        push(`/order/${res.data.orderId}?gateway=wallet`);
                         return;
                     } else {
                         setError('Wallet payment failed. Please try again.');
@@ -404,7 +404,7 @@ function CheckoutContent() {
 
             // Free order via 100% coupon — already fulfilled server-side
             if (resOrder.freeOrder) {
-                router.push(`/order/${resOrder.orderId}?gateway=coupon`);
+                push(`/order/${resOrder.orderId}?gateway=coupon`);
                 return;
             }
 

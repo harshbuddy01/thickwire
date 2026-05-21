@@ -63,9 +63,25 @@ const s: { [k: string]: React.CSSProperties } = {
     spinner: { minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' },
 };
 
+function formatAccountDate(mounted: boolean, dateVal: any, type: 'date' | 'datetime') {
+    if (!mounted || !dateVal) return '';
+    try {
+        const d = new Date(dateVal);
+        return type === 'date' ? d.toLocaleDateString() : d.toLocaleString();
+    } catch {
+        return '';
+    }
+}
+
+function daysUntil(date: string) {
+    if (!date) return 0;
+    const diff = new Date(date).getTime() - Date.now();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
-    const router = useRouter();
+    const { push } = useRouter();
     const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'wallet' | 'tickets' | 'settings'>('overview');
 
     const [orders, setOrders] = useState<any[]>([]);
@@ -87,6 +103,8 @@ export default function AccountPage() {
     const [ticketAttachment, setTicketAttachment] = useState<string | null>(null);
     const [isSubmittingReply, setIsSubmittingReply] = useState(false);
     const [ratingSubmitting, setRatingSubmitting] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setMounted(true); }, []);
 
     // Refs for notification sounds
     const prevTicketMessageCountsRef = useRef<Record<string, number>>({});
@@ -165,11 +183,11 @@ export default function AccountPage() {
 
     useEffect(() => {
         if (!loading && !user) {
-            router.push('/login');
+            push('/login');
         } else if (user) {
             fetchData();
         }
-    }, [user, loading, router, fetchData]);
+    }, [user, loading, push, fetchData]);
 
     // Poll tickets separately for notifications
     useEffect(() => {
@@ -247,11 +265,6 @@ export default function AccountPage() {
         }
     };
 
-    const daysUntil = (date: string) => {
-        if (!date) return 0;
-        const diff = new Date(date).getTime() - Date.now();
-        return Math.ceil(diff / (1000 * 60 * 60 * 24));
-    };
 
     if (loading || isFetching || !user) {
         return (
@@ -269,6 +282,8 @@ export default function AccountPage() {
         { id: 'tickets', label: 'Support Tickets', icon: <HelpCircle size={18} /> },
         { id: 'settings', label: 'Settings', icon: <Settings size={18} /> }
     ];
+    const selectedCredActivatedAt = formatAccountDate(mounted, selectedCredential?.activatedAt, 'date');
+    const selectedCredExpiresAt = formatAccountDate(mounted, selectedCredential?.expiresAt, 'date');
 
     return (
         <div className="container" style={s.page}>
@@ -339,18 +354,21 @@ export default function AccountPage() {
                                 {orders.length === 0 ? (
                                     <div style={s.emptyState}>No orders yet.</div>
                                 ) : (
-                                    orders.slice(0, 3).map(order => (
-                                        <Link href={`/order/${order.id}`} key={order.id} style={s.orderRow}>
-                                            <div>
-                                                <div style={{ fontWeight: 600, color: '#1a1c23', marginBottom: 4 }}>{order.service?.name} — {order.plan?.name}</div>
-                                                <div style={{ fontSize: '0.75rem', color: '#999' }}>Order #{order.id.substring(0, 8)} • {new Date(order.createdAt).toLocaleDateString()}</div>
-                                            </div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                                <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
-                                                <ChevronRight size={16} style={{ color: '#ccc' }} />
-                                            </div>
-                                        </Link>
-                                    ))
+                                    orders.slice(0, 3).map(order => {
+                                        const formattedOrderDate = formatAccountDate(mounted, order.createdAt, 'date');
+                                        return (
+                                            <Link href={`/order/${order.id}`} key={order.id} style={s.orderRow}>
+                                                <div>
+                                                    <div style={{ fontWeight: 600, color: '#1a1c23', marginBottom: 4 }}>{order.service?.name} — {order.plan?.name}</div>
+                                                    <div suppressHydrationWarning style={{ fontSize: '0.75rem', color: '#999' }}>Order #{order.id.substring(0, 8)} • {formattedOrderDate}</div>
+                                                </div>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                    <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
+                                                    <ChevronRight size={16} style={{ color: '#ccc' }} />
+                                                </div>
+                                            </Link>
+                                        );
+                                    })
                                 )}
                             </div>
                         </div>
@@ -385,17 +403,20 @@ export default function AccountPage() {
                                 <div style={s.emptyState}>No transactions yet.</div>
                             ) : (
                                 <div style={s.listCard}>
-                                    {walletTransactions.map(tx => (
-                                        <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #eee' }}>
-                                            <div>
-                                                <div style={{ fontWeight: 700, color: '#1a1c23', marginBottom: 4 }}>{tx.description}</div>
-                                                <div style={{ fontSize: '0.8rem', color: '#888' }}>{new Date(tx.createdAt).toLocaleString()} • {tx.type}</div>
+                                    {walletTransactions.map(tx => {
+                                        const formattedTxDate = formatAccountDate(mounted, tx.createdAt, 'datetime');
+                                        return (
+                                            <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #eee' }}>
+                                                <div>
+                                                    <div style={{ fontWeight: 700, color: '#1a1c23', marginBottom: 4 }}>{tx.description}</div>
+                                                    <div suppressHydrationWarning style={{ fontSize: '0.8rem', color: '#888' }}>{formattedTxDate} • {tx.type}</div>
+                                                </div>
+                                                <div style={{ fontWeight: 800, fontSize: '1.1rem', color: Number(tx.amount) > 0 ? '#10b981' : '#1a1c23' }}>
+                                                    {Number(tx.amount) > 0 ? '+' : ''}{Number(tx.amount).toFixed(2)} {walletData?.baseCurrency || 'INR'}
+                                                </div>
                                             </div>
-                                            <div style={{ fontWeight: 800, fontSize: '1.1rem', color: Number(tx.amount) > 0 ? '#10b981' : '#1a1c23' }}>
-                                                {Number(tx.amount) > 0 ? '+' : ''}{Number(tx.amount).toFixed(2)} {walletData?.baseCurrency || 'INR'}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>
@@ -417,6 +438,8 @@ export default function AccountPage() {
                                     const stColor = sub.status === 'ACTIVE' ? '#16a34a' : sub.status === 'EXPIRING_SOON' ? '#ea580c' : '#dc2626';
                                     const stBg = sub.status === 'ACTIVE' ? '#f0fdf4' : sub.status === 'EXPIRING_SOON' ? '#fff7ed' : '#fef2f2';
                                     const daysLeft = daysUntil(sub.expiresAt);
+                                    const formattedActivatedAt = formatAccountDate(mounted, sub.activatedAt, 'date');
+                                    const formattedExpiresAt = formatAccountDate(mounted, sub.expiresAt, 'date');
 
                                     return (
                                         <div key={sub.id} style={{ ...s.listCard, marginBottom: 12, borderLeft: `4px solid ${stColor}` }}>
@@ -433,8 +456,8 @@ export default function AccountPage() {
                                                         )}
                                                     </div>
                                                     <div style={{ display: 'flex', gap: 16, fontSize: '0.8rem', color: '#888' }}>
-                                                        <span>Activated: {new Date(sub.activatedAt).toLocaleDateString()}</span>
-                                                        <span>Expires: {new Date(sub.expiresAt).toLocaleDateString()}</span>
+                                                        <span suppressHydrationWarning>Activated: {formattedActivatedAt}</span>
+                                                        <span suppressHydrationWarning>Expires: {formattedExpiresAt}</span>
                                                     </div>
                                                 </div>
 
@@ -466,25 +489,28 @@ export default function AccountPage() {
                     {activeTab === 'orders' && (
                         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                             <h2 style={s.sectionTitle}>Order History</h2>
-                            {orders.map(order => (
-                                <div key={order.id} style={{ ...s.listCard, marginBottom: 12 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
-                                        <div>
-                                            <div style={{ fontWeight: 700, color: '#1a1c23', marginBottom: 4 }}>{order.service?.name}</div>
-                                            <div style={{ fontSize: '0.85rem', color: '#888' }}>{order.plan?.name} • ₹{order.amount}</div>
+                            {orders.map(order => {
+                                const formattedOrderDate = formatAccountDate(mounted, order.createdAt, 'datetime');
+                                return (
+                                    <div key={order.id} style={{ ...s.listCard, marginBottom: 12 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+                                            <div>
+                                                <div style={{ fontWeight: 700, color: '#1a1c23', marginBottom: 4 }}>{order.service?.name}</div>
+                                                <div style={{ fontSize: '0.85rem', color: '#888' }}>{order.plan?.name} • ₹{order.amount}</div>
+                                            </div>
+                                            <div style={{ textAlign: 'right' }}>
+                                                <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb', marginBottom: 6, display: 'inline-block' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
+                                                <div suppressHydrationWarning style={{ fontSize: '0.75rem', color: '#aaa' }}>{formattedOrderDate}</div>
+                                            </div>
                                         </div>
-                                        <div style={{ textAlign: 'right' }}>
-                                            <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb', marginBottom: 6, display: 'inline-block' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
-                                            <div style={{ fontSize: '0.75rem', color: '#aaa' }}>{new Date(order.createdAt).toLocaleString()}</div>
+                                        <div style={{ height: 1, background: '#f0f0f0', margin: '12px 0' }}></div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <span style={{ fontSize: '0.8rem', color: '#aaa', fontFamily: 'monospace' }}>ID: {order.id}</span>
+                                            <Link href={`/order/${order.id}`} style={{ fontSize: '0.85rem', color: '#6c5ce7', fontWeight: 600, textDecoration: 'none' }}>View Receipt →</Link>
                                         </div>
                                     </div>
-                                    <div style={{ height: 1, background: '#f0f0f0', margin: '12px 0' }}></div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#aaa', fontFamily: 'monospace' }}>ID: {order.id}</span>
-                                        <Link href={`/order/${order.id}`} style={{ fontSize: '0.85rem', color: '#6c5ce7', fontWeight: 600, textDecoration: 'none' }}>View Receipt →</Link>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                     
@@ -505,28 +531,31 @@ export default function AccountPage() {
                                     <p style={{ color: '#888', marginBottom: 24 }}>You haven&apos;t opened any support tickets yet.</p>
                                 </div>
                             ) : (
-                                tickets.map(ticket => (
-                                    <div key={ticket.id} style={{ ...s.listCard, marginBottom: 12, borderLeft: ticket.status === 'RESOLVED' ? '4px solid #10b981' : '4px solid #f59e0b', cursor: 'pointer', transition: 'transform 0.1s' }} onClick={() => setSelectedSupportTicket(ticket)}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', margin: 0 }}>{ticket.subject}</h3>
-                                                    <span style={{ ...s.badge, background: ticket.status === 'RESOLVED' ? '#ecfdf5' : '#fffbeb', color: ticket.status === 'RESOLVED' ? '#10b981' : '#f59e0b' }}>
-                                                        {ticket.status}
-                                                    </span>
+                                tickets.map(ticket => {
+                                    const formattedTicketDate = formatAccountDate(mounted, ticket.createdAt, 'datetime');
+                                    return (
+                                        <div key={ticket.id} style={{ ...s.listCard, marginBottom: 12, borderLeft: ticket.status === 'RESOLVED' ? '4px solid #10b981' : '4px solid #f59e0b', cursor: 'pointer', transition: 'transform 0.1s' }} onClick={() => setSelectedSupportTicket(ticket)}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', margin: 0 }}>{ticket.subject}</h3>
+                                                        <span style={{ ...s.badge, background: ticket.status === 'RESOLVED' ? '#ecfdf5' : '#fffbeb', color: ticket.status === 'RESOLVED' ? '#10b981' : '#f59e0b' }}>
+                                                            {ticket.status}
+                                                        </span>
+                                                    </div>
+                                                    <p 
+                                                        dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(ticket.message || '') }}
+                                                        style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                                    />
+                                                    <div suppressHydrationWarning style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                                                        Created: {formattedTicketDate} • {ticket.messages?.length || 1} messages
+                                                    </div>
                                                 </div>
-                                                <p 
-                                                    dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(ticket.message || '') }}
-                                                    style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 12px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                                                />
-                                                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                                                    Created: {new Date(ticket.createdAt).toLocaleString()} • {ticket.messages?.length || 1} messages
-                                                </div>
+                                                <ChevronRight size={20} style={{ color: '#cbd5e1', flexShrink: 0, marginTop: '4px' }} />
                                             </div>
-                                            <ChevronRight size={20} style={{ color: '#cbd5e1', flexShrink: 0, marginTop: '4px' }} />
                                         </div>
-                                    </div>
-                                ))
+                                    );
+                                })
                             )}
                         </div>
                     )}
@@ -604,11 +633,11 @@ export default function AccountPage() {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px', background: '#f8fafc', padding: '12px 16px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                                         <div>
                                             <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Activated</div>
-                                            <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.85rem' }}>{new Date(selectedCredential.activatedAt).toLocaleDateString()}</div>
+                                            <div suppressHydrationWarning style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.85rem' }}>{selectedCredActivatedAt}</div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
                                             <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Expires</div>
-                                            <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.85rem' }}>{new Date(selectedCredential.expiresAt).toLocaleDateString()}</div>
+                                            <div suppressHydrationWarning style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.85rem' }}>{selectedCredExpiresAt}</div>
                                         </div>
                                     </div>
 
@@ -691,52 +720,55 @@ export default function AccountPage() {
                         </div>
 
                         <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', background: '#fff' }}>
-                            {selectedSupportTicket.messages && selectedSupportTicket.messages.map((msg: any) => (
-                                <div key={msg.id} style={{
-                                    display: 'flex',
-                                    flexDirection: msg.sender === 'CUSTOMER' ? 'row-reverse' : 'row',
-                                    gap: '12px'
-                                }}>
-                                    <div style={{
-                                        width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
-                                        background: msg.sender === 'CUSTOMER' ? '#f1eeff' : '#1e293b',
-                                        color: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#fff',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.8rem'
+                            {selectedSupportTicket.messages && selectedSupportTicket.messages.map((msg: any) => {
+                                const formattedMsgDate = formatAccountDate(mounted, msg.createdAt, 'datetime');
+                                return (
+                                    <div key={msg.id} style={{
+                                        display: 'flex',
+                                        flexDirection: msg.sender === 'CUSTOMER' ? 'row-reverse' : 'row',
+                                        gap: '12px'
                                     }}>
-                                        {msg.sender === 'CUSTOMER' ? 'Me' : 'A'}
-                                    </div>
-                                    <div style={{
-                                        background: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#f1f5f9',
-                                        color: msg.sender === 'CUSTOMER' ? '#fff' : '#334155',
-                                        padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', whiteSpace: 'pre-wrap', lineHeight: 1.5,
-                                        maxWidth: '80%',
-                                        borderTopRightRadius: msg.sender === 'CUSTOMER' ? '4px' : '16px',
-                                        borderTopLeftRadius: msg.sender === 'ADMIN' ? '4px' : '16px',
-                                    }}>
-                                        {msg.attachmentUrl && (
-                                            <div style={{ marginBottom: msg.text ? '8px' : 0 }}>
-                                                {msg.attachmentUrl.startsWith('data:video') ? (
-                                                    <video src={msg.attachmentUrl} controls style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} />
-                                                ) : (
-                                                    <img src={msg.attachmentUrl} alt="Attachment" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
-                                                )}
+                                        <div style={{
+                                            width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
+                                            background: msg.sender === 'CUSTOMER' ? '#f1eeff' : '#1e293b',
+                                            color: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#fff',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.8rem'
+                                        }}>
+                                            {msg.sender === 'CUSTOMER' ? 'Me' : 'A'}
+                                        </div>
+                                        <div style={{
+                                            background: msg.sender === 'CUSTOMER' ? '#6c5ce7' : '#f1f5f9',
+                                            color: msg.sender === 'CUSTOMER' ? '#fff' : '#334155',
+                                            padding: '12px 16px', borderRadius: '16px', fontSize: '0.9rem', whiteSpace: 'pre-wrap', lineHeight: 1.5,
+                                            maxWidth: '80%',
+                                            borderTopRightRadius: msg.sender === 'CUSTOMER' ? '4px' : '16px',
+                                            borderTopLeftRadius: msg.sender === 'ADMIN' ? '4px' : '16px',
+                                        }}>
+                                            {msg.attachmentUrl && (
+                                                <div style={{ marginBottom: msg.text ? '8px' : 0 }}>
+                                                    {msg.attachmentUrl.startsWith('data:video') ? (
+                                                        <video src={msg.attachmentUrl} controls style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px' }} />
+                                                    ) : (
+                                                        <img src={msg.attachmentUrl} alt="Attachment" style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
+                                                    )}
+                                                </div>
+                                            )}
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                                <div 
+                                                    dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(msg.text || '') }} 
+                                                    style={{ wordBreak: 'break-word' }}
+                                                />
+                                                <span style={{ fontSize: '0.6rem', opacity: 0.5, display: 'inline-flex', alignItems: 'center', gap: '2px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8' }}>
+                                                    🛡️ Secured
+                                                </span>
                                             </div>
-                                        )}
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                            <div 
-                                                dangerouslySetInnerHTML={{ __html: sanitizer.sanitize(msg.text || '') }} 
-                                                style={{ wordBreak: 'break-word' }}
-                                            />
-                                            <span style={{ fontSize: '0.6rem', opacity: 0.5, display: 'inline-flex', alignItems: 'center', gap: '2px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8' }}>
-                                                🛡️ Secured
-                                            </span>
-                                        </div>
-                                        <div style={{ fontSize: '0.65rem', marginTop: '6px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8', textAlign: msg.sender === 'CUSTOMER' ? 'right' : 'left' }}>
-                                            {new Date(msg.createdAt).toLocaleString()}
+                                            <div suppressHydrationWarning style={{ fontSize: '0.65rem', marginTop: '6px', color: msg.sender === 'CUSTOMER' ? '#e0d4ff' : '#94a3b8', textAlign: msg.sender === 'CUSTOMER' ? 'right' : 'left' }}>
+                                                {formattedMsgDate}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                             
                             {selectedSupportTicket.status === 'RESOLVED' && (
                                 <div style={{ textAlign: 'center', padding: '16px', background: '#ecfdf5', borderRadius: '12px', marginTop: '8px' }}>

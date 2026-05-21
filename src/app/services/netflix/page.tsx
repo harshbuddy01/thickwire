@@ -20,11 +20,16 @@ export async function generateMetadata(): Promise<Metadata> {
 import { notFound } from 'next/navigation';
 
 export default async function Page() {
+    let service;
     try {
-        const service = await getServiceBySlug('netflix');
-        if (!service) return notFound();
-        return <NetflixPageClient service={service} />;
+        service = await getServiceBySlug('netflix');
     } catch (e) {
-        return notFound();
+        // dynamic error handling or logging
     }
+
+    if (!service) {
+        notFound();
+    }
+
+    return <NetflixPageClient service={service} />;
 }

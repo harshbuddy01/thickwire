@@ -1,7 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useOrderPolling } from '@/hooks/useOrderPolling';
-import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { CheckCircle2, XCircle, Clock, Headphones, ArrowRight, Package, Mail, ShieldCheck } from 'lucide-react';
@@ -23,10 +23,21 @@ export default function OrderStatusPage({
     );
 }
 
+function formatOrderDate(mounted: boolean, dateVal: any) {
+    if (!mounted || !dateVal) return '';
+    try {
+        return new Date(dateVal).toLocaleString();
+    } catch {
+        return '';
+    }
+}
+
 function OrderContent({ orderId }: { orderId: string }) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => { setMounted(true); }, []);
+    
     const validation = orderIdParamSchema.safeParse(orderId);
     const { order, loading, error } = useOrderPolling(validation.success ? orderId : null);
-    const searchParams = useSearchParams();
 
     if (!validation.success) {
         return (
@@ -71,6 +82,7 @@ function OrderContent({ orderId }: { orderId: string }) {
     }
 
     const statusConfig = getStatusConfig(order.paymentStatus, order.fulfillmentStatus, order.service.name);
+    const formattedDeliveredAt = formatOrderDate(mounted, order.deliveredAt);
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%)', padding: 24, fontFamily: 'var(--font-poppins), sans-serif' }}>
@@ -141,7 +153,7 @@ function OrderContent({ orderId }: { orderId: string }) {
                         {order.deliveredAt && (
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>Delivered</span>
-                                <span style={{ fontWeight: 600, color: '#10b981', fontSize: '0.9rem' }}>{new Date(order.deliveredAt).toLocaleString()}</span>
+                                <span suppressHydrationWarning style={{ fontWeight: 600, color: '#10b981', fontSize: '0.9rem' }}>{formattedDeliveredAt}</span>
                             </div>
                         )}
                     </div>

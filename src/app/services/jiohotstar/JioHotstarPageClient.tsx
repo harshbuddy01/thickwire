@@ -9,7 +9,7 @@ import type { Service, Plan } from '@/lib/types';
 const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 export default function JioHotstarPageClient({ service }: { service: Service }) {
-    const router = useRouter();
+    const { push } = useRouter();
     const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
 
     const plans = service.plans;
@@ -21,7 +21,7 @@ export default function JioHotstarPageClient({ service }: { service: Service }) 
 
     const handleBuy = () => {
         if (selectedPlanId) {
-            router.push(`/checkout?planId=${selectedPlanId}&service=${service.slug}`);
+            push(`/checkout?planId=${selectedPlanId}&service=${service.slug}`);
         }
     };
 

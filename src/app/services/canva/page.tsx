@@ -22,6 +22,10 @@ export default async function CanvaServicePage() {
     try {
         service = await getServiceBySlug('canva');
     } catch {
+        // dynamic error handling or logging
+    }
+
+    if (!service) {
         notFound();
     }
 
