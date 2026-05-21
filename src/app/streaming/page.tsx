@@ -6,15 +6,20 @@ import { ChevronRight, ShieldCheck, Truck, BadgePercent, Headphones } from 'luci
 
 const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
+// If logo starts with '/' it's a local public asset, otherwise prepend CDN base
+function logoSrc(logo: string) {
+    return logo.startsWith('/') ? logo : `${MINIO}/${logo}`;
+}
+
 const SERVICES = [
-    { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflix.svg',     bg: '#141414' },
-    { id: 'prime',       name: 'Prime Video',        slug: 'prime',       plan: 'All Plans',          logo: 'logos/prime.svg',       bg: '#0F2535' },
-    { id: 'hotstar',     name: 'Disney+ Hotstar',    slug: 'hotstar',     plan: 'Premium Plans',      logo: 'logos/hotstar.svg',     bg: '#0E1A3C' },
+    { id: 'netflix',     name: 'Netflix',           slug: 'netflix',     plan: 'Premium Plan',       logo: 'logos/netflixlogo.0.0.1466448626.png',                     bg: '#141414' },
+    { id: 'prime',       name: 'Prime Video',        slug: 'prime',       plan: 'All Plans',          logo: '/logos/prime.svg',                                         bg: '#0F2535' },
+    { id: 'jiohotstar',  name: 'JioHotstar',         slug: 'jiohotstar',  plan: 'Premium Plans',      logo: 'logos/jiohotstar1573.logowik.com.webp',                    bg: '#0E1A3C' },
     { id: 'zee5',        name: 'ZEE5',               slug: 'zee5',        plan: 'Premium Plans',      logo: 'logos/zee5.jpg',        bg: '#1A0A2E' },
     { id: 'sonyliv',     name: 'Sony LIV',           slug: 'sonyliv',     plan: 'Premium Plans',      logo: 'logos/sonyliv.jpg',     bg: '#1A1A1A' },
     { id: 'chaupal',     name: 'Chaupal',            slug: 'chaupal',     plan: 'Premium Plans',      logo: 'logos/chaupal.svg',     bg: '#120E00' },
     { id: 'youtube',     name: 'YouTube Premium',    slug: 'youtube',     plan: 'Ad-free Experience', logo: 'logos/youtube.png',     bg: '#1A0000' },
-    { id: 'disney',      name: 'Disney+',            slug: 'disney',      plan: 'Premium Plans',      logo: 'logos/disney.jpg',      bg: '#040D2E' },
+    { id: 'disney',      name: 'Disney+',            slug: 'disney',      plan: 'Premium Plans',      logo: 'logos/opinions-on-the-new-disney-design-v0-y6jw0ri25wqc1.jpg', bg: '#040D2E' },
     { id: 'crunchyroll', name: 'Crunchyroll',        slug: 'crunchyroll', plan: 'Premium Plans',      logo: 'logos/crunchyroll.png', bg: '#1A0D00' },
     { id: 'hbomax',      name: 'HBO Max',            slug: 'hbomax',      plan: 'Premium Plans',      logo: 'logos/hbomax.jpg',      bg: '#0F0520' },
     { id: 'jiosaavn',    name: 'JioSaavn',           slug: 'jiosaavn',    plan: 'Music & Podcasts',   logo: 'logos/jiosaavn.png',    bg: '#001A19' },
@@ -93,10 +98,13 @@ export default function StreamingCategoryPage() {
                                         flexShrink: 0,
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'center',
+                                        padding: 0,
+                                        margin: 0,
+                                        background: 'transparent'
                                     }}>
                                         <Image
-                                            src={`${MINIO}/${s.logo}`}
+                                            src={logoSrc(s.logo)}
                                             alt={s.name}
                                             width={80}
                                             height={80}
@@ -105,6 +113,11 @@ export default function StreamingCategoryPage() {
                                                 height: '100%', 
                                                 objectFit: 'contain', 
                                                 display: 'block',
+                                                margin: 0,
+                                                padding: 0,
+                                                border: 0,
+                                                borderRadius: 0,
+                                                background: 'transparent',
                                                 filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.4))'
                                             }}
                                             onError={(e) => {

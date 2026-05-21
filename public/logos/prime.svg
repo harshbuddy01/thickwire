@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Dark background with rounded corners and cyan border -->
+  <rect width="400" height="400" rx="60" fill="#0F2535"/>
+  <rect width="400" height="400" rx="60" fill="none" stroke="#00A8E1" stroke-width="6"/>
+
+  <!-- "prime" in cyan -->
+  <text
+    x="200"
+    y="155"
+    font-family="Arial Black, Arial, sans-serif"
+    font-size="100"
+    font-weight="900"
+    fill="#00A8E1"
+    text-anchor="middle"
+    letter-spacing="-2">prime</text>
+
+  <!-- "video" in white -->
+  <text
+    x="200"
+    y="255"
+    font-family="Arial Black, Arial, sans-serif"
+    font-size="100"
+    font-weight="900"
+    fill="#FFFFFF"
+    text-anchor="middle"
+    letter-spacing="-2">video</text>
+
+  <!-- Amazon smile arrow -->
+  <path
+    d="M 80 320 Q 200 380 320 320"
+    stroke="#00A8E1"
+    stroke-width="14"
+    fill="none"
+    stroke-linecap="round"/>
+  <!-- Arrow tip -->
+  <path
+    d="M 304 308 L 328 322 L 308 340"
+    stroke="#00A8E1"
+    stroke-width="14"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+</svg>
