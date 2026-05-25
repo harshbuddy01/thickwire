@@ -130,6 +130,7 @@ export default function Footer() {
             <h4>Categories</h4>
             <Link href="/streaming">Streaming</Link>
             <Link href="/ai">AI Tools</Link>
+            <Link href="/education">Education</Link>
             <Link href="/vpn">VPN & Security</Link>
             <Link href="/activation">Activation</Link>
             <Link href="/audiobooks">Audiobooks</Link>
@@ -257,6 +258,7 @@ export default function Footer() {
           <FooterCol title="Categories" isOpen={openCols.includes('cat')} onToggle={() => toggleCol('cat')}>
             <FooterLink href="/streaming" icon={<PlayCircle size={15} />}>Streaming</FooterLink>
             <FooterLink href="/audiobooks" icon={<BookOpen size={15} />}>Audiobooks</FooterLink>
+            <FooterLink href="/education" icon={<BookOpen size={15} />}>Education</FooterLink>
             <FooterLink href="/news" icon={<Newspaper size={15} />}>News</FooterLink>
             <FooterLink href="/ai" icon={<Cpu size={15} />}>AI Tools</FooterLink>
             <FooterLink href="/vpn" icon={<Lock size={15} />}>VPN</FooterLink>
