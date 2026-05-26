@@ -206,7 +206,10 @@ function CheckoutContent() {
     }, [plan]);
 
     useEffect(() => {
-        if (!serviceSlug || !planId) return;
+        if (!serviceSlug || !planId) {
+            setLoading(false);
+            return;
+        }
         getServiceBySlug(serviceSlug)
             .then((s) => {
                 setService(s);

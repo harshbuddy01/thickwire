@@ -79,6 +79,19 @@ function daysUntil(date: string) {
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
+function getOrderBadge(order: any) {
+    if (order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED') {
+        return { text: 'DELIVERED', bg: '#f0fdf4', color: '#16a34a' };
+    }
+    if (order.paymentStatus === 'CONFIRMED') {
+        return { text: 'CONFIRMED', bg: '#eff6ff', color: '#2563eb' };
+    }
+    if (order.paymentStatus === 'FAILED') {
+        return { text: 'FAILED', bg: '#fef2f2', color: '#dc2626' };
+    }
+    return { text: 'PENDING', bg: '#fffbeb', color: '#d97706' };
+}
+
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
@@ -356,6 +369,7 @@ export default function AccountPage() {
                                 ) : (
                                     orders.slice(0, 3).map(order => {
                                         const formattedOrderDate = formatAccountDate(mounted, order.createdAt, 'date');
+                                        const badge = getOrderBadge(order);
                                         return (
                                             <Link href={`/order/${order.id}`} key={order.id} style={s.orderRow}>
                                                 <div>
@@ -363,7 +377,7 @@ export default function AccountPage() {
                                                     <div suppressHydrationWarning style={{ fontSize: '0.75rem', color: '#999' }}>Order #{order.id.substring(0, 8)} • {formattedOrderDate}</div>
                                                 </div>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                                    <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
+                                                    <span style={{ ...s.badge, background: badge.bg, color: badge.color }}>{badge.text}</span>
                                                     <ChevronRight size={16} style={{ color: '#ccc' }} />
                                                 </div>
                                             </Link>
@@ -491,6 +505,7 @@ export default function AccountPage() {
                             <h2 style={s.sectionTitle}>Order History</h2>
                             {orders.map(order => {
                                 const formattedOrderDate = formatAccountDate(mounted, order.createdAt, 'datetime');
+                                const badge = getOrderBadge(order);
                                 return (
                                     <div key={order.id} style={{ ...s.listCard, marginBottom: 12 }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
@@ -499,7 +514,7 @@ export default function AccountPage() {
                                                 <div style={{ fontSize: '0.85rem', color: '#888' }}>{order.plan?.name} • ₹{order.amount}</div>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
-                                                <span style={{ ...s.badge, background: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#f0fdf4' : '#eff6ff', color: order.fulfillmentStatus === 'FULFILLED' || order.fulfillmentStatus === 'MANUAL_FULFILLED' ? '#16a34a' : '#2563eb', marginBottom: 6, display: 'inline-block' }}>{order.fulfillmentStatus === 'MANUAL_PENDING' ? 'PENDING' : order.fulfillmentStatus}</span>
+                                                <span style={{ ...s.badge, background: badge.bg, color: badge.color, marginBottom: 6, display: 'inline-block' }}>{badge.text}</span>
                                                 <div suppressHydrationWarning style={{ fontSize: '0.75rem', color: '#aaa' }}>{formattedOrderDate}</div>
                                             </div>
                                         </div>
