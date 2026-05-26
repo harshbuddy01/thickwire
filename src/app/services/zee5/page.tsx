@@ -56,7 +56,7 @@ export default function Zee5ProductPage() {
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 
                 {/* Hero Section */}
-                <div className="mobile-safe-banner zee5-product-hero" style={{
+                <div style={{
                     position: 'relative',
                     borderRadius: '24px',
                     overflow: 'hidden',
