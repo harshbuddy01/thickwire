@@ -557,22 +557,22 @@ function CheckoutContent() {
 
                                 {showMobileScanner && (
                                     <div style={{
-                                        padding: 16, background: '#f8fafc', borderRadius: 20,
+                                        background: '#f8fafc', borderRadius: 20,
                                         border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                        marginTop: 10, width: 220, height: 220, boxSizing: 'border-box'
+                                        marginTop: 10, width: '100%', maxWidth: 280, padding: 8, boxSizing: 'border-box'
                                     }}>
-                                        <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+                                        <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', borderRadius: 10, objectFit: 'contain' }} />
                                     </div>
                                 )}
                             </div>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: '100%' }}>
                                 <div style={{
-                                    padding: 16, background: '#f8fafc', borderRadius: 20,
+                                    background: '#f8fafc', borderRadius: 20,
                                     border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                    width: 220, height: 220, boxSizing: 'border-box'
+                                    width: '100%', maxWidth: 280, padding: 8, boxSizing: 'border-box'
                                 }}>
-                                    <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+                                    <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', borderRadius: 10, objectFit: 'contain' }} />
                                 </div>
                                 <p style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', margin: 0, padding: '0 20px', lineHeight: 1.5 }}>
                                     Scan this secure dynamic QR using any UPI app (GPay, PhonePe, Paytm, BHIM) to complete your order.
