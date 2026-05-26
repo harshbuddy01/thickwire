@@ -138,11 +138,8 @@ function CheckoutContent() {
 
     useEffect(() => {
         if (!authLoading && !user) {
-            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-            if (!token) {
-                const dest = `/checkout?planId=${planId}&service=${serviceSlug}`;
-                router.push(`/login?redirect=${encodeURIComponent(dest)}`);
-            }
+            const dest = `/checkout?planId=${planId}&service=${serviceSlug}`;
+            router.push(`/login?redirect=${encodeURIComponent(dest)}`);
         }
     }, [authLoading, user, planId, serviceSlug, router]);
 
