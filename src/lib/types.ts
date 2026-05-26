@@ -53,6 +53,11 @@ export interface CreateOrderResponse {
     // NOWPayments
     nowpaymentsInvoiceUrl?: string;
 
+    // UPI Direct dynamic QR
+    qrCodeId?: string;
+    qrImageUrl?: string;
+    paymentUrl?: string;
+
     // Free order (100% coupon)
     freeOrder?: boolean;
 }

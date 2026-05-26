@@ -77,6 +77,63 @@ function CheckoutContent() {
     const [requestingCredit, setRequestingCredit] = useState(false);
     const [creditRequestSuccess, setCreditRequestSuccess] = useState(false);
 
+    // Dynamic QR UPI Direct checkout states
+    const [checkoutPaymentQr, setCheckoutPaymentQr] = useState<{
+        qrCodeId: string;
+        qrImageUrl: string;
+        paymentUrl: string;
+        amount: number;
+        orderId: string;
+    } | null>(null);
+    const [qrTimeLeft, setQrTimeLeft] = useState(600); // 10 minutes
+    const [qrStatus, setQrStatus] = useState<'GENERATED' | 'SUCCESS' | 'EXPIRED'>('GENERATED');
+    const [isMobileDevice, setIsMobileDevice] = useState(false);
+    const [showMobileScanner, setShowMobileScanner] = useState(false);
+
+    useEffect(() => {
+        setIsMobileDevice(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    }, []);
+
+    useEffect(() => {
+        let pollInterval: any;
+        let timerInterval: any;
+
+        if (checkoutPaymentQr && qrStatus === 'GENERATED') {
+            // Poll for order confirmation status
+            pollInterval = setInterval(async () => {
+                try {
+                    const { data } = await api.get(`/orders/status/${checkoutPaymentQr.orderId}`);
+                    if (data.paymentStatus === 'CONFIRMED') {
+                        setQrStatus('SUCCESS');
+                        clearInterval(pollInterval);
+                        clearInterval(timerInterval);
+                        setTimeout(() => {
+                            router.push(`/order/${checkoutPaymentQr.orderId}?gateway=upi-direct`);
+                        }, 2500);
+                    }
+                } catch (err) {
+                    console.error('Polling order status check failed:', err);
+                }
+            }, 3000);
+
+            // Timer countdown
+            timerInterval = setInterval(() => {
+                setQrTimeLeft((prev) => {
+                    if (prev <= 1) {
+                        setQrStatus('EXPIRED');
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+
+        return () => {
+            if (pollInterval) clearInterval(pollInterval);
+            if (timerInterval) clearInterval(timerInterval);
+        };
+    }, [checkoutPaymentQr, qrStatus, router]);
+
     const { user, loading: authLoading } = useAuth();
 
     useEffect(() => {
@@ -312,13 +369,7 @@ function CheckoutContent() {
             return;
         }
 
-        // Validate UPI Direct early
-        if (gateway === 'upi-direct') {
-            if (!utrNumber.trim() || utrNumber.trim().length < 10) {
-                setError('Please enter a valid UTR number (at least 10 digits).');
-                return;
-            }
-        }
+
 
         setSubmitting(true);
         setError(null);
@@ -344,28 +395,17 @@ function CheckoutContent() {
             };
 
             if (gateway === 'upi-direct') {
-                const { data: utrData } = await api.post('/wallet/utr/submit', {
-                    utr: utrNumber.trim(),
-                    amount: Math.round(planPriceInWalletCurrency),
-                });
-                setUtrResult(utrData);
-                
-                if (utrData.status === 'MATCHED') {
-                    // Wallet credited — now create order and pay from wallet
-                    try {
-                        const resOrder = await createOrder(payload);
-                        const res = await api.post('/wallet/pay', { orderId: resOrder.orderId });
-                        if (res.data?.success) {
-                            router.push(`/order/${res.data.orderId}?gateway=wallet`);
-                            return;
-                        }
-                    } catch (walletErr: any) {
-                        setError(walletErr?.response?.data?.message || 'UTR matched and wallet credited, but purchase failed. Please go to Wallet and try again.');
-                    }
-                }
-                // If PENDING, we still create the order so admin can fulfill it later when they approve UTR
-                if (utrData.status === 'PENDING') {
-                    await createOrder(payload);
+                const resOrder = await createOrder(payload);
+                if (resOrder.qrCodeId) {
+                    setCheckoutPaymentQr({
+                        qrCodeId: resOrder.qrCodeId,
+                        qrImageUrl: resOrder.qrImageUrl || '',
+                        paymentUrl: resOrder.paymentUrl || '',
+                        amount: resOrder.amount,
+                        orderId: resOrder.orderId,
+                    });
+                } else {
+                    setError('Failed to generate secure UPI payment QR. Please try again.');
                 }
                 setSubmitting(false);
                 return;
@@ -445,6 +485,195 @@ function CheckoutContent() {
                     <p style={{ color: '#666', marginTop: 8, marginBottom: 24 }}>The plan you&apos;re looking for doesn&apos;t exist or is unavailable.</p>
                     <Link href="/" style={{ background: '#10b981', color: '#fff', padding: '12px 24px', borderRadius: 8, textDecoration: 'none', fontWeight: 600 }}>Back to Home</Link>
                 </div>
+            </div>
+        );
+    }
+
+    if (checkoutPaymentQr) {
+        return (
+            <div style={{
+                minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: '#f8fafc', padding: 20, fontFamily: 'Outfit, var(--font-poppins), sans-serif'
+            }}>
+                <style>{`
+                    @keyframes pulse {
+                        0%, 100% { opacity: 1; transform: scale(1); }
+                        50% { opacity: .6; transform: scale(1.05); }
+                    }
+                    @keyframes success-scale {
+                        0% { transform: scale(0.6); opacity: 0; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                    @keyframes spin {
+                        to { transform: rotate(360deg); }
+                    }
+                `}</style>
+
+                {qrStatus === 'GENERATED' && (
+                    <div style={{
+                        background: '#fff', border: '1px solid #e2e8f0', borderRadius: 24,
+                        padding: 32, maxWidth: 450, width: '100%', boxShadow: '0 15px 35px rgba(0,0,0,0.05)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginBottom: 20 }}>
+                            <span style={{ fontSize: '0.75rem', background: '#f1eeff', color: '#6c5ce7', padding: '6px 12px', borderRadius: 20, fontWeight: 800, textTransform: 'uppercase' }}>
+                                Direct UPI Payment
+                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.85rem', fontWeight: 700, color: '#ef4444' }}>
+                                <Clock size={14} /> Expires in: {Math.floor(qrTimeLeft / 60)}:{(qrTimeLeft % 60).toString().padStart(2, '0')}
+                            </div>
+                        </div>
+
+                        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                            <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>Amount to Pay</div>
+                            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#1e293b', marginTop: 4 }}>₹{checkoutPaymentQr.amount}</div>
+                            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: 4 }}>Order #{checkoutPaymentQr.orderId}</div>
+                        </div>
+
+                        {isMobileDevice ? (
+                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                                <a
+                                    href={checkoutPaymentQr.paymentUrl}
+                                    style={{
+                                        width: '100%', padding: '16px', background: 'linear-gradient(135deg, #10b981, #059669)',
+                                        borderRadius: 16, color: 'white', fontSize: '1.05rem', textDecoration: 'none',
+                                        fontWeight: 800, textAlign: 'center', display: 'flex', alignItems: 'center',
+                                        justifyContent: 'center', gap: 8, boxShadow: '0 6px 16px rgba(16, 185, 129, 0.25)',
+                                        fontFamily: 'Outfit, sans-serif'
+                                    }}
+                                >
+                                    📱 Tap to Pay on Mobile
+                                </a>
+                                
+                                <button
+                                    onClick={() => setShowMobileScanner(!showMobileScanner)}
+                                    style={{
+                                        background: 'none', border: 'none', color: '#6c5ce7', fontWeight: 700,
+                                        fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline'
+                                    }}
+                                >
+                                    {showMobileScanner ? 'Hide QR Code' : 'Show QR Code to Scan'}
+                                </button>
+
+                                {showMobileScanner && (
+                                    <div style={{
+                                        padding: 16, background: '#f8fafc', borderRadius: 20,
+                                        border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
+                                        marginTop: 10, width: 220, height: 220, boxSizing: 'border-box'
+                                    }}>
+                                        <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: '100%' }}>
+                                <div style={{
+                                    padding: 16, background: '#f8fafc', borderRadius: 20,
+                                    border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
+                                    width: 220, height: 220, boxSizing: 'border-box'
+                                }}>
+                                    <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+                                </div>
+                                <p style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', margin: 0, padding: '0 20px', lineHeight: 1.5 }}>
+                                    Scan this secure dynamic QR using any UPI app (GPay, PhonePe, Paytm, BHIM) to complete your order.
+                                </p>
+                            </div>
+                        )}
+
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: 10, marginTop: 28,
+                            background: '#f8fafc', padding: '10px 18px', borderRadius: 30,
+                            border: '1px solid #f1f5f9',
+                        }}>
+                            <span style={{
+                                width: 8, height: 8, borderRadius: '50%', background: '#10b981',
+                                animation: 'pulse 1.5s infinite', display: 'inline-block'
+                            }} />
+                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#475569' }}>
+                                Waiting for transaction verification...
+                            </span>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                setCheckoutPaymentQr(null);
+                                setQrStatus('GENERATED');
+                            }}
+                            style={{
+                                background: 'none', border: 'none', color: '#94a3b8',
+                                fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                                marginTop: 24, transition: 'color 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.color = '#64748b'}
+                            onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}
+                        >
+                            Cancel Payment
+                        </button>
+                    </div>
+                )}
+
+                {qrStatus === 'SUCCESS' && (
+                    <div style={{
+                        background: '#fff', border: '1px solid #bbf7d0', borderRadius: 24,
+                        padding: 40, display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        justifyContent: 'center', boxShadow: '0 10px 25px rgba(16, 185, 129, 0.05)',
+                        animation: 'success-scale 0.4s ease-out', textAlign: 'center', maxWidth: 450, width: '100%', boxSizing: 'border-box'
+                    }}>
+                        <div style={{
+                            width: 64, height: 64, borderRadius: '50%', background: '#f0fdf4',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#10b981', marginBottom: 18, border: '2px solid #bbf7d0',
+                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.1)'
+                        }}>
+                            <CheckCircle2 size={36} />
+                        </div>
+                        <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#166534', margin: 0 }}>
+                            Order Paid Successfully!
+                        </h3>
+                        <p style={{ fontSize: '0.95rem', color: '#15803d', marginTop: 8, lineHeight: 1.5 }}>
+                            We have received your payment of ₹{checkoutPaymentQr.amount}. Redirecting to your order confirmation details...
+                        </p>
+                        <div style={{ width: 24, height: 24, border: '3px solid #e2e8f0', borderTop: '3px solid #10b981', borderRadius: '50%', animation: 'spin 1s linear infinite', marginTop: 20 }}></div>
+                    </div>
+                )}
+
+                {qrStatus === 'EXPIRED' && (
+                    <div style={{
+                        background: '#fff', border: '1px solid #fecaca', borderRadius: 24,
+                        padding: 40, display: 'flex', flexDirection: 'column', alignItems: 'center',
+                        justifyContent: 'center', boxShadow: '0 10px 25px rgba(239, 68, 68, 0.05)',
+                        textAlign: 'center', maxWidth: 450, width: '100%', boxSizing: 'border-box'
+                    }}>
+                        <div style={{
+                            width: 64, height: 64, borderRadius: '50%', background: '#fef2f2',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#ef4444', marginBottom: 18, border: '2px solid #fecaca'
+                        }}>
+                            <AlertCircle size={36} />
+                        </div>
+                        <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#991b1b', margin: 0 }}>
+                            Payment Session Expired
+                        </h3>
+                        <p style={{ fontSize: '0.95rem', color: '#b91c1c', marginTop: 8, lineHeight: 1.5 }}>
+                            The UPI QR code has expired. No charges were made to your account.
+                        </p>
+
+                        <button
+                            onClick={() => {
+                                setCheckoutPaymentQr(null);
+                                setQrStatus('GENERATED');
+                            }}
+                            style={{
+                                marginTop: 24, padding: '12px 28px', background: '#ef4444',
+                                border: 'none', borderRadius: 12, color: 'white', fontWeight: 800,
+                                cursor: 'pointer', fontFamily: 'Outfit, sans-serif', fontSize: '0.9rem',
+                                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.2)', transition: 'all 0.2s'
+                            }}
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }
@@ -778,32 +1007,13 @@ function CheckoutContent() {
                                 {/* UPI Direct Inline Flow */}
                                 {gateway === 'upi-direct' && (
                                     <div style={{ padding: 20, background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: 16 }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
-                                            {/* QR Code */}
-                                            <div style={{ width: '100%', maxWidth: 300, background: '#fff', borderRadius: 16, border: '2px dashed #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: 12 }}>
-                                                {upiDetails?.qrImageUrl ? (
-                                                    <img src={upiDetails.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', objectFit: 'contain', display: 'block' }} />
-                                                ) : (
-                                                    <div style={{ padding: 40 }}><Smartphone size={40} style={{ color: '#d8b4fe' }} /></div>
-                                                )}
-                                            </div>
-                                            <div style={{ width: '100%', marginTop: 16, fontSize: '0.85rem', color: '#4b5563', lineHeight: 1.6, background: '#fff', padding: 16, borderRadius: 12, border: '1px solid #e9d5ff' }}>
-                                                <div style={{ fontWeight: 700, color: '#6c5ce7', marginBottom: 8, fontSize: '0.9rem' }}>Payment Instructions:</div>
-                                                1. Scan the QR code above using any UPI app (GPay, PhonePe, Paytm)<br/>
-                                                2. Pay exactly <strong>₹{Math.round(planPriceInWalletCurrency)}</strong> {plan?.currency !== 'INR' && <span style={{ fontSize: '0.75rem', fontWeight: 'normal' }}>(converted from {plan?.currency === 'USD' ? '$' : plan?.currency}{finalAmount})</span>}<br/>
-                                                3. Copy the 12-digit UTR from your payment app<br/>
-                                                4. Submit below — your wallet will be credited instantly
-                                            </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#6c5ce7', fontWeight: 700, fontSize: '0.9rem', marginBottom: 6 }}>
+                                            <Zap size={18} /> Instant Dynamic UPI Checkout
                                         </div>
-                                        <div style={{ display: 'flex', gap: 10 }}>
-                                            <input type="text" placeholder="Enter 12-digit UTR number" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} maxLength={20}
-                                                style={{ flex: 1, padding: '12px 14px', borderRadius: 10, border: '1px solid #e9d5ff', fontSize: '0.9rem', fontWeight: 600, fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box' }} />
+                                        <div style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5 }}>
+                                            A secure, single-use UPI QR code will be generated for exactly <strong>₹{Math.round(planPriceInWalletCurrency)}</strong>.
+                                            Scan the QR on desktop or tap to pay directly on mobile. Payments are automatically verified!
                                         </div>
-                                        {utrResult && (
-                                            <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 10, background: utrResult.status === 'MATCHED' ? '#f0fdf4' : utrResult.status === 'PENDING' ? '#fffbeb' : '#fef2f2', border: `1px solid ${utrResult.status === 'MATCHED' ? '#bbf7d0' : utrResult.status === 'PENDING' ? '#fde68a' : '#fecaca'}`, fontSize: '0.85rem', fontWeight: 600, color: utrResult.status === 'MATCHED' ? '#166534' : utrResult.status === 'PENDING' ? '#92400e' : '#991b1b' }}>
-                                                {utrResult.message}
-                                            </div>
-                                        )}
                                     </div>
                                 )}
                                 
@@ -1249,11 +1459,10 @@ function CheckoutContent() {
                         </div>
                     )}
 
-                    {gateway === 'upi-direct' && upiDetails && (
-                        <div className="mcg-utr-block">
-                            <img src={upiDetails.qrImageUrl} alt="QR" style={{ width: '100%', borderRadius: 12 }} />
-                            <div style={{ fontSize: 12, textAlign: 'center', fontWeight: 600 }}>UPI ID: {upiDetails.upiId}</div>
-                            <input type="text" placeholder="Enter 12-digit UTR Number" value={utrNumber} onChange={e => setUtrNumber(e.target.value)} className="mcg-utr-input" />
+                    {gateway === 'upi-direct' && (
+                        <div className="mcg-utr-block" style={{ padding: 16, background: 'rgba(255,255,255,0.06)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: 13, lineHeight: 1.5 }}>
+                            ⚡ <strong>Dynamic UPI Checkout</strong><br/>
+                            We will generate a secure, single-use QR/Tap-to-Pay link for exactly <strong>₹{Math.round(planPriceInWalletCurrency)}</strong>. Fulfillments are 100% instant!
                         </div>
                     )}
 
