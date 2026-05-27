@@ -27,12 +27,12 @@ export default function WalletOnboardingPopup({ onClose }: WalletOnboardingPopup
         {
             icon: <QrCode size={32} />,
             title: 'Pay via UPI — Instant!',
-            desc: 'Scan our QR code or pay to our UPI ID using GPay, PhonePe, Paytm, or any UPI app. Then submit your 12-digit UTR number.',
+            desc: 'Generate a secure, single-use dynamic QR code or tap to pay directly from GPay, PhonePe, Paytm, or any UPI app.',
         },
         {
             icon: <Sparkles size={32} />,
             title: 'Auto-Credit in Seconds',
-            desc: 'Once you submit the UTR, your wallet is credited instantly. If the payment takes a moment to verify, it\u2019ll be credited within 30 minutes.',
+            desc: 'Once paid, the payment is automatically verified in real-time, and your balance is credited instantly to your wallet!',
         },
     ];
 
