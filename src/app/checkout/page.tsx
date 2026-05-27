@@ -25,6 +25,20 @@ export default function CheckoutPage() {
     );
 }
 
+const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+        if (typeof window !== 'undefined' && (window as any).Razorpay) {
+            resolve(true);
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
+};
+
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -395,17 +409,73 @@ function CheckoutContent() {
             };
 
             if (gateway === 'upi-direct') {
-                const resOrder = await createOrder(payload);
-                if (resOrder.qrCodeId) {
-                    setCheckoutPaymentQr({
-                        qrCodeId: resOrder.qrCodeId,
-                        qrImageUrl: resOrder.qrImageUrl || '',
-                        paymentUrl: resOrder.paymentUrl || '',
-                        amount: resOrder.amount,
-                        orderId: resOrder.orderId,
-                    });
+                const resOrder = await createOrder({
+                    ...payload,
+                    gateway: 'razorpay' // creates a standard Razorpay Order on the backend
+                });
+
+                if (resOrder.razorpayOrderId) {
+                    const loaded = await loadRazorpayScript();
+                    if (!loaded) {
+                        setError('Failed to load secure UPI checkout. Please check your internet connection.');
+                        setSubmitting(false);
+                        return;
+                    }
+
+                    const options = {
+                        key: resOrder.keyId,
+                        amount: Math.round(resOrder.amount * 100),
+                        currency: resOrder.currency || 'INR',
+                        name: 'StreamKart',
+                        description: `Payment for ${service?.name} - ${plan?.name}`,
+                        order_id: resOrder.razorpayOrderId,
+                        method: {
+                            upi: true,
+                            card: false,
+                            netbanking: false,
+                            wallet: false,
+                            emi: false,
+                            paylater: false
+                        },
+                        handler: async function (response: any) {
+                            setSubmitting(true);
+                            try {
+                                const verifyRes = await api.post('/orders/verify', {
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                });
+                                if (verifyRes.data && verifyRes.data.success) {
+                                    router.push(`/order/${verifyRes.data.orderId}?gateway=upi-direct`);
+                                } else {
+                                    setError('Verification failed. Please contact support.');
+                                }
+                            } catch (verifyErr: any) {
+                                console.error('Verification error:', verifyErr);
+                                setError(verifyErr?.response?.data?.message || 'Payment verification failed.');
+                            } finally {
+                                setSubmitting(false);
+                            }
+                        },
+                        prefill: {
+                            name: form.customerName,
+                            email: form.customerEmail,
+                            contact: form.customerPhone || ''
+                        },
+                        theme: {
+                            color: '#6c5ce7'
+                        },
+                        modal: {
+                            ondismiss: function () {
+                                setSubmitting(false);
+                            }
+                        }
+                    };
+
+                    const rzp = new (window as any).Razorpay(options);
+                    rzp.open();
                 } else {
-                    setError('Failed to generate secure UPI payment QR. Please try again.');
+                    setError('Failed to initialize secure UPI checkout. Please try again.');
                 }
                 setSubmitting(false);
                 return;
