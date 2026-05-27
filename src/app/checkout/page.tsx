@@ -548,55 +548,63 @@ function CheckoutContent() {
                             <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: 4 }}>Order #{checkoutPaymentQr.orderId}</div>
                         </div>
 
-                        {isMobileDevice ? (
-                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                                <a
-                                    href={checkoutPaymentQr.paymentUrl}
-                                    style={{
-                                        width: '100%', padding: '16px', background: 'linear-gradient(135deg, #10b981, #059669)',
-                                        borderRadius: 16, color: 'white', fontSize: '1.05rem', textDecoration: 'none',
-                                        fontWeight: 800, textAlign: 'center', display: 'flex', alignItems: 'center',
-                                        justifyContent: 'center', gap: 8, boxShadow: '0 6px 16px rgba(16, 185, 129, 0.25)',
-                                        fontFamily: 'Outfit, sans-serif'
-                                    }}
-                                >
-                                    📱 Tap to Pay on Mobile
-                                </a>
-                                
-                                <button
-                                    onClick={() => setShowMobileScanner(!showMobileScanner)}
-                                    style={{
-                                        background: 'none', border: 'none', color: '#6c5ce7', fontWeight: 700,
-                                        fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline'
-                                    }}
-                                >
-                                    {showMobileScanner ? 'Hide QR Code' : 'Show QR Code to Scan'}
-                                </button>
-
-                                {showMobileScanner && (
-                                    <div style={{
-                                        background: '#f8fafc', borderRadius: 20,
-                                        border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                        marginTop: 10, width: '100%', maxWidth: 280, padding: 8, boxSizing: 'border-box'
-                                    }}>
-                                        <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', borderRadius: 10, objectFit: 'contain' }} />
-                                    </div>
-                                )}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%' }}>
+                            {/* Dynamic QR Code Card Frame */}
+                            <div style={{
+                                borderRadius: 24,
+                                border: '2px dashed #e2e8f0', 
+                                display: 'flex', 
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%', 
+                                maxWidth: 280, 
+                                padding: 12, 
+                                boxSizing: 'border-box',
+                                boxShadow: '0 12px 28px rgba(0, 0, 0, 0.04)',
+                                background: 'linear-gradient(135deg, #fff 0%, #f8fafc 100%)',
+                            }}>
+                                <img 
+                                    src={checkoutPaymentQr.qrImageUrl} 
+                                    alt="UPI Dynamic QR" 
+                                    style={{ 
+                                        width: '100%', 
+                                        height: 'auto', 
+                                        borderRadius: 16, 
+                                        objectFit: 'contain',
+                                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
+                                    }} 
+                                />
                             </div>
-                        ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: '100%' }}>
-                                <div style={{
-                                    background: '#f8fafc', borderRadius: 20,
-                                    border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                    width: '100%', maxWidth: 280, padding: 8, boxSizing: 'border-box'
+
+                            {/* Premium Instructions Card */}
+                            <div style={{ 
+                                background: '#f1eeff', 
+                                padding: '16px 20px', 
+                                borderRadius: 16, 
+                                border: '1px solid #e5e0ff',
+                                width: '100%',
+                                boxSizing: 'border-box'
+                            }}>
+                                <p style={{ 
+                                    fontSize: '0.82rem', 
+                                    color: '#5b4dc7', 
+                                    textAlign: 'center', 
+                                    margin: 0, 
+                                    lineHeight: 1.6,
+                                    fontWeight: 600,
                                 }}>
-                                    <img src={checkoutPaymentQr.qrImageUrl} alt="UPI QR" style={{ width: '100%', height: 'auto', borderRadius: 10, objectFit: 'contain' }} />
-                                </div>
-                                <p style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', margin: 0, padding: '0 20px', lineHeight: 1.5 }}>
-                                    Scan this secure dynamic QR using any UPI app (GPay, PhonePe, Paytm, BHIM) to complete your order.
+                                    {isMobileDevice ? (
+                                        <span>
+                                            📸 <strong>How to Pay on Mobile:</strong> Take a screenshot of this QR Code, open your favorite UPI app (Google Pay, PhonePe, Paytm), select <strong>&quot;Scan from Gallery / Upload Photo&quot;</strong>, and select the screenshot. Once paid, return to this screen to receive your order!
+                                        </span>
+                                    ) : (
+                                        <span>
+                                            💻 <strong>How to Pay on Desktop:</strong> Open any UPI app (Google Pay, PhonePe, Paytm, BHIM) on your mobile device and scan this secure dynamic QR code to complete your payment instantly.
+                                        </span>
+                                    )}
                                 </p>
                             </div>
-                        )}
+                        </div>
 
                         <div style={{
                             display: 'flex', alignItems: 'center', gap: 10, marginTop: 28,

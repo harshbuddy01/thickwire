@@ -338,61 +338,67 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
                             <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#1e293b', marginTop: 4 }}>₹{qrAmount}</div>
                         </div>
 
-                        {/* Mobile view Intent CTA */}
-                        {isMobile ? (
-                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                                <a
-                                    href={paymentUrl || ''}
-                                    style={{
-                                        width: '100%', padding: '16px', background: 'linear-gradient(135deg, #10b981, #059669)',
-                                        borderRadius: 16, color: 'white', fontSize: '1.05rem', textDecoration: 'none',
-                                        fontWeight: 800, textAlign: 'center', display: 'flex', alignItems: 'center',
-                                        justifyContent: 'center', gap: 8, boxShadow: '0 6px 16px rgba(16, 185, 129, 0.25)',
-                                        fontFamily: 'Outfit, sans-serif'
-                                    }}
-                                >
-                                    📱 Tap to Pay on Mobile
-                                </a>
-                                
-                                <button
-                                    onClick={() => setShowMobileQr(!showMobileQr)}
-                                    style={{
-                                        background: 'none', border: 'none', color: '#6c5ce7', fontWeight: 700,
-                                        fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline'
-                                    }}
-                                >
-                                    {showMobileQr ? 'Hide QR Code' : 'Show QR Code to Scan'}
-                                </button>
-
-                                {showMobileQr && qrImageUrl && (
-                                    <div style={{
-                                        padding: 16, background: '#f8fafc', borderRadius: 20,
-                                        border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                        marginTop: 10, width: 220, height: 220, boxSizing: 'border-box'
-                                    }}>
-                                        <img src={qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
-                                    </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, width: '100%' }}>
+                            {/* Dynamic QR Code Card Frame */}
+                            <div style={{
+                                borderRadius: 24,
+                                border: '2px dashed #e2e8f0', 
+                                display: 'flex', 
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%', 
+                                maxWidth: 240, 
+                                padding: 12, 
+                                boxSizing: 'border-box',
+                                boxShadow: '0 12px 28px rgba(0, 0, 0, 0.04)',
+                                background: 'linear-gradient(135deg, #fff 0%, #f8fafc 100%)',
+                            }}>
+                                {qrImageUrl ? (
+                                    <img 
+                                        src={qrImageUrl} 
+                                        alt="UPI Dynamic QR" 
+                                        style={{ 
+                                            width: '100%', 
+                                            height: 'auto', 
+                                            borderRadius: 16, 
+                                            objectFit: 'contain',
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)'
+                                        }} 
+                                    />
+                                ) : (
+                                    <QrCode size={60} style={{ color: '#cbd5e1' }} />
                                 )}
                             </div>
-                        ) : (
-                            /* Desktop QR View */
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, width: '100%' }}>
-                                <div style={{
-                                    padding: 16, background: '#f8fafc', borderRadius: 20,
-                                    border: '2px dashed #e2e8f0', display: 'flex', justifyContent: 'center',
-                                    width: 220, height: 220, boxSizing: 'border-box'
+
+                            {/* Premium Instructions Card */}
+                            <div style={{ 
+                                background: '#f1eeff', 
+                                padding: '16px 20px', 
+                                borderRadius: 16, 
+                                border: '1px solid #e5e0ff',
+                                width: '100%',
+                                boxSizing: 'border-box'
+                            }}>
+                                <p style={{ 
+                                    fontSize: '0.82rem', 
+                                    color: '#5b4dc7', 
+                                    textAlign: 'center', 
+                                    margin: 0, 
+                                    lineHeight: 1.6,
+                                    fontWeight: 600,
                                 }}>
-                                    {qrImageUrl ? (
-                                        <img src={qrImageUrl} alt="UPI QR" style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+                                    {isMobile ? (
+                                        <span>
+                                            📸 <strong>How to Pay on Mobile:</strong> Take a screenshot of this QR Code, open your favorite UPI app (Google Pay, PhonePe, Paytm), select <strong>&quot;Scan from Gallery / Upload Photo&quot;</strong>, and select the screenshot. Once paid, return to this screen to receive your balance!
+                                        </span>
                                     ) : (
-                                        <QrCode size={60} style={{ color: '#cbd5e1' }} />
+                                        <span>
+                                            💻 <strong>How to Pay on Desktop:</strong> Open any UPI app (Google Pay, PhonePe, Paytm, BHIM) on your mobile device and scan this secure dynamic QR code to complete your payment instantly.
+                                        </span>
                                     )}
-                                </div>
-                                <p style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', margin: 0, padding: '0 20px', lineHeight: 1.5 }}>
-                                    Scan this single-use QR using any UPI app (GPay, PhonePe, Paytm, BHIM) to complete your payment.
                                 </p>
                             </div>
-                        )}
+                        </div>
 
                         {/* Polling Pulsing dot */}
                         <div style={{
