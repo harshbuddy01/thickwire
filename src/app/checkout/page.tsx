@@ -1110,7 +1110,7 @@ function CheckoutContent() {
                             >
                                 {submitting ? 'Processing securely...' : (
                                     <>
-                                        <Lock size={20} /> {gateway === 'upi-direct' ? 'Submit UTR & Pay' : `Pay Securely ${plan.currency === 'USD' ? '$' : '₹'}${finalAmount.toLocaleString()}`}
+                                        <Lock size={20} /> {gateway === 'upi-direct' ? 'Generate UPI QR & Pay' : gateway === 'wallet' ? 'Pay with StreamKart Wallet' : gateway === 'nowpayments' ? 'Pay with Crypto' : `Pay Securely ${plan.currency === 'USD' ? '$' : '₹'}${finalAmount.toLocaleString()}`}
                                     </>
                                 )}
                             </button>
