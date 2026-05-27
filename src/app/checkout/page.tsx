@@ -411,71 +411,19 @@ function CheckoutContent() {
             if (gateway === 'upi-direct') {
                 const resOrder = await createOrder({
                     ...payload,
-                    gateway: 'razorpay' // creates a standard Razorpay Order on the backend
+                    gateway: 'upi-direct'
                 });
 
-                if (resOrder.razorpayOrderId) {
-                    const loaded = await loadRazorpayScript();
-                    if (!loaded) {
-                        setError('Failed to load secure UPI checkout. Please check your internet connection.');
-                        setSubmitting(false);
-                        return;
-                    }
-
-                    const options = {
-                        key: resOrder.keyId,
-                        amount: Math.round(resOrder.amount * 100),
-                        currency: resOrder.currency || 'INR',
-                        name: 'StreamKart',
-                        description: `Payment for ${service?.name} - ${plan?.name}`,
-                        order_id: resOrder.razorpayOrderId,
-                        method: {
-                            upi: true,
-                            card: false,
-                            netbanking: false,
-                            wallet: false,
-                            emi: false,
-                            paylater: false
-                        },
-                        handler: async function (response: any) {
-                            setSubmitting(true);
-                            try {
-                                const verifyRes = await api.post('/orders/verify', {
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature
-                                });
-                                if (verifyRes.data && verifyRes.data.success) {
-                                    router.push(`/order/${verifyRes.data.orderId}?gateway=upi-direct`);
-                                } else {
-                                    setError('Verification failed. Please contact support.');
-                                }
-                            } catch (verifyErr: any) {
-                                console.error('Verification error:', verifyErr);
-                                setError(verifyErr?.response?.data?.message || 'Payment verification failed.');
-                            } finally {
-                                setSubmitting(false);
-                            }
-                        },
-                        prefill: {
-                            name: form.customerName,
-                            email: form.customerEmail,
-                            contact: form.customerPhone || ''
-                        },
-                        theme: {
-                            color: '#6c5ce7'
-                        },
-                        modal: {
-                            ondismiss: function () {
-                                setSubmitting(false);
-                            }
-                        }
-                    };
-
-                    const rzp = new (window as any).Razorpay(options);
-                    rzp.open();
+                if (resOrder.qrCodeId) {
+                    setCheckoutPaymentQr({
+                        qrCodeId: resOrder.qrCodeId,
+                        qrImageUrl: resOrder.qrImageUrl || '',
+                        paymentUrl: resOrder.paymentUrl || '',
+                        amount: resOrder.amount,
+                        orderId: resOrder.orderId,
+                    });
                 } else {
-                    setError('Failed to initialize secure UPI checkout. Please try again.');
+                    setError('Failed to generate secure UPI payment QR. Please try again.');
                 }
                 setSubmitting(false);
                 return;

@@ -108,62 +108,21 @@ export default function WalletTopupSection({ walletData, onSuccess }: WalletTopu
         }
         setStatus('LOADING');
         try {
-            const loaded = await loadRazorpayScript();
-            if (!loaded) {
-                alert('Failed to load secure UPI checkout. Please check your internet connection.');
-                setStatus('IDLE');
-                return;
-            }
-
-            const { data } = await api.post('/wallet/topup', {
+            const { data } = await api.post('/wallet/utr/qr-dynamic', {
                 amount: Number(amount),
-                currency: walletData?.currency || 'INR',
             });
-
-            const options = {
-                key: data.keyId,
-                amount: Math.round(data.amount * 100),
-                currency: data.currency,
-                name: 'StreamKart Wallet',
-                description: 'Wallet Top-Up',
-                order_id: data.razorpayOrderId,
-                method: {
-                    upi: true,
-                    card: false,
-                    netbanking: false,
-                    wallet: false,
-                    emi: false,
-                    paylater: false
-                },
-                handler: async function (response: any) {
-                    setStatus('LOADING');
-                    try {
-                        await api.post('/wallet/topup/confirm', {
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature,
-                        });
-                        alert('Wallet topped up successfully!');
-                        setStatus('SUCCESS');
-                        setQrAmount(Number(amount));
-                        onSuccess();
-                    } catch (err: any) {
-                        alert(err.response?.data?.message || 'Failed to confirm top-up. Please contact support.');
-                        setStatus('IDLE');
-                    }
-                },
-                theme: { color: '#6c5ce7' },
-                modal: {
-                    ondismiss: function () {
-                        setStatus('IDLE');
-                    }
-                }
-            };
-
-            const rzp = new (window as any).Razorpay(options);
-            rzp.open();
+            if (data.success) {
+                setQrCodeId(data.qrCodeId);
+                setQrImageUrl(data.qrImageUrl);
+                setPaymentUrl(data.paymentUrl);
+                setQrAmount(Number(amount));
+                setTimeLeft(600); // 10 minutes
+                setStatus('GENERATED');
+            } else {
+                throw new Error('Failed to generate dynamic QR');
+            }
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to initiate wallet top-up. Please try again.');
+            alert(err.response?.data?.message || 'Failed to generate dynamic QR. Please try again.');
             setStatus('IDLE');
         }
     };
