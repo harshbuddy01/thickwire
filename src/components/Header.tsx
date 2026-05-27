@@ -30,6 +30,7 @@ export default function Header() {
     const [suggestions, setSuggestions] = useState<Service[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [abandonedCart, setAbandonedCart] = useState<any>(null);
+    const [cartBannerDismissed, setCartBannerDismissed] = useState(false);
 
     useEffect(() => {
         getServices().then(setServices).catch(console.error);
@@ -122,14 +123,115 @@ export default function Header() {
 
     return (
         <>
-            {/* ─── Abandoned Cart Banner ───────────────────────────────── */}
-            {abandonedCart && !pathname.startsWith('/order/') && (
-                <div style={{ background: '#b87a1d', color: '#fff', padding: '12px 16px', textAlign: 'center', fontSize: '0.95rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', zIndex: 1000, position: 'relative' }}>
-                    <ShoppingCart size={16} />
-                    <span>You left <strong>{abandonedCart.serviceName} — {abandonedCart.planName}</strong> in your cart!</span>
-                    <Link href={`/order/${abandonedCart.id}`} style={{ background: '#fff', color: '#b87a1d', padding: '4px 12px', borderRadius: '20px', textDecoration: 'none', marginLeft: '12px', fontSize: '0.85rem' }}>
-                        Complete Purchase
-                    </Link>
+            {/* ─── Abandoned Cart Floating Toast (Top Right) ──────────────────────── */}
+            {abandonedCart && !cartBannerDismissed && !pathname.startsWith('/order/') && !pathname.startsWith('/checkout') && (
+                <div style={{
+                    position: 'fixed',
+                    top: '24px',
+                    right: '24px',
+                    zIndex: 2000,
+                    maxWidth: '380px',
+                    width: 'calc(100% - 48px)',
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    backdropFilter: 'blur(16px)',
+                    border: '1px solid rgba(184, 122, 29, 0.2)',
+                    borderRadius: '24px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(184, 122, 29, 0.05)',
+                    padding: '20px 24px',
+                    fontFamily: "'Outfit', sans-serif",
+                    animation: 'slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxSizing: 'border-box',
+                }}>
+                    <style>{`
+                        @keyframes slideInRight {
+                            from { transform: translateX(120%); opacity: 0; }
+                            to { transform: translateX(0); opacity: 1; }
+                        }
+                    `}</style>
+                    <button 
+                        onClick={() => setCartBannerDismissed(true)}
+                        style={{
+                            position: 'absolute',
+                            top: '16px',
+                            right: '16px',
+                            background: '#f1f5f9',
+                            border: 'none',
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#64748b',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
+                        onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}
+                    >
+                        <X size={14} />
+                    </button>
+
+                    <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                        <div style={{
+                            background: '#fff9f0',
+                            color: '#b87a1d',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            border: '1px solid rgba(184, 122, 29, 0.1)',
+                        }}>
+                            <ShoppingCart size={20} />
+                        </div>
+                        <div style={{ flex: 1, paddingRight: '20px' }}>
+                            <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 800, color: '#1e293b' }}>
+                                Pending Order Found
+                            </h4>
+                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', lineHeight: 1.4 }}>
+                                You have an active pending checkout for <strong>{abandonedCart.serviceName} — {abandonedCart.planName}</strong>.
+                            </p>
+                            <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center' }}>
+                                <Link 
+                                    href={`/order/${abandonedCart.id}`}
+                                    onClick={() => setCartBannerDismissed(true)}
+                                    style={{
+                                        background: 'linear-gradient(135deg, #b87a1d, #d4af37)',
+                                        color: '#fff',
+                                        padding: '8px 16px',
+                                        borderRadius: '12px',
+                                        textDecoration: 'none',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 700,
+                                        display: 'inline-block',
+                                        boxShadow: '0 4px 10px rgba(184, 122, 29, 0.2)',
+                                        transition: 'transform 0.2s',
+                                    }}
+                                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
+                                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                                >
+                                    Complete Payment →
+                                </Link>
+                                <button 
+                                    onClick={() => setCartBannerDismissed(true)}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        color: '#94a3b8',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        textDecoration: 'underline',
+                                    }}
+                                >
+                                    Dismiss
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
 
