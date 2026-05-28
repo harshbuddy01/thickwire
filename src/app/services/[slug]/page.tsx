@@ -3,6 +3,7 @@ import type { Service } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import PlanCard from './PlanCard';
+import WishlistButton from './WishlistButton';
 import Link from 'next/link';
 import { ChevronRight, ShieldCheck, Navigation, Headphones, HelpCircle } from 'lucide-react';
 import { serviceSlugParamSchema } from '@/lib/validators';
@@ -74,6 +75,9 @@ export default async function ServicePage({
                     <p style={{ fontSize: '1.2rem', opacity: 0.9, maxWidth: '600px', margin: '0 auto', fontWeight: 400, lineHeight: 1.6 }}>
                         {service.description || `Upgrade your experience with premium ${service.name} access. Choose a plan below and get instant activation.`}
                     </p>
+                    <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+                        <WishlistButton service={service} />
+                    </div>
                 </div>
             </div>
 

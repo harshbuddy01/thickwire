@@ -1,15 +1,21 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useAuth } from '@/lib/AuthContext';
 import api from '@/lib/api';
-import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet, Image as ImageIcon, X } from 'lucide-react';
+import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet, Image as ImageIcon, X, Heart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import WalletTopupSection from '@/components/WalletTopupSection';
 import { playNotificationSound } from '@/lib/notificationSound';
 import { sanitizer } from '@/lib/sanitizer';
+
+const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
+function logoSrc(logo: string) {
+    if (!logo) return '';
+    return logo.startsWith('/') || logo.startsWith('http') ? logo : `${MINIO}/${logo}`;
+}
 
 const s: { [k: string]: React.CSSProperties } = {
     page: { minHeight: '80vh', padding: '40px 20px 60px' },
@@ -93,9 +99,23 @@ function getOrderBadge(order: any) {
 }
 
 export default function AccountPage() {
+    return (
+        <Suspense fallback={
+            <div style={s.spinner}>
+                <div style={{ width: 36, height: 36, border: '4px solid #eee', borderTop: '4px solid #6c5ce7', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+            </div>
+        }>
+            <AccountPageContent />
+        </Suspense>
+    );
+}
+
+function AccountPageContent() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'wallet' | 'tickets' | 'settings'>('overview');
+    const searchParams = useSearchParams();
+    const [activeTab, setActiveTab] = useState<'overview' | 'subscriptions' | 'orders' | 'wallet' | 'tickets' | 'settings' | 'wishlist'>('overview');
+    const [wishlistItems, setWishlistItems] = useState<any[]>([]);
 
     const [orders, setOrders] = useState<any[]>([]);
     const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -118,6 +138,50 @@ export default function AccountPage() {
     const [ratingSubmitting, setRatingSubmitting] = useState(false);
     const [mounted, setMounted] = useState(false);
     useEffect(() => { setMounted(true); }, []);
+
+    // Listen to tab query parameter transitions
+    useEffect(() => {
+        const tabParam = searchParams.get('tab');
+        if (tabParam && ['overview', 'wallet', 'subscriptions', 'orders', 'tickets', 'settings', 'wishlist'].includes(tabParam)) {
+            setActiveTab(tabParam as any);
+        }
+    }, [searchParams]);
+
+    // Handle tab switching and sync with browser URL
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId as any);
+        router.push(`/account?tab=${tabId}`);
+    };
+
+    // Load wishlist from localStorage on mount and activeTab updates
+    useEffect(() => {
+        if (mounted) {
+            const stored = localStorage.getItem('streamkart_wishlist');
+            if (stored) {
+                try {
+                    setWishlistItems(JSON.parse(stored));
+                } catch (e) {
+                    console.error('Failed to parse wishlist', e);
+                }
+            } else {
+                setWishlistItems([]);
+            }
+        }
+    }, [mounted, activeTab]);
+
+    const handleRemoveFromWishlist = (slug: string) => {
+        const stored = localStorage.getItem('streamkart_wishlist');
+        if (stored) {
+            try {
+                const list = JSON.parse(stored);
+                const updated = list.filter((item: any) => item.slug !== slug);
+                setWishlistItems(updated);
+                localStorage.setItem('streamkart_wishlist', JSON.stringify(updated));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    };
 
     // Refs for notification sounds
     const prevTicketMessageCountsRef = useRef<Record<string, number>>({});
@@ -292,6 +356,7 @@ export default function AccountPage() {
         { id: 'wallet', label: 'My Wallet', icon: <Wallet size={18} /> },
         { id: 'subscriptions', label: 'Subscriptions', icon: <Clock size={18} /> },
         { id: 'orders', label: 'Order History', icon: <ShieldCheck size={18} /> },
+        { id: 'wishlist', label: 'Wishlist', icon: <Heart size={18} /> },
         { id: 'tickets', label: 'Support Tickets', icon: <HelpCircle size={18} /> },
         { id: 'settings', label: 'Settings', icon: <Settings size={18} /> }
     ];
@@ -329,7 +394,7 @@ export default function AccountPage() {
                         {tabs.map(tab => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
+                                onClick={() => handleTabChange(tab.id)}
                                 className="tab-btn"
                                 style={{
                                     ...s.tabBtn,
@@ -362,7 +427,7 @@ export default function AccountPage() {
                             <div style={s.listCard}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23' }}>Recent Orders</h3>
-                                    <button onClick={() => setActiveTab('orders')} style={{ background: 'none', border: 'none', color: '#6c5ce7', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'Outfit, sans-serif' }}>View all</button>
+                                    <button onClick={() => handleTabChange('orders')} style={{ background: 'none', border: 'none', color: '#6c5ce7', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'Outfit, sans-serif' }}>View all</button>
                                 </div>
                                 {orders.length === 0 ? (
                                     <div style={s.emptyState}>No orders yet.</div>
@@ -526,6 +591,134 @@ export default function AccountPage() {
                                     </div>
                                 );
                             })}
+                        </div>
+                    )}
+
+                    {/* Wishlist */}
+                    {activeTab === 'wishlist' && (
+                        <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                            <h2 style={s.sectionTitle}>My Wishlist</h2>
+                            {wishlistItems.length === 0 ? (
+                                <div style={{ ...s.listCard, ...s.emptyState, padding: '60px 24px' }}>
+                                    <div style={{ width: '72px', height: '72px', background: '#fff1f2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#f43f5e' }}>
+                                        <Heart size={36} fill="#f43f5e" />
+                                    </div>
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>Your wishlist is empty</h3>
+                                    <p style={{ color: '#64748b', marginBottom: 24, fontSize: '0.9rem', maxWidth: '360px', margin: '0 auto 24px', lineHeight: 1.5 }}>
+                                        Browse our collection of official premium streaming subscriptions and add your favorites here!
+                                    </p>
+                                    <Link href="/streaming" style={{ display: 'inline-block', padding: '12px 28px', background: '#6c5ce7', color: 'white', borderRadius: '14px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(108, 92, 231, 0.25)', transition: 'all 0.2s' }}>
+                                        Explore Services
+                                    </Link>
+                                </div>
+                            ) : (
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+                                    {wishlistItems.map(item => (
+                                        <div key={item.slug} style={{
+                                            background: '#fff',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '24px',
+                                            padding: '24px 20px',
+                                            position: 'relative',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            boxShadow: '0 8px 30px rgba(0,0,0,0.02)',
+                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                        }} className="wishlist-item-card">
+                                            {/* Remove Button (Trash Icon) */}
+                                            <button 
+                                                onClick={() => handleRemoveFromWishlist(item.slug)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '16px',
+                                                    right: '16px',
+                                                    background: '#fef2f2',
+                                                    border: 'none',
+                                                    width: '32px',
+                                                    height: '32px',
+                                                    borderRadius: '50%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: '#ef4444',
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s',
+                                                    zIndex: 10
+                                                }}
+                                                title="Remove from wishlist"
+                                                onMouseEnter={e => {
+                                                    e.currentTarget.style.background = '#fee2e2';
+                                                    e.currentTarget.style.transform = 'scale(1.05)';
+                                                }}
+                                                onMouseLeave={e => {
+                                                    e.currentTarget.style.background = '#fef2f2';
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                            >
+                                                <Trash2 size={15} />
+                                            </button>
+
+                                            {/* Logo & Service Name */}
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                                                <div style={{ width: '56px', height: '56px', position: 'relative', borderRadius: '14px', overflow: 'hidden', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                    {item.logoUrl ? (
+                                                        <Image
+                                                            src={logoSrc(item.logoUrl)}
+                                                            alt={item.name}
+                                                            fill
+                                                            style={{ objectFit: 'contain', padding: '6px' }}
+                                                        />
+                                                    ) : (
+                                                        <Heart size={20} style={{ color: '#cbd5e1' }} />
+                                                    )}
+                                                </div>
+                                                <div style={{ minWidth: 0, flex: 1 }}>
+                                                    <h4 style={{ margin: '0 0 2px 0', fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                        {item.name}
+                                                    </h4>
+                                                    <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Streaming Premium</span>
+                                                </div>
+                                            </div>
+
+                                            {/* Description */}
+                                            <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5, height: '57px', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                                {item.description || `Instant access to premium ${item.name} accounts with 24/7 priority support.`}
+                                            </p>
+
+                                            {/* Order Now button (wishlist to order page!) */}
+                                            <Link href={`/services/${item.slug}`} style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '8px',
+                                                background: '#6c5ce7',
+                                                padding: '12px',
+                                                borderRadius: '14px',
+                                                color: '#fff',
+                                                textDecoration: 'none',
+                                                fontSize: '0.85rem',
+                                                fontWeight: 700,
+                                                marginTop: 'auto',
+                                                boxShadow: '0 4px 12px rgba(108, 92, 231, 0.15)',
+                                                transition: 'all 0.2s',
+                                                textAlign: 'center'
+                                            }}
+                                            className="wishlist-order-btn"
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.background = '#5b4bc7';
+                                                e.currentTarget.style.transform = 'translateY(-1px)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.background = '#6c5ce7';
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                            }}
+                                            >
+                                                Order Now
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
                     

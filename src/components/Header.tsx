@@ -363,12 +363,8 @@ export default function Header() {
                             {searchOpen ? <X size={18} /> : <Search size={18} />}
                         </button>
 
-                        <Link href="/account" className="header-icon-link" aria-label="Cart">
-                            <ShoppingCart size={20} />
-                        </Link>
-
                         {/* Heart: hidden on mobile via CSS */}
-                        <Link href="/account" className="header-icon-link mobile-hide" aria-label="Wishlist">
+                        <Link href="/account?tab=wishlist" className="header-icon-link mobile-hide" aria-label="Wishlist">
                             <Heart size={20} />
                         </Link>
 
@@ -527,35 +523,35 @@ export default function Header() {
                 <div className="sub-nav-wrapper">
                     <div className="container">
                         <div className="sub-nav-bar">
-                            <Link href="/account" className="sub-nav-item">
+                            <Link href="/account?tab=wallet" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-wallet"><Wallet size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>My Wallet</strong>
                                     <span>—</span>
                                 </div>
                             </Link>
-                            <Link href="/account" className="sub-nav-item">
+                            <Link href="/account?tab=overview" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-dashboard"><LayoutGrid size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Dashboard</strong>
                                     <span>My Account</span>
                                 </div>
                             </Link>
-                            <Link href="/account" className="sub-nav-item">
+                            <Link href="/account?tab=orders" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-orders"><Package size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Orders</strong>
                                     <span>Track & View</span>
                                 </div>
                             </Link>
-                            <Link href="/account" className="sub-nav-item">
+                            <Link href="/account?tab=wishlist" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-wishlist"><Heart size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Wishlist</strong>
                                     <span>Saved Items</span>
                                 </div>
                             </Link>
-                            <Link href="/support" className="sub-nav-item">
+                            <Link href="/account?tab=tickets" className="sub-nav-item">
                                 <div className="sub-nav-icon-box icon-support"><HeadphonesIcon size={20} /></div>
                                 <div className="sub-nav-meta">
                                     <strong>Support</strong>
