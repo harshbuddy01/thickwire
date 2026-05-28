@@ -242,4 +242,21 @@ export async function submitSupplierApplication(payload: { email: string; phone:
     return data;
 }
 
+// ─── Wishlist ───────────────────────────────────────
+
+export async function getWishlist() {
+    const { data } = await api.get('/account/wishlist');
+    return data;
+}
+
+export async function addToWishlist(item: { id: string; name: string; slug: string; logoUrl: string | null; description?: string | null }) {
+    const { data } = await api.post('/account/wishlist', item);
+    return data;
+}
+
+export async function removeFromWishlist(slug: string) {
+    const { data } = await api.delete(`/account/wishlist/${slug}`);
+    return data;
+}
+
 export default api;

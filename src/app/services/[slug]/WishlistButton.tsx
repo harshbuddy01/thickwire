@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
+import { useAuth } from '@/lib/AuthContext';
+import { getWishlist, addToWishlist, removeFromWishlist } from '@/lib/api';
 
 interface WishlistButtonProps {
     service: {
@@ -14,11 +16,28 @@ interface WishlistButtonProps {
 }
 
 export default function WishlistButton({ service }: WishlistButtonProps) {
+    const { user } = useAuth();
     const [inWishlist, setInWishlist] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
+        if (user) {
+            getWishlist()
+                .then((list) => {
+                    if (Array.isArray(list)) {
+                        setInWishlist(list.some((item: any) => item.slug === service.slug));
+                    }
+                })
+                .catch(() => {
+                    loadFromLocalStorage();
+                });
+        } else {
+            loadFromLocalStorage();
+        }
+    }, [service.slug, user]);
+
+    const loadFromLocalStorage = () => {
         const stored = localStorage.getItem('streamkart_wishlist');
         if (stored) {
             try {
@@ -29,9 +48,31 @@ export default function WishlistButton({ service }: WishlistButtonProps) {
                 console.error(e);
             }
         }
-    }, [service.slug]);
+    };
 
-    const handleToggle = () => {
+    const handleToggle = async () => {
+        if (user) {
+            try {
+                if (inWishlist) {
+                    await removeFromWishlist(service.slug);
+                    setInWishlist(false);
+                } else {
+                    const newItem = {
+                        id: service.id,
+                        name: service.name,
+                        slug: service.slug,
+                        logoUrl: service.logoUrl,
+                        description: service.description
+                    };
+                    await addToWishlist(newItem);
+                    setInWishlist(true);
+                }
+                return;
+            } catch (err) {
+                console.warn('Backend wishlist update failed, falling back to local storage', err);
+            }
+        }
+
         const stored = localStorage.getItem('streamkart_wishlist');
         let list = [];
         if (stored) {

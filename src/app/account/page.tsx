@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useAuth } from '@/lib/AuthContext';
-import api from '@/lib/api';
+import api, { getWishlist, removeFromWishlist } from '@/lib/api';
 import { Package, Clock, Settings, LogOut, ChevronRight, AlertCircle, ShieldCheck, CheckCircle2, HelpCircle, Wallet, Image as ImageIcon, X, Heart, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -153,23 +153,54 @@ function AccountPageContent() {
         router.push(`/account?tab=${tabId}`);
     };
 
-    // Load wishlist from localStorage on mount and activeTab updates
+    // Load wishlist from hybrid Redis / localStorage on mount and activeTab updates
     useEffect(() => {
         if (mounted) {
-            const stored = localStorage.getItem('streamkart_wishlist');
-            if (stored) {
-                try {
-                    setWishlistItems(JSON.parse(stored));
-                } catch (e) {
-                    console.error('Failed to parse wishlist', e);
-                }
+            if (user) {
+                getWishlist()
+                    .then((list) => {
+                        if (Array.isArray(list)) {
+                            setWishlistItems(list);
+                        } else {
+                            loadFromLocalStorage();
+                        }
+                    })
+                    .catch(() => {
+                        loadFromLocalStorage();
+                    });
             } else {
-                setWishlistItems([]);
+                loadFromLocalStorage();
             }
         }
-    }, [mounted, activeTab]);
+    }, [mounted, activeTab, user]);
 
-    const handleRemoveFromWishlist = (slug: string) => {
+    const loadFromLocalStorage = () => {
+        const stored = localStorage.getItem('streamkart_wishlist');
+        if (stored) {
+            try {
+                setWishlistItems(JSON.parse(stored));
+            } catch (e) {
+                console.error('Failed to parse wishlist', e);
+            }
+        } else {
+            setWishlistItems([]);
+        }
+    };
+
+    const handleRemoveFromWishlist = async (slug: string) => {
+        if (user) {
+            try {
+                const updated = await removeFromWishlist(slug);
+                if (Array.isArray(updated)) {
+                    setWishlistItems(updated);
+                    return;
+                }
+            } catch (err) {
+                console.warn('Failed to delete from Redis, falling back to local storage', err);
+            }
+        }
+
+        // Local Storage Fallback
         const stored = localStorage.getItem('streamkart_wishlist');
         if (stored) {
             try {
