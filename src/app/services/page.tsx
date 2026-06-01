@@ -314,7 +314,7 @@ export default function ServicesDirectoryPage() {
                 {/* Wide Premium Banner Section - Hidden on mobile in css */}
                 <div className={styles.heroBanner}>
                     <Image 
-                        src="/assets/streamkart-premium-access-banner.png" 
+                        src="/assets/streamkart-premium-access-banner.jpg" 
                         alt="StreamKart Premium Digital Access Banner" 
                         width={1400} 
                         height={450} 
