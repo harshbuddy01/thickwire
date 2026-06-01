@@ -25,11 +25,11 @@ const s: { [k: string]: React.CSSProperties } = {
         gap: 24, marginBottom: 32, position: 'relative', overflow: 'hidden',
         boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
     },
-    profileAccent: { position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: 'linear-gradient(90deg, #6c5ce7, #a55eea, #6c5ce7)' },
+    profileAccent: { position: 'absolute', top: 0, left: 0, width: '100%', height: 4, background: 'linear-gradient(90deg, #b87a1d, #ffdf7e, #b87a1d)' },
     avatar: {
-        width: 72, height: 72, borderRadius: '50%', background: '#f1eeff',
-        border: '2px solid #e8e0ff', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', fontSize: '1.5rem', fontWeight: 700, color: '#6c5ce7', flexShrink: 0, overflow: 'hidden',
+        width: 72, height: 72, borderRadius: '50%', background: 'rgba(184, 122, 29, 0.06)',
+        border: '2px solid rgba(184, 122, 29, 0.15)', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', fontSize: '1.5rem', fontWeight: 700, color: '#b87a1d', flexShrink: 0, overflow: 'hidden',
     },
     profileName: { fontSize: '1.3rem', fontWeight: 800, color: '#1a1c23', marginBottom: 4 },
     profileEmail: { fontSize: '0.85rem', color: '#888' },
@@ -102,7 +102,7 @@ export default function AccountPage() {
     return (
         <Suspense fallback={
             <div style={s.spinner}>
-                <div style={{ width: 36, height: 36, border: '4px solid #eee', borderTop: '4px solid #6c5ce7', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                <div style={{ width: 36, height: 36, border: '4px solid #eee', borderTop: '4px solid #b87a1d', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
             </div>
         }>
             <AccountPageContent />
@@ -377,7 +377,7 @@ function AccountPageContent() {
     if (loading || isFetching || !user) {
         return (
             <div style={s.spinner}>
-                <div style={{ width: 36, height: 36, border: '4px solid #eee', borderTop: '4px solid #6c5ce7', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                <div style={{ width: 36, height: 36, border: '4px solid #eee', borderTop: '4px solid #b87a1d', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
             </div>
         );
     }
@@ -429,8 +429,9 @@ function AccountPageContent() {
                                 className="tab-btn"
                                 style={{
                                     ...s.tabBtn,
-                                    background: activeTab === tab.id ? '#f1eeff' : '#fff',
-                                    color: activeTab === tab.id ? '#6c5ce7' : '#666',
+                                    background: activeTab === tab.id ? 'rgba(184, 122, 29, 0.08)' : '#fff',
+                                    color: activeTab === tab.id ? '#b87a1d' : '#666',
+                                    borderLeft: activeTab === tab.id ? '3px solid #b87a1d' : 'none',
                                 }}
                             >
                                 {tab.icon} {tab.label}
@@ -489,7 +490,7 @@ function AccountPageContent() {
                         <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
                             <h2 style={s.sectionTitle}>My Wallet</h2>
                             
-                            <div className="account-wallet-card" style={{ ...s.listCard, marginBottom: 24, background: 'linear-gradient(135deg, #6c5ce7, #a55eea)', color: 'white', border: 'none' }}>
+                            <div className="account-wallet-card" style={{ ...s.listCard, marginBottom: 24, background: 'linear-gradient(135deg, #b87a1d, #d4af37, #b87a1d)', color: 'white', border: 'none' }}>
                                 <div className="account-wallet-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
                                     <div>
                                         <div style={{ fontSize: '0.9rem', opacity: 0.9, marginBottom: 8, fontWeight: 600 }}>Available Balance</div>
@@ -541,7 +542,7 @@ function AccountPageContent() {
                                     <Package size={48} style={{ margin: '0 auto 16px', color: '#ccc' }} />
                                     <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a1c23', marginBottom: 8 }}>No active subscriptions</h3>
                                     <p style={{ color: '#888', marginBottom: 24 }}>You don&apos;t have any subscription plans yet.</p>
-                                    <Link href="/" style={{ display: 'inline-block', padding: '12px 24px', background: '#6c5ce7', color: 'white', borderRadius: 14, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>Browse Services</Link>
+                                    <Link href="/" style={{ display: 'inline-block', padding: '12px 24px', background: '#b87a1d', color: 'white', borderRadius: 14, fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>Browse Services</Link>
                                 </div>
                             ) : (
                                 subscriptions.map(sub => {
@@ -617,7 +618,7 @@ function AccountPageContent() {
                                         <div style={{ height: 1, background: '#f0f0f0', margin: '12px 0' }}></div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span style={{ fontSize: '0.8rem', color: '#aaa', fontFamily: 'monospace' }}>ID: {order.id}</span>
-                                            <Link href={`/order/${order.id}`} style={{ fontSize: '0.85rem', color: '#6c5ce7', fontWeight: 600, textDecoration: 'none' }}>View Receipt →</Link>
+                                            <Link href={`/order/${order.id}`} style={{ fontSize: '0.85rem', color: '#b87a1d', fontWeight: 600, textDecoration: 'none' }}>View Receipt →</Link>
                                         </div>
                                     </div>
                                 );
@@ -638,7 +639,7 @@ function AccountPageContent() {
                                     <p style={{ color: '#64748b', marginBottom: 24, fontSize: '0.9rem', maxWidth: '360px', margin: '0 auto 24px', lineHeight: 1.5 }}>
                                         Browse our collection of official premium streaming subscriptions and add your favorites here!
                                     </p>
-                                    <Link href="/streaming" style={{ display: 'inline-block', padding: '12px 28px', background: '#6c5ce7', color: 'white', borderRadius: '14px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(108, 92, 231, 0.25)', transition: 'all 0.2s' }}>
+                                    <Link href="/streaming" style={{ display: 'inline-block', padding: '12px 28px', background: '#b87a1d', color: 'white', borderRadius: '14px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', boxShadow: '0 4px 14px rgba(184, 122, 29, 0.25)', transition: 'all 0.2s' }}>
                                         Explore Services
                                     </Link>
                                 </div>
@@ -722,7 +723,7 @@ function AccountPageContent() {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 gap: '8px',
-                                                background: '#6c5ce7',
+                                                background: '#b87a1d',
                                                 padding: '12px',
                                                 borderRadius: '14px',
                                                 color: '#fff',
@@ -730,17 +731,17 @@ function AccountPageContent() {
                                                 fontSize: '0.85rem',
                                                 fontWeight: 700,
                                                 marginTop: 'auto',
-                                                boxShadow: '0 4px 12px rgba(108, 92, 231, 0.15)',
+                                                boxShadow: '0 4px 12px rgba(184, 122, 29, 0.15)',
                                                 transition: 'all 0.2s',
                                                 textAlign: 'center'
                                             }}
                                             className="wishlist-order-btn"
                                             onMouseEnter={e => {
-                                                e.currentTarget.style.background = '#5b4bc7';
+                                                e.currentTarget.style.background = '#9e6714';
                                                 e.currentTarget.style.transform = 'translateY(-1px)';
                                             }}
                                             onMouseLeave={e => {
-                                                e.currentTarget.style.background = '#6c5ce7';
+                                                e.currentTarget.style.background = '#b87a1d';
                                                 e.currentTarget.style.transform = 'translateY(0)';
                                             }}
                                             >

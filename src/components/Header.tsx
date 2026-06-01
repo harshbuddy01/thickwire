@@ -570,7 +570,7 @@ export default function Header() {
                     <span>Home</span>
                 </Link>
 
-                <Link href="/streaming" className={`mobile-nav-item ${isActive('/streaming') ? 'mobile-nav-item--active' : ''}`}>
+                <Link href="/streaming" className={`mobile-nav-item ${isActive('/streaming') || isActive('/services') ? 'mobile-nav-item--active' : ''}`}>
                     <LayoutGrid size={20} className="mobile-nav-icon" />
                     <span>Browse</span>
                 </Link>

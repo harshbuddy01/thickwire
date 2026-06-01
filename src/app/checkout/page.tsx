@@ -12,6 +12,7 @@ import { checkoutSchema, serviceSlugParamSchema } from '@/lib/validators';
 import { rateLimiter, THROTTLES } from '@/lib/rateLimiter';
 import styles from './checkout.module.css';
 import './mobile-glass.css';
+import { getFallbackService } from '@/lib/services-data';
 
 export default function CheckoutPage() {
     return (
@@ -232,7 +233,14 @@ function CheckoutContent() {
             })
             .catch(() => {
                 // Fallback for services not yet added to the production DB
-                setError('Unable to load plan details. Please go back and try again.');
+                const fallback = getFallbackService(serviceSlug);
+                if (fallback) {
+                    setService(fallback);
+                    const p = fallback.plans.find((pl) => pl.id === planId);
+                    setPlan(p || null);
+                } else {
+                    setError('Unable to load plan details. Please go back and try again.');
+                }
             })
             .finally(() => setLoading(false));
     }, [serviceSlug, planId]);

@@ -2765,14 +2765,16 @@ textarea.form-input {
   }
 
   .mobile-nav-item--active {
-    color: #6c5ce7 !important;
+    color: #b87a1d !important;
   }
 
   .mobile-nav-item--active::before {
-    background: linear-gradient(135deg, rgba(108, 92, 231, 0.12) 0%, rgba(162, 155, 254, 0.08) 100%);
+    background: linear-gradient(135deg, rgba(184, 122, 29, 0.16) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
     transform: translate(-50%, -55%) scale(1);
     opacity: 1;
-    border: 1px solid rgba(108, 92, 231, 0.15);
+    border: 1px solid rgba(184, 122, 29, 0.25) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .mobile-nav-item svg {
@@ -2782,9 +2784,9 @@ textarea.form-input {
   }
 
   .mobile-nav-item--active svg {
-    color: #6c5ce7 !important;
+    color: #b87a1d !important;
     transform: translateY(-2px);
-    filter: drop-shadow(0 4px 6px rgba(108, 92, 231, 0.25));
+    filter: drop-shadow(0 4px 10px rgba(184, 122, 29, 0.35));
   }
 
   /* Dot indicator below active item */
@@ -2793,7 +2795,7 @@ textarea.form-input {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: #6c5ce7;
+    background: #b87a1d;
     position: absolute;
     bottom: -1px;
     opacity: 0;
@@ -2804,7 +2806,7 @@ textarea.form-input {
   .mobile-nav-item--active::after {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 8px rgba(108, 92, 231, 0.8);
+    box-shadow: 0 0 8px rgba(184, 122, 29, 0.8);
   }
 }
 
@@ -3699,5 +3701,16 @@ h2:has(span) {
     scroll-behavior: auto !important;
     transition-duration: 0s !important;
     transition-delay: 0s !important;
+  }
+}
+
+/* Hide header/footer globally on mobile only when services page is active to prevent unmount React runtime errors */
+@media (max-width: 720px) {
+  body.services-page-active header,
+  body.services-page-active header.services-luxury-header,
+  body.services-page-active footer,
+  body.services-page-active .main-footer,
+  body.services-page-active #main-footer {
+    display: none !important;
   }
 }

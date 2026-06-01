@@ -22,7 +22,7 @@ export default function Footer() {
   const accentColor = '#b87a1d';
   const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
-  if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup') return null;
+  if (pathname === '/checkout' || pathname === '/login' || pathname === '/signup' || pathname === '/services') return null;
 
   return (
     <footer className="site-footer" style={{

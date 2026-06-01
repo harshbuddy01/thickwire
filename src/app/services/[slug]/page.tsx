@@ -7,6 +7,7 @@ import WishlistButton from './WishlistButton';
 import Link from 'next/link';
 import { ChevronRight, ShieldCheck, Navigation, Headphones, HelpCircle } from 'lucide-react';
 import { serviceSlugParamSchema } from '@/lib/validators';
+import { getFallbackService } from '@/lib/services-data';
 
 export const revalidate = 30; // ISR: 30 seconds
 
@@ -25,6 +26,13 @@ export async function generateMetadata({
             description: service.description || `Buy ${service.name} from StreamKart with instant delivery`,
         };
     } catch {
+        const fallback = getFallbackService(params.slug);
+        if (fallback) {
+            return {
+                title: `${fallback.name} — StreamKart`,
+                description: fallback.description,
+            };
+        }
         return { title: 'Service — StreamKart' };
     }
 }
@@ -42,7 +50,7 @@ export default async function ServicePage({
     try {
         service = await getServiceBySlug(params.slug);
     } catch {
-        // dynamic error handling or logging
+        service = getFallbackService(params.slug);
     }
 
     if (!service) {
