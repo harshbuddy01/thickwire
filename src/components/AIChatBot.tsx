@@ -161,7 +161,7 @@ function extractServiceSlug(text: string): string | null {
         
         const fullResult = fuse.search(lower);
         if (fullResult.length > 0) {
-            return fullResult.item.slug;
+            return fullResult[0].item.slug;
         }
 
         const words = lower.split(/\s+/);
