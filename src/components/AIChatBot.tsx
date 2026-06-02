@@ -161,7 +161,7 @@ function extractServiceSlug(text: string): string | null {
         
         const fullResult = fuse.search(lower);
         if (fullResult.length > 0) {
-            return fullResult[0].item.slug;
+            return fullResult.item.slug;
         }
 
         const words = lower.split(/\s+/);
@@ -1346,7 +1346,6 @@ export default function AIChatBot() {
             setInput(transcript);
             setIsListening(false);
             
-            // Explicitly force termination on captured voice string to halt accidental cycles
             try { recognition.stop(); } catch (e) {}
 
             setTimeout(() => {
