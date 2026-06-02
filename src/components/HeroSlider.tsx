@@ -60,7 +60,16 @@ export default function HeroSlider() {
         return () => clearInterval(timer);
     }, [direction, slidesList]);
 
-    if (slidesList.length === 0) return null;
+    if (slidesList.length === 0) return (
+        <div style={{
+            width: '100%',
+            aspectRatio: '16/5',
+            borderRadius: '24px',
+            background: 'linear-gradient(90deg, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+        }} />
+    );
 
     return (
         <div className="hero-slider" style={{ 

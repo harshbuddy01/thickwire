@@ -3710,3 +3710,115 @@ h2:has(span) {
     display: none !important;
   }
 }
+
+/* ─── Gemini Page Mobile Fixes ────────────────────────── */
+@media (max-width: 768px) {
+  /* Gemini top hero section: stack vertically */
+  .gemini-top-section {
+    flex-direction: column !important;
+    gap: 32px !important;
+    padding: 28px 20px !important;
+  }
+  .gemini-right-col {
+    padding: 24px 20px !important;
+  }
+  /* Gemini product image block */
+  .gemini-image-block > div {
+    width: 180px !important;
+    height: 180px !important;
+  }
+  .gemini-image-block > div img {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  /* Gemini icons row: allow wrapping */
+  .gemini-icons-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 24px !important;
+    margin-top: 32px !important;
+  }
+  .gemini-icons-row > div[style*="width: 1px"] {
+    display: none !important;
+  }
+  /* Gemini main card: stack left and right columns */
+  .gemini-main-card {
+    flex-direction: column !important;
+  }
+  .gemini-left-col {
+    padding: 28px 20px !important;
+    border-right: none !important;
+    border-bottom: 1px solid #fef08a !important;
+  }
+  /* Gemini bottom CTA: stack */
+  .gemini-bottom-cta {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 28px 20px !important;
+    gap: 28px !important;
+    align-items: center !important;
+  }
+  .gemini-bottom-cta > div:first-child {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 20px !important;
+  }
+  .gemini-bottom-cta > div:last-child {
+    align-items: center !important;
+  }
+  /* Gemini trust badges: 2-column grid */
+  .gemini-trust-badges,
+  .gemini-main-card + div[style*="justify-content: space-between"] {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+  /* Gemini footer badges */
+  .gemini-footer-badges {
+    flex-direction: column !important;
+    gap: 24px !important;
+    text-align: center !important;
+    padding: 32px 16px !important;
+  }
+  .gemini-footer-badges > div:last-child {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  /* Gemini FAQ grid: single column */
+  .chatgpt-plans-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Disney Page Mobile Sidebar Stacking ─────────────── */
+@media (max-width: 1024px) {
+  /* Disney sidebar: hide sticky order summary on tablet and below (plans are in main column) */
+  .service-layout-grid > div:last-child {
+    position: static !important;
+  }
+}
+
+/* ─── HBO Max Page Mobile Fixes ───────────────────────── */
+@media (max-width: 768px) {
+  .hbo-plans-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hbo-faq-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hbo-bottom-cta {
+    flex-direction: column !important;
+    gap: 20px !important;
+    text-align: center !important;
+  }
+  .hbo-page-exact .trust-strip {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ─── Prime Video Mobile Fixes ────────────────────────── */
+@media (max-width: 768px) {
+  .prime-page-exact .plans-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+

@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { ChevronRight, Check, Lock, ChevronDown, ShieldCheck, Zap, Mail, Globe, Headset, Star, Search, UserCheck, Play, HelpCircle, Activity, Smartphone, Monitor, Tv } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronRight, Check, Lock, ShieldCheck, Zap, Mail, Headset, Star, UserCheck, Play, HelpCircle, Smartphone, Monitor, Tv } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Service, Plan } from '@/lib/types';
 
@@ -16,10 +15,12 @@ export default function DisneyPageClient({ service }: { service: Service }) {
     const plans = service.plans.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     const selectedPlan = plans.find(p => p.id === selectedPlanId) || plans[1] || plans[0]; // default to middle plan
 
-    // Ensure state initializes
-    if (!selectedPlanId && selectedPlan) {
-        setSelectedPlanId(selectedPlan.id);
-    }
+    // Properly initialize selected plan in useEffect (not during render to avoid infinite loop)
+    useEffect(() => {
+        if (!selectedPlanId && selectedPlan) {
+            setSelectedPlanId(selectedPlan.id);
+        }
+    }, []);
 
     const handleBuy = () => {
         if (selectedPlanId) {
@@ -69,7 +70,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
 
                             <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '20px', marginTop: '-12px' }}>All plans include premium content with the best streaming experience.</p>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
                                 {plans.map((plan, i) => {
                                     const isSelected = selectedPlanId === plan.id;
                                     const isMostPopular = i === 1;
@@ -149,7 +150,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
                                 <div style={{ width: '28px', height: '28px', background: '#0a3a82', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem' }}>2</div>
                                 <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: '#111827' }}>How It Works?</h2>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', background: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', background: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                     <div style={{ background: '#eff6ff', color: '#0a3a82', padding: '10px', borderRadius: '8px' }}><Check size={20} /></div>
                                     <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827' }}>1. Choose Plan</div><div style={{ fontSize: '0.7rem', color: '#64748b' }}>Select the plan that suits your needs.</div></div>
@@ -170,7 +171,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
                         </section>
 
                         {/* Dark Blue Stats Bar */}
-                        <div style={{ background: '#040b16', borderRadius: '16px', padding: '32px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', color: '#fff' }}>
+                        <div style={{ background: '#040b16', borderRadius: '16px', padding: '32px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '20px', color: '#fff' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}><div style={{ opacity: 0.8 }}><UserCheck size={32} /></div><div><div style={{ fontSize: '1.4rem', fontWeight: 800 }}>10,000+</div><div style={{ fontSize: '0.85rem', opacity: 0.8 }}>Happy Customers</div></div></div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}><div style={{ opacity: 0.8 }}><Star size={32} /></div><div><div style={{ fontSize: '1.4rem', fontWeight: 800 }}>99%</div><div style={{ fontSize: '0.85rem', opacity: 0.8 }}>Positive Reviews</div></div></div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}><div style={{ opacity: 0.8 }}><Zap size={32} /></div><div><div style={{ fontSize: '1.4rem', fontWeight: 800 }}>5-15 Mins</div><div style={{ fontSize: '0.85rem', opacity: 0.8 }}>Instant Delivery</div></div></div>
