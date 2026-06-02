@@ -15,6 +15,7 @@ const HERO_BG = `${MINIO}/slider/ChatGPT%20Image%20May%201%2C%202026%2C%2003_22_
 export default function Zee5ProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
     const [service, setService] = useState<Service | null>(null);
+    const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
     const { user } = useAuth();
     const router = useRouter();
 
@@ -37,7 +38,7 @@ export default function Zee5ProductPage() {
         else setFaqOpen(index);
     };
 
-    const currentPlan = service?.plans?.[0];
+    const currentPlan = service?.plans?.[selectedPlanIndex];
 
     return (
         <div style={{ background: '#f8f9fb', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
@@ -49,7 +50,7 @@ export default function Zee5ProductPage() {
                     <ChevronRight size={14} />
                     <Link href="/streaming" style={{ color: '#6b7280', textDecoration: 'none' }}>OTT Subscriptions</Link>
                     <ChevronRight size={14} />
-                    <span style={{ color: '#111827', fontWeight: 500 }}>ZEE5 1 Year</span>
+                    <span style={{ color: '#111827', fontWeight: 500 }}>{service?.name || 'ZEE5'}</span>
                 </nav>
             </div>
 
@@ -88,10 +89,10 @@ export default function Zee5ProductPage() {
                     {/* Left Col - Features */}
                     <div style={{ padding: '40px', flex: 1, borderRight: '1px solid #e5e7eb' }}>
                         <div className="zee5-main-header" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
-                            <img src={`${MINIO}/logos/zee5.png`} alt="ZEE5" style={{ width: '60px', height: '60px', borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', objectFit: 'cover' }} />
+                            <img src={LOGO_URL} alt="ZEE5" style={{ width: '60px', height: '60px', borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', objectFit: 'cover' }} />
                             <div>
-                                <h2 style={{ margin: '0 0 4px 0', fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>ZEE5</h2>
-                                <p style={{ margin: 0, fontSize: '1.1rem', color: '#4b5563', fontWeight: 500 }}>1 Year Plan</p>
+                                <h2 style={{ margin: '0 0 4px 0', fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>{service?.name || 'ZEE5'}</h2>
+                                <p style={{ margin: 0, fontSize: '1.1rem', color: '#4b5563', fontWeight: 500 }}>{currentPlan ? currentPlan.name : '...'}</p>
                             </div>
                         </div>
 
@@ -113,8 +114,35 @@ export default function Zee5ProductPage() {
                         </div>
                     </div>
 
-                    {/* Mid Col - Input */}
+                    {/* Mid Col - Input & Plan Selector */}
                     <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb' }}>
+                        {service && service.plans.length > 1 && (
+                            <div style={{ marginBottom: '28px' }}>
+                                <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Select Plan</h3>
+                                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                    {service.plans.map((plan, idx) => (
+                                        <button
+                                            key={plan.id}
+                                            onClick={() => setSelectedPlanIndex(idx)}
+                                            style={{
+                                                padding: '10px 16px',
+                                                borderRadius: '10px',
+                                                border: selectedPlanIndex === idx ? '2px solid #6d28d9' : '1px solid #d1d5db',
+                                                background: selectedPlanIndex === idx ? '#f5f3ff' : '#fff',
+                                                color: selectedPlanIndex === idx ? '#6d28d9' : '#374151',
+                                                fontWeight: 600,
+                                                cursor: 'pointer',
+                                                fontSize: '0.9rem',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            {plan.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Enter Your Mobile Number</h3>
                         <p style={{ margin: '0 0 24px 0', fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.5 }}>
                             We&apos;ll send your ZEE5 premium access details on this number.
