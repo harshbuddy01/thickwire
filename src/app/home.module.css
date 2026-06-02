@@ -242,19 +242,25 @@
     padding: 0 16px;
   }
 }
-
 @media (max-width: 768px) {
   .trending-cards-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    overflow: visible !important;
-    gap: 12px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-behavior: smooth;
+    gap: 16px !important;
+    margin: 0 -16px !important;
+    padding: 4px 16px 16px 16px !important;
+    scrollbar-width: none;
+  }
+  .trending-cards-grid::-webkit-scrollbar {
+    display: none;
   }
   .trending-cards-grid > * {
-    flex: none !important;
-    max-width: 100% !important;
+    flex: 0 0 130px !important;
+    width: 130px !important;
+    height: 130px !important;
+    aspect-ratio: 1/1 !important;
+    border-radius: 20px !important;
   }
 
   /* Category blocks → 2-col grid, keep original image ratios */

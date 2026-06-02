@@ -972,8 +972,12 @@ a {
     display: none;
   }
   .trending-cards-grid > a, .trending-cards-grid > div {
-    flex: 0 0 160px !important;
-    max-width: 160px !important;
+    flex: 0 0 130px !important;
+    max-width: 130px !important;
+    width: 130px !important;
+    height: 130px !important;
+    aspect-ratio: 1/1 !important;
+    border-radius: 20px !important;
   }
 
   .blocks-parent-grid {
@@ -2824,20 +2828,24 @@ textarea.form-input {
   }
   /* Trending cards → 2×2 grid */
   .trending-cards-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 12px !important;
-    overflow: visible !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-behavior: smooth;
+    gap: 16px !important;
+    margin: 0 -16px !important;
+    padding: 4px 16px 16px 16px !important;
+    scrollbar-width: none;
+  }
+  .trending-cards-grid::-webkit-scrollbar {
+    display: none;
   }
   .trending-cards-grid > a,
   .trending-cards-grid > div {
-    flex: unset !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    border-radius: 16px !important;
-    aspect-ratio: 1/1;
+    flex: 0 0 130px !important;
+    width: 130px !important;
+    height: 130px !important;
+    aspect-ratio: 1/1 !important;
+    border-radius: 20px !important;
   }
   /* Block banners → 2-col grid with orphan spanning */
   .blocks-parent-grid {
