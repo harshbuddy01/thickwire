@@ -82,12 +82,15 @@ export default function ChatWidget() {
   };
 
   // Handle AI Message Submit
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = async (e?: React.FormEvent, textOverride?: string) => {
     if (e) e.preventDefault();
-    if (!inputValue.trim() || isAiLoading) return;
+    
+    const userText = (textOverride || inputValue).trim();
+    if (!userText || isAiLoading) return;
 
-    const userText = inputValue.trim();
-    setInputValue('');
+    if (!textOverride) {
+      setInputValue('');
+    }
 
     const newMsg: Message = {
       id: Math.random().toString(),
@@ -259,16 +262,16 @@ export default function ChatWidget() {
               {/* Suggestions Chips / Quick Replies */}
               {!isAiLoading && (
                 <div className={styles.quickRepliesContainer}>
-                  <button onClick={() => { setInputValue('What are the plans and pricing?'); }} className={styles.quickReplyChip}>
+                  <button onClick={() => handleSendMessage(undefined, 'What are the plans and pricing?')} className={styles.quickReplyChip}>
                     🏷️ Plans & Pricing
                   </button>
-                  <button onClick={() => { setInputValue('How to pay?'); }} className={styles.quickReplyChip}>
+                  <button onClick={() => handleSendMessage(undefined, 'How to pay?')} className={styles.quickReplyChip}>
                     💳 How to pay?
                   </button>
                   <button onClick={startNetflixFlow} className={styles.quickReplyChip} style={{ borderColor: '#e50914', color: '#e50914' }}>
                     🍿 Get Netflix Code
                   </button>
-                  <button onClick={() => { setInputValue('I need help with my order'); }} className={styles.quickReplyChip}>
+                  <button onClick={() => handleSendMessage(undefined, 'I need help with my order')} className={styles.quickReplyChip}>
                     📞 Contact Support
                   </button>
                 </div>
