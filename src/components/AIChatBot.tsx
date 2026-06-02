@@ -161,7 +161,7 @@ function extractServiceSlug(text: string): string | null {
         
         const fullResult = fuse.search(lower);
         if (fullResult.length > 0) {
-            return fullResult.item.slug;
+            return fullResult[0].item.slug;
         }
 
         const words = lower.split(/\s+/);
@@ -169,7 +169,7 @@ function extractServiceSlug(text: string): string | null {
             if (word.length > 3) {
                 const wordResult = fuse.search(word);
                 if (wordResult.length > 0) {
-                    return wordResult.item.slug;
+                    return wordResult[0].item.slug;
                 }
             }
         }
@@ -197,13 +197,13 @@ function matchCategoryFuzzy(text: string): string | null {
         });
 
         const fullResult = fuse.search(lower);
-        if (fullResult.length > 0) return fullResult.item.value;
+        if (fullResult.length > 0) return fullResult[0].item.value;
 
         const words = lower.split(/\s+/);
         for (const word of words) {
             if (word.length > 3) {
                 const res = fuse.search(word);
-                if (res.length > 0) return res.item.value;
+                if (res.length > 0) return res[0].item.value;
             }
         }
     } catch (e) {
@@ -932,7 +932,7 @@ export default function AIChatBot() {
 
             if (services.length > 0) {
                 if (services.length === 1) {
-                    const slug = services;
+                    const slug = services[0];
                     const svc = PRICE_CATALOG[slug];
                     if (svc) {
                         if (duration) {
@@ -1061,7 +1061,8 @@ export default function AIChatBot() {
                             <span className={styles.cartTotalValue}>₹{totalPrice}</span>
                         </div>
                         <button className={styles.checkoutBtn} onClick={() => {
-                            const firstItem = allItems;
+                            const firstItem = allItems[0];
+                            if (!firstItem) return;
                             const durationCode = firstItem.duration <= 30 ? '1m' : firstItem.duration <= 90 ? '3m' : '6m';
                             router.push(`/checkout?planId=fallback-${firstItem.slug}-${durationCode}&service=${firstItem.slug}`);
                         }}>
@@ -1112,7 +1113,8 @@ export default function AIChatBot() {
                         <span className={styles.cartTotalValue}>₹{totalPrice}</span>
                     </div>
                     <button className={styles.checkoutBtn} onClick={() => {
-                        const firstItem = cart;
+                        const firstItem = cart[0];
+                        if (!firstItem) return;
                         const durationCode = firstItem.duration <= 30 ? '1m' : firstItem.duration <= 90 ? '3m' : '6m';
                         router.push(`/checkout?planId=fallback-${firstItem.slug}-${durationCode}&service=${firstItem.slug}`);
                     }}>
@@ -1178,7 +1180,7 @@ export default function AIChatBot() {
             const detectedServices = extractMultipleServices(text);
             if (detectedServices.length > 0) {
                 if (detectedServices.length === 1) {
-                    const slug = detectedServices;
+                    const slug = detectedServices[0];
                     const svc = PRICE_CATALOG[slug];
                     if (svc) {
                         const planList = svc.plans.map(p => `• **${p.label}** — ₹${p.price}`).join('\n');
