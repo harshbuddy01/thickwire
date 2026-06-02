@@ -48,7 +48,7 @@ export default function GrossingCategoryPage() {
                         alt="Top Grossing"
                         width={1440}
                         height={360}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        style={{ width: '100%', height: 'auto', display: 'block' }}
                         priority
                     />
                 </div>

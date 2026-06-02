@@ -67,7 +67,7 @@ export default function Zee5ProductPage() {
                     <img 
                         src={service?.bannerUrl || HERO_BG} 
                         alt="ZEE5 - Blockbuster Entertainment Unlimited" 
-                        style={{ width: '100%', height: 'auto', display: 'block', minHeight: '300px', objectFit: 'cover' }}
+                        style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                     {/* Slider dots */}
                     <div style={{ position: 'absolute', bottom: '20px', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 2 }}>
