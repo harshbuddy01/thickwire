@@ -129,6 +129,7 @@ function AccountPageContent() {
     const [loadingModal, setLoadingModal] = useState(false);
     const [selectedCredential, setSelectedCredential] = useState<any>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [copiedKey, setCopiedKey] = useState<string | null>(null);
     
     // Support Ticket State
     const [selectedSupportTicket, setSelectedSupportTicket] = useState<any>(null);
@@ -370,6 +371,37 @@ function AccountPageContent() {
             setSelectedCredential({ error: err.response?.data?.message || 'Failed to load credentials.' });
         } finally {
             setLoadingModal(false);
+        }
+    };
+
+    const copyToClipboard = async (text: string, key: string) => {
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                setCopiedKey(key);
+                setTimeout(() => setCopiedKey(null), 2000);
+                return;
+            }
+            
+            // Fallback for non-secure / in-app browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            if (successful) {
+                setCopiedKey(key);
+                setTimeout(() => setCopiedKey(null), 2000);
+            }
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
         }
     };
 
@@ -848,16 +880,17 @@ function AccountPageContent() {
                 }}>
                     <div style={{
                         background: 'white', width: '100%', maxWidth: '420px', borderRadius: '24px',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.1)', overflow: 'hidden', animation: 'scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.1)', overflow: 'hidden', animation: 'scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        maxHeight: '80vh', display: 'flex', flexDirection: 'column'
                     }}>
-                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
                             <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <ShieldCheck size={20} style={{ color: '#4f46e5' }} /> Your Credentials
                             </h2>
                             <button onClick={() => setModalOpen(false)} style={{ background: '#f1f5f9', border: 'none', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#64748b', cursor: 'pointer', transition: 'all 0.2s' }}>&times;</button>
                         </div>
 
-                        <div style={{ padding: '24px' }}>
+                        <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
                             {loadingModal ? (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px 0', gap: '16px' }}>
                                     <div style={{ width: 32, height: 32, border: '3px solid #e2e8f0', borderTop: '3px solid #4f46e5', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
@@ -900,7 +933,7 @@ function AccountPageContent() {
                                                             <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '10px 14px', color: '#e50914', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.9rem', wordBreak: 'break-all', display: 'flex', alignItems: 'center' }}>
                                                                 {assignedEmail}
                                                             </div>
-                                                            <button onClick={() => navigator.clipboard.writeText(assignedEmail)} style={{ background: '#e50914', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                            <button onClick={() => copyToClipboard(assignedEmail, 'netflixEmail')} style={{ background: copiedKey === 'netflixEmail' ? '#10b981' : '#e50914', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s' }}>{copiedKey === 'netflixEmail' ? 'Copied!' : 'Copy'}</button>
                                                         </div>
                                                         
                                                         <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginTop: '12px', marginBottom: '6px', marginLeft: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</div>
@@ -964,7 +997,7 @@ function AccountPageContent() {
                                                         <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem' }}>
                                                             {selectedCredential.credential.split(':')[0]}
                                                         </div>
-                                                        <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.split(':')[0])} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                        <button onClick={() => copyToClipboard(selectedCredential.credential.split(':')[0], 'splitEmail')} style={{ background: copiedKey === 'splitEmail' ? '#10b981' : '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>{copiedKey === 'splitEmail' ? 'Copied!' : 'Copy'}</button>
                                                     </div>
                                                 </div>
 
@@ -977,7 +1010,7 @@ function AccountPageContent() {
                                                         <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0f172a', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', letterSpacing: showPassword ? 'normal' : '3px' }}>
                                                             {showPassword ? selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1) : '••••••••••••'}
                                                         </div>
-                                                        <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1))} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                        <button onClick={() => copyToClipboard(selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1), 'splitPassword')} style={{ background: copiedKey === 'splitPassword' ? '#10b981' : '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>{copiedKey === 'splitPassword' ? 'Copied!' : 'Copy'}</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -988,7 +1021,7 @@ function AccountPageContent() {
                                                     <div style={{ width: '100%', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', wordBreak: 'break-all' }}>
                                                         {selectedCredential.credential}
                                                     </div>
-                                                    <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential)} style={{ width: '100%', background: '#0f172a', color: 'white', border: 'none', borderRadius: '12px', padding: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy to Clipboard</button>
+                                                    <button onClick={() => copyToClipboard(selectedCredential.credential, 'rawContent')} style={{ width: '100%', background: copiedKey === 'rawContent' ? '#10b981' : '#0f172a', color: 'white', border: 'none', borderRadius: '12px', padding: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'background 0.2s' }}>{copiedKey === 'rawContent' ? '✓ Copied to Clipboard' : 'Copy to Clipboard'}</button>
                                                 </div>
                                             </div>
                                         );
