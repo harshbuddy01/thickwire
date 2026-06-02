@@ -43,7 +43,6 @@ interface CartItem {
    Service / Price Catalog (from services-data.ts fallback)
    ═══════════════════════════════════════════════════════════ */
 
-/* Auto-generate price catalog from ALL site services */
 const DEFAULT_PLANS = [
     { label: '1 Month', months: 1, price: 149 },
     { label: '3 Months', months: 3, price: 399 },
@@ -56,7 +55,6 @@ SITE_SERVICES.forEach(svc => {
         PRICE_CATALOG[svc.slug] = { name: svc.name, plans: [...DEFAULT_PLANS] };
     }
 });
-// Also add common alias slugs
 PRICE_CATALOG['hotstar'] = PRICE_CATALOG['jiohotstar'];
 PRICE_CATALOG['nordvpn'] = PRICE_CATALOG['nord-vpn'];
 
@@ -64,7 +62,6 @@ PRICE_CATALOG['nordvpn'] = PRICE_CATALOG['nord-vpn'];
    NLP Helpers
    ═══════════════════════════════════════════════════════════ */
 
-/* Comprehensive service aliases covering ALL 50+ services */
 const SERVICE_ALIASES: Record<string, string> = {
     // Streaming
     'netflix': 'netflix', 'net flix': 'netflix',
@@ -151,32 +148,28 @@ function extractServiceSlug(text: string): string | null {
     const lower = text.toLowerCase().trim();
     if (!lower) return null;
 
-    // 1. Direct prefix/substring match first (highly accurate)
-    const sorted = Object.entries(SERVICE_ALIASES).sort((a, b) => b[0].length - a[0].length);
+    const sorted = Object.entries(SERVICE_ALIASES).sort((a, b) => b.length - a.length);
     for (const [keyword, slug] of sorted) {
         if (lower.includes(keyword)) return slug;
     }
 
-    // 2. Fuzzy match fallback using Fuse.js for spelling mistakes
     try {
         const fuse = new Fuse(FUZZY_SERVICE_ITEMS, {
             keys: ['keyword'],
-            threshold: 0.35, // Balanced tolerance for typos
+            threshold: 0.35,
         });
         
-        // Search full query first
         const fullResult = fuse.search(lower);
         if (fullResult.length > 0) {
-            return fullResult[0].item.slug;
+            return fullResult.item.slug;
         }
 
-        // Search single words
         const words = lower.split(/\s+/);
         for (const word of words) {
             if (word.length > 3) {
                 const wordResult = fuse.search(word);
                 if (wordResult.length > 0) {
-                    return wordResult[0].item.slug;
+                    return wordResult.item.slug;
                 }
             }
         }
@@ -191,14 +184,12 @@ function matchCategoryFuzzy(text: string): string | null {
     const lower = text.toLowerCase().trim();
     if (!lower) return null;
 
-    // 1. Direct matching first
     for (const cat of BROAD_CATEGORIES) {
         for (const k of cat.keys) {
             if (lower.includes(k)) return cat.value;
         }
     }
 
-    // 2. Fuzzy matching fallback
     try {
         const fuse = new Fuse(BROAD_CATEGORY_ITEMS, {
             keys: ['key'],
@@ -206,13 +197,13 @@ function matchCategoryFuzzy(text: string): string | null {
         });
 
         const fullResult = fuse.search(lower);
-        if (fullResult.length > 0) return fullResult[0].item.value;
+        if (fullResult.length > 0) return fullResult.item.value;
 
         const words = lower.split(/\s+/);
         for (const word of words) {
             if (word.length > 3) {
                 const res = fuse.search(word);
-                if (res.length > 0) return res[0].item.value;
+                if (res.length > 0) return res.item.value;
             }
         }
     } catch (e) {
@@ -242,7 +233,7 @@ function extractDuration(text: string): number | null {
 function extractMultipleServices(text: string): string[] {
     const lower = text.toLowerCase();
     const found: string[] = [];
-    const sorted = Object.entries(SERVICE_ALIASES).sort((a, b) => b[0].length - a[0].length);
+    const sorted = Object.entries(SERVICE_ALIASES).sort((a, b) => b.length - a.length);
     for (const [keyword, slug] of sorted) {
         if (lower.includes(keyword) && !found.includes(slug)) {
             found.push(slug);
@@ -274,47 +265,29 @@ function StreamBuddyLogo({ size = 26, className = '' }: { size?: number; classNa
             xmlns="http://www.w3.org/2000/svg"
         >
             <defs>
-                {/* Ultra-bright premium linear glowing neon gradient */}
                 <linearGradient id="neonLightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#b87a1d" />
                     <stop offset="50%" stopColor="#ffdf7e" />
                     <stop offset="100%" stopColor="#ec4899" />
                 </linearGradient>
-                {/* Advanced high-intensity light-emitting glow filter */}
                 <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
                     <feGaussianBlur stdDeviation="6" result="blur" />
                     <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
             </defs>
-            
-            {/* 1. Deep outer neon aura (adds high-intensity soft back-lighting) */}
             <circle cx="50" cy="50" r="42" fill="url(#neonLightGrad)" opacity="0.35" filter="url(#neonGlow)" />
-            
-            {/* 2. Sleek, high-gloss pitch-black inner core circle */}
             <circle cx="50" cy="50" r="38" fill="#09090b" stroke="url(#neonLightGrad)" strokeWidth="2.2" filter="url(#neonGlow)" />
-            
-            {/* 3. Dynamic abstract neural energy orbits (keeps the AI assistant feel highly premium) */}
             <ellipse cx="50" cy="50" rx="30" ry="10" stroke="url(#neonLightGrad)" strokeWidth="1" transform="rotate(30 50 50)" opacity="0.25" />
             <ellipse cx="50" cy="50" rx="30" ry="10" stroke="url(#neonLightGrad)" strokeWidth="1" transform="rotate(-30 50 50)" opacity="0.25" />
-            
-            {/* 4. Elegant 3D Glass Lens Glare Arc (gives it a premium glass look) */}
             <path d="M16 40C16 26.7452 26.7452 16 40 16C53.2548 16 64 26.7452 64 40" stroke="white" strokeWidth="1.2" opacity="0.18" strokeLinecap="round" />
-            
-            {/* 5. Glowing Neon Microphone Icon (bright, light-emitting focus in the center) */}
             <g filter="url(#neonGlow)">
-                {/* Microphone Capsule */}
                 <rect x="44" y="28" width="12" height="20" rx="6" fill="#fff9eb" stroke="url(#neonLightGrad)" strokeWidth="2.5" />
-                {/* Microphone Grille Detail Lines */}
                 <line x1="44" y1="34" x2="56" y2="34" stroke="#09090b" strokeWidth="1.2" />
                 <line x1="44" y1="40" x2="56" y2="40" stroke="#09090b" strokeWidth="1.2" />
-                {/* Microphone U-shaped support stand */}
                 <path d="M37 38C37 46.5 42.82 52.5 50 52.5C57.18 52.5 63 46.5 63 38" stroke="url(#neonLightGrad)" strokeWidth="2.8" strokeLinecap="round" />
-                {/* Base stem and base plate */}
                 <line x1="50" y1="52.5" x2="50" y2="62" stroke="url(#neonLightGrad)" strokeWidth="3" strokeLinecap="round" />
                 <line x1="41" y1="62" x2="59" y2="62" stroke="url(#neonLightGrad)" strokeWidth="3.2" strokeLinecap="round" />
             </g>
-            
-            {/* 6. Surrounding stellar sparkles representing high-fidelity speech processing */}
             <circle cx="26" cy="30" r="1.5" fill="#ffdf7e" />
             <circle cx="74" cy="30" r="1.5" fill="#ec4899" />
             <circle cx="32" cy="64" r="1" fill="#fff" opacity="0.8" />
@@ -324,7 +297,7 @@ function StreamBuddyLogo({ size = 26, className = '' }: { size?: number; classNa
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Component
+   Main Component
    ═══════════════════════════════════════════════════════════ */
 
 export default function AIChatBot() {
@@ -364,12 +337,15 @@ export default function AIChatBot() {
         flowStateRef.current = flowState;
     }, [flowState]);
 
-
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const recognitionRef = useRef<any>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const handleUserMessageRef = useRef<(text: string) => void>(null as any);
+    
+    // Core structural control refs to completely isolate background voice overlap
     const isSpeakingRef = useRef(false);
+    const isBotWorkingRef = useRef(false);
+    const longJobActiveRef = useRef(false);
     const lastProcessedMessageRef = useRef<{ text: string; time: number }>({ text: '', time: 0 });
 
     /* ─── Load admin accounts from localStorage on mount ──── */
@@ -393,12 +369,10 @@ export default function AIChatBot() {
         } catch { /* ignore */ }
     }, [adminAccounts]);
 
-
-
     /* ─── Helpers ─────────────────────────────────────────── */
 
     const startListeningSafe = useCallback(() => {
-        if (recognitionRef.current) {
+        if (recognitionRef.current && !isSpeakingRef.current && !isBotWorkingRef.current) {
             try {
                 recognitionRef.current.start();
                 setIsListening(true);
@@ -426,34 +400,26 @@ export default function AIChatBot() {
 
             if (!cleanText || cleanText.length < 2) {
                 isSpeakingRef.current = false;
-                if (voiceModeActiveRef.current) {
+                if (!longJobActiveRef.current) {
+                    isBotWorkingRef.current = false;
+                }
+                if (voiceModeActiveRef.current && !isBotWorkingRef.current) {
                     setTimeout(() => startListeningSafe(), 500);
                 }
                 return;
             }
 
             const utterance = new SpeechSynthesisUtterance(cleanText);
-
-            // Select the best, most natural sounding voice available
             const voices = window.speechSynthesis.getVoices();
 
-            // Priority: Realistic Premium Male voices > Google Male voices > Edge Male voices
+            // Configured voice preferences targeted directly at authentic Siri / Samantha / Aria female engines
             const voicePreference = [
-                // macOS premium realistic English male voices
-                (v: SpeechSynthesisVoice) => v.name.includes('Daniel') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Alex') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Rishi') && v.lang.startsWith('en'), // Premium Indian English Male
-                (v: SpeechSynthesisVoice) => v.name.includes('Oliver') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Fred') && v.lang.startsWith('en'),
-                // Google Chrome male voices
-                (v: SpeechSynthesisVoice) => v.name.includes('Google UK English Male'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Google US English Male'),
-                // Microsoft Edge premium male voices
-                (v: SpeechSynthesisVoice) => v.name.includes('Ryan') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Guy') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('David') && v.lang.startsWith('en'),
-                // Fallbacks for any English male voice
-                (v: SpeechSynthesisVoice) => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man') || v.name.toLowerCase().includes('guy')),
+                (v: SpeechSynthesisVoice) => v.name.includes('Siri') && v.lang.startsWith('en'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Samantha') && v.lang.startsWith('en'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Google US English') && !v.name.includes('Male'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Microsoft Aria Online'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Zira'),
+                (v: SpeechSynthesisVoice) => v.lang.startsWith('en') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman')),
                 (v: SpeechSynthesisVoice) => v.lang.startsWith('en'),
             ];
 
@@ -464,21 +430,27 @@ export default function AIChatBot() {
             }
             if (selectedVoice) utterance.voice = selectedVoice;
 
-            // Tuned for natural, warm, masculine delivery
-            utterance.rate = 1.02;
-            utterance.pitch = 0.92;
+            // Tuned for natural, bright, and clean speech delivery matching Siri parameters
+            utterance.rate = 1.05;
+            utterance.pitch = 1.05;
             utterance.volume = 1;
 
             utterance.onend = () => {
                 isSpeakingRef.current = false;
-                if (voiceModeActiveRef.current) {
+                if (!longJobActiveRef.current) {
+                    isBotWorkingRef.current = false;
+                }
+                if (voiceModeActiveRef.current && !isBotWorkingRef.current) {
                     setTimeout(() => startListeningSafe(), 350);
                 }
             };
 
             utterance.onerror = () => {
                 isSpeakingRef.current = false;
-                if (voiceModeActiveRef.current) {
+                if (!longJobActiveRef.current) {
+                    isBotWorkingRef.current = false;
+                }
+                if (voiceModeActiveRef.current && !isBotWorkingRef.current) {
                     setTimeout(() => startListeningSafe(), 350);
                 }
             };
@@ -486,6 +458,9 @@ export default function AIChatBot() {
             window.speechSynthesis.speak(utterance);
         } catch (err) {
             isSpeakingRef.current = false;
+            if (!longJobActiveRef.current) {
+                isBotWorkingRef.current = false;
+            }
             console.error('Speech synthesis error:', err);
         }
     }, [isMuted, startListeningSafe]);
@@ -513,6 +488,8 @@ export default function AIChatBot() {
             setVoiceModeActive(false);
             voiceModeActiveRef.current = false;
             setIsListening(false);
+            isBotWorkingRef.current = false;
+            longJobActiveRef.current = false;
             try {
                 recognitionRef.current.stop();
             } catch (e) {}
@@ -523,6 +500,8 @@ export default function AIChatBot() {
             setVoiceModeActive(true);
             voiceModeActiveRef.current = true;
             setIsMuted(false);
+            isBotWorkingRef.current = false;
+            longJobActiveRef.current = false;
             try {
                 localStorage.setItem('sk_bot_muted', JSON.stringify(false));
             } catch {}
@@ -579,7 +558,9 @@ export default function AIChatBot() {
             return;
         }
 
-        // Simulate scanning inbox
+        // Long-running tracking flag blocks microphone activation during background simulator delay chains
+        longJobActiveRef.current = true;
+        isBotWorkingRef.current = true;
         setIsTyping(true);
 
         // Phase 1: Connecting
@@ -606,6 +587,9 @@ export default function AIChatBot() {
         setTimeout(() => {
             setIsTyping(false);
             const code = String(Math.floor(1000 + Math.random() * 9000));
+
+            // Release long running simulation thread lock right before passing to speech layer
+            longJobActiveRef.current = false;
 
             addBotMessage(
                 `✅ **Sign-in code found!**\n\nService: **${PRICE_CATALOG[account.service]?.name || account.service}**\nEmail: **${email}**`,
@@ -644,6 +628,13 @@ export default function AIChatBot() {
         }
         lastProcessedMessageRef.current = { text: normalized, time: nowMs };
 
+        // Force stop input monitoring to secure the processing thread
+        isBotWorkingRef.current = true;
+        if (recognitionRef.current) {
+            try { recognitionRef.current.stop(); } catch (e) {}
+        }
+        setIsListening(false);
+
         addUserMessage(text);
         setInput('');
 
@@ -654,7 +645,6 @@ export default function AIChatBot() {
             setFlowState('idle');
             const psychological = ['psychological', 'psycho', '1', 'mind', 'suspense', 'thriller', 'one'];
             const supernatural = ['supernatural', 'ghost', 'spirit', 'demon', '2', 'paranormal', 'two'];
-            const slasher = ['slasher', 'gore', 'monster', 'survival', '3', 'squid', 'violence', 'three'];
 
             if (psychological.some(k => lower.includes(k))) {
                 typeAndRespond(
@@ -673,7 +663,6 @@ export default function AIChatBot() {
                     </div>
                 );
             } else {
-                // Slasher / Gore default
                 typeAndRespond(
                     `🩸 **Slasher & Gore:** Intense! Check out **Squid Game** (streaming on **Netflix**) or **The Purge** (streaming on **Amazon Prime**) for pure adrenaline!\n\nWant me to add one of these services to your cart?`,
                     <div className={styles.quickActions}>
@@ -689,7 +678,6 @@ export default function AIChatBot() {
             setFlowState('idle');
             const social = ['social', 'graphics', '1', 'beginner', 'template', 'post', 'canva', 'simple', 'one'];
             const professional = ['professional', 'pro', '2', 'advanced', 'photoshop', 'premiere', 'adobe', 'filmmaking', 'design', 'two'];
-            const shorts = ['shorts', 'youtube', '3', 'cut', 'capcut', 'descript', 'fast', 'short', 'three'];
 
             if (social.some(k => lower.includes(k))) {
                 typeAndRespond(
@@ -706,7 +694,6 @@ export default function AIChatBot() {
                     </div>
                 );
             } else {
-                // YouTube Shorts default
                 typeAndRespond(
                     `📱 **Shorts & YouTube:** I highly recommend **CapCut Pro** or **Descript**! CapCut is standard for transition effects, while Descript uses AI auto-transcription for quick speech-based video cuts.\n\nWhich one would you like to add?`,
                     <div className={styles.quickActions}>
@@ -906,8 +893,8 @@ export default function AIChatBot() {
             }
         }
 
-        // ─── Sign-in Code Request ───────────────────────
-        if (lower.includes('sign') && (lower.includes('code') || lower.includes('in'))) {
+        // ─── Sign-in Code Request (Enhanced keyword route pattern) ───────────────────────
+        if (lower.includes('sign') && (lower.includes('code') || lower.includes('in') || lower.includes('up'))) {
             const slug = extractServiceSlug(text) || '';
             setSigninServiceSlug(slug);
             setAwaitingSigninEmail(true);
@@ -945,7 +932,7 @@ export default function AIChatBot() {
 
             if (services.length > 0) {
                 if (services.length === 1) {
-                    const slug = services[0];
+                    const slug = services;
                     const svc = PRICE_CATALOG[slug];
                     if (svc) {
                         if (duration) {
@@ -961,7 +948,6 @@ export default function AIChatBot() {
                                 return;
                             }
                         }
-                        // Show all plans for single service
                         const planList = svc.plans.map(p => `• **${p.label}** — ₹${p.price}`).join('\n');
                         typeAndRespond(
                             `💰 **${svc.name}** Plans:\n\n${planList}\n\nWhich plan would you like?`,
@@ -976,7 +962,6 @@ export default function AIChatBot() {
                         return;
                     }
                 } else {
-                    // Multiple services! Build a compiled list
                     const lines: string[] = [];
                     const buttons: React.ReactNode[] = [];
 
@@ -987,7 +972,7 @@ export default function AIChatBot() {
                             svc.plans.forEach(p => {
                                 lines.push(`• **${p.label}** — ₹${p.price}`);
                             });
-                            lines.push(''); // spacing
+                            lines.push('');
 
                             buttons.push(
                                 <button key={`${slug}-btn`} className={styles.chip} onClick={() => handleUserMessageRef.current(`Add ${svc.name} 1 Month to cart`)}>
@@ -1007,7 +992,6 @@ export default function AIChatBot() {
                 }
             }
 
-            // Generic price query
             typeAndRespond(
                 `Which service would you like to check the price for? We have Netflix, Spotify, YouTube Premium, ChatGPT Plus, and many more! 🎬`,
                 <div className={styles.quickActions}>
@@ -1077,7 +1061,7 @@ export default function AIChatBot() {
                             <span className={styles.cartTotalValue}>₹{totalPrice}</span>
                         </div>
                         <button className={styles.checkoutBtn} onClick={() => {
-                            const firstItem = allItems[0];
+                            const firstItem = allItems;
                             const durationCode = firstItem.duration <= 30 ? '1m' : firstItem.duration <= 90 ? '3m' : '6m';
                             router.push(`/checkout?planId=fallback-${firstItem.slug}-${durationCode}&service=${firstItem.slug}`);
                         }}>
@@ -1128,7 +1112,7 @@ export default function AIChatBot() {
                         <span className={styles.cartTotalValue}>₹{totalPrice}</span>
                     </div>
                     <button className={styles.checkoutBtn} onClick={() => {
-                        const firstItem = cart[0];
+                        const firstItem = cart;
                         const durationCode = firstItem.duration <= 30 ? '1m' : firstItem.duration <= 90 ? '3m' : '6m';
                         router.push(`/checkout?planId=fallback-${firstItem.slug}-${durationCode}&service=${firstItem.slug}`);
                     }}>
@@ -1194,7 +1178,7 @@ export default function AIChatBot() {
             const detectedServices = extractMultipleServices(text);
             if (detectedServices.length > 0) {
                 if (detectedServices.length === 1) {
-                    const slug = detectedServices[0];
+                    const slug = detectedServices;
                     const svc = PRICE_CATALOG[slug];
                     if (svc) {
                         const planList = svc.plans.map(p => `• **${p.label}** — ₹${p.price}`).join('\n');
@@ -1211,7 +1195,6 @@ export default function AIChatBot() {
                         return;
                     }
                 } else {
-                    // Multiple services mentioned catch-all!
                     const lines: string[] = [];
                     const buttons: React.ReactNode[] = [];
 
@@ -1247,7 +1230,6 @@ export default function AIChatBot() {
         try {
             setIsTyping(true);
 
-            // Fetch the last few messages for context to keep conversation fluid
             const contextHistory = messages.slice(-6).map(m => ({
                 role: m.role,
                 text: m.text
@@ -1267,7 +1249,6 @@ export default function AIChatBot() {
                 const data = await res.json();
                 if (data.isFallback) {
                     setIsTyping(false);
-                    // Key is missing or service unavailable - degrade gracefully
                     typeAndRespond(
                         `I'm your helpful StreamKart assistant! 🤖 I can check subscription prices, manage your shopping cart, and get sign-in codes for premium services.\n\nTry asking me:\n• *"What is the price of Netflix?"*\n• *"Add Spotify to cart"*\n• *"I want to watch scary movies"*`,
                         <div className={styles.quickActions}>
@@ -1280,14 +1261,12 @@ export default function AIChatBot() {
                 }
             }
 
-            // Stream response
             const reader = res.body?.getReader();
             if (!reader) throw new Error("No stream reader");
 
             setIsTyping(false);
 
             const botMsgId = genId();
-            // Inject empty bot message to start streaming into
             setMessages(prev => [...prev, {
                 id: botMsgId,
                 role: 'bot',
@@ -1305,7 +1284,6 @@ export default function AIChatBot() {
                 const chunk = decoder.decode(value, { stream: true });
                 accumulatedText += chunk;
 
-                // React state compilation
                 setMessages(prev => prev.map(msg => 
                     msg.id === botMsgId 
                         ? { ...msg, text: accumulatedText }
@@ -1313,7 +1291,6 @@ export default function AIChatBot() {
                 ));
             }
 
-            // Speak stream output
             speak(accumulatedText);
 
         } catch (err) {
@@ -1330,7 +1307,6 @@ export default function AIChatBot() {
         }
 
     }, [addUserMessage, typeAndRespond, awaitingSigninEmail, signinEmail, signinServiceSlug, cart, router, handleSigninCodeRequest, messages, speak]);
-
 
     handleUserMessageRef.current = handleUserMessage;
 
@@ -1366,9 +1342,13 @@ export default function AIChatBot() {
         recognition.lang = 'en-IN';
 
         recognition.onresult = (event: any) => {
-            const transcript = event.results[0][0].transcript;
+            const transcript = event.results.transcript;
             setInput(transcript);
             setIsListening(false);
+            
+            // Explicitly force termination on captured voice string to halt accidental cycles
+            try { recognition.stop(); } catch (e) {}
+
             setTimeout(() => {
                 handleUserMessageRef.current(transcript);
             }, 300);
@@ -1378,7 +1358,7 @@ export default function AIChatBot() {
             setIsListening(false);
             if (voiceModeActiveRef.current) {
                 setTimeout(() => {
-                    if (voiceModeActiveRef.current && recognitionRef.current) {
+                    if (voiceModeActiveRef.current && !isSpeakingRef.current && !isBotWorkingRef.current && recognitionRef.current) {
                         try { recognitionRef.current.start(); setIsListening(true); } catch (e) {}
                     }
                 }, 1000);
@@ -1388,7 +1368,7 @@ export default function AIChatBot() {
         recognition.onend = () => {
             setIsListening(false);
             setTimeout(() => {
-                if (voiceModeActiveRef.current && !isSpeakingRef.current && recognitionRef.current) {
+                if (voiceModeActiveRef.current && !isSpeakingRef.current && !isBotWorkingRef.current && recognitionRef.current) {
                     try { recognitionRef.current.start(); setIsListening(true); } catch (e) {}
                 }
             }, 600);
@@ -1570,48 +1550,48 @@ export default function AIChatBot() {
                                     </div>
                                 )}
                                 <div ref={messagesEndRef} />
-                            </div>
-
-                            {/* Input */}
-                            <div className={styles.inputArea}>
-                                {isListening && (
-                                    <div className={styles.soundwave} style={{ marginBottom: 8 }}>
-                                        {[...Array(7)].map((_, i) => (
-                                            <div key={i} className={styles.soundwaveBar} />
-                                        ))}
-                                        <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 700, marginLeft: 8 }}>Listening...</span>
-                                    </div>
-                                )}
-                                <div className={styles.inputRow}>
-                                    <input
-                                        ref={inputRef}
-                                        className={styles.textInput}
-                                        value={input}
-                                        onChange={e => setInput(e.target.value)}
-                                        onKeyDown={handleKeyDown}
-                                        placeholder={isListening ? 'Speak now...' : 'Ask me anything...'}
-                                        disabled={isListening}
-                                    />
-                                    <button
-                                        className={`${styles.micBtn} ${isListening ? styles.micBtnActive : ''}`}
-                                        onClick={toggleMic}
-                                        title={isListening ? 'Stop listening' : 'Start voice input'}
-                                    >
-                                        {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-                                    </button>
-                                    <button
-                                        className={styles.sendBtn}
-                                        onClick={handleSend}
-                                        disabled={!input.trim() || isListening}
-                                        title="Send message"
-                                    >
-                                        <Send size={16} />
-                                    </button>
                                 </div>
-                            </div>
-                        </>
-                    )
-                ) : (
+
+                                {/* Input */}
+                                <div className={styles.inputArea}>
+                                    {isListening && (
+                                        <div className={styles.soundwave} style={{ marginBottom: 8 }}>
+                                            {[...Array(7)].map((_, i) => (
+                                                <div key={i} className={styles.soundwaveBar} />
+                                            ))}
+                                            <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 700, marginLeft: 8 }}>Listening...</span>
+                                        </div>
+                                    )}
+                                    <div className={styles.inputRow}>
+                                        <input
+                                            ref={inputRef}
+                                            className={styles.textInput}
+                                            value={input}
+                                            onChange={e => setInput(e.target.value)}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder={isListening ? 'Speak now...' : 'Ask me anything...'}
+                                            disabled={isListening}
+                                        />
+                                        <button
+                                            className={`${styles.micBtn} ${isListening ? styles.micBtnActive : ''}`}
+                                            onClick={toggleMic}
+                                            title={isListening ? 'Stop listening' : 'Start voice input'}
+                                        >
+                                            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                                        </button>
+                                        <button
+                                            className={styles.sendBtn}
+                                            onClick={handleSend}
+                                            disabled={!input.trim() || isListening}
+                                            title="Send message"
+                                        >
+                                            <Send size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    ) : (
                         /* ─── Admin Panel View ────────────────────────── */
                         <div className={styles.adminPanel}>
                             <h4 className={styles.adminTitle}>
@@ -1621,7 +1601,6 @@ export default function AIChatBot() {
                                 Add email accounts and app-passwords here. When a user requests a sign-in code, the bot will use these credentials to fetch it securely.
                             </p>
 
-                            {/* Add New Account */}
                             <div className={styles.adminCard}>
                                 <div className={styles.adminLabel}><Plus size={12} /> Add New Account</div>
 
@@ -1656,7 +1635,6 @@ export default function AIChatBot() {
                                 </button>
                             </div>
 
-                            {/* Existing Accounts */}
                             {adminAccounts.length > 0 && (
                                 <div className={styles.adminCard}>
                                     <div className={styles.adminLabel}>
