@@ -31,15 +31,11 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 </nav>
 
                 {/* Hero Banner */}
-                <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
-                    <Image
+                <div className={styles['hero-image-container']}>
+                    <img
                         src={service.bannerUrl || `${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
                         alt="YouTube Premium Hero"
-                        fill
-                        priority
                         className={styles['hero-banner-image']}
-                        style={{ objectFit: 'cover' }}
-                        sizes="100vw"
                     />
                 </div>
 

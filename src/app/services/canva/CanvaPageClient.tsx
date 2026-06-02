@@ -44,13 +44,11 @@ export default function CanvaPageClient({ service }: { service: Service }) {
             </div>
 
             <div className="container">
-                <div className={styles['hero-image-container']} style={{ position: 'relative', width: '100%', height: 'auto', aspectRatio: '1200 / 400', borderRadius: '24px', overflow: 'hidden' }}>
-                    <Image 
+                <div className={styles['hero-image-container']}>
+                    <img 
                         src={service.bannerUrl || `${MINIO_URL}/slider/canva.PNG`} 
                         alt="Canva Edu Banner" 
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        priority
+                        className={styles['hero-banner-image']}
                     />
                 </div>
 

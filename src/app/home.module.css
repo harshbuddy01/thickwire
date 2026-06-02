@@ -218,7 +218,6 @@
   }
   .hero-slider {
     border-radius: 14px !important;
-    aspect-ratio: 2/1 !important;
   }
   .content-section-head {
     flex-direction: row;

@@ -63,14 +63,13 @@ export default function HeroSlider() {
             overflow: 'hidden', 
             borderRadius: '24px', 
             boxShadow: '0 20px 40px rgba(0,0,0,0.15)', 
-            aspectRatio: '2/1', 
             backgroundColor: '#111' 
         }}>
             {/* Sliding Container */}
             <div style={{
                 display: 'flex',
                 width: `${slidesList.length * 100}%`,
-                height: '100%',
+                height: 'auto',
                 transform: `translateX(-${(current * 100) / slidesList.length}%)`,
                 transition: 'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)'
             }}>
@@ -79,7 +78,7 @@ export default function HeroSlider() {
                         key={slide.id} 
                         style={{ 
                             width: `${100 / slidesList.length}%`, 
-                            height: '100%',
+                            height: 'auto',
                             position: 'relative',
                             cursor: 'pointer'
                         }}
@@ -89,7 +88,15 @@ export default function HeroSlider() {
                             }
                         }}
                     >
-                        <ProgressiveImage src={slide.src} alt={slide.alt} priority={idx === 0} />
+                        <img 
+                            src={slide.src} 
+                            alt={slide.alt} 
+                            style={{ 
+                                width: '100%', 
+                                height: 'auto', 
+                                display: 'block' 
+                            }} 
+                        />
                         
                         {/* Premium Glassy Overlay */}
                         <div style={{

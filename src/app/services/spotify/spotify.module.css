@@ -19,7 +19,6 @@
   margin-bottom: 30px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.1);
   position: relative;
-  aspect-ratio: 21 / 9;
 }
 
 .spotify-page-exact .hero-banner-image {
@@ -323,4 +322,4 @@
 }
 
 
-@media (max-width: 768px) { .hero-image-container { aspect-ratio: 16/8 !important; min-height: 140px !important; border-radius: 16px !important; } }
+@media (max-width: 768px) { .hero-image-container { border-radius: 16px !important; } }

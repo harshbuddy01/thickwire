@@ -1849,7 +1849,6 @@ textarea.form-input {
 .hero-image-container {
   width: 100%;
   position: relative;
-  aspect-ratio: 21 / 9;
   overflow: hidden;
   border-radius: 20px;
 }
@@ -2348,8 +2347,6 @@ textarea.form-input {
 
   /* Hero Slider Mobile Height */
   .hero-slider {
-    aspect-ratio: 16/8 !important;
-    min-height: 140px !important;
     border-radius: 16px !important;
   }
 
@@ -2391,13 +2388,10 @@ textarea.form-input {
 
   /* Service Page Hero */
   .hero-image-container {
-    aspect-ratio: 16/8 !important;
-    min-height: 140px !important;
     border-radius: 16px !important;
   }
   .hero-banner-image {
-    height: 100% !important;
-    object-fit: cover !important;
+    height: auto !important;
   }
 }
 
@@ -2817,8 +2811,6 @@ textarea.form-input {
     margin-bottom: 20px !important;
   }
   .hero-slider {
-    aspect-ratio: 16/8 !important;
-    min-height: 140px !important;
     border-radius: 16px !important;
   }
   /* Section heads */
@@ -3130,8 +3122,6 @@ textarea.form-input {
 
   /* Service Page Hero Banners */
   .hero-image-container {
-    aspect-ratio: 16/10 !important;
-    min-height: 180px !important;
     border-radius: 20px !important;
   }
 }
