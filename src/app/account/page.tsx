@@ -881,42 +881,118 @@ function AccountPageContent() {
                                         </div>
                                     </div>
 
-                                    {selectedCredential.credential.includes(':') ? (
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                            <div>
-                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px' }}>EMAIL OR USERNAME</div>
-                                                <div style={{ display: 'flex' }}>
-                                                    <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem' }}>
-                                                        {selectedCredential.credential.split(':')[0]}
-                                                    </div>
-                                                    <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.split(':')[0])} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
-                                                </div>
-                                            </div>
+                                    {(() => {
+                                        const isNetflix = selectedCredential.serviceSlug === 'netflix' || 
+                                                          (selectedCredential.serviceName && selectedCredential.serviceName.toLowerCase().includes('netflix'));
 
-                                            <div>
-                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <span>PASSWORD</span>
-                                                    <button onClick={() => setShowPassword(!showPassword)} style={{ background: 'none', border: 'none', color: '#4f46e5', fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer' }}>{showPassword ? 'Hide' : 'Show'}</button>
-                                                </div>
-                                                <div style={{ display: 'flex' }}>
-                                                    <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0f172a', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', letterSpacing: showPassword ? 'normal' : '3px' }}>
-                                                        {showPassword ? selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1) : '••••••••••••'}
+                                        if (isNetflix) {
+                                            let assignedEmail = selectedCredential.credential.trim();
+                                            const emailMatch = assignedEmail.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+                                            if (emailMatch) {
+                                                assignedEmail = emailMatch[0];
+                                            }
+                                            return (
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                                    {/* Email Credentials Card */}
+                                                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px' }}>
+                                                        <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Assigned Netflix Email</div>
+                                                        <div style={{ display: 'flex' }}>
+                                                            <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '10px 14px', color: '#e50914', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.9rem', wordBreak: 'break-all', display: 'flex', alignItems: 'center' }}>
+                                                                {assignedEmail}
+                                                            </div>
+                                                            <button onClick={() => navigator.clipboard.writeText(assignedEmail)} style={{ background: '#e50914', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                        </div>
+                                                        
+                                                        <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginTop: '12px', marginBottom: '6px', marginLeft: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Password</div>
+                                                        <div style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 14px', color: '#475569', fontWeight: 600, fontSize: '0.8rem' }}>
+                                                            🔒 No password needed! Sign in securely using an OTP code.
+                                                        </div>
                                                     </div>
-                                                    <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1))} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+
+                                                    {/* Step-by-step instructions */}
+                                                    <div style={{ border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px' }}>
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px' }}>🚀 Sign In Steps</div>
+                                                        
+                                                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', fontSize: '0.8rem', color: '#334155' }}>
+                                                            <span style={{ minWidth: '20px', height: '20px', borderRadius: '50%', background: '#e50914', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>1</span>
+                                                            <div><strong>Open Netflix:</strong> Go to Netflix App or netflix.com</div>
+                                                        </div>
+                                                        
+                                                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', fontSize: '0.8rem', color: '#334155' }}>
+                                                            <span style={{ minWidth: '20px', height: '20px', borderRadius: '50%', background: '#e50914', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>2</span>
+                                                            <div><strong>Enter Email:</strong> Use your assigned email address</div>
+                                                        </div>
+                                                        
+                                                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', fontSize: '0.8rem', color: '#334155' }}>
+                                                            <span style={{ minWidth: '20px', height: '20px', borderRadius: '50%', background: '#e50914', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>3</span>
+                                                            <div><strong>Request OTP:</strong> Select &quot;Sign In with a Code&quot; on Netflix</div>
+                                                        </div>
+                                                        
+                                                        <div style={{ display: 'flex', gap: '10px', fontSize: '0.8rem', color: '#334155' }}>
+                                                            <span style={{ minWidth: '20px', height: '20px', borderRadius: '50%', background: '#e50914', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>4</span>
+                                                            <div>
+                                                                <strong>Get Code Instantly:</strong>
+                                                                <ul style={{ margin: '4px 0 0 0', paddingLeft: '16px', color: '#64748b' }}>
+                                                                    <li>Go to streamkart.store homepage</li>
+                                                                    <li>Open the Support Chat Widget (bottom-right)</li>
+                                                                    <li>Click the <strong>🍿 Get Netflix Code</strong> button</li>
+                                                                    <li>Enter your assigned email and get code</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Fair Use Policy */}
+                                                    <div style={{ background: '#fff7ed', border: '1px solid #ffedd5', borderRadius: '16px', padding: '14px', fontSize: '0.75rem', color: '#7c2d12' }}>
+                                                        <div style={{ fontWeight: 800, color: '#c2410c', marginBottom: '6px' }}>
+                                                            ⚠️ Fair Use & Limits
+                                                        </div>
+                                                        <ul style={{ margin: 0, paddingLeft: '14px', lineHeight: 1.5 }}>
+                                                            <li>Daily Limit: max <strong>3 codes per day</strong></li>
+                                                            <li>Monthly Limit: max <strong>5 codes per month</strong></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+
+                                        return selectedCredential.credential.includes(':') ? (
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                                <div>
+                                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px' }}>EMAIL OR USERNAME</div>
+                                                    <div style={{ display: 'flex' }}>
+                                                        <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem' }}>
+                                                            {selectedCredential.credential.split(':')[0]}
+                                                        </div>
+                                                        <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.split(':')[0])} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <span>PASSWORD</span>
+                                                        <button onClick={() => setShowPassword(!showPassword)} style={{ background: 'none', border: 'none', color: '#4f46e5', fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer' }}>{showPassword ? 'Hide' : 'Show'}</button>
+                                                    </div>
+                                                    <div style={{ display: 'flex' }}>
+                                                        <div style={{ flex: 1, background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px 0 0 12px', padding: '12px 16px', color: '#0f172a', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', letterSpacing: showPassword ? 'normal' : '3px' }}>
+                                                            {showPassword ? selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1) : '••••••••••••'}
+                                                        </div>
+                                                        <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential.substring(selectedCredential.credential.indexOf(':') + 1))} style={{ background: '#0f172a', color: 'white', border: 'none', borderRadius: '0 12px 12px 0', padding: '0 16px', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px' }}>CREDENTIAL CONTENT</div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                                <div style={{ width: '100%', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', wordBreak: 'break-all' }}>
-                                                    {selectedCredential.credential}
+                                        ) : (
+                                            <div>
+                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '6px', marginLeft: '4px' }}>CREDENTIAL CONTENT</div>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                    <div style={{ width: '100%', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '16px', color: '#0ea5e9', fontWeight: 700, fontFamily: 'monospace', fontSize: '0.95rem', wordBreak: 'break-all' }}>
+                                                        {selectedCredential.credential}
+                                                    </div>
+                                                    <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential)} style={{ width: '100%', background: '#0f172a', color: 'white', border: 'none', borderRadius: '12px', padding: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy to Clipboard</button>
                                                 </div>
-                                                <button onClick={() => navigator.clipboard.writeText(selectedCredential.credential)} style={{ width: '100%', background: '#0f172a', color: 'white', border: 'none', borderRadius: '12px', padding: '12px', fontWeight: 700, fontSize: '0.9rem', cursor: 'pointer', transition: 'background 0.2s' }}>Copy to Clipboard</button>
                                             </div>
-                                        </div>
-                                    )}
+                                        );
+                                    })()}
 
                                     <div style={{ marginTop: '24px', padding: '12px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                                         <AlertCircle size={20} style={{ color: '#d97706', flexShrink: 0, marginTop: '2px' }} />
