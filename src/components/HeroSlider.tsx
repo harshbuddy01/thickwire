@@ -65,51 +65,58 @@ export default function HeroSlider() {
             boxShadow: '0 20px 40px rgba(0,0,0,0.15)', 
             backgroundColor: '#111' 
         }}>
-            {/* Sliding Container */}
+            {/* Cross-Fade Container */}
             <div style={{
-                display: 'flex',
-                width: `${slidesList.length * 100}%`,
-                height: 'auto',
-                transform: `translateX(-${(current * 100) / slidesList.length}%)`,
-                transition: 'transform 0.9s cubic-bezier(0.65, 0, 0.35, 1)'
+                position: 'relative',
+                width: '100%',
+                height: 'auto'
             }}>
-                {slidesList.map((slide, idx) => (
-                    <div 
-                        key={slide.id} 
-                        style={{ 
-                            width: `${100 / slidesList.length}%`, 
-                            height: 'auto',
-                            position: 'relative',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => {
-                            if (slide.link && slide.link !== '/') {
-                                window.location.href = slide.link;
-                            }
-                        }}
-                    >
-                        <img 
-                            src={slide.src} 
-                            alt={slide.alt} 
+                {slidesList.map((slide, idx) => {
+                    const isActive = idx === current;
+                    return (
+                        <div 
+                            key={slide.id} 
                             style={{ 
-                                width: '100%', 
-                                height: 'auto', 
-                                display: 'block' 
-                            }} 
-                        />
-                        
-                        {/* Premium Glassy Overlay */}
-                        <div style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            background: 'linear-gradient(to right, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1))',
-                            pointerEvents: 'none'
-                        }} />
-                    </div>
-                ))}
+                                width: '100%',
+                                height: 'auto',
+                                position: isActive ? 'relative' : 'absolute',
+                                top: 0,
+                                left: 0,
+                                opacity: isActive ? 1 : 0,
+                                zIndex: isActive ? 2 : 1,
+                                transition: 'opacity 0.8s ease-in-out',
+                                pointerEvents: isActive ? 'auto' : 'none',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => {
+                                if (slide.link && slide.link !== '/') {
+                                    window.location.href = slide.link;
+                                }
+                            }}
+                        >
+                            <img 
+                                src={slide.src} 
+                                alt={slide.alt} 
+                                style={{ 
+                                    width: '100%', 
+                                    height: 'auto', 
+                                    display: 'block' 
+                                }} 
+                            />
+                            
+                            {/* Premium Glassy Overlay */}
+                            <div style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                background: 'linear-gradient(to right, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1))',
+                                pointerEvents: 'none'
+                            }} />
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Navigation Dots */}
