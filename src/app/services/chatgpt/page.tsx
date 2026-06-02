@@ -10,7 +10,7 @@ import { getServiceBySlug } from '@/lib/api';
 import type { Service, Plan } from '@/lib/types';
 
 const MINIO = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
-const HERO_BANNER = `${MINIO}/slider/file_00000000a6587208abda7443e39b8c5d.png`;
+const HERO_BANNER = `${MINIO}/slider/ChatGPT%20Image%20Jun%202,%202026,%2011_53_54%20PM.png`;
 
 export default function ChatGPTProductPage() {
     const [faqOpen, setFaqOpen] = useState<number | null>(null);
