@@ -137,16 +137,24 @@ api.interceptors.response.use(
     }
 );
 
+import { formatCdnUrl } from './utils';
+
 // ─── Services ───────────────────────────────────────
 
 export async function getServices(): Promise<Service[]> {
     const { data } = await api.get('/services');
-    return data;
+    return data.map((s: any) => ({
+        ...s,
+        bannerUrl: s.bannerUrl ? formatCdnUrl(s.bannerUrl) : s.bannerUrl
+    }));
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service> {
     const { data } = await api.get(`/services/${slug}`);
-    return data;
+    return {
+        ...data,
+        bannerUrl: data.bannerUrl ? formatCdnUrl(data.bannerUrl) : data.bannerUrl
+    };
 }
 
 // ─── Orders ─────────────────────────────────────────

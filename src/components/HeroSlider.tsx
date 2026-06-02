@@ -5,6 +5,8 @@ import ProgressiveImage from '@/components/ProgressiveImage';
 
 import api from '@/lib/api';
 
+import { formatCdnUrl } from '@/lib/utils';
+
 const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 const DEFAULT_SLIDES = [
@@ -25,7 +27,7 @@ export default function HeroSlider() {
                 if (data && data.length > 0) {
                     setSlidesList(data.map((b: any) => ({
                         id: b.id,
-                        src: b.imageUrl,
+                        src: formatCdnUrl(b.imageUrl),
                         alt: 'Storefront Slide',
                         link: b.linkUrl || '/'
                     })));
