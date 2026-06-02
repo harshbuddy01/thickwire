@@ -86,22 +86,21 @@ export default function ChatGPTProductPage() {
                             @media (max-width: 768px) {
                                 .chatgpt-plans-container-new {
                                     display: flex !important;
-                                    overflow-x: auto !important;
-                                    padding-bottom: 24px !important;
-                                    margin: 0 -20px !important;
-                                    padding-left: 20px !important;
-                                    padding-right: 20px !important;
-                                    scrollbar-width: none;
-                                }
-                                .chatgpt-plans-container-new::-webkit-scrollbar {
-                                    display: none;
+                                    flex-direction: column !important;
+                                    gap: 20px !important;
+                                    padding-bottom: 0 !important;
+                                    margin: 0 !important;
+                                    padding-left: 0 !important;
+                                    padding-right: 0 !important;
                                 }
                                 .chatgpt-plans-container-new > div {
-                                    flex: 0 0 290px !important;
-                                    max-width: 290px !important;
+                                    flex: none !important;
+                                    max-width: 100% !important;
+                                    width: 100% !important;
+                                    transform: none !important;
                                 }
                                 .chatgpt-plan-price-isolated-value {
-                                    font-size: 2rem !important;
+                                    font-size: 2.2rem !important;
                                 }
                             }
                         ` }} />

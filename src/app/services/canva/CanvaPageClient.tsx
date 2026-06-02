@@ -100,12 +100,27 @@ export default function CanvaPageClient({ service }: { service: Service }) {
                 </div>
 
                 {/* Plans Grid */}
-                <div style={{ 
+                <div className="canva-plans-grid-new" style={{ 
                     display: 'grid', 
                     gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
                     gap: '32px',
                     marginBottom: '64px'
                 }}>
+                    <style dangerouslySetInnerHTML={{ __html: `
+                        @media (max-width: 768px) {
+                            .canva-plans-grid-new {
+                                display: flex !important;
+                                flex-direction: column !important;
+                                gap: 20px !important;
+                            }
+                            .canva-plans-grid-new > div {
+                                width: 100% !important;
+                                max-width: 100% !important;
+                                transform: none !important;
+                                padding: 24px 20px !important;
+                            }
+                        }
+                    ` }} />
                     {service.plans.map((plan, index) => {
                         const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
                         const cardId = plan.id;

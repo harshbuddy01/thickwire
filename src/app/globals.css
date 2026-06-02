@@ -2399,7 +2399,7 @@ textarea.form-input {
   }
 }
 
-/* ─── GLOBAL HORIZONTAL SCROLL FOR PLAN GRIDS ON MOBILE ─── */
+/* ─── GLOBAL STACK FOR PLAN GRIDS ON MOBILE ─── */
 @media (max-width: 768px) {
   .plans-grid, 
   .chatgpt-plans-grid, 
@@ -2408,15 +2408,12 @@ textarea.form-input {
   .youtube-page-exact .plans-grid,
   .hbo-page-exact .plans-grid {
     display: flex !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 16px !important;
-    padding: 8px 4px 24px 4px !important;
-    margin: 0 -20px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    flex-direction: column !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    gap: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
     grid-template-columns: none !important;
   }
 
@@ -2435,11 +2432,12 @@ textarea.form-input {
   .spotify-page-exact .plans-grid > div,
   .youtube-page-exact .plans-grid > div,
   .hbo-page-exact .plans-grid > div {
-    flex: 0 0 280px !important;
-    max-width: 280px !important;
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
-  /* Reduce padding for mobile cards inside horizontal scroll */
+  /* Reduce padding for mobile cards */
   .plan-card-inner, .plan-content, .chatgpt-plans-grid > div {
     padding: 24px 20px !important;
   }
