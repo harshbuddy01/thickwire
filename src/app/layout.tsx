@@ -7,7 +7,7 @@ import './globals.css';
 import { AuthProvider } from '@/lib/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import AIChatBot from '@/components/AIChatBot';
+import ChatWidget from '@/components/ChatWidget';
 import PageLoader from '@/components/PageLoader';
 import Script from 'next/script';
 
@@ -50,7 +50,7 @@ export default function RootLayout({
                     <Header />
                     <main>{children}</main>
                     <Footer />
-                    <AIChatBot />
+                    <ChatWidget />
                 </AuthProvider>
             </body>
         </html>
