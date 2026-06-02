@@ -412,13 +412,14 @@ export default function AIChatBot() {
             const utterance = new SpeechSynthesisUtterance(cleanText);
             const voices = window.speechSynthesis.getVoices();
 
-            // Configured voice preferences targeted directly at authentic Siri / Samantha / Aria female engines
+            // Female-first Siri-like voice priority:
+            // Samantha (macOS) → Karen → Google UK English Female → Microsoft Aria → Microsoft Jenny → any English female → fallback English
             const voicePreference = [
-                (v: SpeechSynthesisVoice) => v.name.includes('Siri') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Samantha') && v.lang.startsWith('en'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Google US English') && !v.name.includes('Male'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Microsoft Aria Online'),
-                (v: SpeechSynthesisVoice) => v.name.includes('Zira'),
+                (v: SpeechSynthesisVoice) => v.name === 'Samantha' && v.lang.startsWith('en'),
+                (v: SpeechSynthesisVoice) => v.name === 'Karen' && v.lang.startsWith('en'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Google UK English Female'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Microsoft Aria'),
+                (v: SpeechSynthesisVoice) => v.name.includes('Microsoft Jenny'),
                 (v: SpeechSynthesisVoice) => v.lang.startsWith('en') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman')),
                 (v: SpeechSynthesisVoice) => v.lang.startsWith('en'),
             ];
@@ -430,9 +431,9 @@ export default function AIChatBot() {
             }
             if (selectedVoice) utterance.voice = selectedVoice;
 
-            // Tuned for natural, bright, and clean speech delivery matching Siri parameters
-            utterance.rate = 1.05;
-            utterance.pitch = 1.05;
+            // Pitch 1.08, rate 1.0 for natural Siri-like female clarity
+            utterance.rate = 1.0;
+            utterance.pitch = 1.08;
             utterance.volume = 1;
 
             utterance.onend = () => {
@@ -441,7 +442,8 @@ export default function AIChatBot() {
                     isBotWorkingRef.current = false;
                 }
                 if (voiceModeActiveRef.current && !isBotWorkingRef.current) {
-                    setTimeout(() => startListeningSafe(), 350);
+                    // 800ms delay — gives audio hardware time to fully clear before mic restarts
+                    setTimeout(() => startListeningSafe(), 800);
                 }
             };
 
@@ -451,7 +453,7 @@ export default function AIChatBot() {
                     isBotWorkingRef.current = false;
                 }
                 if (voiceModeActiveRef.current && !isBotWorkingRef.current) {
-                    setTimeout(() => startListeningSafe(), 350);
+                    setTimeout(() => startListeningSafe(), 800);
                 }
             };
 
@@ -622,11 +624,25 @@ export default function AIChatBot() {
         const normalized = lower.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").replace(/\s+/g, " ").trim();
 
         // ─── Suppress Voice Recognition Duplication ───────
+        // 4000ms window prevents the same partial phrase firing multiple times during long TTS
         const nowMs = Date.now();
-        if (lastProcessedMessageRef.current.text === normalized && nowMs - lastProcessedMessageRef.current.time < 1500) {
+        if (lastProcessedMessageRef.current.text === normalized && nowMs - lastProcessedMessageRef.current.time < 4000) {
             return;
         }
         lastProcessedMessageRef.current = { text: normalized, time: nowMs };
+
+        // ─── Noise Filter: drop long transcripts with no clear intent keywords ───
+        const words = text.split(/\s+/);
+        const INTENT_KEYWORDS = [
+            'price', 'cost', 'plan', 'buy', 'add', 'cart', 'checkout', 'show', 'watch',
+            'netflix', 'spotify', 'chatgpt', 'hotstar', 'prime', 'disney', 'youtube',
+            'zee5', 'sonyliv', 'canva', 'capcut', 'gemini', 'linkedin', 'hbo', 'nord',
+            'sign', 'code', 'login', 'help', 'support', 'scary', 'funny', 'action',
+            'hello', 'hi', 'hey', 'how', 'what', 'who', 'thank', 'service', 'offer'
+        ];
+        if (words.length > 25 && !INTENT_KEYWORDS.some(kw => lower.includes(kw))) {
+            return; // Likely echo/noise — discard silently
+        }
 
         // Force stop input monitoring to secure the processing thread
         isBotWorkingRef.current = true;
@@ -819,16 +835,20 @@ export default function AIChatBot() {
             { key: 'modern family', title: 'Modern Family', platform: 'JioHotstar', platformSlug: 'jiohotstar' },
         ];
 
-        for (const item of SHOW_DATABASE) {
-            if (lower.includes(item.key)) {
-                typeAndRespond(
-                    `🍿 **${item.title}** is streaming on **${item.platform}**!\n\nWould you like to buy a subscription to watch it?`,
-                    <div className={styles.quickActions}>
-                        <button className={styles.chip} onClick={() => handleUserMessageRef.current(`Price of ${item.platform}`)}>💰 Check plans</button>
-                        <button className={styles.chip} onClick={() => handleUserMessageRef.current(`Add ${item.platform} to cart`)}>🛒 Add to Cart</button>
-                    </div>
-                );
-                return;
+        // Show DB guard: only match show names when message is ≤12 words (prevents false positives in long speech)
+        const wordCount = lower.split(/\s+/).length;
+        if (wordCount <= 12) {
+            for (const item of SHOW_DATABASE) {
+                if (lower.includes(item.key)) {
+                    typeAndRespond(
+                        `🍿 **${item.title}** is streaming on **${item.platform}**!\n\nWould you like to buy a subscription to watch it?`,
+                        <div className={styles.quickActions}>
+                            <button className={styles.chip} onClick={() => handleUserMessageRef.current(`Price of ${item.platform}`)}>💰 Check plans</button>
+                            <button className={styles.chip} onClick={() => handleUserMessageRef.current(`Add ${item.platform} to cart`)}>🛒 Add to Cart</button>
+                        </div>
+                    );
+                    return;
+                }
             }
         }
 
@@ -1344,10 +1364,19 @@ export default function AIChatBot() {
         recognition.lang = 'en-IN';
 
         recognition.onresult = (event: any) => {
-            const transcript = event.results.transcript;
+            // Block mic during TTS playback — prevents bot voice being picked up as user input
+            if (isSpeakingRef.current) return;
+
+            const result = event.results[event.results.length - 1];
+            const transcript = result[0].transcript.trim();
+            const confidence = result[0].confidence ?? 1;
+
+            // Confidence filter: TTS echo artifacts tend to be low-confidence — drop them
+            if (confidence < 0.4) return;
+
             setInput(transcript);
             setIsListening(false);
-            
+
             try { recognition.stop(); } catch (e) {}
 
             setTimeout(() => {
@@ -1368,11 +1397,12 @@ export default function AIChatBot() {
 
         recognition.onend = () => {
             setIsListening(false);
+            // 1200ms delay — enough time for TTS audio to fully clear from the room before mic restarts
             setTimeout(() => {
                 if (voiceModeActiveRef.current && !isSpeakingRef.current && !isBotWorkingRef.current && recognitionRef.current) {
                     try { recognitionRef.current.start(); setIsListening(true); } catch (e) {}
                 }
-            }, 600);
+            }, 1200);
         };
 
         recognitionRef.current = recognition;
