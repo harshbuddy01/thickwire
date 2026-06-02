@@ -56,20 +56,34 @@ export default function ChatGPTProductPage() {
                 {/* Hero Banner Image (Styled directly to avoid container cropping) */}
                 <div className="hero-image-container-safe" style={{
                     width: '100%',
-                    position: 'relative'
+                    position: 'relative',
+                    minHeight: '200px',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    background: 'rgba(0,0,0,0.03)'
                 }}>
-                    <img 
-                        src={service?.bannerUrl || HERO_BANNER} 
-                        alt="ChatGPT Plus - Smarter Answers, Write Better" 
-                        style={{ 
-                            width: '100%', 
-                            height: 'auto', 
-                            display: 'block',
-                            borderRadius: '24px',
-                            border: '1px solid #e2e8f0',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.04)'
-                        }}
-                    />
+                    {service ? (
+                        <img 
+                            src={service.bannerUrl || HERO_BANNER} 
+                            alt="ChatGPT Plus - Smarter Answers, Write Better" 
+                            style={{ 
+                                width: '100%', 
+                                height: 'auto', 
+                                display: 'block',
+                                borderRadius: '24px',
+                                border: '1px solid #e2e8f0',
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.04)'
+                            }}
+                        />
+                    ) : (
+                        <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%)',
+                            backgroundSize: '200% 100%',
+                            animation: 'shimmer 1.5s infinite'
+                        }} />
+                    )}
                 </div>
 
                 {/* Pricing Plans Section */}

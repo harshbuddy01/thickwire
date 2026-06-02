@@ -76,14 +76,25 @@ export default function SonyLivProductPage() {
                     minHeight: '400px',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
                 }}>
-                    <div style={{
-                        position: 'absolute',
-                        top: 0, left: 0, right: 0, bottom: 0,
-                        backgroundImage: `url(${service?.bannerUrl || HERO_BG})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        zIndex: 0
-                    }} />
+                    {service ? (
+                        <div style={{
+                            position: 'absolute',
+                            top: 0, left: 0, right: 0, bottom: 0,
+                            backgroundImage: `url(${service.bannerUrl || HERO_BG})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            zIndex: 0
+                        }} />
+                    ) : (
+                        <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(90deg, #0f131c 25%, #181f2b 50%, #0f131c 75%)',
+                            backgroundSize: '200% 100%',
+                            animation: 'shimmer 1.5s infinite',
+                            zIndex: 0
+                        }} />
+                    )}
                     <div style={{
                         position: 'absolute',
                         top: 0, left: 0, bottom: 0, right: '30%',

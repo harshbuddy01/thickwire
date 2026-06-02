@@ -62,13 +62,24 @@ export default function Zee5ProductPage() {
                     borderRadius: '24px',
                     overflow: 'hidden',
                     background: '#0a0a0f',
+                    minHeight: '200px',
                     boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
                 }}>
-                    <img 
-                        src={service?.bannerUrl || HERO_BG} 
-                        alt="ZEE5 - Blockbuster Entertainment Unlimited" 
-                        style={{ width: '100%', height: 'auto', display: 'block' }}
-                    />
+                    {service ? (
+                        <img 
+                            src={service.bannerUrl || HERO_BG} 
+                            alt="ZEE5 - Blockbuster Entertainment Unlimited" 
+                            style={{ width: '100%', height: 'auto', display: 'block' }}
+                        />
+                    ) : (
+                        <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(90deg, #12121e 25%, #181829 50%, #12121e 75%)',
+                            backgroundSize: '200% 100%',
+                            animation: 'shimmer 1.5s infinite'
+                        }} />
+                    )}
                     {/* Slider dots */}
                     <div style={{ position: 'absolute', bottom: '20px', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 2 }}>
                         <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#fff' }}></div>
