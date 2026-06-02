@@ -78,160 +78,111 @@ export default function Zee5ProductPage() {
                     </div>
                 </div>
 
-                {/* Main Content Sections */}
-                <div className="zee5-main-content main-content" style={{
-                    background: '#fff',
-                    borderRadius: '24px',
-                    border: '1px solid #e5e7eb',
-                    boxShadow: '0 10px 20px rgba(0,0,0,0.02)'
+                {/* Plans Grid */}
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                    gap: '24px', 
+                    marginBottom: '20px' 
                 }}>
-                    
-                    {/* Left Col - Features */}
-                    <div style={{ padding: '40px', flex: 1, borderRight: '1px solid #e5e7eb' }}>
-                        <div className="zee5-main-header" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
-                            <img src={LOGO_URL} alt="ZEE5" style={{ width: '60px', height: '60px', borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', objectFit: 'cover' }} />
-                            <div>
-                                <h2 style={{ margin: '0 0 4px 0', fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>{service?.name || 'ZEE5'}</h2>
-                                <p style={{ margin: 0, fontSize: '1.1rem', color: '#4b5563', fontWeight: 500 }}>{currentPlan ? currentPlan.name : '...'}</p>
-                            </div>
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            {[
-                                'Access to 150,000+ Movies & Shows',
-                                '100+ Live TV Channels',
-                                'ZEE5 Originals',
-                                'Download & Watch Offline',
-                                'Watch on Multiple Devices',
-                                'Full HD Streaming',
-                                'Official & Secure Subscription'
-                            ].map((feature, i) => (
-                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <CheckCircle2 size={20} color="#6d28d9" fill="#ede9fe" />
-                                    <span style={{ color: '#4b5563', fontSize: '0.95rem', fontWeight: 500 }}>{feature}</span>
+                    {service?.plans.map((plan, index) => {
+                        const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
+                        return (
+                            <div 
+                                key={plan.id} 
+                                style={{
+                                    background: '#fff',
+                                    borderRadius: '24px',
+                                    border: isBestValue ? '2px solid #6d28d9' : '1px solid #e5e7eb',
+                                    padding: '36px',
+                                    boxShadow: '0 10px 20px rgba(0,0,0,0.02)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    position: 'relative'
+                                }}
+                            >
+                                {isBestValue && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '16px',
+                                        right: '16px',
+                                        background: '#ede9fe',
+                                        color: '#6d28d9',
+                                        padding: '4px 10px',
+                                        borderRadius: '8px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700
+                                    }}>
+                                        BEST VALUE
+                                    </div>
+                                )}
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                                    <img src={LOGO_URL} alt="ZEE5" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }} />
+                                    <div>
+                                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#111827' }}>{plan.name}</h3>
+                                        <p style={{ margin: 0, fontSize: '0.85rem', color: '#6b7280' }}>Official Premium</p>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
 
-                    {/* Mid Col - Input & Plan Selector */}
-                    <div style={{ padding: '40px', flex: 1.2, borderRight: '1px solid #e5e7eb' }}>
-                        {service && service.plans.length > 1 && (
-                            <div style={{ marginBottom: '28px' }}>
-                                <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Select Plan</h3>
-                                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                                    {service.plans.map((plan, idx) => (
-                                        <button
-                                            key={plan.id}
-                                            onClick={() => setSelectedPlanIndex(idx)}
-                                            style={{
-                                                padding: '10px 16px',
-                                                borderRadius: '10px',
-                                                border: selectedPlanIndex === idx ? '2px solid #6d28d9' : '1px solid #d1d5db',
-                                                background: selectedPlanIndex === idx ? '#f5f3ff' : '#fff',
-                                                color: selectedPlanIndex === idx ? '#6d28d9' : '#374151',
-                                                fontWeight: 600,
-                                                cursor: 'pointer',
-                                                fontSize: '0.9rem',
-                                                transition: 'all 0.2s'
-                                            }}
-                                        >
-                                            {plan.name}
-                                        </button>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '24px' }}>
+                                    <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>
+                                        {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}
+                                    </span>
+                                    <span style={{ fontSize: '0.9rem', color: '#6b7280', fontWeight: 500 }}>
+                                        / {plan.durationDays} Days
+                                    </span>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', flex: 1 }}>
+                                    {[
+                                        'Access to 150,000+ Movies & Shows',
+                                        '100+ Live TV Channels',
+                                        'ZEE5 Originals',
+                                        'Download & Watch Offline',
+                                        'Watch on Multiple Devices',
+                                        'Full HD Streaming',
+                                        'Official & Secure Subscription'
+                                    ].map((feature, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <CheckCircle2 size={16} color="#6d28d9" fill="#ede9fe" />
+                                            <span style={{ color: '#4b5563', fontSize: '0.85rem', fontWeight: 500 }}>{feature}</span>
+                                        </div>
                                     ))}
                                 </div>
+
+                                <button 
+                                    onClick={() => handleBuy(plan)}
+                                    style={{
+                                        width: '100%',
+                                        background: '#0a0a0f',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '12px',
+                                        padding: '16px',
+                                        fontSize: '1rem',
+                                        fontWeight: 700,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '8px',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 8px 16px rgba(10,10,15,0.15)',
+                                        marginBottom: '16px'
+                                    }}
+                                >
+                                    <Lock size={18} /> Buy Now Securely
+                                </button>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'center' }}>
+                                    <ShieldCheck size={20} color="#9ca3af" />
+                                    <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                                        256-bit Secure Checkout
+                                    </span>
+                                </div>
                             </div>
-                        )}
-
-                        <h3 style={{ margin: '0 0 12px 0', fontSize: '1.2rem', fontWeight: 700, color: '#111827' }}>Enter Your Mobile Number</h3>
-                        <p style={{ margin: '0 0 24px 0', fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.5 }}>
-                            We&apos;ll send your ZEE5 premium access details on this number.
-                        </p>
-
-                        <div style={{ display: 'flex', marginBottom: '24px' }}>
-                            <div style={{
-                                background: '#f9fafb',
-                                border: '1px solid #d1d5db',
-                                borderRight: 'none',
-                                borderRadius: '12px 0 0 12px',
-                                padding: '16px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                color: '#374151',
-                                fontWeight: 500
-                            }}>
-                                +91 <ChevronDown size={14} color="#6b7280" />
-                            </div>
-                            <input 
-                                type="tel" 
-                                placeholder="Enter your mobile number" 
-                                style={{
-                                    flex: 1,
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '0 12px 12px 0',
-                                    padding: '16px',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    color: '#111827'
-                                }} 
-                            />
-                        </div>
-
-                        <div style={{ background: '#f3f4f6', borderRadius: '12px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                            <Lock size={20} color="#6b7280" style={{ flexShrink: 0, marginTop: '2px' }} />
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#4b5563', lineHeight: 1.5 }}>
-                                Please double-check your mobile number. Access details will be sent on this number.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Right Col - Price & CTA */}
-                    <div style={{ padding: '40px', flex: 0.8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '3.5rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>
-                                {!currentPlan ? '...' : `${currentPlan.currency === 'USD' ? '$' : '₹'}${parseFloat(currentPlan.price).toLocaleString()}`}
-                            </span>
-                        </div>
-                        <div style={{ fontSize: '1rem', color: '#4b5563', fontWeight: 500, marginBottom: '24px' }}>
-                            for {!currentPlan ? '...' : `${currentPlan.durationDays} Days`}
-                        </div>
-
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f3f4f6', color: '#4b5563', padding: '6px 12px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, marginBottom: '32px' }}>
-                            <CheckCircle2 size={14} /> One-time payment
-                        </div>
-
-                        <button 
-                            onClick={() => handleBuy(currentPlan)}
-                            style={{
-                                width: '100%',
-                                background: '#0a0a0f',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '12px',
-                                padding: '18px',
-                                fontSize: '1.1rem',
-                                fontWeight: 700,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '12px',
-                                cursor: 'pointer',
-                                marginBottom: '20px',
-                                boxShadow: '0 10px 20px rgba(10,10,15,0.2)',
-                                opacity: 1
-                            }}
-                        >
-                            <Lock size={20} /> Buy Now Securely
-                        </button>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <ShieldCheck size={24} color="#9ca3af" />
-                            <div style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.4 }}>
-                                256-bit SSL Encrypted<br/>Secure & Safe Payment
-                            </div>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
 
                 {/* Trust Badges */}
