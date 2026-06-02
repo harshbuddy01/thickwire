@@ -40,7 +40,7 @@ export default function SpotifyPageClient({ service }: { service: Service }) {
                 {/* Hero Banner */}
                 <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/file_000000004fd07208a284a13ce78f69ff.png`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/file_000000004fd07208a284a13ce78f69ff.png`}
                         alt="Spotify Premium Hero"
                         fill
                         priority

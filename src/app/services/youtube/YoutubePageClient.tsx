@@ -33,7 +33,7 @@ export default function YoutubePageClient({ service }: { service: Service }) {
                 {/* Hero Banner */}
                 <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
                         alt="YouTube Premium Hero"
                         fill
                         priority

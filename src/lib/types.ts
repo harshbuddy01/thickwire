@@ -5,6 +5,7 @@ export interface Service {
     name: string;
     slug: string;
     logoUrl: string | null;
+    bannerUrl?: string | null;
     description: string | null;
     displayOrder: number;
     plans: Plan[];

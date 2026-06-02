@@ -41,7 +41,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
                 <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/prime-banner.png`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/prime-banner.png`}
                         alt="Prime Video"
                         fill
                         priority

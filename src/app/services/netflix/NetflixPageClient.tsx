@@ -48,7 +48,7 @@ export default function NetflixPageClient({ service }: { service: Service }) {
                 {/* ─── Hero Section (Exact Image) ────────────────────── */}
                 <div className={styles['hero-image-container']} style={{ position: 'relative' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/netflix-banner-new.png`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/netflix-banner-new.png`}
                         alt="Netflix Premium"
                         fill
                         priority

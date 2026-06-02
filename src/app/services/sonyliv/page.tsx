@@ -79,7 +79,7 @@ export default function SonyLivProductPage() {
                     <div style={{
                         position: 'absolute',
                         top: 0, left: 0, right: 0, bottom: 0,
-                        backgroundImage: `url(${HERO_BG})`,
+                        backgroundImage: `url(${service?.bannerUrl || HERO_BG})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         zIndex: 0

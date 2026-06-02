@@ -46,7 +46,7 @@ export default function DisneyPageClient({ service }: { service: Service }) {
                 {/* ─── Hero Banner ────────────────────────────────────── */}
                 <div className="hero-image-container" style={{ position: 'relative', width: '100%', background: '#040b16', marginBottom: '40px' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/diney+.PNG`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/diney+.PNG`}
                         alt="Disney+ Hotstar Banner"
                         fill
                         priority

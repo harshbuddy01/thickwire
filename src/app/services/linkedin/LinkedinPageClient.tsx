@@ -44,7 +44,7 @@ export default function LinkedinPageClient({ service }: { service: Service }) {
 
             <div className="container">
                 <div className={styles['hero-image-container']}>
-                    <img src={`${MINIO_URL}/slider/F77E7AE2-0D15-43E3-A697-0C0C72D45B90.PNG`} alt="LinkedIn Premium Banner" className={styles['hero-banner-image']} />
+                    <img src={service.bannerUrl || `${MINIO_URL}/slider/F77E7AE2-0D15-43E3-A697-0C0C72D45B90.PNG`} alt="LinkedIn Premium Banner" className={styles['hero-banner-image']} />
                 </div>
 
                 <div className={styles['plans-section']}>

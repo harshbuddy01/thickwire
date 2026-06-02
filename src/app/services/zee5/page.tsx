@@ -64,7 +64,7 @@ export default function Zee5ProductPage() {
                     boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
                 }}>
                     <img 
-                        src={HERO_BG} 
+                        src={service?.bannerUrl || HERO_BG} 
                         alt="ZEE5 - Blockbuster Entertainment Unlimited" 
                         style={{ width: '100%', height: 'auto', display: 'block', minHeight: '300px', objectFit: 'cover' }}
                     />

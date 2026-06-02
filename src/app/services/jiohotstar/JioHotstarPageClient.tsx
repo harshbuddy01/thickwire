@@ -45,7 +45,7 @@ export default function JioHotstarPageClient({ service }: { service: Service }) 
                     background: '#040b16',
                     marginBottom: '40px'
                 }}>
-                    <img src={`${MINIO_URL}/slider/jiohostar.PNG`} alt="JioHotstar Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    <img src={service.bannerUrl || `${MINIO_URL}/slider/jiohostar.PNG`} alt="JioHotstar Banner" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
 
                 <div className="service-layout-grid">

@@ -30,7 +30,7 @@ export default function HboPageClient({ service }: { service: Service }) {
                 {/* Hero Banner */}
                 <div className={`hero-image-container ${styles['hero-image-container'] || ''}`.trim()} style={{ position: 'relative' }}>
                     <Image
-                        src={`${MINIO_URL}/slider/file_00000000b5047208a3d5ea069a7996df.png`}
+                        src={service.bannerUrl || `${MINIO_URL}/slider/file_00000000b5047208a3d5ea069a7996df.png`}
                         alt="HBO Max Hero"
                         fill
                         priority

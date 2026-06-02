@@ -47,7 +47,7 @@ export default function NordVpnPageClient({ service }: { service: Service }) {
             <div className="container">
                 {/* ─── Hero Banner ────────────────────────────────────── */}
                 <div className={styles['hero-image-container']}>
-                    <img src={`${MINIO_URL}/slider/9F224C95-172A-4D32-A4FD-CB37A31E7AB3.PNG`} alt="NordVPN Banner" className={styles['hero-banner-image']} />
+                    <img src={service.bannerUrl || `${MINIO_URL}/slider/9F224C95-172A-4D32-A4FD-CB37A31E7AB3.PNG`} alt="NordVPN Banner" className={styles['hero-banner-image']} />
                 </div>
 
                 {/* ─── Plan Selection ────────────────────────────────── */}

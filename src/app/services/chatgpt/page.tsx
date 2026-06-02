@@ -64,7 +64,7 @@ export default function ChatGPTProductPage() {
                     aspectRatio: '16/6'
                 }}>
                     <Image 
-                        src={HERO_BANNER} 
+                        src={service?.bannerUrl || HERO_BANNER} 
                         alt="ChatGPT Plus - Smarter Answers, Write Better" 
                         fill
                         priority
