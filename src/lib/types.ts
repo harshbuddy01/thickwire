@@ -22,6 +22,7 @@ export interface Plan {
     displayOrder: number;
     stockCount: number;
     inStock: boolean;
+    isBestValue?: boolean;
 }
 
 // ─── Order ──────────────────────────────────────────

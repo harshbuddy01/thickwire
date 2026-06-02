@@ -18,10 +18,22 @@ export default function PrimePageClient({ service }: { service: Service }) {
 
     // Color schemes per plan index for visual variety (matching original Prime design)
     const colorSchemes = [
-        { card: 'card-dark', badge: 'badge-gold', text: 'text-gold', btn: 'btn-outline-gold', features: '' },
-        { card: 'card-blue solid-blue', badge: 'badge-blue', text: 'text-blue-light', btn: 'btn-gradient-blue', features: 'text-white' },
-        { card: 'card-dark', badge: 'badge-gold', text: 'text-gold', btn: 'btn-outline-gold', features: '' },
+        { card: styles['card-dark'], badge: styles['badge-gold'], text: styles['text-gold'], btn: styles['btn-outline-gold'], features: '' },
+        { card: styles['card-blue'], badge: styles['badge-blue'], text: styles['text-blue-light'], btn: styles['btn-gradient-blue'], features: styles['text-white'] },
+        { card: styles['card-dark'], badge: styles['badge-gold'], text: styles['text-gold'], btn: styles['btn-outline-gold'], features: '' },
     ];
+
+    const formatDuration = (days: number) => {
+        if (days >= 365) {
+            const years = Math.floor(days / 365);
+            return `${days} Days (${years} Year${years > 1 ? 's' : ''})`;
+        }
+        if (days >= 30) {
+            const months = Math.floor(days / 30);
+            return `${days} Days (${months} Month${months > 1 ? 's' : ''})`;
+        }
+        return `${days} Days`;
+    };
 
     return (
         <div className={styles['prime-page-exact']}>
@@ -49,11 +61,15 @@ export default function PrimePageClient({ service }: { service: Service }) {
                     <div className={styles['plans-grid']}>
                         {service.plans.map((plan, index) => {
                             const colors = colorSchemes[index % colorSchemes.length];
-                            const isBestValue = index === service.plans.length - 1 && service.plans.length > 1;
+                            const isBlue = index % colorSchemes.length === 1;
+                            const hasExplicitBestValue = service.plans.some(p => p.isBestValue);
+                            const isBestValue = hasExplicitBestValue
+                                ? !!plan.isBestValue
+                                : (index === service.plans.length - 1 && service.plans.length > 1);
 
                             return (
-                                <div key={plan.id} className={`plan-card ${colors.card} ${isBestValue ? 'best-value' : ''}`}>
-                                    <div className={`plan-badge ${colors.badge}`}>
+                                <div key={plan.id} className={`${styles['plan-card']} ${colors.card} ${isBestValue ? styles['best-value'] : ''}`}>
+                                    <div className={`${styles['plan-badge']} ${colors.badge}`}>
                                         <Crown size={12} fill="currentColor" /> PREMIUM PLAN
                                     </div>
                                     {isBestValue ? (
@@ -61,11 +77,14 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                             <div className={styles['best-value-ribbon']}>BEST<br/>VALUE</div>
                                             <div className={styles['plan-content']}>
                                                 <h3 className={styles['plan-name']}>{plan.name}</h3>
-                                                <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
+                                                <div className={`${styles['plan-price']} ${isBlue ? styles['text-blue-light'] : ''}`}>
                                                     <span className={styles['currency']}>{plan.currency === 'USD' ? '$' : '₹'}</span>
                                                     <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                                 </div>
-                                                <ul className={`plan-features ${colors.features}`}>
+                                                <div style={{ fontSize: '13px', color: isBlue ? '#33a8ff' : '#d8a241', fontWeight: 700, marginTop: '-12px', marginBottom: '20px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                    Validity: {formatDuration(plan.durationDays)}
+                                                </div>
+                                                <ul className={`${styles['plan-features']} ${colors.features}`}>
                                                     <li><Check size={16} className={colors.text} /> Full HD / 4K Ultra HD Quality</li>
                                                     <li><Check size={16} className={colors.text} /> Watch on 1 Device</li>
                                                     <li><Check size={16} className={colors.text} /> All Prime Video Content</li>
@@ -74,7 +93,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                                 </ul>
                                                     <Link
                                                         href={`/checkout?planId=${plan.id}&service=${service.slug}`}
-                                                        className={`plan-btn ${colors.btn}`}
+                                                        className={`${styles['plan-btn']} ${colors.btn}`}
                                                         style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
                                                     >
                                                         <ShoppingCart size={18} /> Buy Now →
@@ -84,12 +103,15 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                     ) : (
                                         <div className={styles['plan-content']}>
                                             <h3 className={styles['plan-name']}>{plan.name}</h3>
-                                            <div className={`plan-price ${colors.card.includes('blue') ? 'text-blue-light' : ''}`}>
+                                            <div className={`${styles['plan-price']} ${isBlue ? styles['text-blue-light'] : ''}`}>
                                                 <span className={styles['currency']}>{plan.currency === 'USD' ? '$' : '₹'}</span>
                                                 <span className={styles['amount']}>{parseFloat(plan.price).toLocaleString()}</span>
                                             </div>
-                                            <ul className={`plan-features ${colors.features}`}>
-                                                <li><Check size={16} className={colors.text} /> {colors.card.includes('blue') ? 'Full HD Quality' : 'HD Quality'}</li>
+                                            <div style={{ fontSize: '13px', color: isBlue ? '#33a8ff' : '#d8a241', fontWeight: 700, marginTop: '-12px', marginBottom: '20px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                                Validity: {formatDuration(plan.durationDays)}
+                                            </div>
+                                            <ul className={`${styles['plan-features']} ${colors.features}`}>
+                                                <li><Check size={16} className={colors.text} /> {isBlue ? 'Full HD Quality' : 'HD Quality'}</li>
                                                 <li><Check size={16} className={colors.text} /> Watch on 1 Device</li>
                                                 <li><Check size={16} className={colors.text} /> All Prime Video Content</li>
                                                 <li><Check size={16} className={colors.text} /> {plan.name.toLowerCase().includes('ads free') || plan.name.toLowerCase().includes('ad free') ? 'Ads Free Experience' : 'Ads Supported'}</li>
@@ -97,7 +119,7 @@ export default function PrimePageClient({ service }: { service: Service }) {
                                             </ul>
                                                 <Link
                                                     href={`/checkout?planId=${plan.id}&service=${service.slug}`}
-                                                    className={`plan-btn ${colors.btn}`}
+                                                    className={`${styles['plan-btn']} ${colors.btn}`}
                                                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
                                                 >
                                                     <ShoppingCart size={18} /> Buy Now →
