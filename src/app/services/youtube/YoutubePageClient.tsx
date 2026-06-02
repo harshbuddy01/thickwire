@@ -1,16 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { ChevronRight, Check, Lock, ShieldCheck, Zap, Headphones, HelpCircle, Star, Globe, Navigation, Info } from 'lucide-react';
 import { useState } from 'react';
-import type { Service, Plan } from '@/lib/types';
-import styles from './youtube.module.css';
+import type { Service } from '@/lib/types';
 
 const MINIO_URL = process.env.NEXT_PUBLIC_CDN_URL || 'https://assets.streamkart.store/streamkart-assets';
 
 export default function YoutubePageClient({ service }: { service: Service }) {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+    const [hoveredBtn, setHoveredBtn] = useState<string | null>(null);
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
@@ -20,285 +20,480 @@ export default function YoutubePageClient({ service }: { service: Service }) {
     const globalPlans = service.plans.filter(p => p.currency === 'USD');
 
     return (
-        <div className={styles['youtube-page-exact']}>
-            <div className="container">
-                <nav className="breadcrumb-nav" style={{ padding: '24px 0', fontSize: '13px', color: '#666', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <Link href="/" style={{ color: '#111', textDecoration: 'none' }}>Home</Link>
-                    <ChevronRight size={14} />
-                    <Link href="/services" style={{ color: '#111', textDecoration: 'none' }}>Entertainment</Link>
-                    <ChevronRight size={14} />
-                    <span className="current" style={{ fontWeight: 600 }}>YouTube Premium</span>
+        <div style={{
+            background: '#0a0a0a',
+            backgroundColor: '#0c0c0e',
+            color: '#ffffff',
+            fontFamily: "'Outfit', sans-serif",
+            minHeight: '100vh',
+            paddingBottom: '100px',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            {/* Ambient YouTube Red Glow */}
+            <div style={{
+                position: 'absolute',
+                top: '5%',
+                left: '10%',
+                width: '45vw',
+                height: '45vw',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255, 0, 0, 0.05) 0%, transparent 70%)',
+                filter: 'blur(100px)',
+                pointerEvents: 'none',
+                zIndex: 1
+            }}></div>
+            <div style={{
+                position: 'absolute',
+                bottom: '15%',
+                right: '-5%',
+                width: '40vw',
+                height: '40vw',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255, 0, 0, 0.04) 0%, transparent 70%)',
+                filter: 'blur(100px)',
+                pointerEvents: 'none',
+                zIndex: 1
+            }}></div>
+
+            <div className="container" style={{ position: 'relative', zIndex: 10, maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+                {/* Breadcrumbs */}
+                <nav style={{ padding: '24px 0', fontSize: '13px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <Link href="/" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
+                    <ChevronRight size={14} style={{ color: 'rgba(255,255,255,0.3)' }} />
+                    <Link href="/services" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontWeight: 500 }}>Entertainment</Link>
+                    <ChevronRight size={14} style={{ color: 'rgba(255,255,255,0.3)' }} />
+                    <span style={{ fontWeight: 700, color: '#ff0000' }}>YouTube Premium</span>
                 </nav>
 
                 {/* Hero Banner */}
-                <div className={styles['hero-image-container']}>
+                <div style={{
+                    width: '100%',
+                    borderRadius: '24px',
+                    overflow: 'hidden',
+                    boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
+                    marginBottom: '48px',
+                    border: '1px solid rgba(255,255,255,0.05)'
+                }}>
                     <img
                         src={service.bannerUrl || `${MINIO_URL}/slider/file_00000000ab007208a29586bb51529b03.png`}
                         alt="YouTube Premium Hero"
-                        className={styles['hero-banner-image']}
+                        style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                 </div>
 
-                {/* Plans */}
-                <div className={styles['plans-section']}>
-                    <div className={styles['youtube-plans-grid']} style={{ gap: '24px' }}>
-                        {/* Indian Column */}
-                        <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            <div className="youtube-region-btn active" style={{ cursor: 'default' }}>
-                                <img src="https://flagcdn.com/w40/in.png" alt="India" width="20" style={{ borderRadius: '2px' }} /> For Indian Customers
-                            </div>
-                            
-                            {/* We will map through Indian plans, but render 2 per row if needed? No, vertical list is fine. The screenshot shows side-by-side inside the Indian column. */}
-                            <div className={styles['youtube-indian-plans-grid']} style={{ gap: '16px' }}>
-                                {indianPlans.length > 0 ? indianPlans.map((plan, idx) => (
-                                    <div key={plan.id} className={styles['youtube-plan-card']}>
-                                        {idx === 0 && (
-                                            <div className={styles['youtube-plan-tag']}>
-                                                <Star size={12} fill="#ff0000" /> MOST POPULAR
+                {/* Section Title */}
+                <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.03em' }}>
+                        YouTube. <span style={{ color: '#ff0000' }}>Ad-Free</span>. Non-Stop.
+                    </h2>
+                    <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto' }}>
+                        Enjoy background play, offline downloads, and YouTube Music Premium. Choose a regional plan below.
+                    </p>
+                </div>
+
+                {/* Plans Columns */}
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', 
+                    gap: '40px',
+                    marginBottom: '64px'
+                }}>
+                    {/* Indian Region Column */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <div style={{ 
+                            padding: '16px 24px', 
+                            borderRadius: '16px', 
+                            background: 'rgba(255, 0, 0, 0.08)', 
+                            border: '1px solid rgba(255, 0, 0, 0.25)', 
+                            color: '#ff0000',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '1rem',
+                            letterSpacing: '0.5px'
+                        }}>
+                            <img src="https://flagcdn.com/w40/in.png" alt="India" width="22" style={{ borderRadius: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }} /> 
+                            FOR INDIAN CUSTOMERS
+                        </div>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            {indianPlans.length > 0 ? indianPlans.map((plan, idx) => {
+                                const isPopular = idx === 0;
+                                const cardId = plan.id;
+                                const isHovered = hoveredCard === cardId;
+
+                                return (
+                                    <div 
+                                        key={plan.id} 
+                                        onMouseEnter={() => setHoveredCard(cardId)}
+                                        onMouseLeave={() => setHoveredCard(null)}
+                                        style={{
+                                            background: 'rgba(22, 22, 26, 0.6)',
+                                            border: isPopular 
+                                                ? `2px solid ${isHovered ? '#ff0000' : 'rgba(255, 0, 0, 0.4)'}` 
+                                                : `1px solid ${isHovered ? '#ff0000' : 'rgba(255,255,255,0.08)'}`,
+                                            borderRadius: '24px',
+                                            padding: '36px',
+                                            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                            transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                                            boxShadow: isHovered 
+                                                ? '0 20px 40px rgba(255, 0, 0, 0.12)' 
+                                                : '0 10px 30px rgba(0,0,0,0.2)',
+                                            position: 'relative',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            backdropFilter: 'blur(12px)'
+                                        }}
+                                    >
+                                        {isPopular && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '-12px',
+                                                left: '32px',
+                                                background: '#ff0000',
+                                                color: '#fff',
+                                                padding: '6px 14px',
+                                                borderRadius: '20px',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 800,
+                                                letterSpacing: '1.5px',
+                                                textTransform: 'uppercase',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                boxShadow: '0 4px 12px rgba(255, 0, 0, 0.3)'
+                                            }}>
+                                                <Star size={12} fill="#fff" /> MOST POPULAR
                                             </div>
                                         )}
-                                        <div className={styles['youtube-plan-header']} style={{ flexDirection: 'column', gap: '16px' }}>
-                                            <div className={styles['youtube-plan-title']}>
-                                                <p>YouTube Premium</p>
-                                                <h3>{plan.name}</h3>
-                                                <div className={styles['youtube-plan-badge']}>Individual</div>
+
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', gap: '16px' }}>
+                                            <div>
+                                                <p style={{ margin: 0, fontSize: '0.85rem', color: '#ff0000', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>YouTube Premium</p>
+                                                <h3 style={{ margin: '4px 0 8px 0', fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>{plan.name}</h3>
+                                                <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>Individual</div>
                                             </div>
-                                            <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
-                                                <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
-                                                <p>for {plan.durationDays} Days</p>
+                                            <div style={{ textAlign: 'right' }}>
+                                                <h4 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#fff', margin: 0, lineHeight: 1 }}>₹{parseFloat(plan.price).toLocaleString()}</h4>
+                                                <p style={{ margin: '6px 0 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>for {plan.durationDays} Days</p>
                                             </div>
                                         </div>
 
-                                        <ul className={styles['youtube-plan-features']}>
-                                            <li><Check size={18} className={styles['check-icon']} /> Ad-free videos</li>
-                                            <li><Check size={18} className={styles['check-icon']} /> Background play</li>
-                                            <li><Check size={18} className={styles['check-icon']} /> Downloads to watch offline</li>
-                                            <li><Check size={18} className={styles['check-icon']} /> YouTube Originals</li>
-                                            <li><Check size={18} className={styles['check-icon']} /> Works on mobile, tablet & web</li>
+                                        <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px 0', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> Ad-free videos & music</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> Background play & PiP</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> High-res offline downloads</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> YouTube Music Premium access</li>
                                         </ul>
 
-                                        <div style={{ marginTop: 'auto' }}>
-                                                <Link 
-                                                    href={`/checkout?planId=${plan.id}&service=${service.slug}`}
-                                                    style={{ textDecoration: 'none' }}
+                                        <div>
+                                            <Link href={`/checkout?planId=${plan.id}&service=${service.slug}`} style={{ textDecoration: 'none' }}>
+                                                <button 
+                                                    onMouseEnter={() => setHoveredBtn(cardId)}
+                                                    onMouseLeave={() => setHoveredBtn(null)}
+                                                    style={{
+                                                        background: isPopular ? '#ff0000' : 'rgba(255,255,255,0.08)',
+                                                        color: '#fff',
+                                                        border: isPopular ? 'none' : '1px solid rgba(255,255,255,0.15)',
+                                                        width: '100%',
+                                                        padding: '16px',
+                                                        borderRadius: '30px',
+                                                        fontSize: '1rem',
+                                                        fontWeight: 800,
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '10px',
+                                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                                                        transform: hoveredBtn === cardId ? 'scale(1.02)' : 'scale(1)',
+                                                        boxShadow: hoveredBtn === cardId && isPopular ? '0 10px 20px rgba(255, 0, 0, 0.3)' : 'none'
+                                                    }}
                                                 >
-                                                    <button className={styles['youtube-buy-btn']}>
-                                                        <Lock size={18} /> Buy Now Securely
-                                                    </button>
-                                                </Link>
-                                            <div className={styles['youtube-secure-text']}>
-                                                <ShieldCheck size={14} /> Secure & Safe Payment
+                                                    <Lock size={18} /> Buy Now Securely
+                                                </button>
+                                            </Link>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '12px', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500 }}>
+                                                <ShieldCheck size={14} style={{ color: '#ff0000' }} /> Secure & Encrypted Payment
                                             </div>
                                         </div>
                                     </div>
-                                )) : (
-                                    <div style={{ padding: '40px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #eaeaea', gridColumn: 'span 2' }}>
-                                        <p style={{ fontSize: '15px', color: '#666' }}>No plans available currently.</p>
-                                    </div>
-                                )}
-                            </div>
+                                );
+                            }) : (
+                                <div style={{ padding: '40px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                    <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)' }}>No plans available currently.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Global Region Column */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <div style={{ 
+                            padding: '16px 24px', 
+                            borderRadius: '16px', 
+                            background: 'rgba(255,255,255,0.05)', 
+                            border: '1px solid rgba(255, 255, 255, 0.1)', 
+                            color: '#ffffff',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '1rem',
+                            letterSpacing: '0.5px'
+                        }}>
+                            <Globe size={20} style={{ color: '#ff0000' }} />
+                            FOR OUTSIDE INDIA CUSTOMERS
                         </div>
 
-                        {/* Global Column */}
-                        <div className="plan-column" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            <div className={styles['youtube-region-btn']} style={{ cursor: 'default' }}>
-                                <Globe size={18} /> For Outside India Customers
-                            </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            {globalPlans.length > 0 ? globalPlans.map((plan, idx) => {
+                                const cardId = plan.id;
+                                const isHovered = hoveredCard === cardId;
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
-                                {globalPlans.length > 0 ? globalPlans.map((plan, idx) => (
-                                    <div key={plan.id} className={styles['youtube-plan-card']}>
-                                        <div className={styles['youtube-plan-header']} style={{ flexDirection: 'column', gap: '16px' }}>
-                                            <div className={styles['youtube-plan-title']}>
-                                                <p>YouTube Premium</p>
-                                                <h3>{plan.name}</h3>
-                                                <div className="youtube-plan-badge youtube-plan-badge-blue">Individual</div>
+                                return (
+                                    <div 
+                                        key={plan.id} 
+                                        onMouseEnter={() => setHoveredCard(cardId)}
+                                        onMouseLeave={() => setHoveredCard(null)}
+                                        style={{
+                                            background: 'rgba(22, 22, 26, 0.6)',
+                                            border: `1px solid ${isHovered ? '#ff0000' : 'rgba(255,255,255,0.08)'}`,
+                                            borderRadius: '24px',
+                                            padding: '36px',
+                                            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                                            transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                                            boxShadow: isHovered 
+                                                ? '0 20px 40px rgba(255, 0, 0, 0.12)' 
+                                                : '0 10px 30px rgba(0,0,0,0.2)',
+                                            position: 'relative',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            backdropFilter: 'blur(12px)'
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', gap: '16px' }}>
+                                            <div>
+                                                <p style={{ margin: 0, fontSize: '0.85rem', color: '#ff0000', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>YouTube Premium</p>
+                                                <h3 style={{ margin: '4px 0 8px 0', fontSize: '1.4rem', fontWeight: 800, color: '#fff' }}>{plan.name}</h3>
+                                                <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>Individual</div>
                                             </div>
-                                            <div className={styles['youtube-plan-price']} style={{ textAlign: 'left' }}>
-                                                <h4>{plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}</h4>
-                                                <p>for {plan.durationDays} Days</p>
+                                            <div style={{ textAlign: 'right' }}>
+                                                <h4 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#fff', margin: 0, lineHeight: 1 }}>${parseFloat(plan.price).toLocaleString()}</h4>
+                                                <p style={{ margin: '6px 0 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>for {plan.durationDays} Days</p>
                                             </div>
                                         </div>
 
-                                        <ul className={styles['youtube-plan-features']}>
-                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Ad-free videos</li>
-                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Background play</li>
-                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Downloads to watch offline</li>
-                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> YouTube Originals</li>
-                                            <li><Check size={18} className={styles['check-icon']} style={{ color: '#3b82f6' }} /> Works on mobile, tablet & web</li>
+                                        <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px 0', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> Ad-free videos & music</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> Background play & PiP</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> High-res offline downloads</li>
+                                            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.92rem', color: 'rgba(255,255,255,0.85)' }}><Check size={18} style={{ color: '#ff0000', flexShrink: 0 }} /> YouTube Music Premium access</li>
                                         </ul>
 
-                                        <div className={styles['youtube-info-box']}>
-                                            <Info size={16} /> This plan is for outside India customers only.
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px',
+                                            background: 'rgba(255,255,255,0.03)',
+                                            border: '1px solid rgba(255,255,255,0.06)',
+                                            padding: '12px 16px',
+                                            borderRadius: '12px',
+                                            fontSize: '0.8rem',
+                                            color: 'rgba(255,255,255,0.5)',
+                                            marginBottom: '20px'
+                                        }}>
+                                            <Info size={16} style={{ color: '#ff0000', flexShrink: 0 }} /> This plan is for outside India customers only.
                                         </div>
 
-                                        <div style={{ marginTop: 'auto' }}>
-                                                <Link 
-                                                    href={`/checkout?planId=${plan.id}&service=${service.slug}`}
-                                                    style={{ textDecoration: 'none' }}
+                                        <div>
+                                            <Link href={`/checkout?planId=${plan.id}&service=${service.slug}`} style={{ textDecoration: 'none' }}>
+                                                <button 
+                                                    onMouseEnter={() => setHoveredBtn(cardId)}
+                                                    onMouseLeave={() => setHoveredBtn(null)}
+                                                    style={{
+                                                        background: 'rgba(255, 255, 255, 0.08)',
+                                                        color: '#fff',
+                                                        border: '1px solid rgba(255,255,255,0.15)',
+                                                        width: '100%',
+                                                        padding: '16px',
+                                                        borderRadius: '30px',
+                                                        fontSize: '1rem',
+                                                        fontWeight: 800,
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '10px',
+                                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                                                        transform: hoveredBtn === cardId ? 'scale(1.02)' : 'scale(1)'
+                                                    }}
                                                 >
-                                                    <button className={styles['youtube-buy-btn']}>
-                                                        <Lock size={18} /> Buy Now Securely
-                                                    </button>
-                                                </Link>
-                                            <div className={styles['youtube-secure-text']}>
-                                                <ShieldCheck size={14} /> Secure & Safe Payment
+                                                    <Lock size={18} /> Buy Now Securely
+                                                </button>
+                                            </Link>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '12px', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', fontWeight: 500 }}>
+                                                <ShieldCheck size={14} style={{ color: '#ff0000' }} /> Secure & Encrypted Payment
                                             </div>
                                         </div>
                                     </div>
-                                )) : (
-                                    <div style={{ padding: '40px', textAlign: 'center', background: '#fff', borderRadius: '16px', border: '1px solid #eaeaea' }}>
-                                        <p style={{ fontSize: '15px', color: '#666' }}>No plans available currently.</p>
-                                    </div>
-                                )}
-                            </div>
+                                );
+                            }) : (
+                                <div style={{ padding: '40px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                    <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.4)' }}>No plans available currently.</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Trust Strip */}
-                <div className={styles['trust-strip']}>
-                    <div className="trust-item">
-                        <ShieldCheck size={28} className="trust-icon" />
-                        <div className="trust-text">
-                            <strong>100% Safe & Secure</strong>
-                            <span>Your data and payments are fully protected.</span>
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+                    gap: '24px',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    padding: '36px',
+                    borderRadius: '24px',
+                    marginBottom: '64px'
+                }}>
+                    {[
+                        { icon: <ShieldCheck size={26} />, title: "100% Safe Checkout", desc: "Your details are fully protected." },
+                        { icon: <Navigation size={26} style={{ transform: 'rotate(45deg)' }} />, title: "Instant Access Delivery", desc: "Automated credentials delivery." },
+                        { icon: <ShieldCheck size={26} />, title: "Official Subscriptions", desc: "Stable private account access." },
+                        { icon: <Headphones size={26} />, title: "24/7 Premium Support", desc: "Dedicated support team." }
+                    ].map((item, idx) => (
+                        <div key={idx} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                            <div style={{ color: '#ff0000' }}>{item.icon}</div>
+                            <div>
+                                <strong style={{ display: 'block', fontSize: '0.95rem', color: '#fff', marginBottom: '2px' }}>{item.title}</strong>
+                                <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>{item.desc}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="trust-item">
-                        <Navigation size={28} className="trust-icon" style={{ transform: 'rotate(45deg)' }} />
-                        <div className="trust-text">
-                            <strong>Instant Delivery</strong>
-                            <span>Access details delivered instantly to your email.</span>
-                        </div>
-                    </div>
-                    <div className="trust-item">
-                        <ShieldCheck size={28} className="trust-icon" />
-                        <div className="trust-text">
-                            <strong>Official Subscription</strong>
-                            <span>Genuine YouTube Premium subscription.</span>
-                        </div>
-                    </div>
-                    <div className="trust-item">
-                        <Headphones size={28} className="trust-icon" />
-                        <div className="trust-text">
-                            <strong>24/7 Customer Support</strong>
-                            <span>We&apos;re here to help you anytime you need.</span>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
-                {/* FAQ */}
-                <div className={styles['faq-section']}>
-                    <h3><HelpCircle size={24} /> Frequently Asked Questions</h3>
-                    <div className={styles['youtube-faq-grid']}>
-                        <div className="faq-column">
-                            {[
-                                { q: "What is YouTube Premium?", a: "YouTube Premium provides ad-free videos, background play, and offline downloads." },
-                                { q: "Will I receive my account details immediately?", a: "Yes, once your payment is confirmed, the details will be sent to your email instantly." },
-                                { q: "Can I use YouTube Premium on multiple devices?", a: "You can log into your account on multiple devices and enjoy premium benefits across all of them." }
-                            ].map((item, idx) => (
-                                <div key={idx} className={`faq-item ${openFaq === idx ? 'open' : ''}`} onClick={() => toggleFaq(idx)} style={{ marginBottom: '12px', background: '#fff', padding: '0', borderRadius: '12px', border: '1px solid #eaeaea', overflow: 'hidden' }}>
-                                    <div className="faq-question" style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', cursor: 'pointer', fontWeight: 700 }}>
+                {/* FAQ Accordion */}
+                <div style={{ maxWidth: '800px', margin: '0 auto 64px auto' }}>
+                    <h3 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'center' }}>
+                        <HelpCircle size={24} style={{ color: '#ff0000' }} /> Frequently Asked Questions
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {[
+                            { q: "What is YouTube Premium?", a: "YouTube Premium provides ad-free videos, background play, and offline downloads." },
+                            { q: "Will I receive my account details immediately?", a: "Yes, once your payment is confirmed, the details will be sent to your email instantly." },
+                            { q: "Can I use YouTube Premium on multiple devices?", a: "You can log into your account on multiple devices and enjoy premium benefits across all of them." },
+                            { q: "Is this an official YouTube subscription?", a: "Yes, we provide 100% official and genuine YouTube Premium subscriptions." },
+                            { q: "Can I renew after my plan expires?", a: "Yes, you can easily renew your subscription by purchasing a new plan from our store." }
+                        ].map((item, idx) => {
+                            const isOpen = openFaq === idx;
+                            return (
+                                <div 
+                                    key={idx} 
+                                    style={{ 
+                                        background: 'rgba(255,255,255,0.02)', 
+                                        border: `1px solid ${isOpen ? 'rgba(255, 0, 0, 0.3)' : 'rgba(255,255,255,0.06)'}`,
+                                        borderRadius: '16px',
+                                        overflow: 'hidden',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    <div 
+                                        onClick={() => toggleFaq(idx)}
+                                        style={{
+                                            padding: '20px 24px',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            cursor: 'pointer',
+                                            fontWeight: 700,
+                                            color: isOpen ? '#ff0000' : '#fff',
+                                            userSelect: 'none'
+                                        }}
+                                    >
                                         <span>{item.q}</span>
-                                        <ChevronRight size={16} style={{ transform: openFaq === idx ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
+                                        <ChevronRight size={18} style={{ 
+                                            transform: isOpen ? 'rotate(90deg)' : 'rotate(0)', 
+                                            transition: 'transform 0.3s ease',
+                                            color: isOpen ? '#ff0000' : 'rgba(255,255,255,0.4)'
+                                        }} />
                                     </div>
-                                    <div className="faq-answer" style={{ 
+                                    <div style={{
                                         display: 'grid',
-                                        gridTemplateRows: openFaq === idx ? '1fr' : '0fr',
-                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
-                                        opacity: openFaq === idx ? 1 : 0
+                                        gridTemplateRows: isOpen ? '1fr' : '0fr',
+                                        transition: 'grid-template-rows 0.3s ease-in-out',
                                     }}>
                                         <div style={{ overflow: 'hidden' }}>
-                                            <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
+                                            <p style={{ 
+                                                margin: 0, 
+                                                padding: '0 24px 20px 24px', 
+                                                color: 'rgba(255,255,255,0.6)', 
+                                                fontSize: '0.95rem',
+                                                lineHeight: 1.6
+                                            }}>{item.a}</p>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                        <div className="faq-column">
-                            {[
-                                { q: "Is this an official YouTube subscription?", a: "Yes, we provide 100% official and genuine YouTube Premium subscriptions." },
-                                { q: "Can I renew after my plan expires?", a: "Yes, you can easily renew your subscription by purchasing a new plan from our store." },
-                                { q: "What happens after my plan ends?", a: "Your account will revert to the free version of YouTube with ads until you renew your subscription." }
-                            ].map((item, idx) => {
-                                const offsetIdx = idx + 3;
-                                return (
-                                <div key={offsetIdx} className={`faq-item ${openFaq === offsetIdx ? 'open' : ''}`} onClick={() => toggleFaq(offsetIdx)} style={{ marginBottom: '12px', background: '#fff', padding: '0', borderRadius: '12px', border: '1px solid #eaeaea', overflow: 'hidden' }}>
-                                    <div className="faq-question" style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', cursor: 'pointer', fontWeight: 700 }}>
-                                        <span>{item.q}</span>
-                                        <ChevronRight size={16} style={{ transform: openFaq === offsetIdx ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.3s' }} />
-                                    </div>
-                                    <div className="faq-answer" style={{ 
-                                        display: 'grid',
-                                        gridTemplateRows: openFaq === offsetIdx ? '1fr' : '0fr',
-                                        transition: 'grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
-                                        opacity: openFaq === offsetIdx ? 1 : 0
-                                    }}>
-                                        <div style={{ overflow: 'hidden' }}>
-                                            <div style={{ padding: '0 20px 16px 20px', color: '#555', fontSize: '14px' }}>{item.a}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )})}
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
 
                 {/* Bottom CTA */}
-                <div className={styles['youtube-bottom-cta']}>
-                    <div className={styles['cta-left']}>
-                        <div style={{ width: '64px', height: '64px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="#ff0000" xmlns="http://www.w3.org/2000/svg">
+                <div style={{
+                    background: '#161619',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '24px',
+                    padding: '40px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '28px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                        <div style={{ width: '64px', height: '64px', background: '#ff0000', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 20px rgba(255,0,0,0.2)' }}>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                             </svg>
                         </div>
                         <div>
-                            <h3>Enjoy YouTube without interruptions.</h3>
-                            <p>Go ad-free and enjoy unlimited entertainment with YouTube Premium.</p>
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>Enjoy YouTube without interruptions.</h3>
+                            <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem' }}>Go ad-free and enjoy unlimited entertainment with YouTube Premium.</p>
                         </div>
                     </div>
-                    <div className={styles['cta-right']}>
-                        <button className={styles['youtube-bottom-cta-btn']} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                            Get YouTube Premium Now <ChevronRight size={18} />
-                        </button>
-                        <div className={styles['youtube-cta-trust']}>
-                            Instant Delivery • Secure Payment
-                        </div>
-                    </div>
-                </div>
-
-                {/* Footer Payment Methods */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '40px', padding: '20px 0', borderTop: '1px solid #eaeaea', flexWrap: 'wrap', gap: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <span style={{ fontSize: '12px', color: '#666', fontWeight: 600 }}>We Accept</span>
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" height="16" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" height="20" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" height="16" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg" alt="RuPay" height="16" />
-                            <span style={{ fontSize: '12px', color: '#888' }}>& more</span>
-                        </div>
-                    </div>
-                    
-                    <div style={{ display: 'flex', gap: '32px' }}>
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <Lock size={20} color="#666" />
-                            <div>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#111' }}>Secure Checkout</div>
-                                <div style={{ fontSize: '11px', color: '#888' }}>Encrypted & protected payments</div>
-                            </div>
-                        </div>
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#111' }}>Trusted by Thousands</div>
-                                <div style={{ fontSize: '11px', color: '#888' }}>Join thousands of satisfied customers.</div>
-                            </div>
-                        </div>
-                    </div>
+                    <button 
+                        onClick={() => window.scrollTo({ top: 350, behavior: 'smooth' })}
+                        style={{
+                            background: '#ff0000',
+                            color: '#fff',
+                            border: 'none',
+                            padding: '16px 32px',
+                            borderRadius: '30px',
+                            fontSize: '1.05rem',
+                            fontWeight: 800,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            transition: 'all 0.2s',
+                            boxShadow: '0 8px 20px rgba(255,0,0,0.2)'
+                        }}
+                        onMouseEnter={e => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 12px 25px rgba(255,0,0,0.3)';
+                        }}
+                        onMouseLeave={e => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(255,0,0,0.2)';
+                        }}
+                    >
+                        Get Premium Now <ChevronRight size={18} />
+                    </button>
                 </div>
             </div>
         </div>
