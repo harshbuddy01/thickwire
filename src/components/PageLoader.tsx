@@ -9,7 +9,6 @@ const CRITICAL_IMAGES = [
     `${CDN_URL}/chatgpt_3d.png`,
     `${CDN_URL}/jiohotstar_3d.png`,
     `${CDN_URL}/sonyliv_3d.png`,
-    `${CDN_URL}/slider/slider1.png`,
 ];
 
 export default function PageLoader() {

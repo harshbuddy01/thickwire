@@ -17,7 +17,7 @@ const DEFAULT_SLIDES = [
 ];
 
 export default function HeroSlider() {
-    const [slidesList, setSlidesList] = useState<any[]>(DEFAULT_SLIDES);
+    const [slidesList, setSlidesList] = useState<any[]>([]);
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
 
@@ -31,10 +31,13 @@ export default function HeroSlider() {
                         alt: 'Storefront Slide',
                         link: b.linkUrl || '/'
                     })));
+                } else {
+                    setSlidesList(DEFAULT_SLIDES);
                 }
             })
             .catch((err) => {
                 console.error('Failed to load dynamic home banners', err);
+                setSlidesList(DEFAULT_SLIDES);
             });
     }, []);
 
