@@ -38,7 +38,7 @@ export default function ChatGPTProductPage() {
     };
 
     return (
-        <div style={{ background: '#f8f9fb', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
+        <div style={{ background: 'linear-gradient(135deg, #f4fbf7 0%, #f8f9fb 100%)', minHeight: '100vh', paddingBottom: '80px', fontFamily: "'Outfit', sans-serif" }}>
             
             {/* Breadcrumb */}
             <div className="container" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
@@ -53,23 +53,22 @@ export default function ChatGPTProductPage() {
 
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                 
-                {/* Hero Banner Image */}
-                <div className="hero-image-container" style={{
+                {/* Hero Banner Image (Styled directly to avoid container cropping) */}
+                <div className="hero-image-container-safe" style={{
                     width: '100%',
-                    borderRadius: '32px',
-                    overflow: 'hidden',
-                    boxShadow: '0 24px 48px rgba(0,0,0,0.1)',
-                    background: '#131314',
-                    position: 'relative',
-                    aspectRatio: '16/6'
+                    position: 'relative'
                 }}>
-                    <Image 
+                    <img 
                         src={service?.bannerUrl || HERO_BANNER} 
                         alt="ChatGPT Plus - Smarter Answers, Write Better" 
-                        fill
-                        priority
-                        style={{ objectFit: 'cover' }}
-                        sizes="100vw"
+                        style={{ 
+                            width: '100%', 
+                            height: 'auto', 
+                            display: 'block',
+                            borderRadius: '24px',
+                            border: '1px solid #e2e8f0',
+                            boxShadow: '0 20px 40px rgba(0,0,0,0.04)'
+                        }}
                     />
                 </div>
 
@@ -77,7 +76,7 @@ export default function ChatGPTProductPage() {
                 <div>
                     <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Choose Your Plan</h2>
                     <p style={{ color: '#6b7280', fontSize: '1.1rem', margin: '0 0 32px 0', fontWeight: 500 }}>Simple plans. Powerful AI.</p>
-
+                    
                     <div className="chatgpt-plans-container-new" style={{
                         display: 'grid',
                         gap: '24px',
@@ -98,8 +97,11 @@ export default function ChatGPTProductPage() {
                                     display: none;
                                 }
                                 .chatgpt-plans-container-new > div {
-                                    flex: 0 0 280px !important;
-                                    max-width: 280px !important;
+                                    flex: 0 0 290px !important;
+                                    max-width: 290px !important;
+                                }
+                                .chatgpt-plan-price-isolated-value {
+                                    font-size: 2rem !important;
                                 }
                             }
                         ` }} />
@@ -113,62 +115,57 @@ export default function ChatGPTProductPage() {
 
                             return (
                                 <div key={plan.id} className="chatgpt-plan-card-isolated" style={{ 
-                                    background: '#131314', 
+                                    background: '#ffffff', 
                                     borderRadius: '24px', 
-                                    padding: '40px 32px', 
+                                    padding: '36px 28px', 
                                     display: 'flex', 
                                     flexDirection: 'column',
-                                    border: isPopular ? '2px solid #D4AF37' : '1px solid #374151',
-                                    boxShadow: isPopular ? '0 20px 40px rgba(253, 224, 71, 0.15)' : '0 12px 24px rgba(0,0,0,0.05)',
+                                    border: isPopular ? '2px solid #10a37f' : '1px solid #e2e8f0',
+                                    boxShadow: isPopular ? '0 20px 40px rgba(16, 163, 127, 0.08)' : '0 10px 30px rgba(0,0,0,0.02)',
                                     position: 'relative',
                                     transform: isPopular ? 'scale(1.02)' : 'none',
-                                    overflow: 'hidden'
+                                    overflow: 'hidden',
+                                    transition: 'transform 0.3s ease, box-shadow 0.3s ease'
                                 }}>
                                     {isPopular && (
-                                        <div style={{ position: 'absolute', top: '-14px', left: '0', right: '0', display: 'flex', justifyContent: 'center' }}>
-                                            <div style={{ background: '#D4AF37', color: '#111827', padding: '6px 16px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                                        <div style={{ position: 'absolute', top: '0', left: '0', right: '0', display: 'flex', justifyContent: 'center' }}>
+                                            <div style={{ background: '#10a37f', color: '#ffffff', padding: '6px 16px', borderRadius: '0 0 12px 12px', fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                                                 Most Popular
                                             </div>
                                         </div>
                                     )}
 
                                     {isBestValue && (
-                                        <div style={{ position: 'absolute', top: '16px', right: '-30px', background: '#D4AF37', color: '#111827', padding: '6px 40px', transform: 'rotate(45deg)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.5px' }}>
+                                        <div style={{ position: 'absolute', top: '16px', right: '-30px', background: '#10a37f', color: '#ffffff', padding: '6px 40px', transform: 'rotate(45deg)', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.5px' }}>
                                             BEST VALUE
                                         </div>
                                     )}
 
-                                    <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', background: isPopular ? '#D4AF37' : 'transparent', border: isPopular ? 'none' : '1px solid #4b5563', borderRadius: '100px', fontSize: '0.7rem', fontWeight: isPopular ? 800 : 700, color: isPopular ? '#111827' : '#e5e7eb', letterSpacing: '0.5px', marginBottom: '24px' }}>
+                                    <div style={{ display: 'inline-flex', alignSelf: 'flex-start', padding: '6px 12px', background: 'rgba(16, 163, 127, 0.08)', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 700, color: '#10a37f', letterSpacing: '0.5px', marginBottom: '24px' }}>
                                         PLUS PLAN
                                     </div>
                                     
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px' }}>
-                                        <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>{plan.name}</span>
-                                        <span style={{ fontSize: '1rem', color: '#9ca3af' }}>({plan.durationDays} Days)</span>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                                        <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1f2937' }}>{plan.name}</span>
+                                        <span style={{ fontSize: '0.9rem', color: '#6b7280', fontWeight: 500 }}>({plan.durationDays} Days)</span>
                                     </div>
                                     
-                                    <div className="chatgpt-plan-price-isolated" style={{ fontSize: '3.2rem', fontWeight: 800, color: '#fff', lineHeight: 1, marginBottom: '32px' }}>
-                                        {plan.currency === 'USD' ? '$' : '₹'}{parseFloat(plan.price).toLocaleString()}
+                                    <div className="chatgpt-plan-price-isolated-value" style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827', lineHeight: 1, marginBottom: '28px', letterSpacing: '-1px' }}>
+                                        <span style={{ color: '#10a37f', marginRight: '2px' }}>{plan.currency === 'USD' ? '$' : '₹'}</span>{parseFloat(plan.price).toLocaleString()}
                                     </div>
                                     
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                <CheckCircle2 size={12} color="#111" />
-                                            </div>
-                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>{plan.description || 'Full Access to GPT-4o & Latest Models'}</span>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '32px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <CheckCircle2 size={16} color="#10a37f" style={{ flexShrink: 0 }} />
+                                            <span style={{ color: '#4b5563', fontSize: '0.92rem', fontWeight: 500 }}>{plan.description || 'Full Access to GPT-4o & Latest Models'}</span>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                <CheckCircle2 size={12} color="#111" />
-                                            </div>
-                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Priority Response</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <CheckCircle2 size={16} color="#10a37f" style={{ flexShrink: 0 }} />
+                                            <span style={{ color: '#4b5563', fontSize: '0.92rem', fontWeight: 500 }}>Priority Response</span>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <div style={{ background: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                <CheckCircle2 size={12} color="#111" />
-                                            </div>
-                                            <span style={{ color: '#e5e7eb', fontSize: '0.95rem' }}>Works on All Devices</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <CheckCircle2 size={16} color="#10a37f" style={{ flexShrink: 0 }} />
+                                            <span style={{ color: '#4b5563', fontSize: '0.92rem', fontWeight: 500 }}>Works on All Devices</span>
                                         </div>
                                     </div>
                                     
@@ -176,12 +173,12 @@ export default function ChatGPTProductPage() {
                                         onClick={() => handleBuy(plan)}
                                         style={{
                                             width: '100%',
-                                            background: isPopular ? 'linear-gradient(to right, #F3E5AB, #D4AF37)' : 'transparent',
-                                            border: isPopular ? 'none' : '1px solid #D4AF37',
-                                            color: isPopular ? '#111827' : '#D4AF37',
+                                            background: isPopular ? 'linear-gradient(to right, #10a37f, #1fa985)' : 'transparent',
+                                            border: isPopular ? 'none' : '1.5px solid #10a37f',
+                                            color: isPopular ? '#ffffff' : '#10a37f',
                                             padding: '16px',
                                             borderRadius: '12px',
-                                            fontSize: '1.05rem',
+                                            fontSize: '1rem',
                                             fontWeight: 800,
                                             cursor: 'pointer',
                                             display: 'flex',
@@ -189,17 +186,17 @@ export default function ChatGPTProductPage() {
                                             justifyContent: 'center',
                                             gap: '10px',
                                             transition: 'all 0.2s',
-                                            boxShadow: isPopular ? '0 8px 24px rgba(253, 224, 71, 0.3)' : 'none',
+                                            boxShadow: isPopular ? '0 8px 20px rgba(16, 163, 127, 0.15)' : 'none',
                                             opacity: 1,
                                             marginTop: 'auto'
                                         }}
                                         onMouseEnter={(e) => { 
-                                            if (isPopular) e.currentTarget.style.transform = 'translateY(-2px)';
-                                            else e.currentTarget.style.background = 'rgba(253, 224, 71, 0.1)';
+                                            e.currentTarget.style.transform = 'translateY(-2px)';
+                                            if (!isPopular) e.currentTarget.style.background = 'rgba(16, 163, 127, 0.05)';
                                         }}
                                         onMouseLeave={(e) => { 
-                                            if (isPopular) e.currentTarget.style.transform = 'translateY(0)';
-                                            else e.currentTarget.style.background = 'transparent';
+                                            e.currentTarget.style.transform = 'translateY(0)';
+                                            if (!isPopular) e.currentTarget.style.background = 'transparent';
                                         }}
                                     >
                                         <ShoppingCart size={18} /> Buy Now
@@ -220,7 +217,7 @@ export default function ChatGPTProductPage() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                             <div style={{ display: 'flex', gap: '20px' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <Zap size={24} color="#111827" strokeWidth={1.5} />
+                                    <Zap size={24} color="#10a37f" strokeWidth={1.5} />
                                 </div>
                                 <div>
                                     <div style={{ color: '#111827', fontWeight: 700, fontSize: '1.05rem', marginBottom: '6px' }}>Smarter & Faster</div>
@@ -229,7 +226,7 @@ export default function ChatGPTProductPage() {
                             </div>
                             <div style={{ display: 'flex', gap: '20px' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <Brain size={24} color="#111827" strokeWidth={1.5} />
+                                    <Brain size={24} color="#10a37f" strokeWidth={1.5} />
                                 </div>
                                 <div>
                                     <div style={{ color: '#111827', fontWeight: 700, fontSize: '1.05rem', marginBottom: '6px' }}>Advanced AI Models</div>
@@ -238,7 +235,7 @@ export default function ChatGPTProductPage() {
                             </div>
                             <div style={{ display: 'flex', gap: '20px' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <ShieldCheck size={24} color="#111827" strokeWidth={1.5} />
+                                    <ShieldCheck size={24} color="#10a37f" strokeWidth={1.5} />
                                 </div>
                                 <div>
                                     <div style={{ color: '#111827', fontWeight: 700, fontSize: '1.05rem', marginBottom: '6px' }}>Private & Secure</div>
@@ -247,7 +244,7 @@ export default function ChatGPTProductPage() {
                             </div>
                             <div style={{ display: 'flex', gap: '20px' }}>
                                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <Monitor size={24} color="#111827" strokeWidth={1.5} />
+                                    <Monitor size={24} color="#10a37f" strokeWidth={1.5} />
                                 </div>
                                 <div>
                                     <div style={{ color: '#111827', fontWeight: 700, fontSize: '1.05rem', marginBottom: '6px' }}>Works Everywhere</div>
@@ -306,7 +303,7 @@ export default function ChatGPTProductPage() {
                 <div className="chatgpt-trust-badges">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e5e7eb' }}>
-                            <ShieldCheck size={28} color="#111827" strokeWidth={1.5} />
+                            <ShieldCheck size={28} color="#10a37f" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>100% Safe & Secure</div>
@@ -315,7 +312,7 @@ export default function ChatGPTProductPage() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e5e7eb' }}>
-                            <CheckCircle2 size={28} color="#111827" strokeWidth={1.5} />
+                            <CheckCircle2 size={28} color="#10a37f" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>Best Price Guarantee</div>
@@ -324,7 +321,7 @@ export default function ChatGPTProductPage() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e5e7eb' }}>
-                            <Zap size={28} color="#111827" strokeWidth={1.5} />
+                            <Zap size={28} color="#10a37f" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>Instant Delivery</div>
@@ -333,7 +330,7 @@ export default function ChatGPTProductPage() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e5e7eb' }}>
-                            <Headphones size={28} color="#111827" strokeWidth={1.5} />
+                            <Headphones size={28} color="#10a37f" strokeWidth={1.5} />
                         </div>
                         <div>
                             <div style={{ fontWeight: 800, color: '#111827', fontSize: '1.05rem', marginBottom: '4px' }}>24/7 Customer Support</div>
@@ -342,24 +339,51 @@ export default function ChatGPTProductPage() {
                     </div>
                 </div>
 
-                {/* Bottom Banner CTA */}
-                <div className="chatgpt-bottom-cta">
+                {/* Bottom Banner CTA (styled matching light emerald theme) */}
+                <div className="chatgpt-bottom-cta-new" style={{
+                    background: 'linear-gradient(135deg, #e6f7f2 0%, #f4fbf9 100%)',
+                    borderRadius: '24px',
+                    padding: '40px 50px',
+                    marginTop: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: '1.5px solid rgba(16, 163, 127, 0.15)',
+                    boxShadow: '0 15px 35px rgba(16, 163, 127, 0.04)',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    <style dangerouslySetInnerHTML={{ __html: `
+                        @media (max-width: 768px) {
+                            .chatgpt-bottom-cta-new {
+                                flex-direction: column !important;
+                                text-align: center !important;
+                                padding: 32px 20px !important;
+                                gap: 24px !important;
+                            }
+                            .chatgpt-bottom-cta-new > div {
+                                flex-direction: column !important;
+                                gap: 16px !important;
+                                text-align: center !important;
+                            }
+                        }
+                    ` }} />
                     <div style={{ display: 'flex', alignItems: 'center', gap: '32px', position: 'relative', zIndex: 2 }}>
-                        <div style={{ width: '80px', height: '80px', background: '#fff', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.2)' }}>
+                        <div style={{ width: '80px', height: '80px', background: '#fff', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(16, 163, 127, 0.12)', flexShrink: 0 }}>
                             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" fill="#111"/>
+                                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" fill="#10a37f"/>
                             </svg>
                         </div>
                         <div>
-                            <h2 style={{ color: '#ffffff', fontSize: '1.6rem', fontWeight: 800, margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Ready to experience the power of AI?</h2>
-                            <p style={{ color: '#9ca3af', fontSize: '1.05rem', margin: 0, fontWeight: 500 }}>Choose a plan and boost your productivity with ChatGPT.</p>
+                            <h2 style={{ color: '#111827', fontSize: '1.6rem', fontWeight: 800, margin: '0 0 8px 0', letterSpacing: '-0.5px' }}>Ready to experience the power of AI?</h2>
+                            <p style={{ color: '#4b5563', fontSize: '1.05rem', margin: 0, fontWeight: 500 }}>Choose a plan and boost your productivity with ChatGPT.</p>
                         </div>
                     </div>
                     <div style={{ position: 'relative', zIndex: 2 }}>
                         <Link href="/checkout" style={{ textDecoration: 'none' }}>
                             <button style={{
-                                background: 'linear-gradient(to right, #fdf0ba, #fcd34d)',
-                                color: '#111827',
+                                background: 'linear-gradient(to right, #10a37f, #1fa985)',
+                                color: '#ffffff',
                                 border: 'none',
                                 padding: '18px 40px',
                                 borderRadius: '12px',
@@ -369,7 +393,7 @@ export default function ChatGPTProductPage() {
                                 alignItems: 'center',
                                 gap: '12px',
                                 cursor: 'pointer',
-                                boxShadow: '0 16px 32px rgba(250,204,21,0.2)',
+                                boxShadow: '0 16px 32px rgba(16, 163, 127, 0.2)',
                                 transition: 'all 0.2s'
                             }}
                             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)' }}
