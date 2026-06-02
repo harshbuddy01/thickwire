@@ -75,22 +75,49 @@ export default async function ServicePage({
             </div>
 
             {/* Premium Hero Banner */}
-            <div style={{ background: gradient, padding: '60px 24px', textAlign: 'center', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-                {/* Decorative overlay */}
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 50%)' }}></div>
-                <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, margin: '0 0 16px 0', letterSpacing: '-0.04em' }}>{service.name}</h1>
-                    <p style={{ fontSize: '1.2rem', opacity: 0.9, maxWidth: '600px', margin: '0 auto', fontWeight: 400, lineHeight: 1.6 }}>
-                        {service.description || `Upgrade your experience with premium ${service.name} access. Choose a plan below and get instant activation.`}
-                    </p>
-                    <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+            {service.bannerUrl ? (
+                <div className="container" style={{ padding: '0 24px' }}>
+                    <div style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)', marginBottom: '32px' }}>
+                        <img 
+                            src={service.bannerUrl} 
+                            alt={`${service.name} Banner`} 
+                            style={{ width: '100%', height: 'auto', display: 'block' }} 
+                        />
+                    </div>
+                    {/* Wishlist & Meta bar under banner */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
+                        <div>
+                            <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#111827' }}>{service.name}</h1>
+                            {service.description && (
+                                <p style={{ fontSize: '1rem', color: '#4b5563', margin: '4px 0 0 0' }}>{service.description}</p>
+                            )}
+                        </div>
                         <WishlistButton service={service} />
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div style={{ background: gradient, padding: '60px 24px', textAlign: 'center', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+                    {/* Decorative overlay */}
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 50%)' }}></div>
+                    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+                        <h1 style={{ fontSize: '3.5rem', fontWeight: 800, margin: '0 0 16px 0', letterSpacing: '-0.04em' }}>{service.name}</h1>
+                        <p style={{ fontSize: '1.2rem', opacity: 0.9, maxWidth: '600px', margin: '0 auto', fontWeight: 400, lineHeight: 1.6 }}>
+                            {service.description || `Upgrade your experience with premium ${service.name} access. Choose a plan below and get instant activation.`}
+                        </p>
+                        <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+                            <WishlistButton service={service} />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Plans Section */}
-            <section className="container" style={{ padding: '60px 24px', marginTop: '-40px', position: 'relative', zIndex: 10 }}>
+            <section className="container" style={{ 
+                padding: '40px 24px 60px', 
+                marginTop: service.bannerUrl ? '0' : '-40px', 
+                position: 'relative', 
+                zIndex: 10 
+            }}>
                 {service.plans.length > 0 ? (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
                         {service.plans.map((plan, index) => (
